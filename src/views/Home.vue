@@ -84,67 +84,59 @@
                 and staying updated with the latest technologies are key aspects of my professional journey.
               </p>
               <p class="statement-text">
-                Let's connect and build something amazing together.
+               Have a project in mind? Let's discuss how we can bring your ideas to life.
               </p>
             </div>
-            
-            <!-- Contact Information -->
-   <div class="brand-contact">
-  <h4 class="contact-title">Get in Touch</h4>
-  <div class="contact-grid">
-    
-    <!-- Email -->
-<!-- Email -->
-<a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="contact-item">
-  <div class="contact-icon">
-    <i class="fas fa-envelope"></i>
-  </div>
-  <div class="contact-details">
-    <span class="contact-label">Email</span>
-    <span class="contact-value">Send an Email</span>
-  </div>
-  <i class="fas fa-external-link-alt contact-arrow"></i>
-</a>
-    <!-- Messenger -->
-    <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="contact-item">
-      <div class="contact-icon">
-        <i class="fab fa-facebook-messenger"></i>
-      </div>
-      <div class="contact-details">
-        <span class="contact-label">Messenger</span>
-        <span class="contact-value">Chat on Facebook</span>
-      </div>
-      <i class="fas fa-external-link-alt contact-arrow"></i>
-    </a>
-
-
-    
-    <!-- GitHub -->
-    <a href="https://github.com/codewithryry" target="_blank" class="contact-item">
-      <div class="contact-icon">
-        <i class="fab fa-github"></i>
-      </div>
-      <div class="contact-details">
-        <span class="contact-label">GitHub</span>
-        <span class="contact-value">github.com/codewithryry</span>
-      </div>
-      <i class="fas fa-external-link-alt contact-arrow"></i>
-    </a>
-
-    <!-- Portfolio -->
-    <a href="https://reymelreymislang.vercel.app" target="_blank" class="contact-item">
-      <div class="contact-icon">
-        <i class="fas fa-globe"></i>
-      </div>
-      <div class="contact-details">
-        <span class="contact-label">Portfolio</span>
-        <span class="contact-value">reymelreymislang.vercel.app</span>
-      </div>
-      <i class="fas fa-external-link-alt contact-arrow"></i>
-    </a>
-  </div>
-</div>
-
+               <!-- Contact Information -->
+              <div class="brand-contact">
+              <h4 class="contact-title">Get in Touch</h4>
+              <div class="contact-grid">
+              <!-- Email -->
+              <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-details">
+                  <span class="contact-label">Email</span>
+                  <span class="contact-value">Send an Email</span>
+                </div>
+                <i class="fas fa-external-link-alt contact-arrow"></i>
+              </a>
+                  <!-- Messenger -->
+                  <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                      <i class="fab fa-facebook-messenger"></i>
+                    </div>
+                    <div class="contact-details">
+                      <span class="contact-label">Messenger</span>
+                      <span class="contact-value">Chat on Facebook</span>
+                    </div>
+                    <i class="fas fa-external-link-alt contact-arrow"></i>
+                  </a>
+                   <!-- GitHub -->
+                  <a href="https://github.com/codewithryry" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                      <i class="fab fa-github"></i>
+                    </div>
+                    <div class="contact-details">
+                      <span class="contact-label">GitHub</span>
+                      <span class="contact-value">View my repositories</span>
+                    </div>
+                    <i class="fas fa-external-link-alt contact-arrow"></i>
+                  </a>
+                  <!-- Portfolio -->
+                  <a href="https://reymelreymislang.vercel.app" target="_blank" class="contact-item">
+                    <div class="contact-icon">
+                      <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="contact-details">
+                      <span class="contact-label">Portfolio</span>
+                    <span class="contact-value">View my other portfolio</span>
+                    </div>
+                    <i class="fas fa-external-link-alt contact-arrow"></i>
+                  </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -339,22 +331,21 @@
           </div>
         </div>
       </section>
-<!-- Footer - Same style as Header -->
-<footer class="header-footer">
-  <div class="header-footer-content">
-    <h1 class="footer-name">Ready to Build Something Great?</h1>
-   <p class="footer-subtitle">
-  Whether you're building a product, launching a startup, or improving a system, 
-  I’d love to collaborate and help bring your vision to life. 
-</p>
-    <div class="footer-cta">
-      <a 
-        href="mailto:reymelrey.mislang@gmail.com?subject=Project%20Collaboration%20Inquiry"
-        class="footer-contact-btn"
-      >
-       Start a Project
-
-      </a>
+      <!-- Footer - Same style as Header -->
+      <footer class="header-footer">
+        <div class="header-footer-content">
+          <h1 class="footer-name">Ready to Build Something Great?</h1>
+        <p class="footer-subtitle">
+        Whether you're building a product, launching a startup, or improving a system, 
+        I’d love to collaborate and help bring your vision to life. 
+      </p>
+          <div class="footer-cta">
+            <a 
+              href="mailto:reymelrey.mislang@gmail.com?subject=Project%20Collaboration%20Inquiry"
+              class="footer-contact-btn"
+            >
+            Start a Project
+            </a>
     </div>
   </div>
 </footer>
@@ -512,14 +503,10 @@
         <div class="modal certificates-modal" @click.stop>
           <button class="modal-close" @click="closeCertificatesListModal">
             <i class="fas fa-times"></i>
-          </button>
-          
+          </button>    
           <div class="modal-header">
-  
             <h3 class="modal-title">Certifications</h3>
-            <p class="modal-subtitle">{{ certificates.length }} professional certificates</p>
-          </div>
-          
+          </div> 
           <div class="certificates-list">
             <div class="certificate-item" v-for="cert in certificates" :key="cert.id">
               <div class="certificate-icon">
