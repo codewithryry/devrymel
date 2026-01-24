@@ -1,0 +1,68 @@
+[
+  {
+    "id": 11,
+    "title": "eGov-RMS (Capstone Project)",
+    "description": "E-Government platform for Calapan City. My Role: AI & NLP developer — budget prediction, AI chat messenger, and UI/UX support.",
+    "link": "https://egovcalapancity.onrender.com/"
+  },
+  {
+    "id": 7,
+    "title": "SIBOL Smart Farming System",
+    "description": "Cross-platform IoT-integrated smart farming system using hybrid rice varieties and digital technologies to improve climate resilience and agricultural productivity.",
+    "link": "https://sibol-theta.vercel.app/"
+  },
+  {
+    "id": 5,
+    "title": "Barangay Information System",
+    "description": "Digital platform modernizing barangay operations, services, and community engagement.",
+    "link": "https://barangay-information-system.vercel.app/"
+  },
+  {
+    "id": 9,
+    "title": "OJT Monitoring System",
+    "description": "Web-based system for managing and monitoring student OJT/Internship records, progress, and evaluations.",
+    "link": "https://ojt-monitoring-system-six.vercel.app/login"
+  },
+  {
+    "id": 10,
+    "title": "Sari-POS",
+    "description": "Point-of-sale (POS) system designed for sari-sari stores to manage sales, inventory, and daily transactions.",
+    "link": "https://sari-pos.vercel.app/"
+  },
+  {
+    "id": 3,
+    "title": "BoardMate",
+    "description": "Collaborative task, chores, and water bill management app for shared living spaces.",
+    "link": "https://boardmate.vercel.app/"
+  },
+  {
+    "id": 4,
+    "title": "LiftUp Connect",
+    "description": "AI-powered mental health support platform for community discussion and emotional well-being.",
+    "link": "https://liftupconnect.vercel.app/"
+  },
+  {
+    "id": 1,
+    "title": "OwePal",
+    "description": "Finance tracking app for budgeting, debt tracking, reminders, and financial clarity.",
+    "link": "https://owepal.vercel.app/owePal"
+  },
+  {
+    "id": 6,
+    "title": "PrintNConnect",
+    "description": "Online printing and connectivity service platform for document handling and services.",
+    "link": "https://printnconnect.vercel.app/"
+  },
+  {
+    "id": 2,
+    "title": "Linktree",
+    "description": "Linktree-style personal landing page for centralized social and project links.",
+    "link": "https://betsylinktree.vercel.app/"
+  },
+  {
+    "id": 8,
+    "title": "BoyLoveY Series Hub",
+    "description": "Online platform showcasing and celebrating Thai Boys' Love (BL) series with updates, reviews, and show information.",
+    "link": "https://boyloveyserieshub.vercel.app/"
+  }
+]

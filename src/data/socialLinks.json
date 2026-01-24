@@ -1,0 +1,188 @@
+[
+  {
+    "id": 1,
+    "label": "Facebook",
+    "icon": "fab fa-facebook",
+    "url": "https://www.facebook.com/100063507442180"
+  },
+  {
+    "id": 2,
+    "label": "Twitter (X)",
+    "icon": "fab fa-twitter",
+    "url": "#"
+  },
+  {
+    "id": 3,
+    "label": "Instagram",
+    "icon": "fab fa-instagram",
+    "url": "https://www.instagram.com/rymelrey.528191/"
+  },
+  {
+    "id": 4,
+    "label": "YouTube",
+    "icon": "fab fa-youtube",
+    "url": "#"
+  },
+  {
+    "id": 5,
+    "label": "LinkedIn",
+    "icon": "fab fa-linkedin",
+    "url": "https://www.linkedin.com/in/reymelreymislang/"
+  },
+  {
+    "id": 6,
+    "label": "Spotify",
+    "icon": "fab fa-spotify",
+    "url": "#"
+  },
+  {
+    "id": 7,
+    "label": "Pinterest",
+    "icon": "fab fa-pinterest",
+    "url": "#"
+  },
+  {
+    "id": 8,
+    "label": "TikTok",
+    "icon": "fab fa-tiktok",
+    "url": "#"
+  },
+  {
+    "id": 9,
+    "label": "Reddit",
+    "icon": "fab fa-reddit",
+    "url": "https://www.reddit.com/user/DemandPositive792/"
+  },
+  {
+    "id": 10,
+    "label": "Discord",
+    "icon": "fab fa-discord",
+    "url": "#"
+  },
+  {
+    "id": 11,
+    "label": "GitHub",
+    "icon": "fab fa-github",
+    "url": "#"
+  },
+  {
+    "id": 12,
+    "label": "GitLab",
+    "icon": "fab fa-gitlab",
+    "url": "#"
+  },
+  {
+    "id": 13,
+    "label": "Stack Overflow",
+    "icon": "fab fa-stack-overflow",
+    "url": "#"
+  },
+  {
+    "id": 14,
+    "label": "Medium",
+    "icon": "fab fa-medium",
+    "url": "#"
+  },
+  {
+    "id": 15,
+    "label": "Dev.to",
+    "icon": "fab fa-dev",
+    "url": "#"
+  },
+  {
+    "id": 16,
+    "label": "Behance",
+    "icon": "fab fa-behance",
+    "url": "#"
+  },
+  {
+    "id": 17,
+    "label": "Dribbble",
+    "icon": "fab fa-dribbble",
+    "url": "#"
+  },
+  {
+    "id": 18,
+    "label": "Telegram",
+    "icon": "fab fa-telegram",
+    "url": "#"
+  },
+  {
+    "id": 19,
+    "label": "WhatsApp",
+    "icon": "fab fa-whatsapp",
+    "url": "#"
+  },
+  {
+    "id": 20,
+    "label": "Messenger",
+    "icon": "fab fa-facebook-messenger",
+    "url": "#"
+  },
+  {
+    "id": 21,
+    "label": "Portfolio",
+    "icon": "fas fa-globe",
+    "url": "#"
+  },
+  {
+    "id": 22,
+    "label": "WhatsApp",
+    "icon": "fab fa-whatsapp",
+    "url": "#"
+  },
+  {
+    "id": 23,
+    "label": "WeChat",
+    "icon": "fab fa-weixin",
+    "url": "#"
+  },
+  {
+    "id": 24,
+    "label": "Telegram",
+    "icon": "fab fa-telegram-plane",
+    "url": "#"
+  },
+  {
+    "id": 25,
+    "label": "Snapchat",
+    "icon": "fab fa-snapchat-ghost",
+    "url": "#"
+  },
+  {
+    "id": 26,
+    "label": "Threads",
+    "icon": "fab fa-threads",
+    "url": "#"
+  },
+  {
+    "id": 27,
+    "label": "Line",
+    "icon": "fab fa-line",
+    "url": "#"
+  },
+  {
+    "id": 28,
+    "label": "Viber",
+    "icon": "fab fa-viber",
+    "url": "#"
+  },
+  {
+    "id": 29,
+    "label": "Signal",
+    "icon": "fab fa-signal-messenger",
+    "url": "#"
+  },
+  {
+    "id": 30,
+    "label": "KakaoTalk",
+    "icon": "fas fa-comment",
+    "url": "#"
+  },
+  {
+    "id": 31,
+    "label": "Twitch",
+    "icon": "fab fa-twitch",
+    "url": "#"
+  }
+]

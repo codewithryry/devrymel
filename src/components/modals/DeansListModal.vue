@@ -1,3 +1,8 @@
+<!-- 
+  Copyright (c) 2026 Reymel Mislang
+  Mindoro State University (MINSU) - Calapan Campus, Philippines
+ -->
+
 <template>
   <transition name="fade">
     <div class="modal-overlay" @click="$emit('close')">

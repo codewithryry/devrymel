@@ -1,3 +1,7 @@
+<!-- 
+  Copyright (c) 2026 Reymel Mislang
+  Mindoro State University (MINSU) - Calapan Campus, Philippines
+ -->
 <template>
   <section class="projects-showcase">
     <h2 class="section-title">Featured Projects</h2>
@@ -237,6 +241,25 @@ export default {
   background: #1a1e22;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style scoped>
 /* Global Styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');

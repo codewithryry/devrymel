@@ -22,7 +22,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 120vh;
   font-family: 'Poppins', sans-serif;
   text-align: center;
   padding: 20px;

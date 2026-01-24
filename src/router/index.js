@@ -1,3 +1,7 @@
+  // Copyright (c) 2026 Reymel Mislang
+  // Mindoro State University (MINSU) - Calapan Campus, Philippines
+
+  
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import NotFound from '../views/NotFound.vue' // Import the 404 component

@@ -1,3 +1,8 @@
+<!-- 
+  Copyright (c) 2026 Reymel Mislang
+  Mindoro State University (MINSU) - Calapan Campus, Philippines
+ -->
+
 <template>
   <footer class="header-footer">
     <div class="header-footer-content">

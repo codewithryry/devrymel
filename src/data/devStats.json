@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "icon": "fas fa-code",
+    "value": "700+",
+    "label": "Hours Coded, Real Dev Time (WakaTime Verified)",
+    "trend": "+3 hrs daily avg",
+    "trendIcon": "fas fa-arrow-up",
+    "trendClass": "up",
+    "chartHeight": "80%"
+  },
+  {
+    "id": 2,
+    "icon": "fas fa-project-diagram",
+    "value": "10+",
+    "label": "Web Systems Built, Academic & Real-World Projects",
+    "trend": "Deployed systems",
+    "trendIcon": "fas fa-globe",
+    "trendClass": "up",
+    "chartHeight": "75%"
+  },
+  {
+    "id": 3,
+    "icon": "fab fa-github",
+    "value": "52+",
+    "label": "GitHub Repositories, Open Source & Private Projects",
+    "trend": "Consistent commits",
+    "trendIcon": "fas fa-database",
+    "trendClass": "up",
+    "chartHeight": "85%"
+  },
+  {
+    "id": 4,
+    "icon": "fas fa-laptop-code",
+    "value": "Freelance",
+    "label": "System Developer, Full-Stack System Builder",
+    "trend": "End-to-end development",
+    "trendIcon": "fas fa-check-circle",
+    "trendClass": "up",
+    "chartHeight": "95%"
+  }
+]

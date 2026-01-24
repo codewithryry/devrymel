@@ -1,4 +1,10 @@
-<template>
+
+<!-- 
+  Copyright (c) 2026 Reymel Mislang
+  Mindoro State University (MINSU) - Calapan Campus, Philippines
+ -->
+ 
+ <template>
   <section class="links-section">
     <h2 class="section-title">Quick Links</h2>
     <br>
@@ -41,13 +47,17 @@
         </a>
         
         <!-- WakaTime Card (mobile only) -->
-        <a href="https://wakatime.com/@codewithryry" target="_blank" class="mobile-link-card">
-          <div class="mobile-icon stats">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <span class="mobile-label">Stats</span>
-          <small class="mobile-desc">Coding analytics</small>
-        </a>
+   <a href="https://docs.google.com/document/d/1QzKrdfaPNfefuENiuya64RzHRCDPMTtvkVF1y8vzuA4/edit?usp=sharing" 
+   target="_blank" 
+   class="mobile-link-card">
+  
+  <div class="mobile-icon book">
+    <i class="fas fa-book-open"></i>
+  </div>
+
+  <span class="mobile-label">My Book</span>
+  <small class="mobile-desc">Crossed Eyes</small>
+</a>
 
         <!-- Certificates Card -->
         <div class="mobile-link-card" @click="$emit('openCertificatesListModal')">
@@ -237,6 +247,11 @@ export default {
 </script>
 
 <style scoped>
+
+
+
+
+
 .links-section {
   margin: 3rem 0;
 }
@@ -430,6 +445,10 @@ export default {
   color: #ea4335; 
 }
 
+.mobile-icon.book {
+  background: rgba(10, 102, 194, 0.1);
+   color: #ea4335; 
+}
 /* Adjust mobile card hover colors */
 .mobile-link-card:hover .mobile-icon.portfolio { 
   background: rgba(102, 126, 234, 0.2); 
@@ -464,6 +483,8 @@ export default {
 .mobile-link-card:hover .mobile-icon.email { 
   background: rgba(234, 67, 53, 0.2); 
 }
+
+
 
 /* Hide mobile view on desktop */
 @media (min-width: 769px) {

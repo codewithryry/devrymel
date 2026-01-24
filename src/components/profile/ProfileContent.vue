@@ -9,124 +9,119 @@
           <img :src="profile.image" alt="Reymel Mislang" class="profile-image" />
         </div>
         
-      <div class="mobile-identity">
-        <h2 class="mobile-name">
-          <span class="name-first">Reymel</span>
-          <span class="name-last">Mislang</span>
-        </h2>
+        <div class="mobile-identity">
+          <h2 class="mobile-name">
+            <span class="name-first">Reymel</span>
+            <span class="name-last">Mislang</span>
+          </h2>
 
-        <div class="mobile-title">
-          <i class="fas fa-terminal"></i>
-          <span></span>
-        </div>
+          <div class="mobile-title">
+            <i class="fas fa-terminal"></i>
+            <span></span>
+          </div>
 
-        <!-- CENTERED BADGES -->
-        <div class="center-badges">
-          <span class="inline-badge deans" @click="openMobileDeansList" title="Dean's List">
-            <i class="fas fa-trophy"></i>
-          </span>
+          <!-- CENTERED BADGES -->
+          <div class="center-badges">
+            <span class="inline-badge deans" @click="openMobileDeansList" title="Dean's List">
+              <i class="fas fa-trophy"></i>
+            </span>
           <span class="inline-badge certs" 
                 @click="$emit('open-certificates')" 
                 title="Certificates">
             <i class="fas fa-certificate"></i>
           </span>
-<span class="inline-badge links" 
-      @click="$emit('openLinks')" 
-      title="Project Links">
-  <i class="fas fa-link"></i>
-</span>
-
+            <span class="inline-badge links" 
+                  @click="$emit('openLinks')" 
+                  title="Project Links">
+              <i class="fas fa-link"></i>
+            </span>
+          </div>
         </div>
-      </div>
       </div>
 
       <!-- About Section (without title) -->
       <div class="mobile-card about-card">
         <div class="card-content">
+<p class="statement-text">
+  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
+  My focus is on turning ideas into real, functional systems that people can actually use.
+</p>
+<p class="statement-text">
+  I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
+  affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
+  help people and create real value.
+</p>
+
           <p class="statement-text">
-            I specialize in building <span class="highlight">full-stack applications</span> that solve real-world problems 
-            through clean architecture and thoughtful design.
+            Get in touch
           </p>
-          <p class="statement-text">
-            My approach combines technical excellence with user-centered design principles. I believe in writing 
-            clean, maintainable code and creating solutions that are both elegant and efficient.
-          </p>
-           <p class="statement-text">
-          Get in touch
-          </p>
-         <div class="mobile-contact-section">
-          <div class="mobile-contact-grid"> 
-        <!-- Improved Mobile Contact Section -->
           <div class="mobile-contact-section">
-            <div class="mobile-contact-grid">
-                          <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
+            <div class="mobile-contact-grid"> 
+              <!-- Improved Mobile Contact Section -->
+              <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
                 <div class="contact-left">
                   <div class="contact-icon">
                     <i class="fas fa-envelope"></i>
                   </div>
                   <div class="contact-text">
                     <span class="contact-title">Email Me</span>
+                    <span class="contact-sub">Let's collaborate</span>
                   </div>
                 </div>
                 <i class="fas fa-arrow-right contact-arrow"></i>
               </a>
 
-                        <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
-              <div class="contact-left">
-                <div class="contact-icon">
-                  <i class="fab fa-facebook-messenger"></i>
+              <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
+                <div class="contact-left">
+                  <div class="contact-icon">
+                    <i class="fab fa-facebook-messenger"></i>
+                  </div>
+                  <div class="contact-text">
+                    <span class="contact-title">Messenger</span>
+                    <span class="contact-sub">Fastest response</span>
+                  </div>
                 </div>
-                <div class="contact-text">
-                  <span class="contact-title">Messenger</span>
-                   <span class="contact-sub">Fastest response</span>
-                </div>
-              </div>
-              <i class="fas fa-arrow-right contact-arrow"></i>
-            </a>
-
-            <!-- <a href="https://github.com/codewithryry" target="_blank" class="mobile-contact-item github">
-              <div class="contact-left">
-                <div class="contact-icon">
-                  <i class="fab fa-github"></i>
-                </div>
-                <div class="contact-text">
-                  <span class="contact-title">GitHub</span>
-                  <span class="contact-sub">View projects</span>
-                </div>
-              </div>
-              <i class="fas fa-arrow-right contact-arrow"></i>
-            </a> -->
+                <i class="fas fa-arrow-right contact-arrow"></i>
+              </a>
+            </div>
           </div>
         </div>
-        </div>
       </div>
-        </div>
-      </div>
-
     </div>
 
     <!-- DESKTOP LAYOUT -->
     <section class="profile-section desktop-profile-content">
+      <!-- Mobile Optimization Notice -->
+      <div class="mobile-optimization-notice" v-if="showNotice">
+        <div class="notice-content">
+         
+          <div class="notice-text">
+            <strong>Mobile Optimized:</strong> This portfolio is best viewed on mobile for optimal experience
+          </div>
+          <a class="notice-close" @click.prevent="hideNotice">
+            <i class="fas fa-times"></i>
+          </a>
+        </div>
+      </div>
+      
       <div class="profile-brand-card">
         <!-- Left Column: Visual Identity -->
         <div class="brand-visual">
+          <!-- Desktop Name Display -->
+          <div class="desktop-name-display">
+            <h2 class="desktop-name">
+              <span class="name-first">Reymel</span>
+              <span class="name-last">Mislang</span>
+            </h2>
+            <div class="desktop-subtitle">Not Full Stack Web Developer</div>
+          </div>
+          
           <div class="profile-frame">
             <div class="profile-glow"></div>
             <img :src="profile.image" alt="Reymel Mislang" class="profile-image" />
             <div class="image-overlay">
               <div class="overlay-gradient"></div>
             </div>
-          </div>
-          
-          <!-- Identity Badge -->
-          <div class="identity-badge">
-            <div class="badge-content">
-              <i class="fas fa-terminal"></i>
-              <div class="badge-info">
-                <span class="badge-title">Web Developer</span>
-              </div>
-            </div>
-            <div class="badge-glow"></div>
           </div>
           
           <!-- Tech Stack Chips -->
@@ -140,14 +135,15 @@
             </div>
           </div>
           
-          <!-- Academic Honors Section -->
+          <!-- Academic Honors Section - Only show latest 2 on desktop -->
           <div class="achievement-badges">
             <h4 class="achievement-title">DEAN LISTER AWARD</h4>
             <div class="badge-grid">
+              <!-- Show only the latest 2 awards on desktop -->
               <div class="achievement-chip" 
-                   v-for="(item, index) in achievements.deansList" 
+                   v-for="(item, index) in latestTwoAchievements" 
                    :key="'chip-' + index"
-                   @click="$emit('openDeansList', index)">
+                   @click="$emit('openDeansList', achievements.deansList.indexOf(item))">
                 <div class="chip-icon">
                   <i class="fas fa-award"></i>
                 </div>
@@ -157,6 +153,11 @@
                 </div>
               </div>
             </div>
+            <!-- View All Link (Desktop only) -->
+            <div class="view-all-link" @click="$emit('openDeansList', 0)">
+              <i class="fas fa-chevron-right"></i>
+              <span>View all {{ achievements.deansList.length }} awards</span>
+            </div>
           </div>
         </div>
         
@@ -164,19 +165,16 @@
         <div class="brand-narrative">     
           <!-- Brand Statement -->
           <div class="brand-statement">
-            <p class="statement-text">
-              I specialize in building <span class="highlight">full-stack applications</span> that solve real-world problems 
-              through clean architecture and thoughtful design. With expertise in both frontend and backend 
-              development, I create digital experiences that are not just functional, but intuitive and scalable.
-            </p>
-            <p class="statement-text">
-              My approach combines technical excellence with user-centered design principles. I believe in writing 
-              clean, maintainable code and creating solutions that are both elegant and efficient. Continuous learning 
-              and staying updated with the latest technologies are key aspects of my professional journey.
-            </p>
-            <p class="statement-text">
-              Have a project in mind? Let's discuss how we can bring your ideas to life.
-            </p>
+<p class="statement-text">
+  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
+  My focus is on turning ideas into real, functional systems that people can actually use.
+</p>
+<p class="statement-text">
+  I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
+  affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
+  help people and create real value.
+</p>
+
           </div>
              
           <!-- Contact Information -->
@@ -205,28 +203,6 @@
                 </div>
                 <i class="fas fa-external-link-alt contact-arrow"></i>
               </a>
-              <!-- GitHub -->
-              <a href="https://github.com/codewithryry" target="_blank" class="contact-item">
-                <div class="contact-icon">
-                  <i class="fab fa-github"></i>
-                </div>
-                <div class="contact-details">
-                  <span class="contact-label">GitHub</span>
-                  <span class="contact-value">View my repositories</span>
-                </div>
-                <i class="fas fa-external-link-alt contact-arrow"></i>
-              </a>
-              <!-- Portfolio -->
-              <a href="https://reymelreymislang.vercel.app" target="_blank" class="contact-item">
-                <div class="contact-icon">
-                  <i class="fas fa-globe"></i>
-                </div>
-                <div class="contact-details">
-                  <span class="contact-label">Portfolio</span>
-                  <span class="contact-value">View my other portfolio</span>
-                </div>
-                <i class="fas fa-external-link-alt contact-arrow"></i>
-              </a>
             </div>
           </div>
         </div>
@@ -252,107 +228,449 @@ export default {
       required: true
     }
   },
-emits: [
-  'openDeansList', 
-  'openMobileDeansList', 
-  'openCertificatesListModal',
-  'openlinks'
-],
-
-methods: {
-  openMobileDeansList() {
-    this.$emit('openMobileDeansList');
+  data() {
+    return {
+      showNotice: true
+    }
   },
-  openCertificatesListModal() {
-    this.$emit('openCertificatesListModal');
+  computed: {
+    // Get the latest 2 achievements for desktop display
+    latestTwoAchievements() {
+      if (!this.achievements.deansList) return [];
+      // Return last 2 items from the array (assuming array is sorted with latest first)
+      return this.achievements.deansList.slice(0, 2);
+    }
+  },
+  emits: [
+    'openDeansList', 
+    'openMobileDeansList', 
+    'openCertificatesListModal',
+    'openLinks'
+  ],
+  methods: {
+    openMobileDeansList() {
+      this.$emit('openMobileDeansList');
+    },
+    openCertificatesListModal() {
+      this.$emit('openCertificatesListModal');
+    },
+    hideNotice() {
+      this.showNotice = false;
+    }
   }
-}
 }
 </script>
 
-
-
 <style scoped>
-.mobile-contact-grid{
-  display:flex;
-  flex-direction:column;
-  gap:0.6rem;
-  width:95%;
+/* Mobile Optimization Notice Styles */
+.mobile-optimization-notice {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  display: flex;
+  align-items: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: slideDown 0.5s ease;
 }
 
-.mobile-contact-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#ffffff; /* same as about text card */
-  border:1px solid #e2e8f0;
-  text-decoration:none;
-  color:#2d3748;
-  transition:all 0.2s ease;
-  box-shadow:0 2px 6px rgba(0,0,0,0.03);
-  width:100%;
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.mobile-contact-item:active{
-  transform:scale(0.97);
+.notice-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
 }
 
-.mobile-contact-item:hover{
-  border-color:#667eea;
-  box-shadow:0 6px 18px rgba(102,126,234,0.12);
+.notice-content i {
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  border-radius: 50%;
 }
 
-.contact-left{
-  display:flex;
-  align-items:center;
-  gap:0.75rem;
+.notice-text {
+  flex: 1;
+  text-align: center;
+  font-size: 1.0rem;
+  line-height: 1.4;
 }
 
-.contact-icon{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:0.95rem;
-  background:#edf2ff;
-  color:#667eea;
+.notice-text strong {
+  font-weight: 600;
 }
 
-.contact-text{
-  display:flex;
-  flex-direction:column;
-  line-height:1.1;
+.notice-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s ease;
 }
 
-.contact-title{
-  font-size:0.85rem;
-  font-weight:600;
+
+
+/* Desktop Name Display */
+.desktop-name-display {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.contact-sub{
-  gap:0.65rem;
-  font-size:0.7rem;
-  color:#718096;
+.desktop-name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0;
+  background: black;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 
-.contact-arrow{
-  font-size:0.75rem;
-  color:#a0aec0;
-  transition:transform 0.2s ease;
+.desktop-name .name-first {
+  color: #2d3748;
 }
 
-.mobile-contact-item:hover .contact-arrow{
-  transform:translateX(4px);
-  color:#667eea;
+.desktop-name .name-last {
+  color: #764ba2;
+}
+
+.desktop-subtitle {
+  font-size: 1rem;
+  color: #718096;
+  font-weight: 500;
+  margin-top: 5px;
+  letter-spacing: 0.5px;
+}
+
+/* Make tech stack chips smaller */
+.tech-stack {
+  margin: 15px 0;
+}
+
+.stack-title {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #4a5568;
+}
+
+.stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.tech-chip {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f6f8ff 0%, #f1f5ff 100%);
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.tech-chip i {
+  font-size: 0.8rem;
+  color: #667eea;
+}
+
+/* Achievement badges - Desktop (2 items only) */
+.achievement-badges {
+  margin-top: 15px;
+}
+
+.achievement-title {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #4a5568;
+  text-align: center;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.achievement-chip {
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.achievement-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  border-color: #667eea;
+}
+
+.chip-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #667eea;
+  font-size: 0.9rem;
+}
+
+.chip-content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.chip-semester {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.chip-gwa {
+  font-size: 0.7rem;
+  color: #718096;
+}
+
+/* View All Link (Desktop only) */
+.view-all-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #667eea;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.view-all-link:hover {
+  background: rgba(102, 126, 234, 0.05);
+  color: #5a67d8;
+  transform: translateX(3px);
+}
+
+.view-all-link i {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.view-all-link:hover i {
+  transform: translateX(3px);
+}
+
+/* Existing mobile contact grid styles */
+.mobile-contact-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 95%;
+}
+
+.mobile-contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  color: #2d3748;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  width: 100%;
+}
+
+.mobile-contact-item:active {
+  transform: scale(0.97);
+}
+
+.mobile-contact-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.12);
+}
+
+.contact-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.contact-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  background: #edf2ff;
+  color: #667eea;
+}
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.contact-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contact-sub {
+  gap: 0.65rem;
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+.contact-arrow {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  transition: transform 0.2s ease;
+}
+
+.mobile-contact-item:hover .contact-arrow {
+  transform: translateX(4px);
+  color: #667eea;
 }
 
 /* Color accents */
-.mobile-contact-item.email .contact-icon{background:rgba(102,126,234,0.12);color:#667eea;}
-.mobile-contact-item.messenger .contact-icon{background:rgba(0,106,255,0.12);color:#006aff;}
-.mobile-contact-item.github .contact-icon{background:rgba(36,41,46,0.12);color:#24292e;}
+.mobile-contact-item.email .contact-icon {
+  background: rgba(102, 126, 234, 0.12);
+  color: #667eea;
+}
+
+.mobile-contact-item.messenger .contact-icon {
+  background: rgba(0, 106, 255, 0.12);
+  color: #006aff;
+}
+
+.mobile-contact-item.github .contact-icon {
+  background: rgba(36, 41, 46, 0.12);
+  color: #24292e;
+}
+
+/* Brand statement note */
+.brand-statement .note {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mobile-optimization-notice {
+    display: none !important;
+  }
+  
+  .desktop-name-display {
+    display: none;
+  }
+  
+  /* Mobile shows all achievements */
+  .badge-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  /* Hide "View all" link on mobile */
+  .view-all-link {
+    display: none;
+  }
+}
+
+/* Desktop-only styles */
+@media (min-width: 769px) {
+  .profile-brand-card {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+  }
+  
+  .brand-visual {
+    padding: 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  }
+  
+  .profile-frame {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 15px;
+  }
+  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+  }
+  
+  /* Make everything in left column more compact */
+  .brand-visual > *:not(:first-child) {
+    margin-top: 15px;
+  }
+  
+  /* Desktop: Show only 2 achievement chips */
+  .badge-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Desktop: Show view all link */
+  .view-all-link {
+    display: flex;
+  }
+}
 </style>
+
+
+
+
 <style scoped>
 /* Fixed badge click handlers */
 .center-badges {

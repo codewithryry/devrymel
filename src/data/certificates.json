@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "title": "FortiGate 7.6 Operator",
+    "file": "FortiGate 7.6 Operator.pdf",
+    "description": "Fortinet FortiGate firewall operator certification",
+    "category": "Cybersecurity"
+  },
+  {
+    "id": 2,
+    "title": "Cybersecurity Associate",
+    "file": "Fortinet Certified Associate in Cybersecurity.pdf",
+    "description": "Associate level cybersecurity certification",
+    "category": "Cybersecurity"
+  },
+  {
+    "id": 3,
+    "title": "Cybersecurity Fundamentals",
+    "file": "Fortinet Certified Fundamentals in Cybersecurity.pdf",
+    "description": "Fundamental cybersecurity knowledge certification",
+    "category": "Cybersecurity"
+  },
+  {
+    "id": 4,
+    "title": "Networking Fundamentals",
+    "file": "Fortinet Networking Fundamentals Self-Paced.pdf",
+    "description": "Self-paced networking fundamentals course",
+    "category": "Networking"
+  },
+  {
+    "id": 5,
+    "title": "Cybersecurity 3.0 Starter",
+    "file": "Getting Started In Cybersecurity 3.0.pdf",
+    "description": "Cybersecurity beginner course",
+    "category": "Cybersecurity"
+  },
+  {
+    "id": 6,
+    "title": "Threat Landscape 3.0",
+    "file": "Introduction to the Threat Landscape 3.0.pdf",
+    "description": "Threat landscape analysis course",
+    "category": "Cybersecurity"
+  },
+  {
+    "id": 7,
+    "title": "Technical Cybersecurity 3.0",
+    "file": "Technical Introduction to Cybersecurity 3.0.pdf",
+    "description": "Technical cybersecurity fundamentals",
+    "category": "Cybersecurity"
+  }
+]

@@ -1,15 +1,18 @@
+<!-- 
+  Copyright (c) 2026 Reymel Mislang
+  Mindoro State University (MINSU) - Calapan Campus, Philippines
+ -->
+
 <template>
   <section class="services-section">
     <h2 class="section-title">Services</h2>
     
-    <div class="services-carousel-container">
+    <!-- Desktop Carousel View -->
+    <div v-if="!isMobile" class="services-carousel-container">
       <div class="carousel-wrapper">
         <div 
           class="services-carousel"
           :style="{ transform: `translateX(${translateValue}%)` }"
-          @touchstart="handleTouchStart"
-          @touchmove="handleTouchMove"
-          @touchend="handleTouchEnd"
         >
           <div 
             v-for="(service, index) in services" 
@@ -74,6 +77,59 @@
         </button>
       </div>
     </div>
+
+    <!-- Mobile Simple View (No Carousel) -->
+    <div v-else class="mobile-services-container">
+      <div class="mobile-service-card">
+        <h3 class="service-title">{{ services[currentIndex].title }}</h3>
+        <p class="service-description">{{ services[currentIndex].description }}</p>
+        
+        <!-- All features visible on mobile -->
+        <div class="service-features">
+          <div v-for="feature in services[currentIndex].features" 
+               :key="feature"
+               class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>{{ feature }}</span>
+          </div>
+        </div>
+        
+        <!-- Action Button -->
+        <div class="service-actions">
+          <a 
+            :href="`mailto:reymelrey.mislang@gmail.com?subject=Inquiry%20About%20${encodeURIComponent(services[currentIndex].title)}`" 
+            class="service-button active-button"
+          >
+            <i class="fas fa-envelope"></i>
+            Get Started Now
+          </a>
+        </div>
+        
+        <!-- Pricing hint -->
+        <div class="pricing-hint">
+          <i class="fas fa-tag"></i>
+          <span>Custom pricing available</span>
+        </div>
+      </div>
+
+      <!-- Simple Mobile Controls -->
+      <div class="mobile-carousel-controls">
+        <button @click="prevService" class="mobile-slider-btn" aria-label="Previous service">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="mobile-carousel-info">
+          <span class="current-service">{{ currentIndex + 1 }}</span>
+          <span class="service-separator">/</span>
+          <span class="total-services">{{ services.length }}</span>
+          <span class="service-name">{{ services[currentIndex].title }}</span>
+        </div>
+        
+        <button @click="nextService" class="mobile-slider-btn" aria-label="Next service">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -92,29 +148,17 @@ export default {
       translateValue: 0,
       isTransitioning: false,
       autoRotateInterval: null,
-      touchStartX: 0,
-      touchEndX: 0,
       isMobile: false
     }
   },
   computed: {
-    visibleServices() {
-      const total = this.services.length;
-      let visible = [];
-      
-      // Show 5 cards: 2 left, 1 center, 2 right
-      for (let i = -2; i <= 2; i++) {
-        let index = (this.currentIndex + i + total) % total;
-        visible.push(this.services[index]);
-      }
-      
-      return visible;
+    isCardActive() {
+      return (index) => this.currentIndex === index;
     }
   },
   methods: {
     getCardPosition(index) {
-      // Don't apply left/right classes on mobile
-      if (this.isMobile) return 'center';
+      if (this.isMobile) return '';
       
       const diff = index - this.currentIndex;
       const total = this.services.length;
@@ -129,44 +173,50 @@ export default {
       return 'center';
     },
     
-    isCardActive(index) {
-      return this.currentIndex === index;
-    },
-    
     nextService() {
       if (this.isTransitioning) return;
       this.isTransitioning = true;
       this.currentIndex = (this.currentIndex + 1) % this.services.length;
-      this.animateTransition();
+      
+      if (!this.isMobile) {
+        this.animateTransition();
+      } else {
+        // Simple transition for mobile
+        setTimeout(() => {
+          this.isTransitioning = false;
+        }, 300);
+      }
     },
     
     prevService() {
       if (this.isTransitioning) return;
       this.isTransitioning = true;
       this.currentIndex = (this.currentIndex - 1 + this.services.length) % this.services.length;
-      this.animateTransition();
+      
+      if (!this.isMobile) {
+        this.animateTransition();
+      } else {
+        // Simple transition for mobile
+        setTimeout(() => {
+          this.isTransitioning = false;
+        }, 300);
+      }
     },
     
     animateTransition() {
-      if (this.isMobile) {
-        // Mobile: Center the active card with smooth transition
-        const cardWidthPercentage = 100; // Each card takes full width on mobile
-        const gapPercentage = 3; // Gap percentage for mobile
-        
-        // Calculate translate value to center the active card
-        this.translateValue = -this.currentIndex * (cardWidthPercentage + gapPercentage);
-      } else {
-        // Desktop: Original calculation
-        const cardWidth = 33.333;
-        this.translateValue = -this.currentIndex * cardWidth + cardWidth; // Offset to center active card
-      }
+      // Only for desktop
+      if (this.isMobile) return;
       
+      const cardWidth = 33.333;
+      this.translateValue = -this.currentIndex * cardWidth + cardWidth;
+
       setTimeout(() => {
         this.isTransitioning = false;
       }, 400);
     },
     
     goToService(index) {
+      if (this.isMobile) return; // Disable click navigation on mobile
       if (this.isTransitioning || index === this.currentIndex) return;
       this.isTransitioning = true;
       this.currentIndex = index;
@@ -191,52 +241,25 @@ export default {
       }
     },
     
-    // Touch events for mobile swipe
-    handleTouchStart(e) {
-      if (!this.isMobile) return;
-      this.touchStartX = e.touches[0].clientX;
-      this.stopAutoRotation();
-    },
-    
-    handleTouchMove(e) {
-      if (!this.isMobile) return;
-      e.preventDefault();
-    },
-    
-    handleTouchEnd(e) {
-      if (!this.isMobile) return;
-      this.touchEndX = e.changedTouches[0].clientX;
-      this.handleSwipe();
-    },
-    
-    handleSwipe() {
-      if (!this.isMobile) return;
-      
-      const swipeThreshold = 50;
-      const swipeDistance = this.touchEndX - this.touchStartX;
-      
-      if (Math.abs(swipeDistance) < swipeThreshold) return;
-      
-      if (swipeDistance > 0) {
-        // Swipe right -> go to previous
-        this.prevService();
-      } else {
-        // Swipe left -> go to next
-        this.nextService();
-      }
-    },
-    
     checkIfMobile() {
+      const wasMobile = this.isMobile;
       this.isMobile = window.innerWidth <= 768;
-      this.animateTransition(); // Recalculate position
-      this.stopAutoRotation();
-      this.startAutoRotation(); // Restart with proper settings
+      
+      if (this.isMobile && !wasMobile) {
+        // Switching to mobile - stop desktop animations
+        this.stopAutoRotation();
+      } else if (!this.isMobile && wasMobile) {
+        // Switching to desktop - restart animations
+        this.startAutoRotation();
+      }
     }
   },
   mounted() {
     this.checkIfMobile();
-    this.animateTransition();
-    this.startAutoRotation();
+    if (!this.isMobile) {
+      this.animateTransition();
+      this.startAutoRotation();
+    }
     
     window.addEventListener('resize', this.checkIfMobile);
   },
@@ -247,23 +270,9 @@ export default {
 }
 </script>
 
-
 <style scoped>
-
-
-@media (max-width: 768px) {
-  .services-section {
-    margin-top: 2rem;
-    margin-bottom: 0;  /* walang extra gap */
-  }
-}
-
-
-
-
 .services-section {
- margin-top: 3rem;
-
+  margin-top: 3rem;
 }
 
 .section-title {
@@ -279,6 +288,7 @@ export default {
 }
 
 
+/* DESKTOP STYLES */
 .carousel-wrapper {
   overflow: hidden;
   margin: 0 auto;
@@ -295,7 +305,6 @@ export default {
   align-items: center;
 }
 
-/* DESKTOP STYLES */
 .service-card {
   flex: 0 0 calc(33.333% - 1rem);
   background: white;
@@ -507,164 +516,144 @@ export default {
   border-color: #667eea;
 }
 
-/* MOBILE RESPONSIVE STYLES */
+/* MOBILE STYLES (SIMPLE SINGLE CARD) */
+.mobile-services-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.mobile-service-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+  margin: 0 auto 1.5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+/* FIXED: Mobile title and description now left-aligned */
+.mobile-service-card .service-title {
+  font-size: 1.3rem;
+  text-align: left; /* Changed from center to left */
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.mobile-service-card .service-description {
+  text-align: left; /* Changed from center to left */
+  margin-bottom: 1.5rem;
+  min-height: 70px;
+  color: #4a5568;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.mobile-service-card .feature-item {
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+  text-align: left;
+}
+
+.mobile-service-card .service-actions {
+  margin-top: 1.5rem;
+}
+
+.mobile-service-card .service-button {
+  max-width: 100%;
+}
+
+/* Mobile Controls */
+.mobile-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding: 0 0.5rem;
+}
+
+.mobile-slider-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #667eea;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-slider-btn:active {
+  background: #667eea;
+  color: white;
+  transform: scale(0.95);
+}
+
+.mobile-carousel-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.mobile-carousel-info .service-name {
+  display: none; /* Hidden on mobile to save space */
+}
+
+/* Responsive Breakpoints */
 @media (max-width: 768px) {
+
+  
+  /* Hide desktop controls on mobile */
+  .carousel-controls,
   .carousel-wrapper {
-    padding: 1rem 0 2rem;
+    display: none;
   }
-
-  .services-carousel {
-    gap: 1rem;
-    padding: 0.5rem;
+  
+  /* Ensure mobile card text is left-aligned */
+  .mobile-service-card .service-title,
+  .mobile-service-card .service-description,
+  .mobile-service-card .feature-item {
+    text-align: left;
   }
+}
 
-  /* MOBILE CARDS - All cards visible, no blur, centered */
-  .service-card {
-    flex: 0 0 90%; /* Each card takes full width */
-    margin: 0;
-    padding: 1.5rem;
-    min-height: 320px;
-    border-radius: 16px;
-    opacity: 1 !important;
-    filter: none !important;
-    transform: scale(1) !important;
-    pointer-events: auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  /* Override left/right classes on mobile */
-  .service-card.left,
-  .service-card.right {
-    opacity: 1 !important;
-    filter: none !important;
-    transform: scale(1) !important;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  /* Active card gets special styling */
-  .service-card.active {
-    box-shadow: 0 16px 32px rgba(102, 126, 234, 0.25);
-    border: 1px solid rgba(102, 126, 234, 0.4);
-    transform: scale(1) !important;
-    z-index: 5;
-  }
-
-
-
-  .service-description {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    min-height: 70px;
-  }
-
-  .service-features {
-    margin-bottom: 1.25rem;
-  }
-
-  .feature-item {
-    font-size: 0.85rem;
-    margin-bottom: 0.4rem;
-  }
-
-  /* Show all features on mobile (no hidden features) */
-  .hidden-feature {
-    opacity: 1 !important;
-  }
-
-  .service-actions {
-    padding-top: 0.25rem;
-  }
-
-  .service-button {
-    max-width: 100%;
-    font-size: 0.9rem;
-    padding: 0.8rem 1rem;
-  }
-
-  .pricing-hint {
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-  }
-
-  /* MOBILE CONTROLS */
-  .carousel-controls {
-    margin-top: 0.5rem;
-    padding: 0 0.5rem;
-    position: relative;
-    z-index: 20;
-  }
-
-  .slider-btn {
-    width: 42px;
-    height: 42px;
-    margin-bottom: 0;
-    background: white;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .slider-btn:active {
-    background: #667eea;
-    color: white;
-    transform: scale(0.95);
-  }
-
-  .carousel-info {
-    flex-direction: row;
-    gap: 0.5rem;
-    margin: 0 0.75rem;
-  }
-
-  .current-service {
-    font-size: 1.3rem;
-  }
-
-  .service-separator {
-    font-size: 1.1rem;
-  }
-
-  .total-services {
-    font-size: 0.95rem;
-  }
-
-  .service-name {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 0.85rem;
-    margin: 0.25rem 0 0 0;
-    color: #4a5568;
-    font-weight: 500;
+@media (min-width: 769px) {
+  /* Hide mobile view on desktop */
+  .mobile-services-container {
+    display: none;
   }
 }
 
 /* Extra Small Screens */
 @media (max-width: 480px) {
-  .service-card {
+  .mobile-service-card {
     padding: 1.25rem;
     min-height: 300px;
   }
-
-  .service-title {
-    font-size: 1.15rem;
+  
+  .mobile-service-card .service-title {
+    font-size: 1.2rem;
   }
-
-  .service-description {
-    font-size: 0.85rem;
-  }
-
-  .carousel-controls {
-    padding: 0 0.25rem;
-  }
-
-  .slider-btn {
-    width: 38px;
-    height: 38px;
+  
+  .mobile-service-card .service-description {
     font-size: 0.9rem;
   }
-
-  .carousel-info {
-    margin: 0 0.5rem;
+  
+  .mobile-slider-btn {
+    width: 42px;
+    height: 42px;
   }
 }
 </style>

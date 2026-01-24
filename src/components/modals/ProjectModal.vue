@@ -1,3 +1,8 @@
+<!-- 
+  Copyright (c) 2026 Reymel Mislang
+  Mindoro State University (MINSU) - Calapan Campus, Philippines
+ -->
+
 <template>
   <transition name="fade">
     <div class="modal-overlay" @click="$emit('close')">
@@ -5,7 +10,7 @@
         <div class="modal-icon">
           <i class="fas fa-code"></i>
         </div>
-        <h3 class="modal-title">Project Demo Coming Soon</h3>
+        <h3 class="modal-title">Coming Soon</h3>
         <p class="modal-text">{{ message }}</p>
         <button @click="$emit('close')" class="modal-close-button">Got it</button>
       </div>
