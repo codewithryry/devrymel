@@ -16,11 +16,13 @@
         :achievements="achievements"
         @openDeansList="openDeansListModal"
         @openMobileDeansList="openMobileDeansListModal"
+        @open-certificates="openCertificatesListModal"   
+        @openLinks="showLinksModal = true" 
+
       />
 
-      <!-- Career Timeline
-      <CareerTimeline :timeline="timeline" /> -->
-
+      <!-- Career Timeline -->
+      <!-- <CareerTimeline :timeline="timeline" /> -->
 
             <!-- Projects Section -->
       <ProjectsSection 
@@ -41,6 +43,10 @@
         @openCertificatesListModal="openCertificatesListModal"
       />
 
+                 <!-- Services Section -->
+      <ServicesSection :services="services" />
+
+
       <!-- Social Media Section -->
       <SocialSection 
         :socialLinks="socialLinks"
@@ -49,8 +55,13 @@
         @openUnavailableSocialModal="openUnavailableSocialModal"
       />
 
-            <!-- Services Section -->
-      <!-- <ServicesSection :services="services" /> -->
+
+      <Linkwebsite
+        v-if="showLinksModal"
+        :links="projectLinks"
+        @close="showLinksModal = false"
+      />
+
 
       <!-- Footer -->
       <FooterSection />
@@ -130,6 +141,8 @@ import CareerTimeline from './CareerTimeline.vue'
 import LiveDevStats from './LiveDevStats.vue'
 import ServicesSection from './ServicesSection.vue'
 import ProjectDeepDiveModal from '../modals/ProjectDeepDiveModal.vue'
+import Linkwebsite from '../modals/Linkwebsite.vue'
+
 
 export default {
   name: "PersonalProfile",
@@ -148,6 +161,7 @@ export default {
     CareerTimeline,
     LiveDevStats,
     ServicesSection,
+    Linkwebsite,
     ProjectDeepDiveModal
   },
   data() {
@@ -234,85 +248,80 @@ export default {
         }
       ],
       
-timeline: [
-  {
-    date: "2021",
-    title: "BSIT Student – Mindoro State University (Calapan Campus)",
-    description: "Started college journey taking Bachelor of Science in Information Technology (BSIT) at Mindoro State University Calapan Campus.",
-    badges: ["BSIT", "College Life", "IT Foundations"]
-  },
-  {
-    date: "Nov 2, 2022",
-    title: "Started Coding Journey",
-    description: "Started coding using HTML and built my first GitHub project: basic-sign-up-form — marking the beginning of my journey in web development.",
-    badges: ["HTML", "First Project", "GitHub"]
-  },
-  {
-    date: "2023 - 2024",
-    title: "IT Student & Project Developer",
-    description: "Developed system projects, participated in team development, and gained experience in UI/UX, backend logic, and system workflows.",
-    badges: ["Team Projects", "System Design", "Web Apps"]
-  },
-  {
-    date: "2024 - Present",
-    title: "Full-Stack Developer & IT Student",
-    description: "Building full-stack applications, working on academic and personal projects, and continuously improving skills in modern web technologies.",
-    badges: ["Vue.js", "Node.js", "JavaScript", "MySQL"]
-  },
-  {
-    date: "2026 (Target)",
-    title: "BSIT Graduate – Mindoro State University (Calapan Campus)",
-    description: "Expected graduation from BSIT program, equipped with strong skills in web development, system design, and real-world project development.",
-    badges: ["BSIT", "Web Development", "System Development"]
-  }
-],
-
-
-      
-devStats: [
-  {
-    id: 1,
-    icon: "fas fa-code",
-    value: "700+",
-    label: "Hours Coded, Real Dev Time (WakaTime Verified)",
-    trend: "+3 hrs daily avg",
-    trendIcon: "fas fa-arrow-up",
-    trendClass: "up",
-    chartHeight: "80%"
-  },
-  {
-    id: 2,
-    icon: "fas fa-project-diagram",
-    value: "10+",
-    label: "Web Systems Built,  Academic & Real-World Projects",
-    trend: "Deployed systems",
-    trendIcon: "fas fa-globe",
-    trendClass: "up",
-    chartHeight: "75%"
-  },
-  {
-    id: 3,
-    icon: "fab fa-github",
-    value: "52+",
-    label: "GitHub Repositories,  Open Source & Private Projects",
-    trend: "Consistent commits",
-    trendIcon: "fas fa-database",
-    trendClass: "up",
-    chartHeight: "85%"
-  },
-  {
-    id: 4,
-    icon: "fas fa-laptop-code",
-    value: "Freelance",
-    label: "System Developer,  Full-Stack System Builder",
-    trend: "End-to-end development",
-    trendIcon: "fas fa-check-circle",
-    trendClass: "up",
-    chartHeight: "95%"
-  }
-],
-
-
+      timeline: [
+        {
+          date: "2021",
+          title: "BSIT Student – Mindoro State University (Calapan Campus)",
+          description: "Started college journey taking Bachelor of Science in Information Technology (BSIT) at Mindoro State University Calapan Campus.",
+          badges: ["BSIT", "College Life", "IT Foundations"]
+        },
+        {
+          date: "Nov 2, 2022",
+          title: "Started Coding Journey",
+          description: "Started coding using HTML and built my first GitHub project: basic-sign-up-form — marking the beginning of my journey in web development.",
+          badges: ["HTML", "First Project", "GitHub"]
+        },
+        {
+          date: "2023 - 2024",
+          title: "IT Student & Project Developer",
+          description: "Developed system projects, participated in team development, and gained experience in UI/UX, backend logic, and system workflows.",
+          badges: ["Team Projects", "System Design", "Web Apps"]
+        },
+        {
+          date: "2024 - Present",
+          title: "Full-Stack Developer & IT Student",
+          description: "Building full-stack applications, working on academic and personal projects, and continuously improving skills in modern web technologies.",
+          badges: ["Vue.js", "Node.js", "JavaScript", "MySQL"]
+        },
+        {
+          date: "2026 (Target)",
+          title: "BSIT Graduate – Mindoro State University (Calapan Campus)",
+          description: "Expected graduation from BSIT program, equipped with strong skills in web development, system design, and real-world project development.",
+          badges: ["BSIT", "Web Development", "System Development"]
+        }
+      ],    
+      devStats: [
+        {
+          id: 1,
+          icon: "fas fa-code",
+          value: "700+",
+          label: "Hours Coded, Real Dev Time (WakaTime Verified)",
+          trend: "+3 hrs daily avg",
+          trendIcon: "fas fa-arrow-up",
+          trendClass: "up",
+          chartHeight: "80%"
+        },
+        {
+          id: 2,
+          icon: "fas fa-project-diagram",
+          value: "10+",
+          label: "Web Systems Built,  Academic & Real-World Projects",
+          trend: "Deployed systems",
+          trendIcon: "fas fa-globe",
+          trendClass: "up",
+          chartHeight: "75%"
+        },
+        {
+          id: 3,
+          icon: "fab fa-github",
+          value: "52+",
+          label: "GitHub Repositories,  Open Source & Private Projects",
+          trend: "Consistent commits",
+          trendIcon: "fas fa-database",
+          trendClass: "up",
+          chartHeight: "85%"
+        },
+        {
+          id: 4,
+          icon: "fas fa-laptop-code",
+          value: "Freelance",
+          label: "System Developer,  Full-Stack System Builder",
+          trend: "End-to-end development",
+          trendIcon: "fas fa-check-circle",
+          trendClass: "up",
+          chartHeight: "95%"
+        }
+      ],
       services: [
         {
           id: 1,
@@ -322,8 +331,6 @@ devStats: [
           features: [
             "Responsive UI/UX Design",
             "RESTful API Development",
-            "Database Design & Management",
-            "Deployment & DevOps"
           ],
           technologies: ["Vue.js", "Node.js", "Python", "MongoDB", "Docker"]
         },
@@ -333,8 +340,6 @@ devStats: [
           title: "Progressive Web Apps",
           description: "Modern PWA development with offline capabilities and native-like experience.",
           features: [
-            "Offline Functionality",
-            "Push Notifications",
             "App-like Experience",
             "Cross-platform"
           ],
@@ -348,13 +353,10 @@ devStats: [
           features: [
             "Performance Audits",
             "Code Optimization",
-            "Database Tuning",
-            "Caching Strategies"
           ],
           technologies: ["Lighthouse", "Webpack", "Redis", "CDN"]
         }
-      ],
-      
+      ],   
       certificates: [
         {
           id: 1,
@@ -365,14 +367,14 @@ devStats: [
         },
         {
           id: 2,
-          title: "Certified Associate in Cybersecurity",
+          title: "Cybersecurity Associate",
           file: "Fortinet Certified Associate in Cybersecurity.pdf",
           description: "Associate level cybersecurity certification",
           category: "Cybersecurity"
         },
         {
           id: 3,
-          title: "Fundamentals in Cybersecurity",
+          title: "Cybersecurity Fundamentals",
           file: "Fortinet Certified Fundamentals in Cybersecurity.pdf",
           description: "Fundamental cybersecurity knowledge certification",
           category: "Cybersecurity"
@@ -386,21 +388,21 @@ devStats: [
         },
         {
           id: 5,
-          title: "Getting Started In Cybersecurity 3.0",
+          title: "Cybersecurity 3.0 Starter",
           file: "Getting Started In Cybersecurity 3.0.pdf",
           description: "Cybersecurity beginner course",
           category: "Cybersecurity"
         },
         {
           id: 6,
-          title: "Introduction to the Threat Landscape 3.0",
+          title: "Threat Landscape 3.0",
           file: "Introduction to the Threat Landscape 3.0.pdf",
           description: "Threat landscape analysis course",
           category: "Cybersecurity"
         },
         {
           id: 7,
-          title: "Technical Introduction to Cybersecurity 3.0",
+          title: "Technical Cybersecurity 3.0",
           file: "Technical Introduction to Cybersecurity 3.0.pdf",
           description: "Technical cybersecurity fundamentals",
           category: "Cybersecurity"
@@ -497,197 +499,238 @@ devStats: [
         ]
       },
       socialLinks: [
-        {
-          id: 1,
-          label: "Facebook",
-          icon: "fab fa-facebook",
-          url: "https://www.facebook.com/100063507442180",
-        },
-        {
-          id: 2,
-          label: "Twitter (X)",
-          icon: "fab fa-twitter",
-          url: "#",
-        },
-        {
-          id: 3,
-          label: "Instagram",
-          icon: "fab fa-instagram",
-          url: "https://www.instagram.com/rymelrey.528191/",
-        },
-        {
-          id: 4,
-          label: "YouTube",
-          icon: "fab fa-youtube",
-          url: "#",
-        },
-        {
-          id: 5,
-          label: "LinkedIn",
-          icon: "fab fa-linkedin",
-          url: "https://www.linkedin.com/in/reymel-mislang/",
-        },
-        {
-          id: 6,
-          label: "Spotify",
-          icon: "fab fa-spotify",
-          url: "#",
-        },
-        {
-          id: 7,
-          label: "Pinterest",
-          icon: "fab fa-pinterest",
-          url: "#",
-        },
-        {
-          id: 8,
-          label: "TikTok",
-          icon: "fab fa-tiktok",
-          url: "#",
-        },
-        {
-          id: 9,
-          label: "Reddit",
-          icon: "fab fa-reddit",
-          url: "https://www.reddit.com/user/DemandPositive792/",
-        },
-        {
-          id: 10,
-          label: "Discord",
-          icon: "fab fa-discord",
-          url: "#",
-        },
-        {
-          id: 11,
-          label: "GitHub",
-          icon: "fab fa-github",
-          url: "#",
-        },
-        {
-          id: 12,
-          label: "GitLab",
-          icon: "fab fa-gitlab",
-          url: "#",
-        },
-        {
-          id: 13,
-          label: "Stack Overflow",
-          icon: "fab fa-stack-overflow",
-          url: "#",
-        },
-        {
-          id: 14,
-          label: "Medium",
-          icon: "fab fa-medium",
-          url: "#",
-        },
-        {
-          id: 15,
-          label: "Dev.to",
-          icon: "fab fa-dev",
-          url: "#",
-        },
-        {
-          id: 16,
-          label: "Behance",
-          icon: "fab fa-behance",
-          url: "#",
-        },
-        {
-          id: 17,
-          label: "Dribbble",
-          icon: "fab fa-dribbble",
-          url: "#",
-        },
-        {
-          id: 18,
-          label: "Telegram",
-          icon: "fab fa-telegram",
-          url: "#",
-        },
-        {
-          id: 19,
-          label: "WhatsApp",
-          icon: "fab fa-whatsapp",
-          url: "#",
-        },
-        {
-          id: 20,
-          label: "Messenger",
-          icon: "fab fa-facebook-messenger",
-          url: "#",
-        },
-        {
-          id: 21,
-          label: "Portfolio",
-          icon: "fas fa-globe",
-          url: "#",
-        },
-        {
-          id: 22,
-          label: "WhatsApp",
-          icon: "fab fa-whatsapp",
-          url: "#",
-        },
-        {
-          id: 23,
-          label: "WeChat",
-          icon: "fab fa-weixin",
-          url: "#",
-        },
-        {
-          id: 24,
-          label: "Telegram",
-          icon: "fab fa-telegram-plane",
-          url: "#",
-        },
-        {
-          id: 25,
-          label: "Snapchat",
-          icon: "fab fa-snapchat-ghost",
-          url: "#",
-        },
-        {
-          id: 26,
-          label: "Threads",
-          icon: "fab fa-threads",
-          url: "#",
-        },
-        {
-          id: 27,
-          label: "Line",
-          icon: "fab fa-line",
-          url: "#",
-        },
-        {
-          id: 28,
-          label: "Viber",
-          icon: "fab fa-viber",
-          url: "#",
-        },
-        {
-          id: 29,
-          label: "Signal",
-          icon: "fab fa-signal-messenger",
-          url: "#",
-        },
-        {
-          id: 30,
-          label: "KakaoTalk",
-          icon: "fas fa-comment",
-          url: "#",
-        },
-        {
-          id: 31,
-          label: "Twitch",
-          icon: "fab fa-twitch",
-          url: "#",
-        }
+          {
+            id: 1,
+            label: "Facebook",
+            icon: "fab fa-facebook",
+            url: "https://www.facebook.com/100063507442180",
+          },
+          {
+            id: 2,
+            label: "Twitter (X)",
+            icon: "fab fa-twitter",
+            url: "#",
+          },
+          {
+            id: 3,
+            label: "Instagram",
+            icon: "fab fa-instagram",
+            url: "https://www.instagram.com/rymelrey.528191/",
+          },
+          {
+            id: 4,
+            label: "YouTube",
+            icon: "fab fa-youtube",
+            url: "#",
+          },
+          {
+            id: 5,
+            label: "LinkedIn",
+            icon: "fab fa-linkedin",
+            url: "https://www.linkedin.com/in/reymelreymislang/",
+          },
+          {
+            id: 6,
+            label: "Spotify",
+            icon: "fab fa-spotify",
+            url: "#",
+          },
+          {
+            id: 7,
+            label: "Pinterest",
+            icon: "fab fa-pinterest",
+            url: "#",
+          },
+          {
+            id: 8,
+            label: "TikTok",
+            icon: "fab fa-tiktok",
+            url: "#",
+          },
+          {
+            id: 9,
+            label: "Reddit",
+            icon: "fab fa-reddit",
+            url: "https://www.reddit.com/user/DemandPositive792/",
+          },
+          {
+            id: 10,
+            label: "Discord",
+            icon: "fab fa-discord",
+            url: "#",
+          },
+          {
+            id: 11,
+            label: "GitHub",
+            icon: "fab fa-github",
+            url: "#",
+          },
+          {
+            id: 12,
+            label: "GitLab",
+            icon: "fab fa-gitlab",
+            url: "#",
+          },
+          {
+            id: 13,
+            label: "Stack Overflow",
+            icon: "fab fa-stack-overflow",
+            url: "#",
+          },
+          {
+            id: 14,
+            label: "Medium",
+            icon: "fab fa-medium",
+            url: "#",
+          },
+          {
+            id: 15,
+            label: "Dev.to",
+            icon: "fab fa-dev",
+            url: "#",
+          },
+          {
+            id: 16,
+            label: "Behance",
+            icon: "fab fa-behance",
+            url: "#",
+          },
+          {
+            id: 17,
+            label: "Dribbble",
+            icon: "fab fa-dribbble",
+            url: "#",
+          },
+          {
+            id: 18,
+            label: "Telegram",
+            icon: "fab fa-telegram",
+            url: "#",
+          },
+          {
+            id: 19,
+            label: "WhatsApp",
+            icon: "fab fa-whatsapp",
+            url: "#",
+          },
+          {
+            id: 20,
+            label: "Messenger",
+            icon: "fab fa-facebook-messenger",
+            url: "#",
+          },
+          {
+            id: 21,
+            label: "Portfolio",
+            icon: "fas fa-globe",
+            url: "#",
+          },
+          {
+            id: 22,
+            label: "WhatsApp",
+            icon: "fab fa-whatsapp",
+            url: "#",
+          },
+          {
+            id: 23,
+            label: "WeChat",
+            icon: "fab fa-weixin",
+            url: "#",
+          },
+          {
+            id: 24,
+            label: "Telegram",
+            icon: "fab fa-telegram-plane",
+            url: "#",
+          },
+          {
+            id: 25,
+            label: "Snapchat",
+            icon: "fab fa-snapchat-ghost",
+            url: "#",
+          },
+          {
+            id: 26,
+            label: "Threads",
+            icon: "fab fa-threads",
+            url: "#",
+          },
+          {
+            id: 27,
+            label: "Line",
+            icon: "fab fa-line",
+            url: "#",
+          },
+          {
+            id: 28,
+            label: "Viber",
+            icon: "fab fa-viber",
+            url: "#",
+          },
+          {
+            id: 29,
+            label: "Signal",
+            icon: "fab fa-signal-messenger",
+            url: "#",
+          },
+          {
+            id: 30,
+            label: "KakaoTalk",
+            icon: "fas fa-comment",
+            url: "#",
+          },
+          {
+            id: 31,
+            label: "Twitch",
+            icon: "fab fa-twitch",
+            url: "#",
+          }
       ],
-      
+
+projectLinks: [
+  {
+    id: 1,
+    title: "OwePal",
+    description: "Finance tracking app for budgeting, debt tracking, reminders, and financial clarity.",
+    link: "https://owepal.vercel.app/owePal"
+  },
+  {
+    id: 2,
+    title: "Linktree",
+    description: "Linktree-style personal landing page for centralized social and project links.",
+    link: "https://betsylinktree.vercel.app/"
+  },
+  {
+    id: 3,
+    title: "BoardMate",
+    description: "Collaborative task, chores, and water bill management app for shared living spaces.",
+    link: "https://boardmate.vercel.app/"
+  },
+  {
+    id: 4,
+    title: "LiftUp Connect",
+    description: "AI-powered mental health support platform for community discussion and emotional well-being.",
+    link: "https://liftupconnect.vercel.app/"
+  },
+  {
+    id: 5,
+    title: "Barangay Information System",
+    description: "Digital platform modernizing barangay operations, services, and community engagement.",
+    link: "https://barangay-information-system.vercel.app/"
+  },
+  {
+    id: 6,
+    title: "PrintNConnect",
+    description: "Online printing and connectivity service platform for document handling and services.",
+    link: "https://printnconnect.vercel.app/"
+  }
+],
+
+            
       // Modal states
       showDeansListModal: false,
       showQRModal: false,
+      showLinksModal: false, 
       showProjectModal: false,
       showSocialModal: false,
       showCertificatesListModal: false,
@@ -717,6 +760,7 @@ devStats: [
     }
   },
   methods: {
+    
     openDeansListModal(index) {
       this.currentDeansListIndex = index;
       this.showDeansListModal = true;
@@ -830,6 +874,8 @@ devStats: [
       }
       this.showSocialModal = true;
     },
+
+    
     
     closeSocialModal() {
       this.showSocialModal = false;

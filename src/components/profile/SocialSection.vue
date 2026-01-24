@@ -53,8 +53,23 @@ export default {
 
 <style scoped>
 .social-section {
-  margin: 3rem 0;
+  margin-top: 3rem;
+  margin-bottom: 0;   /* IMPORTANT: alisin gap sa baba */
 }
+@media (max-width: 768px) {
+  .social-section {
+    margin-top: 2rem;
+    margin-bottom: 0;  /* walang extra gap */
+  }
+}
+
+@media (max-width: 480px) {
+  .social-section {
+    margin-top: 1.5rem;
+    margin-bottom: 0;  /* dikit pero clean */
+  }
+}
+
 
 .section-title {
   font-size: 2rem;
@@ -178,6 +193,20 @@ export default {
   border-color: #a0aec0;
   transform: translateY(-3px);
 }
+
+
+@media (max-width: 768px) {
+  .social-section {
+    margin-bottom: 1rem;   /* bawas gap sa ilalim */
+  }
+}
+
+@media (max-width: 480px) {
+  .social-section {
+    margin-bottom: 0.5rem; /* mas dikit sa footer */
+  }
+}
+
 </style>
 
 

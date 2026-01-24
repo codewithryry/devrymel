@@ -2,77 +2,107 @@
   <div>
     <!-- MOBILE LAYOUT -->
     <div class="mobile-profile-content">
-      <!-- Profile Image & Name -->
-      <div class="mobile-profile-frame">
-        <div class="profile-glow"></div>
-        <img :src="profile.image" alt="Reymel Mislang" class="profile-image" />
-      </div>
-      
-      <div class="mobile-identity">
-        <h2 class="mobile-name">{{ profile.name }}</h2>
-        <div class="mobile-title-badge">
-          <i class="fas fa-terminal"></i>
-          <span>Web Developer</span>
+      <!-- Profile Header -->
+      <div class="mobile-header">
+        <div class="mobile-profile-frame">
+          <div class="profile-glow"></div>
+          <img :src="profile.image" alt="Reymel Mislang" class="profile-image" />
         </div>
         
-        <!-- Small inline honors indicator -->
-        <div class="mobile-honors-indicator" @click="$emit('openMobileDeansList')">
-          <i class="fas fa-trophy"></i>
-          <span>Dean's Lister ({{ achievements.deansList.length }} semesters)</span>
-          <i class="fas fa-chevron-right"></i>
+      <div class="mobile-identity">
+        <h2 class="mobile-name">
+          <span class="name-first">Reymel</span>
+          <span class="name-last">Mislang</span>
+        </h2>
+
+        <div class="mobile-title">
+          <i class="fas fa-terminal"></i>
+          <span></span>
+        </div>
+
+        <!-- CENTERED BADGES -->
+        <div class="center-badges">
+          <span class="inline-badge deans" @click="openMobileDeansList" title="Dean's List">
+            <i class="fas fa-trophy"></i>
+          </span>
+          <span class="inline-badge certs" 
+                @click="$emit('open-certificates')" 
+                title="Certificates">
+            <i class="fas fa-certificate"></i>
+          </span>
+<span class="inline-badge links" 
+      @click="$emit('openLinks')" 
+      title="Project Links">
+  <i class="fas fa-link"></i>
+</span>
+
+        </div>
+      </div>
+      </div>
+
+      <!-- About Section (without title) -->
+      <div class="mobile-card about-card">
+        <div class="card-content">
+          <p class="statement-text">
+            I specialize in building <span class="highlight">full-stack applications</span> that solve real-world problems 
+            through clean architecture and thoughtful design.
+          </p>
+          <p class="statement-text">
+            My approach combines technical excellence with user-centered design principles. I believe in writing 
+            clean, maintainable code and creating solutions that are both elegant and efficient.
+          </p>
+           <p class="statement-text">
+          Get in touch
+          </p>
+         <div class="mobile-contact-section">
+          <div class="mobile-contact-grid"> 
+        <!-- Improved Mobile Contact Section -->
+          <div class="mobile-contact-section">
+            <div class="mobile-contact-grid">
+                          <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
+                <div class="contact-left">
+                  <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                  </div>
+                  <div class="contact-text">
+                    <span class="contact-title">Email Me</span>
+                  </div>
+                </div>
+                <i class="fas fa-arrow-right contact-arrow"></i>
+              </a>
+
+                        <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
+              <div class="contact-left">
+                <div class="contact-icon">
+                  <i class="fab fa-facebook-messenger"></i>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-title">Messenger</span>
+                   <span class="contact-sub">Fastest response</span>
+                </div>
+              </div>
+              <i class="fas fa-arrow-right contact-arrow"></i>
+            </a>
+
+            <!-- <a href="https://github.com/codewithryry" target="_blank" class="mobile-contact-item github">
+              <div class="contact-left">
+                <div class="contact-icon">
+                  <i class="fab fa-github"></i>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-title">GitHub</span>
+                  <span class="contact-sub">View projects</span>
+                </div>
+              </div>
+              <i class="fas fa-arrow-right contact-arrow"></i>
+            </a> -->
+          </div>
+        </div>
+        </div>
+      </div>
         </div>
       </div>
 
-      <!-- About Me -->
-      <div class="mobile-about">
-        <p class="mobile-statement-text">
-          I specialize in building <span class="highlight">full-stack applications</span> that solve real-world problems 
-          through clean architecture and thoughtful design.
-        </p>
-        <p class="mobile-statement-text">
-          My approach combines technical excellence with user-centered design principles. I believe in writing 
-          clean, maintainable code and creating solutions that are both elegant and efficient.
-        </p>
-        <p class="mobile-statement-text">
-          Have a project in mind? Let's discuss how we can bring your ideas to life.
-        </p>
-      </div>
-
-      <!-- Mobile Contact -->
-      <div class="mobile-contact-section">
-        <div class="mobile-contact-grid">
-          <!-- Email -->
-          <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item">
-            <div class="contact-icon">
-              <i class="fas fa-envelope"></i>
-            </div>
-            <div class="contact-info">
-              <span class="contact-label">Email</span>
-              <span class="contact-value">Send an Email</span>
-            </div>
-          </a>
-          <!-- Messenger -->
-          <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item">
-            <div class="contact-icon">
-              <i class="fab fa-facebook-messenger"></i>
-            </div>
-            <div class="contact-info">
-              <span class="contact-label">Messenger</span>
-              <span class="contact-value">Chat on Facebook</span>
-            </div>
-          </a>
-          <!-- GitHub -->
-          <a href="https://github.com/codewithryry" target="_blank" class="mobile-contact-item">
-            <div class="contact-icon">
-              <i class="fab fa-github"></i>
-            </div>
-            <div class="contact-info">
-              <span class="contact-label">GitHub</span>
-              <span class="contact-value">View repositories</span>
-            </div>
-          </a>
-        </div>
-      </div>
     </div>
 
     <!-- DESKTOP LAYOUT -->
@@ -222,9 +252,868 @@ export default {
       required: true
     }
   },
-  emits: ['openDeansList', 'openMobileDeansList']
+emits: [
+  'openDeansList', 
+  'openMobileDeansList', 
+  'openCertificatesListModal',
+  'openlinks'
+],
+
+methods: {
+  openMobileDeansList() {
+    this.$emit('openMobileDeansList');
+  },
+  openCertificatesListModal() {
+    this.$emit('openCertificatesListModal');
+  }
+}
 }
 </script>
+
+
+
+<style scoped>
+.mobile-contact-grid{
+  display:flex;
+  flex-direction:column;
+  gap:0.6rem;
+  width:95%;
+}
+
+.mobile-contact-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#ffffff; /* same as about text card */
+  border:1px solid #e2e8f0;
+  text-decoration:none;
+  color:#2d3748;
+  transition:all 0.2s ease;
+  box-shadow:0 2px 6px rgba(0,0,0,0.03);
+  width:100%;
+}
+
+.mobile-contact-item:active{
+  transform:scale(0.97);
+}
+
+.mobile-contact-item:hover{
+  border-color:#667eea;
+  box-shadow:0 6px 18px rgba(102,126,234,0.12);
+}
+
+.contact-left{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+}
+
+.contact-icon{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.95rem;
+  background:#edf2ff;
+  color:#667eea;
+}
+
+.contact-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.1;
+}
+
+.contact-title{
+  font-size:0.85rem;
+  font-weight:600;
+}
+
+.contact-sub{
+  gap:0.65rem;
+  font-size:0.7rem;
+  color:#718096;
+}
+
+.contact-arrow{
+  font-size:0.75rem;
+  color:#a0aec0;
+  transition:transform 0.2s ease;
+}
+
+.mobile-contact-item:hover .contact-arrow{
+  transform:translateX(4px);
+  color:#667eea;
+}
+
+/* Color accents */
+.mobile-contact-item.email .contact-icon{background:rgba(102,126,234,0.12);color:#667eea;}
+.mobile-contact-item.messenger .contact-icon{background:rgba(0,106,255,0.12);color:#006aff;}
+.mobile-contact-item.github .contact-icon{background:rgba(36,41,46,0.12);color:#24292e;}
+</style>
+<style scoped>
+/* Fixed badge click handlers */
+.center-badges {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+  width: 100%;
+}
+
+.inline-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.inline-badge:active {
+  transform: scale(0.9);
+}
+
+.inline-badge::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease;
+}
+
+.inline-badge:active::after {
+  transform: translate(-50%, -50%) scale(20);
+  opacity: 0;
+}
+
+/* Badge colors */
+.inline-badge.deans {
+  background: linear-gradient(135deg, #f6e05e, #d69e2e);
+}
+
+.inline-badge.certs {
+  background: linear-gradient(135deg, #38a169, #2f855a);
+}
+
+
+.inline-badge.links {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  opacity: 0.9;
+  box-shadow: 0 0 12px rgba(0, 198, 255, 0.45);
+}
+/* Fixed contact card UX */
+.simple-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.simple-contact-item:hover {
+  background: white;
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+}
+
+.simple-contact-item:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+.simple-contact-item .contact-icon {
+
+  border-radius: 10px;
+  background: white;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  border: 1px solid #e2e8f0;
+}
+
+.simple-contact-item span {
+  flex: 1;
+  text-align: left;
+}
+
+.contact-arrow {
+  color: #a0aec0;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.simple-contact-item:hover .contact-arrow {
+  color: #667eea;
+  transform: translateX(3px);
+}
+
+/* Color-specific icons */
+.email-item .contact-icon {
+  color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.messenger-item .contact-icon {
+  color: #006aff;
+  background: linear-gradient(135deg, rgba(0, 106, 255, 0.1), rgba(0, 82, 204, 0.1));
+  border-color: rgba(0, 106, 255, 0.2);
+}
+
+/* Mobile Layout Styles */
+.mobile-profile-content {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-profile-content {
+    display: none;
+  }
+  
+  .mobile-profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+  }
+  
+  /* Mobile Header */
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobile-profile-frame {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+  }
+  
+  .profile-glow {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: linear-gradient(135deg, #667eea, #764ba2, #f687b3);
+    border-radius: 20px;
+    opacity: 0.2;
+    z-index: 1;
+  }
+  
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+  }
+  
+  .profile-badge {
+    top: -8px;
+    right: -8px;
+    z-index: 3;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #f6e05e, #d69e2e);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(214, 158, 46, 0.4);
+    border: 2px solid white;
+    cursor: pointer;
+  }
+  
+  .profile-badge i {
+    font-size: 0.8rem;
+    margin-bottom: -2px;
+  }
+  
+  .mobile-identity {
+    flex: 1;
+  }
+  
+  .mobile-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .name-first {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .name-last {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #4a5568;
+    margin-top: -0.2rem;
+  }
+  
+  .mobile-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-radius: 10px;
+    color: #667eea;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .mobile-title i {
+    font-size: 0.9rem;
+  }
+  
+  /* Card Styles */
+  .mobile-card {
+    border-radius: 16px;
+    padding: 1.25rem;
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    color: #2d3748;
+  }
+  
+  .card-header i {
+    font-size: 1.2rem;
+    color: #667eea;
+  }
+  
+  .card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+  }
+  
+  /* About Card (no title) */
+  .about-card .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .statement-text {
+    font-size: 0.95rem;
+    color: #4a5568;
+    line-height: 1.6;
+    margin: 0;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+  
+  .statement-text .highlight {
+    color: #667eea;
+    font-weight: 600;
+  }
+  
+  /* Tech Card */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+  }
+  
+  .tech-item i {
+    font-size: 1.2rem;
+    color: #4a5568;
+    width: 24px;
+    text-align: center;
+  }
+  
+  .tech-item span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2d3748;
+  }
+  
+  /* Simple Contact Card */
+  .simple-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* Desktop Layout Styles */
+@media (min-width: 769px) {
+  .mobile-profile-content {
+    display: none !important;
+  }
+  
+  .desktop-profile-content {
+    display: block !important;
+  }
+  
+  .profile-section {
+    margin-bottom: 4rem;
+  }
+  
+  .profile-brand-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 0;
+    min-height: 600px;
+  }
+  
+  .brand-visual {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .profile-frame {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-glow {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(135deg, #667eea, #764ba2, #f687b3);
+    border-radius: 24px;
+    opacity: 0.3;
+    z-index: 1;
+  }
+  
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+    border: 8px solid white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+  }
+  
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    z-index: 3;
+  }
+  
+  .overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.2), transparent);
+    border-radius: 20px;
+  }
+  
+  .identity-badge {
+    background: white;
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    position: relative;
+    overflow: hidden;
+    width: 63%;
+    max-width: 320px;
+  }
+  
+  .badge-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .identity-badge i {
+    font-size: 2rem;
+    color: #667eea;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .badge-info {
+    flex: 1;
+  }
+  
+  .badge-title {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3748;
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
+  }
+  
+  .tech-stack {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 2rem;
+  }
+  
+  .stack-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .stack-chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .tech-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+  
+  .tech-chip:hover {
+    transform: translateY(-2px);
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  }
+  
+  .tech-chip i {
+    font-size: 1.2rem;
+    color: #4a5568;
+    width: 24px;
+    text-align: center;
+  }
+  
+  .tech-chip span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #2d3748;
+    line-height: 1.2;
+  }
+  
+  .achievement-badges {
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .achievement-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .badge-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .achievement-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid rgba(246, 224, 94, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .achievement-chip:hover {
+    transform: translateX(5px);
+    border-color: #f6e05e;
+    box-shadow: 0 5px 15px rgba(246, 224, 94, 0.2);
+  }
+  
+  .achievement-chip::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #f6e05e, #d69e2e);
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .chip-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f6e05e, #d69e2e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .chip-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+  .chip-semester {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.2;
+  }
+  
+  .chip-gwa {
+    font-size: 0.75rem;
+    color: #d69e2e;
+    font-weight: 500;
+  }
+  
+  .brand-narrative {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .brand-statement {
+    line-height: 1.8;
+    text-align: justify;
+    hyphens: auto;
+  }
+  
+  .statement-text {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    text-align: justify;
+    text-justify: inter-word;
+    letter-spacing: 0.01em;
+  }
+  
+  .statement-text:last-child {
+    margin-bottom: 0;
+  }
+  
+  .statement-text .highlight {
+    color: #667eea;
+    font-weight: 600;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .statement-text .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    border-radius: 2px;
+    z-index: -1;
+  }
+  
+  .brand-contact {
+    margin-top: 1rem;
+  }
+  
+  .contact-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .contact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+  }
+  
+  .contact-item:hover {
+    background: white;
+    border-color: #667eea;
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  }
+  
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #667eea;
+    font-size: 1.2rem;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .contact-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+  .contact-label {
+    font-size: 0.85rem;
+    color: #718096;
+    font-weight: 500;
+  }
+  
+  .contact-value {
+    font-size: 0.95rem;
+    color: #2d3748;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  
+  .contact-arrow {
+    color: #a0aec0;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .contact-item:hover .contact-arrow {
+    transform: translateX(3px);
+    color: #667eea;
+  }
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style scoped>
 /* Mobile Layout Styles */
@@ -426,13 +1315,12 @@ export default {
     width: 44px;
     height: 44px;
     border-radius: 10px;
-    background: white;
+
     display: flex;
     align-items: center;
     justify-content: center;
     color: #667eea;
     font-size: 1.3rem;
-    border: 1px solid #e2e8f0;
   }
   
   .contact-info {

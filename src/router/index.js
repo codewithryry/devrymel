@@ -8,7 +8,7 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      title: 'Devrymel  ', 
+      title: 'Devrymel | Reymel Mislang  ', 
     }
   },
   // Catch-all route for 404 errors
@@ -29,7 +29,7 @@ const router = createRouter({
 
 // Optional: Add a global navigation guard to update the page title
 router.beforeEach((to, from, next) => {
-  const pageTitle = to.meta.title || 'Reymel Mislang' // Use the meta title or a default title
+  const pageTitle = to.meta.title || '' // Use the meta title or a default title
   document.title = pageTitle // Update the document title
   next()
 })

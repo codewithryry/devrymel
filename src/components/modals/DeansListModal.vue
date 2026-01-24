@@ -38,23 +38,6 @@
               </div>
             </div>
           </div>
-          
-          <div class="detail-row">
-            <div class="detail-col">
-              <i class="fas fa-calendar-alt"></i>
-              <div>
-                <span class="detail-label">Academic Year</span>
-                <span class="detail-value">{{ currentItem.details[1].split(':')[1].trim() }}</span>
-              </div>
-            </div>
-            <div class="detail-col">
-              <i class="fas fa-book"></i>
-              <div>
-                <span class="detail-label">Semester</span>
-                <span class="detail-value">{{ currentItem.details[3].split(':')[1].trim() }}</span>
-              </div>
-            </div>
-          </div>
         </div>
         
         <div class="viewer-navigation">
@@ -359,8 +342,6 @@ export default {
   opacity: 0;
 }
 </style>
-
-
 <style scoped>
 /* ===== GLOBAL STYLES ===== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
