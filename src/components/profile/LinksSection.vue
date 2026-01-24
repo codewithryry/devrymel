@@ -2,6 +2,66 @@
   <section class="links-section">
     <h2 class="section-title">Quick Links</h2>
     <br>
+    
+    <!-- Mobile View - Compact Horizontal Scroll -->
+    <div class="mobile-links-container">
+      <!-- Swipe hint text -->
+      <div class="swipe-hint">
+        <span>Swipe for more..</span>
+      </div>
+      
+      <div class="mobile-links-scroll">
+  
+        
+        
+
+
+        
+        <!-- QR Support Card -->
+        <div class="mobile-link-card" @click="$emit('openQRModal')">
+          <div class="mobile-icon qr">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <span class="mobile-label">Support QR</span>
+        </div>
+        
+        <!-- Coffee Card -->
+        <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card">
+          <div class="mobile-icon coffee">
+            <i class="fas fa-coffee"></i>
+          </div>
+          <span class="mobile-label">Coffee</span>
+        </a>
+        
+        <!-- Telegram Card -->
+        <a href="https://t.me/+XpsVdhvIlVM4ZTA1" target="_blank" class="mobile-link-card">
+          <div class="mobile-icon telegram">
+            <i class="fab fa-telegram"></i>
+          </div>
+          <span class="mobile-label">Telegram</span>
+        </a>
+        
+        <!-- WakaTime Card (mobile only) -->
+        <a href="https://wakatime.com/@codewithryry" target="_blank" class="mobile-link-card">
+          <div class="mobile-icon stats">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <span class="mobile-label">Stats</span>
+        </a>
+
+                <!-- Certificates Card -->
+        <div class="mobile-link-card" @click="$emit('openCertificatesListModal')">
+          <div class="mobile-icon certificates">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <span class="mobile-label">Certificates</span>
+          <span class="mobile-badge">{{ certificates.length }}</span>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Desktop View - Original Grid (unchanged) -->
     <div class="links-grid">
       <!-- Portfolio & Resume -->
       <div class="link-category">
@@ -149,11 +209,166 @@ export default {
   background-clip: text;
 }
 
+/* ===== MOBILE VIEW ===== */
+.mobile-links-container {
+  display: block;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+  position: relative;
+}
 
-.links-grid {
+/* Swipe hint text */
+.swipe-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #718096;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  padding: 0 0.5rem;
+  animation: pulseHint 2s infinite;
+}
+
+.swipe-hint i {
+  color: #667eea;
+  font-size: 0.9rem;
+  animation: bounceRight 1.5s infinite;
+}
+
+@keyframes pulseHint {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bounceRight {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+.mobile-links-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.75rem 0.5rem 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Add gradient fade at the end to indicate more content */
+.mobile-links-scroll::after {
+  content: '';
+  position: absolute;
+  right: 0.5rem;
+  top: 3rem;
+  width: 30px;
+  height: 100px;
+  background: linear-gradient(90deg, transparent, white);
+  pointer-events: none;
+  border-radius: 0 16px 16px 0;
+}
+
+.mobile-links-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.mobile-link-card {
+  flex: 0 0 auto;
+  width: 85px;
+  height: 100px;
+  background: white;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.mobile-link-card:active {
+  transform: scale(0.95);
+}
+
+.mobile-link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+.mobile-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.mobile-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.mobile-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #667eea;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile icon colors */
+.mobile-icon.portfolio { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+.mobile-icon.certificates { background: rgba(56, 161, 105, 0.1); color: #38a169; }
+.mobile-icon.github { background: rgba(36, 41, 46, 0.1); color: #24292e; }
+.mobile-icon.dev { background: rgba(10, 10, 10, 0.1); color: #0a0a0a; }
+.mobile-icon.qr { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+.mobile-icon.coffee { background: rgba(214, 158, 46, 0.1); color: #d69e2e; }
+.mobile-icon.telegram { background: rgba(0, 136, 204, 0.1); color: #0088cc; }
+.mobile-icon.stats { background: rgba(56, 161, 105, 0.1); color: #38a169; }
+
+/* Hide mobile view on desktop */
+@media (min-width: 769px) {
+  .mobile-links-container {
+    display: none;
+  }
+  
+  .swipe-hint {
+    display: none;
+  }
+}
+
+/* ===== DESKTOP VIEW ===== */
+.links-grid {
+  display: none; /* Hidden on mobile by default */
 }
 
 @media (min-width: 769px) {
@@ -164,6 +379,7 @@ export default {
   }
 }
 
+/* Original desktop styles (unchanged) */
 .link-category {
   background: white;
   border-radius: 16px;
@@ -271,6 +487,3 @@ export default {
   color: #667eea;
 }
 </style>
-
-
-

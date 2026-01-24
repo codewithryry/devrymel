@@ -249,10 +249,21 @@ export default {
 
 
 <style scoped>
+
+
+@media (max-width: 768px) {
+  .services-section {
+    margin-top: 2rem;
+    margin-bottom: 0;  /* walang extra gap */
+  }
+}
+
+
+
+
 .services-section {
-  margin-bottom: 0;
-  margin-top: 2rem;
-  padding: 0 1rem;
+ margin-top: 3rem;
+
 }
 
 .section-title {
@@ -509,7 +520,7 @@ export default {
 
   /* MOBILE CARDS - All cards visible, no blur, centered */
   .service-card {
-    flex: 0 0 100%; /* Each card takes full width */
+    flex: 0 0 90%; /* Each card takes full width */
     margin: 0;
     padding: 1.5rem;
     min-height: 320px;
@@ -538,10 +549,7 @@ export default {
     z-index: 5;
   }
 
-  .service-title {
-    font-size: 1.25rem;
-    margin: 0 0 0.75rem 0;
-  }
+
 
   .service-description {
     font-size: 0.9rem;
@@ -660,3 +668,4 @@ export default {
   }
 }
 </style>
+

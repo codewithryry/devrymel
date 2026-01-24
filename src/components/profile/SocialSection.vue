@@ -56,6 +56,7 @@ export default {
   margin-top: 3rem;
   margin-bottom: 0;   /* IMPORTANT: alisin gap sa baba */
 }
+
 @media (max-width: 768px) {
   .social-section {
     margin-top: 2rem;
