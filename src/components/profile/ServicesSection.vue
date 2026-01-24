@@ -151,7 +151,7 @@ export default {
       if (this.isMobile) {
         // Mobile: Center the active card with smooth transition
         const cardWidthPercentage = 100; // Each card takes full width on mobile
-        const gapPercentage = 4; // Gap percentage for mobile
+        const gapPercentage = 3; // Gap percentage for mobile
         
         // Calculate translate value to center the active card
         this.translateValue = -this.currentIndex * (cardWidthPercentage + gapPercentage);
@@ -668,4 +668,3 @@ export default {
   }
 }
 </style>
-

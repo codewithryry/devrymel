@@ -11,27 +11,25 @@
       </div>
       
       <div class="mobile-links-scroll">
-  
-        
-        
 
-
-        
-        <!-- QR Support Card -->
-        <div class="mobile-link-card" @click="$emit('openQRModal')">
-          <div class="mobile-icon qr">
-            <i class="fas fa-qrcode"></i>
-          </div>
-          <span class="mobile-label">Support QR</span>
-        </div>
-        
         <!-- Coffee Card -->
         <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card">
           <div class="mobile-icon coffee">
             <i class="fas fa-coffee"></i>
           </div>
           <span class="mobile-label">Coffee</span>
+          <small class="mobile-desc">Support my work</small>
         </a>
+
+                <!-- QR Support Card -->
+        <div class="mobile-link-card" @click="$emit('openQRModal')">
+          <div class="mobile-icon qr">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <span class="mobile-label">Support QR</span>
+          <small class="mobile-desc">Multiple banks available</small>
+        </div>
+        
         
         <!-- Telegram Card -->
         <a href="https://t.me/+XpsVdhvIlVM4ZTA1" target="_blank" class="mobile-link-card">
@@ -39,6 +37,7 @@
             <i class="fab fa-telegram"></i>
           </div>
           <span class="mobile-label">Telegram</span>
+          <small class="mobile-desc">Join community</small>
         </a>
         
         <!-- WakaTime Card (mobile only) -->
@@ -47,17 +46,62 @@
             <i class="fas fa-chart-line"></i>
           </div>
           <span class="mobile-label">Stats</span>
+          <small class="mobile-desc">Coding analytics</small>
         </a>
 
-                <!-- Certificates Card -->
+        <!-- Certificates Card -->
         <div class="mobile-link-card" @click="$emit('openCertificatesListModal')">
           <div class="mobile-icon certificates">
             <i class="fas fa-certificate"></i>
           </div>
           <span class="mobile-label">Certificates</span>
+          <small class="mobile-desc">{{ certificates.length }} certifications</small>
           <span class="mobile-badge">{{ certificates.length }}</span>
         </div>
         
+        <!-- GitHub Card (mobile) -->
+        <a href="https://github.com/codewithryry?tab=repositories" target="_blank" class="mobile-link-card">
+          <div class="mobile-icon github">
+            <i class="fab fa-github"></i>
+          </div>
+          <span class="mobile-label">GitHub</span>
+          <small class="mobile-desc">All my projects</small>
+        </a>
+        
+        <!-- Dev.to Card (mobile) -->
+        <a href="https://dev.to/codewithryry" target="_blank" class="mobile-link-card">
+          <div class="mobile-icon dev">
+            <i class="fab fa-dev"></i>
+          </div>
+          <span class="mobile-label">Dev.to</span>
+          <small class="mobile-desc">Technical writing</small>
+        </a>
+        
+        <!-- Portfolio Card (mobile) -->
+        <a href="https://reymelreymislang.vercel.app/" target="_blank" class="mobile-link-card">
+          <div class="mobile-icon portfolio">
+            <i class="fas fa-briefcase"></i>
+          </div>
+          <span class="mobile-label">Portfolio</span>
+          <small class="mobile-desc">View my work</small>
+        </a>
+        
+        <!-- Resume Card (mobile only) -->
+        <a href="/Reymel Mislang Resume  (8.5 x 13 in).pdf" download class="mobile-link-card">
+          <div class="mobile-icon resume">
+            <i class="fas fa-file-download"></i>
+          </div>
+          <span class="mobile-label">Resume</span>
+          <small class="mobile-desc">Download PDF</small>
+        </a>
+        <!-- Email Card (mobile only) -->
+        <a href="mailto:your.email@example.com" class="mobile-link-card">
+          <div class="mobile-icon email">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <span class="mobile-label">Email</span>
+          <small class="mobile-desc">Contact me</small>
+        </a>
       </div>
     </div>
     
@@ -230,12 +274,6 @@ export default {
   animation: pulseHint 2s infinite;
 }
 
-.swipe-hint i {
-  color: #667eea;
-  font-size: 0.9rem;
-  animation: bounceRight 1.5s infinite;
-}
-
 @keyframes pulseHint {
   0%, 100% {
     opacity: 0.8;
@@ -245,20 +283,11 @@ export default {
   }
 }
 
-@keyframes bounceRight {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-}
-
 .mobile-links-scroll {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   overflow-x: auto;
-  padding: 0.75rem 0.5rem 1rem;
+  padding: 0.75rem 0.5rem 1.25rem;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
 }
@@ -269,8 +298,8 @@ export default {
   position: absolute;
   right: 0.5rem;
   top: 3rem;
-  width: 30px;
-  height: 100px;
+  width: 40px;
+  height: 140px;
   background: linear-gradient(90deg, transparent, white);
   pointer-events: none;
   border-radius: 0 16px 16px 0;
@@ -280,35 +309,34 @@ export default {
   display: none; /* Chrome, Safari, Edge */
 }
 
+/* Match social card size and style */
 .mobile-link-card {
   flex: 0 0 auto;
-  width: 85px;
-  height: 100px;
+  width: 140px; /* Match social card width */
+  height: 150px; /* Increased height to accommodate description */
   background: white;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem 0.5rem;
+  padding: 1.2rem 0.8rem;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s ease;
-  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
   cursor: pointer;
+  position: relative;
 }
 
 .mobile-link-card:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
 }
 
 .mobile-link-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  border-color: #667eea;
+  transform: translateY(-5px);
+  border-color: currentColor;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .mobile-icon {
@@ -318,42 +346,124 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
 }
 
 .mobile-label {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #2d3748;
   text-align: center;
   line-height: 1.2;
+  margin-bottom: 0.2rem;
+}
+
+.mobile-desc {
+  color: #718096;
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.2;
+  opacity: 0.9;
 }
 
 .mobile-badge {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 10px;
+  right: 10px;
   background: #667eea;
   color: white;
   font-size: 0.65rem;
   font-weight: 700;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Mobile icon colors */
-.mobile-icon.portfolio { background: rgba(102, 126, 234, 0.1); color: #667eea; }
-.mobile-icon.certificates { background: rgba(56, 161, 105, 0.1); color: #38a169; }
-.mobile-icon.github { background: rgba(36, 41, 46, 0.1); color: #24292e; }
-.mobile-icon.dev { background: rgba(10, 10, 10, 0.1); color: #0a0a0a; }
-.mobile-icon.qr { background: rgba(102, 126, 234, 0.1); color: #667eea; }
-.mobile-icon.coffee { background: rgba(214, 158, 46, 0.1); color: #d69e2e; }
-.mobile-icon.telegram { background: rgba(0, 136, 204, 0.1); color: #0088cc; }
-.mobile-icon.stats { background: rgba(56, 161, 105, 0.1); color: #38a169; }
+/* Mobile icon colors - keeping your original colors plus new ones */
+.mobile-icon.portfolio { 
+  background: rgba(102, 126, 234, 0.1); 
+  color: #667eea; 
+}
+.mobile-icon.certificates { 
+  background: rgba(56, 161, 105, 0.1); 
+  color: #38a169; 
+}
+.mobile-icon.github { 
+  background: rgba(36, 41, 46, 0.1); 
+  color: #24292e; 
+}
+.mobile-icon.dev { 
+  background: rgba(10, 10, 10, 0.1); 
+  color: #0a0a0a; 
+}
+.mobile-icon.qr { 
+  background: rgba(102, 126, 234, 0.1); 
+  color: #667eea; 
+}
+.mobile-icon.coffee { 
+  background: rgba(214, 158, 46, 0.1); 
+  color: #d69e2e; 
+}
+.mobile-icon.telegram { 
+  background: rgba(0, 136, 204, 0.1); 
+  color: #0088cc; 
+}
+.mobile-icon.stats { 
+  background: rgba(56, 161, 105, 0.1); 
+  color: #38a169; 
+}
+.mobile-icon.resume { 
+  background: rgba(245, 101, 101, 0.1); 
+  color: #f56565; 
+}
+.mobile-icon.linkedin { 
+  background: rgba(10, 102, 194, 0.1); 
+  color: #0a66c2; 
+}
+.mobile-icon.email { 
+  background: rgba(234, 67, 53, 0.1); 
+  color: #ea4335; 
+}
+
+/* Adjust mobile card hover colors */
+.mobile-link-card:hover .mobile-icon.portfolio { 
+  background: rgba(102, 126, 234, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.certificates { 
+  background: rgba(56, 161, 105, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.github { 
+  background: rgba(36, 41, 46, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.dev { 
+  background: rgba(10, 10, 10, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.qr { 
+  background: rgba(102, 126, 234, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.coffee { 
+  background: rgba(214, 158, 46, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.telegram { 
+  background: rgba(0, 136, 204, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.stats { 
+  background: rgba(56, 161, 105, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.resume { 
+  background: rgba(245, 101, 101, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.linkedin { 
+  background: rgba(10, 102, 194, 0.2); 
+}
+.mobile-link-card:hover .mobile-icon.email { 
+  background: rgba(234, 67, 53, 0.2); 
+}
 
 /* Hide mobile view on desktop */
 @media (min-width: 769px) {
