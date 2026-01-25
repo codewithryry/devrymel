@@ -35,7 +35,7 @@
             <div class="inline-badge certs" 
                 @click="$emit('open-certificates')" 
                 title="Certificates">
-              <i class="fas fa-certificate"></i>
+             <i class="fas fa-award"></i>
               <span class="badge-label">Certs</span>
             </div>
             <div class="inline-badge links" 
@@ -61,9 +61,6 @@
           affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
           help people and create real value.
         </p>
-          <p class="statement-text">
-            Get in touch
-          </p>
           <div class="mobile-contact-section">
             <div class="mobile-contact-grid"> 
               <!-- Improved Mobile Contact Section -->
@@ -684,14 +681,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   margin-top: 0.4rem;
   width: 100%;
 }
 
 .inline-badge {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -893,6 +890,14 @@ export default {
   .mobile-identity {
     flex: 1;
   }
+
+  .mobile-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* 🔥 this centers children */
+  width: 100%;
+}
+
   
   .mobile-name {
     font-size: 1.8rem;
@@ -916,16 +921,29 @@ export default {
     margin-top: -0.2rem;
   }
   
-  .mobile-title {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.9rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    border-radius: 10px;
-    color: #667eea;
-    font-weight: 700;
-  }
+.mobile-title {
+  display: flex;                 /* instead of inline-flex */
+  align-items: left;
+  justify-content: left;       /* center content */
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 10px;
+  color: #667eea;
+  font-weight: 700;
+  margin: 0 auto;                /* 🔥 force horizontal centering */
+  width: fit-content;            /* 🔥 content-based width */
+}
+
+.mobile-title span:empty::before {
+  content: " ";          /* invisible space */
+}
+.mobile-title {
+  min-width: 80px;       /* adjust size */
+  justify-content: left;
+  margin: 0 auto;
+}
+
   
   .mobile-title i {
     font-size: 0.9rem;
@@ -1628,19 +1646,7 @@ export default {
     margin: 0;
   }
   
-  .mobile-title-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    border-radius: 12px;
-    color: #667eea;
-    font-weight: 500;
-    font-size: 0.95rem;
-    margin: 0 auto;
-  }
-  
+
   /* Small honors indicator */
   .mobile-honors-indicator {
     display: inline-flex;
