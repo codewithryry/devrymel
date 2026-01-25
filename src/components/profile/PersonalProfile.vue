@@ -509,7 +509,7 @@ export default {
     /* ===== SOCIAL ===== */
     openUnavailableSocialModal(platform) {
       if (platform === 'All Platforms') {
-        this.socialModalTitle = "Platforms Coming Soon"
+        this.socialModalTitle = "Coming Soon"
         this.socialModalMessage = "These platforms are currently being set up and will be available soon:"
         this.socialModalPlatforms = this.unavailableSocialLinks.map(link => link.label)
       } else {
