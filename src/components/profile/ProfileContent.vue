@@ -17,7 +17,7 @@
 
           <div class="mobile-title">
             <i class="fas fa-terminal"></i>
-            <span>Freelancer</span>
+            <span></span>
           </div>
 
         <!-- CENTERED BADGES SECTION -->
@@ -924,8 +924,7 @@ export default {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
     border-radius: 10px;
     color: #667eea;
-    font-weight: 600;
-    font-size: 0.7rem;
+    font-weight: 700;
   }
   
   .mobile-title i {
@@ -1452,8 +1451,8 @@ export default {
 
 /* ---- Badge base ---- */
 .inline-badge{
-  width:28px;
-  height:28px;
+  width:32px;
+  height:32px;
   min-width:28px;
   border-radius:50%;
   display:flex;
