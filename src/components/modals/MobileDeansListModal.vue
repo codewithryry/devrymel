@@ -17,7 +17,7 @@
         <div class="mobile-deans-content">
           <div class="mobile-deans-description">
             <i class="fas fa-award"></i>
-            <p>Academic achievements showcasing consistent excellence in academics across multiple semesters.</p>
+<p>Consistent academic excellence across multiple semesters.</p>
           </div>
           
           <div class="mobile-deans-list">

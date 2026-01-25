@@ -512,6 +512,7 @@ export default {
 .mobile-contact-grid {
   display: flex;
   flex-direction: column;
+  margin-bottom: -10px;
   gap: 0.6rem;
   width: 95%;
 }
@@ -687,8 +688,8 @@ export default {
 }
 
 .inline-badge {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -979,6 +980,7 @@ export default {
   .about-card .card-content {
     display: flex;
     flex-direction: column;
+    margin-top: -15px;
     gap: 1rem;
   }
   

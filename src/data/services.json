@@ -11,28 +11,6 @@
     "technologies": ["Vue.js", "Node.js", "Python", "MongoDB", "Docker"]
   },
   {
-    "id": 2,
-    "icon": "fas fa-mobile-alt",
-    "title": "Progressive Web Apps",
-    "description": "Modern PWA development with offline capabilities and native-like experience.",
-    "features": [
-      "App-like Experience",
-      "Cross-platform"
-    ],
-    "technologies": ["Vue PWA", "Service Workers", "IndexedDB", "Web App Manifest"]
-  },
-  {
-    "id": 3,
-    "icon": "fas fa-database",
-    "title": "Database Systems & Cloud Integration",
-    "description": "Design and integration of scalable databases with cloud-based services.",
-    "features": [
-      "Cloud Database Setup",
-      "Data Security & Optimization"
-    ],
-    "technologies": ["Firebase", "MySQL", "MongoDB", "WAMP", "Cloud Functions"]
-  },
-  {
     "id": 4,
     "icon": "fas fa-user-shield",
     "title": "Smart Reporting & Safety Systems",

@@ -26,8 +26,7 @@
           <span class="mobile-label">Coffee</span>
           <small class="mobile-desc">Support my work</small>
         </a>
-
-                <!-- QR Support Card -->
+        <!-- QR Support Card -->
         <div class="mobile-link-card" @click="$emit('openQRModal')">
           <div class="mobile-icon qr">
             <i class="fas fa-qrcode"></i>
@@ -44,31 +43,7 @@
           </div>
           <span class="mobile-label">Telegram</span>
           <small class="mobile-desc">Join community</small>
-        </a>
-        
-        <!-- WakaTime Card (mobile only) -->
-   <a href="https://docs.google.com/document/d/1QzKrdfaPNfefuENiuya64RzHRCDPMTtvkVF1y8vzuA4/edit?usp=sharing" 
-   target="_blank" 
-   class="mobile-link-card">
-  
-  <div class="mobile-icon book">
-    <i class="fas fa-book-open"></i>
-  </div>
-
-  <span class="mobile-label">My Book</span>
-  <small class="mobile-desc">Crossed Eyes</small>
-</a>
-
-        <!-- Certificates Card -->
-        <div class="mobile-link-card" @click="$emit('openCertificatesListModal')">
-          <div class="mobile-icon certificates">
-            <i class="fas fa-certificate"></i>
-          </div>
-          <span class="mobile-label">Certificates</span>
-          <small class="mobile-desc">{{ certificates.length }} certifications</small>
-          <span class="mobile-badge">{{ certificates.length }}</span>
-        </div>
-        
+        </a>       
         <!-- GitHub Card (mobile) -->
         <a href="https://github.com/codewithryry?tab=repositories" target="_blank" class="mobile-link-card">
           <div class="mobile-icon github">
@@ -112,6 +87,15 @@
           <span class="mobile-label">Email</span>
           <small class="mobile-desc">Contact me</small>
         </a>
+        <a href="https://docs.google.com/document/d/1QzKrdfaPNfefuENiuya64RzHRCDPMTtvkVF1y8vzuA4/edit?usp=sharing" 
+            target="_blank" 
+            class="mobile-link-card">          
+            <div class="mobile-icon book">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <span class="mobile-label">Book</span>
+            <small class="mobile-desc">Crossed Eyes</small>
+          </a>
       </div>
     </div>
     

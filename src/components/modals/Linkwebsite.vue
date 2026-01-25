@@ -22,10 +22,8 @@
           <!-- DESCRIPTION -->
           <div class="modal-description">
             <i class="fas fa-link"></i>
-            <p>
-              Live deployed websites and systems showcasing real-world projects,
-              production-ready applications, and professional development work.
-            </p>
+<p>Production-ready systems I’ve designed, built, and deployed.</p>
+
           </div>
 
           <!-- CARD LIST -->

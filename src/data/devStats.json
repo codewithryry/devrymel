@@ -1,14 +1,15 @@
 [
-  {
-    "id": 1,
-    "icon": "fas fa-code",
-    "value": "700+",
-    "label": "Hours Coded, Real Dev Time (WakaTime Verified)",
-    "trend": "+3 hrs daily avg",
-    "trendIcon": "fas fa-arrow-up",
-    "trendClass": "up",
-    "chartHeight": "80%"
-  },
+{
+  "id": 1,
+  "icon": "fas fa-code",
+  "value": "737+ hrs",
+  "label": "Total Coding Time Since Sep 3, 2024 (WakaTime Verified)",
+  "trend": "Top PH Dev • 6+ hrs daily avg",
+  "trendIcon": "fas fa-chart-line",
+  "trendClass": "up",
+  "chartHeight": "88%"
+},
+
   {
     "id": 2,
     "icon": "fas fa-project-diagram",
@@ -30,13 +31,24 @@
     "chartHeight": "85%"
   },
   {
+  "id": 6,
+  "icon": "fab fa-tiktok",
+  "value": "79.3K+",
+  "label": "TikTok Likes • 3,059 Followers • Tech Content Creator",
+  "trend": "Dev content growth",
+  "trendIcon": "fas fa-fire",
+  "trendClass": "up",
+  "chartHeight": "85%"
+},
+  {
     "id": 4,
     "icon": "fas fa-laptop-code",
-    "value": "Freelance",
+    "value": "Freelancer",
     "label": "System Developer, Full-Stack System Builder",
     "trend": "End-to-end development",
     "trendIcon": "fas fa-check-circle",
     "trendClass": "up",
     "chartHeight": "95%"
   }
+
 ]

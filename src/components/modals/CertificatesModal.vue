@@ -19,10 +19,8 @@
         <!-- DESCRIPTION (LEFT ALIGNED, NOT CENTERED) -->
         <div class="cert-description">
           <i class="fas fa-certificate"></i>
-          <p>
-            Professional certifications and training records that showcase technical skills,
-            continuous learning, and career development in IT and technology fields.
-          </p>
+<p>Credentials that represent my learning journey and technical progress.</p>
+
         </div>
 
         <!-- SCROLL CONTAINER -->
