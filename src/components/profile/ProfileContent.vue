@@ -62,10 +62,10 @@
           affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
           help people and create real value.
         </p>
-          <div class="mobile-contact-section">
+          <!-- <div class="mobile-contact-section">
             <div class="mobile-contact-grid"> 
               <!-- Improved Mobile Contact Section -->
-              <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
+              <!-- <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
                 <div class="contact-left">
                   <div class="contact-icon">
                     <i class="fas fa-envelope"></i>
@@ -76,9 +76,9 @@
                   </div>
                 </div>
                 <i class="fas fa-arrow-right contact-arrow"></i>
-              </a>
+              </a> -->
 
-              <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
+              <!-- <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
                 <div class="contact-left">
                   <div class="contact-icon">
                     <i class="fab fa-facebook-messenger"></i>
@@ -91,7 +91,7 @@
                 <i class="fas fa-arrow-right contact-arrow"></i>
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
