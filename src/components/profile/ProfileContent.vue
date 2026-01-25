@@ -17,41 +17,50 @@
 
           <div class="mobile-title">
             <i class="fas fa-terminal"></i>
-            <span></span>
+            <span>Freelancer</span>
           </div>
 
-          <!-- CENTERED BADGES -->
+        <!-- CENTERED BADGES SECTION -->
+        <div class="mobile-badges-section">
+          <div class="badge-instructions">
+            <span>Tap to explore</span>
+          </div>
           <div class="center-badges">
-            <span class="inline-badge deans" @click="openMobileDeansList" title="Dean's List">
+            <div class="inline-badge deans" 
+                @click="openMobileDeansList" 
+                title="Dean's List Awards">
               <i class="fas fa-trophy"></i>
-            </span>
-          <span class="inline-badge certs" 
+              <span class="badge-label">Awards</span>
+            </div>
+            <div class="inline-badge certs" 
                 @click="$emit('open-certificates')" 
                 title="Certificates">
-            <i class="fas fa-certificate"></i>
-          </span>
-            <span class="inline-badge links" 
-                  @click="$emit('openLinks')" 
-                  title="Project Links">
+              <i class="fas fa-certificate"></i>
+              <span class="badge-label">Certs</span>
+            </div>
+            <div class="inline-badge links" 
+                @click="$emit('openLinks')" 
+                title="Project Links">
               <i class="fas fa-link"></i>
-            </span>
+              <span class="badge-label">Links</span>
+            </div>
           </div>
+        </div>
         </div>
       </div>
 
       <!-- About Section (without title) -->
       <div class="mobile-card about-card">
         <div class="card-content">
-<p class="statement-text">
-  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
-  My focus is on turning ideas into real, functional systems that people can actually use.
-</p>
-<p class="statement-text">
-  I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
-  affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
-  help people and create real value.
-</p>
-
+        <p class="statement-text">
+          I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
+          My focus is on turning ideas into real, functional systems that people can actually use.
+        </p>
+        <p class="statement-text">
+          I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
+          affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
+          help people and create real value.
+        </p>
           <p class="statement-text">
             Get in touch
           </p>
@@ -165,16 +174,15 @@
         <div class="brand-narrative">     
           <!-- Brand Statement -->
           <div class="brand-statement">
-<p class="statement-text">
-  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
-  My focus is on turning ideas into real, functional systems that people can actually use.
-</p>
-<p class="statement-text">
-  I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
-  affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
-  help people and create real value.
-</p>
-
+          <p class="statement-text">
+            I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
+            My focus is on turning ideas into real, functional systems that people can actually use.
+          </p>
+          <p class="statement-text">
+            I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
+            affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
+            help people and create real value.
+          </p>
           </div>
              
           <!-- Contact Information -->
@@ -262,6 +270,9 @@ export default {
 </script>
 
 <style scoped>
+
+
+
 /* Mobile Optimization Notice Styles */
 .mobile-optimization-notice {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -667,10 +678,6 @@ export default {
   }
 }
 </style>
-
-
-
-
 <style scoped>
 /* Fixed badge click handlers */
 .center-badges {
@@ -918,7 +925,7 @@ export default {
     border-radius: 10px;
     color: #667eea;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
   }
   
   .mobile-title i {
@@ -1412,7 +1419,91 @@ export default {
 
 
 
+<style scoped>
+/* ============================= */
+/* MOBILE BADGES VISIBILITY FIX */
+/* ============================= */
 
+.mobile-badges-section{
+  margin-top: 0.6rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* ---- Tap to explore (subtle hint) ---- */
+.badge-instructions{
+  text-align:center;
+  font-size:0.6rem;
+  color: rgba(0,0,0,0.35);   /* softer */
+  margin-bottom:0.8rem;
+  letter-spacing:0.4px;
+  font-style: italic;
+  opacity:0.6;              /* less visible */
+  user-select:none;
+}
+
+/* ---- Badge row ---- */
+.center-badges{
+  display:flex;
+  align-items:center;
+  gap:0.55rem;
+}
+
+/* ---- Badge base ---- */
+.inline-badge{
+  width:28px;
+  height:28px;
+  min-width:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all .2s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);  /* visibility boost */
+  border:1px solid rgba(255,255,255,0.6);
+}
+
+/* ---- Icon ---- */
+.inline-badge i{
+  font-size:0.8rem;
+  color:white;
+}
+
+/* ---- Labels hidden (compact mode) ---- */
+.inline-badge .badge-label{
+  display:none;
+}
+
+/* ---- Colors (high contrast but clean) ---- */
+.inline-badge.deans{
+  background: linear-gradient(135deg,#f6c453,#f0b429);
+}
+
+.inline-badge.certs{
+  background: linear-gradient(135deg,#38a169,#2f855a);
+}
+
+.inline-badge.links{
+  background: linear-gradient(135deg,#3182ce,#2563eb);
+}
+
+/* ---- Tap feedback ---- */
+.inline-badge:active{
+  transform:scale(.88);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity:0.9;
+}
+
+/* ---- Desktop hidden ---- */
+@media(min-width:769px){
+  .mobile-badges-section{
+    display:none;
+  }
+}
+
+</style>
 
 
 
