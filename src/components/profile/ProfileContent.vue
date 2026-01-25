@@ -23,7 +23,8 @@
         <!-- CENTERED BADGES SECTION -->
         <div class="mobile-badges-section">
           <div class="badge-instructions">
-            <span>Tap to explore</span>
+           <span>Tap to view details</span>
+
           </div>
           <div class="center-badges">
             <div class="inline-badge deans" 
@@ -1452,13 +1453,13 @@ export default {
 
 /* ---- Tap to explore (subtle hint) ---- */
 .badge-instructions{
-  text-align:center;
+  text-align: center;
   font-size:0.6rem;
-  color: rgba(0,0,0,0.35);   /* softer */
+  color: rgba(0, 0, 0, 0.35);   /* softer */
   margin-bottom:0.8rem;
   letter-spacing:0.4px;
-  font-style: italic;
-  opacity:0.6;              /* less visible */
+  font-style: bold;
+  opacity:0.9;              /* less visible */
   user-select:none;
 }
 

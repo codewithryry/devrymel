@@ -2,14 +2,8 @@
   {
     "id": 11,
     "title": "eGov-RMS (Capstone Project)",
-    "description": "E-Government platform for Calapan City. My Role: AI & NLP developer — budget prediction, AI chat messenger, and UI/UX support.",
+    "description": "E-Government platform for Calapan City. My Role as a second coder for this project is to create a AI & NLP developerbudget prediction, AI chat messenger, and UI/UX support.",
     "link": "https://egovcalapancity.onrender.com/"
-  },
-  {
-    "id": 7,
-    "title": "SIBOL Smart Farming System",
-    "description": "Cross-platform IoT-integrated smart farming system using hybrid rice varieties and digital technologies to improve climate resilience and agricultural productivity.",
-    "link": "https://sibol-theta.vercel.app/"
   },
   {
     "id": 5,
@@ -19,17 +13,12 @@
   },
   {
     "id": 9,
-    "title": "OJT Monitoring System",
+    "title": "OJTSync",
     "description": "Web-based system for managing and monitoring student OJT/Internship records, progress, and evaluations.",
-    "link": "https://ojt-monitoring-system-six.vercel.app/login"
+    "link": "https://ojtsync.vercel.app/"
   },
-  {
-    "id": 10,
-    "title": "Sari-POS",
-    "description": "Point-of-sale (POS) system designed for sari-sari stores to manage sales, inventory, and daily transactions.",
-    "link": "https://sari-pos.vercel.app/"
-  },
-  {
+
+    {
     "id": 3,
     "title": "BoardMate",
     "description": "Collaborative task, chores, and water bill management app for shared living spaces.",
@@ -40,6 +29,20 @@
     "title": "LiftUp Connect",
     "description": "AI-powered mental health support platform for community discussion and emotional well-being.",
     "link": "https://liftupconnect.vercel.app/"
+  },
+
+
+    {
+    "id": 7,
+    "title": "SIBOL Smart Farming System",
+    "description": "Cross-platform IoT-integrated smart farming system using hybrid rice varieties and digital technologies to improve climate resilience and agricultural productivity.",
+    "link": "https://sibol-theta.vercel.app/"
+  },
+  {
+    "id": 10,
+    "title": "Sari-POS",
+    "description": "Point-of-sale (POS) system designed for sari-sari stores to manage sales, inventory, and daily transactions.",
+    "link": "https://sari-pos.vercel.app/"
   },
   {
     "id": 1,
