@@ -16,9 +16,9 @@
           </h2>
 
           <div class="mobile-title">
-            <i class="fas fa-terminal"></i>
-            <span></span>
-          </div>
+  <i class="fas fa-terminal"></i>
+  <span style="color:black;"></span>
+</div>
 
         <!-- CENTERED BADGES SECTION -->
         <div class="mobile-badges-section">
@@ -53,19 +53,17 @@
       <!-- About Section (without title) -->
       <div class="mobile-card about-card">
         <div class="card-content">
-        <p class="statement-text">
-          I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
-          My focus is on turning ideas into real, functional systems that people can actually use.
-        </p>
-        <p class="statement-text">
-          I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
-          affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
-          help people and create real value.
-        </p>
-          <!-- <div class="mobile-contact-section">
+<p class="statement-text">
+  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding. I also build workflow automations using n8n to connect apps and automate repetitive tasks. My focus is on turning ideas into real, functional systems people use.
+</p>
+
+<p class="statement-text">
+  I enjoy learning new technologies, improving my skills each day, and creating digital projects for freelance work, affiliate systems, and real-world applications. I am also open for commission-based projects involving web development and automation. My goal is to build useful, simple, and practical solutions that create real value.
+</p>
+          <div class="mobile-contact-section">
             <div class="mobile-contact-grid"> 
               <!-- Improved Mobile Contact Section -->
-              <!-- <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
+              <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
                 <div class="contact-left">
                   <div class="contact-icon">
                     <i class="fas fa-envelope"></i>
@@ -75,8 +73,8 @@
                     <span class="contact-sub">Let's collaborate</span>
                   </div>
                 </div>
-                <i class="fas fa-arrow-right contact-arrow"></i>
-              </a> -->
+                <!-- <i class="fas fa-arrow-right contact-arrow"></i> -->
+              </a> 
 
               <!-- <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
                 <div class="contact-left">
@@ -89,9 +87,10 @@
                   </div>
                 </div>
                 <i class="fas fa-arrow-right contact-arrow"></i>
-              </a>
+              </a> -->
             </div>
-          </div> -->
+          </div>
+
         </div>
       </div>
     </div>
@@ -173,14 +172,12 @@
           <!-- Brand Statement -->
           <div class="brand-statement">
           <p class="statement-text">
-            I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding.
-            My focus is on turning ideas into real, functional systems that people can actually use.
-          </p>
-          <p class="statement-text">
-            I enjoy learning new technologies, improving my skills every day, and creating digital projects for freelance work,
-            affiliate systems, and real-world applications. My goal is to build useful, simple, and practical solutions that
-            help people and create real value.
-          </p>
+  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding. I also build workflow automations using n8n to connect apps and automate repetitive tasks. My focus is on turning ideas into real, functional systems people use.
+</p>
+
+<p class="statement-text">
+  I enjoy learning new technologies, improving my skills each day, and creating digital projects for freelance work, affiliate systems, and real-world applications. I am also open for commission-based projects involving web development and automation. My goal is to build useful, simple, and practical solutions that create real value.
+</p>
           </div>
              
           <!-- Contact Information -->

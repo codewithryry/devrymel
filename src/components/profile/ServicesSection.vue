@@ -271,6 +271,53 @@ export default {
 </script>
 
 <style scoped>
+
+/* Mobile Controls */
+.mobile-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Changed from space-between to center */
+  gap: 1.5rem; /* Add gap between the buttons and info */
+  margin-top: 1rem;
+  padding: 0 0.5rem;
+}
+
+.mobile-slider-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #667eea;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+.mobile-slider-btn:active {
+  background: #667eea;
+  color: white;
+  transform: scale(0.95);
+}
+
+.mobile-carousel-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.mobile-carousel-info .service-name {
+  display: none; /* Hidden on mobile to save space */
+}
+
+
 .services-section {
   margin-top: 3rem;
 }
@@ -569,47 +616,9 @@ export default {
   max-width: 100%;
 }
 
-/* Mobile Controls */
-.mobile-carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1rem;
-  padding: 0 0.5rem;
-}
 
-.mobile-slider-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: #667eea;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
 
-.mobile-slider-btn:active {
-  background: #667eea;
-  color: white;
-  transform: scale(0.95);
-}
 
-.mobile-carousel-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-}
-
-.mobile-carousel-info .service-name {
-  display: none; /* Hidden on mobile to save space */
-}
 
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
