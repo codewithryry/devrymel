@@ -9,153 +9,140 @@
 
       <!-- Action Items -->
       <transition-group name="fab-reveal" tag="div" class="fab-actions">
-
-        <!-- Quick Navigation -->
-        <!-- <div v-if="fabOpen" key="nav" class="fab-group" :style="{ '--delay': 1 }">
-          <button class="fab-action" @click.stop="togglePanel('nav')" :title="t.quickNav">
+        <!-- Language -->
+        <!-- <div v-if="fabOpen" key="language" class="fab-group" :style="{ '--delay': 0 }">
+          <button class="fab-action" @click.stop="togglePanel('language')" :title="t.language">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 12h18"/>
-              <path d="M3 6h18"/>
-              <path d="M3 18h18"/>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20" />
+              <path d="M12 2a15.3 15.3 0 0 1 0 20" />
+              <path d="M12 2a15.3 15.3 0 0 0 0 20" />
             </svg>
-            <span class="fab-tooltip">{{ t.quickNav }}</span>
+            <span class="fab-tooltip">{{ t.language }}</span>
           </button>
 
           <transition name="panel-appear">
-            <div v-if="showNavPanel" class="panel nav-panel" :class="{ 'panel-mobile': isMobile }">
+            <div v-if="showLanguagePanel" class="panel language-panel" :class="{ 'panel-mobile': isMobile }">
               <div class="panel-head">
-                <span>{{ t.quickNav }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showNavPanel = false">
+                <span>{{ t.chooseLanguage }}</span>
+                <button v-if="isMobile" class="panel-close" @click="showLanguagePanel = false">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+                    <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
               <div class="panel-body">
-                <button class="nav-row" @click="scrollToSection('#about')">
-                  <div class="nav-icon indigo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="8" r="4"/>
-                      <path d="M4 22c1.8-4 5-6 8-6s6.2 2 8 6"/>
-                    </svg>
-                  </div>
-                  <div class="nav-info">
-                    <span class="nav-title">{{ t.about }}</span>
-                    <span class="nav-sub">Profile overview</span>
-                  </div>
-                </button>
+                <button
+                  v-for="lang in languages"
+                  :key="lang.id"
+                  class="language-btn"
+                  :class="{ active: currentLang === lang.id }"
+                  @click="setLang(lang.id)"
+                >
+                  <span class="language-flag">{{ lang.flag }}</span>
+                  <span class="language-name">{{ lang.name }}</span>
 
-                <button class="nav-row" @click="scrollToSection('#skills')">
-                  <div class="nav-icon emerald">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.8 5.5 21l2-7.5L2 9h7z"/>
-                    </svg>
-                  </div>
-                  <div class="nav-info">
-                    <span class="nav-title">{{ t.skills }}</span>
-                    <span class="nav-sub">Tools and technologies</span>
-                  </div>
-                </button>
-
-                <button class="nav-row" @click="scrollToSection('#projects')">
-                  <div class="nav-icon violet">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="4" width="18" height="14" rx="2"/>
-                      <path d="M8 22h8"/>
-                      <path d="M12 18v4"/>
-                    </svg>
-                  </div>
-                  <div class="nav-info">
-                    <span class="nav-title">{{ t.projectsNav }}</span>
-                    <span class="nav-sub">Featured work</span>
-                  </div>
-                </button>
-
-                <button class="nav-row" @click="scrollToSection('#experience')">
-                  <div class="nav-icon amber">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="2" y="7" width="20" height="14" rx="2"/>
-                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                    </svg>
-                  </div>
-                  <div class="nav-info">
-                    <span class="nav-title">{{ t.experience }}</span>
-                    <span class="nav-sub">Internship and work</span>
-                  </div>
-                </button>
-
-                <button class="nav-row" @click="scrollToSection('#contact')">
-                  <div class="nav-icon rose">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M4 4h16v16H4z"/>
-                      <path d="M22 6l-10 7L2 6"/>
-                    </svg>
-                  </div>
-                  <div class="nav-info">
-                    <span class="nav-title">{{ t.contact }}</span>
-                    <span class="nav-sub">Send a message</span>
-                  </div>
+                  <svg v-if="currentLang === lang.id" class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
                 </button>
               </div>
             </div>
           </transition>
         </div> -->
 
-<!-- Tech Stack -->
-<div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
-  <button class="fab-action" @click.stop="togglePanel('tech')" :title="t.techStack">
-    <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M16 18l6-6-6-6"/>
-      <path d="M8 6l-6 6 6 6"/>
-      <path d="M14.5 4l-5 16"/>
-    </svg>
-    <span class="fab-tooltip">{{ t.techStack }}</span>
-  </button>
+        <!-- Quick Intro -->
+        <!-- <div v-if="fabOpen" key="intro" class="fab-group" :style="{ '--delay': 1 }">
+          <button class="fab-action" @click.stop="togglePanel('intro')" :title="t.quickIntro">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 22c1.8-4 5-6 8-6s6.2 2 8 6" />
+            </svg>
+            <span class="fab-tooltip">{{ t.quickIntro }}</span>
+          </button>
 
-  <transition name="panel-appear">
-    <div v-if="showTechPanel" class="panel tech-panel" :class="{ 'panel-mobile': isMobile }">
-      <div class="panel-head">
-        <span>{{ t.techStack }}</span>
-        <button v-if="isMobile" class="panel-close" @click="showTechPanel = false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
+          <transition name="panel-appear">
+            <div v-if="showIntroPanel" class="panel intro-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>{{ t.quickIntro }}</span>
+                <button v-if="isMobile" class="panel-close" @click="showIntroPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-      <div class="panel-body tech-body">
-        <div class="tech-grid">
-          <span class="tech-pill">Vue.js</span>
-          <span class="tech-pill">JavaScript</span>
-          <span class="tech-pill">Firebase</span>
-          <span class="tech-pill">HTML</span>
-          <span class="tech-pill">CSS</span>
-          <span class="tech-pill">Node.js</span>
-          <span class="tech-pill">MySQL</span>
-          <span class="tech-pill">GitHub</span>
+              <div class="panel-body intro-body">
+
+                <div class="intro-content">
+                  <h3>{{ t.introTitle }}</h3>
+                  <p>{{ t.introPitch }}</p>
+                </div>
+
+               <button class="intro-btn" @click="scrollToSection('#projects')">
+                  {{ t.viewWork }}
+                </button> -->
+              <!-- </div>
+            </div>
+          </transition>
+        </div> -->
+
+        <!-- Tech Stack -->
+        <div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
+          <button class="fab-action" @click.stop="togglePanel('tech')" :title="t.techStack">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 18l6-6-6-6" />
+              <path d="M8 6l-6 6 6 6" />
+              <path d="M14.5 4l-5 16" />
+            </svg>
+            <span class="fab-tooltip">{{ t.techStack }}</span>
+          </button>
+
+          <transition name="panel-appear">
+            <div v-if="showTechPanel" class="panel tech-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>{{ t.techStack }}</span>
+                <button v-if="isMobile" class="panel-close" @click="showTechPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="panel-body tech-body">
+                <div class="tech-grid">
+                  <span class="tech-pill">Vue.js</span>
+                  <span class="tech-pill">JavaScript</span>
+                  <span class="tech-pill">Firebase</span>
+                  <span class="tech-pill">HTML</span>
+                  <span class="tech-pill">CSS</span>
+                  <span class="tech-pill">Node.js</span>
+                  <span class="tech-pill">MySQL</span>
+                  <span class="tech-pill">GitHub</span>
+                </div>
+
+                <div class="hire-card">
+                  <div>
+                    <span class="hire-title">{{ t.availableWork }}</span>
+                    <span class="hire-sub">{{ t.frontendDev }}</span>
+                  </div>
+
+                  <a href="mailto:reymelrey.mislang@gmail.com" class="hire-btn">
+                    {{ t.hireMe }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </transition>
         </div>
 
-        <div class="hire-card">
-          <div>
-            <span class="hire-title">{{ t.availableWork }}</span>
-            <span class="hire-sub">{{ t.frontendDev }}</span>
-          </div>
-
-          <a href="mailto:reymelrey.mislang@gmail.com" class="hire-btn">
-            {{ t.hireMe }}
-          </a>
-        </div>
-      </div>
-    </div>
-  </transition>
-</div>
-
-        <div v-if="fabOpen" key="theme" class="fab-group" :style="{ '--delay': 0 }">
+        <!-- Theme -->
+        <div v-if="fabOpen" key="theme" class="fab-group" :style="{ '--delay': 3 }">
           <button class="fab-action" @click.stop="togglePanel('theme')" :title="t.theme">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="5"/>
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              <circle cx="12" cy="12" r="5" />
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
             </svg>
             <span class="fab-tooltip">{{ t.theme }}</span>
           </button>
@@ -166,10 +153,11 @@
                 <span>{{ t.chooseTheme }}</span>
                 <button v-if="isMobile" class="panel-close" @click="showThemePanel = false">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+                    <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               </div>
+
               <div class="panel-body">
                 <button
                   v-for="theme in themes"
@@ -180,8 +168,9 @@
                 >
                   <span class="theme-swatch" :style="{ background: theme.preview }"></span>
                   <span class="theme-name">{{ theme.name }}</span>
+
                   <svg v-if="currentTheme === theme.id" class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <polyline points="20 6 9 17 4 12"/>
+                    <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </button>
               </div>
@@ -189,12 +178,11 @@
           </transition>
         </div>
 
-
         <!-- Stats -->
-        <div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 1 }">
+        <div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 4 }">
           <button class="fab-action" @click.stop="togglePanel('stats')" :title="t.stats">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 20V10M12 20V4M6 20v-6"/>
+              <path d="M18 20V10M12 20V4M6 20v-6" />
             </svg>
             <span class="fab-tooltip">{{ t.stats }}</span>
           </button>
@@ -205,19 +193,18 @@
                 <span>{{ t.liveStats }}</span>
                 <button v-if="isMobile" class="panel-close" @click="showStatsPanel = false">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+                    <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
               <div class="panel-body stats-body">
-                <!-- Active Live Views -->
                 <div class="stat-card stat-active">
                   <div class="stat-left">
                     <div class="stat-icon-wrap blue">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
                       </svg>
                     </div>
 
@@ -230,57 +217,54 @@
                   <span class="stat-badge live">Live</span>
                 </div>
 
-                <!-- Coming Soon Projects -->
                 <div class="stat-card stat-coming">
                   <div class="stat-left">
                     <div class="stat-icon-wrap muted">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                        <polyline points="2 17 12 22 22 17"/>
-                        <polyline points="2 12 12 17 22 12"/>
+                        <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                        <polyline points="2 17 12 22 22 17" />
+                        <polyline points="2 12 12 17 22 12" />
                       </svg>
                     </div>
 
                     <div class="stat-info">
                       <span class="stat-value muted-text">{{ t.projects }}</span>
-                      <span class="stat-label">Project counter</span>
+                      <span class="stat-label">{{ t.projectCounter }}</span>
                     </div>
                   </div>
 
                   <span class="stat-badge soon">Soon</span>
                 </div>
 
-                <!-- Coming Soon Coding Hours -->
                 <div class="stat-card stat-coming">
                   <div class="stat-left">
                     <div class="stat-icon-wrap muted">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="16 18 22 12 16 6"/>
-                        <polyline points="8 6 2 12 8 18"/>
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
                       </svg>
                     </div>
 
                     <div class="stat-info">
                       <span class="stat-value muted-text">{{ t.hrsCoding }}</span>
-                      <span class="stat-label">Coding activity</span>
+                      <span class="stat-label">{{ t.codingActivity }}</span>
                     </div>
                   </div>
 
                   <span class="stat-badge soon">Soon</span>
                 </div>
 
-                <!-- Coming Soon Repositories -->
                 <div class="stat-card stat-coming">
                   <div class="stat-left">
                     <div class="stat-icon-wrap muted">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                       </svg>
                     </div>
 
                     <div class="stat-info">
                       <span class="stat-value muted-text">{{ t.repos }}</span>
-                      <span class="stat-label">GitHub repositories</span>
+                      <span class="stat-label">{{ t.githubRepos }}</span>
                     </div>
                   </div>
 
@@ -292,183 +276,120 @@
         </div>
 
         <!-- Feedback -->
-        <button v-if="fabOpen" key="fb" class="fab-action" :style="{ '--delay': 2 }" @click="openFeedback" :title="t.comments">
+        <button v-if="fabOpen" key="fb" class="fab-action" :style="{ '--delay': 5 }" @click="openFeedback" :title="t.comments">
           <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
           <span class="fab-tooltip">{{ t.comments }}</span>
           <span v-if="feedbackCount" class="fab-badge">{{ feedbackCount }}</span>
         </button>
 
         <!-- Contact -->
-        <div v-if="fabOpen" key="contact" class="fab-group" :style="{ '--delay': 3 }">
+        <div v-if="fabOpen" key="contact" class="fab-group" :style="{ '--delay': 6 }">
           <button class="fab-action" @click.stop="togglePanel('contact')" :title="t.contact">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
             </svg>
             <span class="fab-tooltip">{{ t.contact }}</span>
           </button>
 
-      <transition name="panel-appear">
-        <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
-          <div class="panel-head">
-            <span>{{ t.getInTouch }}</span>
-            <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
+          <transition name="panel-appear">
+            <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>{{ t.getInTouch }}</span>
+                <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-          <div class="panel-body">
-            <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
-              <div class="contact-icon red">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">{{ t.emailMe }}</span>
-                <span class="contact-sub">reymelrey.mislang@gmail.com</span>
-              </div>
-            </a>
+              <div class="panel-body">
+                <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
+                  <div class="contact-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">{{ t.emailMe }}</span>
+                    <span class="contact-sub">reymelrey.mislang@gmail.com</span>
+                  </div>
+                </a>
 
-            <!-- <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" rel="noopener noreferrer" class="contact-row">
-              <div class="contact-icon blue">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.03 2 10.89c0 2.31 1.11 4.38 2.85 5.76V22l5.36-2.94c.72.2 1.48.31 2.27.31 5.52 0 10-4.03 10-8.89S17.52 2 12 2zm1.09 11.77l-2.56-2.73-4.99 2.73 5.49-5.82 2.62 2.73 4.93-2.73-5.49 5.82z"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">Messenger</span>
-                <span class="contact-sub">Facebook</span>
-              </div>
-            </a> -->
+                <a href="https://www.linkedin.com/in/reymel-mislang/" target="_blank" rel="noopener noreferrer" class="contact-row">
+                  <div class="contact-icon linkedin">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">LinkedIn</span>
+                    <span class="contact-sub">Reymel Mislang</span>
+                  </div>
+                </a>
 
-            <!-- <a href="https://github.com/codewithryry" target="_blank" rel="noopener noreferrer" class="contact-row">
-              <div class="contact-icon dark">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">GitHub</span>
-                <span class="contact-sub">@codewithryry</span>
-              </div>
-            </a> -->
+                <div class="contact-row">
+                  <div class="contact-icon location">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">{{ t.location }}</span>
+                    <span class="contact-sub">Calapan City, Oriental Mindoro</span>
+                  </div>
+                </div>
 
-            <!-- <a href="https://devrymel.vercel.app" target="_blank" rel="noopener noreferrer" class="contact-row">
-              <div class="contact-icon green">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 0 20"/>
-                  <path d="M12 2a15.3 15.3 0 0 0 0 20"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">Portfolio</span>
-                <span class="contact-sub">devrymel.vercel.app</span>
-              </div>
-            </a> -->
-
-            <a href="https://www.linkedin.com/in/reymel-mislang/" target="_blank" rel="noopener noreferrer" class="contact-row">
-              <div class="contact-icon linkedin">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">LinkedIn</span>
-                <span class="contact-sub">Reymel Mislang</span>
-              </div>
-            </a>
-
-            <!-- <a href="https://facebook.com/imrymel/" target="_blank" rel="noopener noreferrer" class="contact-row">
-              <div class="contact-icon facebook">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.25c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06z"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">Facebook</span>
-                <span class="contact-sub">facebook.com/imrymel</span>
-              </div>
-            </a> -->
-
-            <!-- <a href="tel:+639761025310" class="contact-row">
-              <div class="contact-icon phone">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3.09 5.18 2 2 0 0 1 5.11 3h3a2 2 0 0 1 2 1.72c.13.96.35 1.89.66 2.78a2 2 0 0 1-.45 2.11L9.05 10.88a16 16 0 0 0 4.07 4.07l1.27-1.27a2 2 0 0 1 2.11-.45c.89.31 1.82.53 2.78.66A2 2 0 0 1 22 16.92z"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">Phone / GCash</span>
-                <span class="contact-sub">0976 102 5310</span>
-              </div>
-            </a> -->
-
-            <div class="contact-row">
-              <div class="contact-icon location">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">Location</span>
-                <span class="contact-sub">Calapan City, Oriental Mindoro</span>
+                <a href="/Resume.pdf" download class="contact-row resume">
+                  <div class="contact-icon accent">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">{{ t.downloadCV }}</span>
+                    <span class="contact-sub">{{ t.latestResume }}</span>
+                  </div>
+                </a>
               </div>
             </div>
-
-            <a href="/Resume.pdf" download class="contact-row resume">
-              <div class="contact-icon accent">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-              </div>
-              <div class="contact-info">
-                <span class="contact-title">{{ t.downloadCV }}</span>
-                <span class="contact-sub">PDF • Latest Resume</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </transition>
+          </transition>
         </div>
       </transition-group>
 
-      <!-- Main Toggle — Compass/Navigation Icon -->
-      <button 
-        class="fab-trigger" 
-        :class="{ active: fabOpen }" 
+      <!-- Main Toggle -->
+      <button
+        class="fab-trigger"
+        :class="{ active: fabOpen }"
         @click.stop="toggleFab"
         :aria-label="fabOpen ? t.close : t.menu"
       >
         <span class="trigger-icon">
-          <!-- Closed: Compass/Navigation icon -->
-          <svg v-if="!fabOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          <svg v-if="!fabOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
           </svg>
-          <!-- Open: X close icon -->
-          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </span>
+
         <span v-if="!fabOpen && totalNotifications" class="trigger-pulse"></span>
       </button>
 
-      <!-- Scroll to Top (positioned directly below the trigger) -->
+      <!-- Scroll to Top -->
       <transition name="fade-up">
         <button v-if="showScrollTop" class="scroll-top" @click="scrollToTop" :title="t.top">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="18 15 12 9 6 15"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="18 15 12 9 6 15" />
           </svg>
         </button>
       </transition>
@@ -479,8 +400,8 @@
       <div v-if="toastVisible" class="toast" :class="{ 'toast-mobile': isMobile }">
         <div class="toast-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
           </svg>
         </div>
         <span>{{ toastMessage }}</span>
@@ -490,14 +411,21 @@
     <FeedbackBubble
       ref="feedbackBubble"
       :show-button="false"
+      :lang="currentLang"
       @count-change="feedbackCount = $event"
     />
 
-    <router-view :lang="currentLang" />
+    <!-- important: key reloads routed page when language changes -->
+    <router-view
+      :key="currentLang"
+      :lang="currentLang"
+      :translations="t"
+    />
   </div>
 </template>
 
 <script>
+import { computed } from "vue";
 import { trackVisit, getViews } from "./services/analyticsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
 
@@ -511,13 +439,23 @@ const UI_TRANSLATIONS = {
     menu: "Menu",
     close: "Close",
 
+    language: "Language",
+    chooseLanguage: "Choose Language",
+
+    quickIntro: "Quick Intro",
+    introTitle: "Hi, I’m Reymel",
+    introPitch: "A frontend-focused IT graduate building clean, responsive, and user-friendly web applications.",
+    viewWork: "View Work",
+
     chooseTheme: "Appearance",
     liveStats: "Live Stats",
     views: "Views",
     projects: "Projects",
     hrsCoding: "Hours Coding",
     repos: "Repositories",
-    liveFirestore: "Live from Firestore",
+    projectCounter: "Project counter",
+    codingActivity: "Coding activity",
+    githubRepos: "GitHub repositories",
 
     quickNav: "Quick Nav",
     about: "About",
@@ -533,7 +471,9 @@ const UI_TRANSLATIONS = {
 
     getInTouch: "Get in Touch",
     emailMe: "Email",
+    location: "Location",
     downloadCV: "Download Resume",
+    latestResume: "PDF • Latest Resume",
 
     commentsWall: "Feedback",
     loading: "Loading",
@@ -550,13 +490,23 @@ const UI_TRANSLATIONS = {
     menu: "Menu",
     close: "Isara",
 
+    language: "Wika",
+    chooseLanguage: "Pumili ng Wika",
+
+    quickIntro: "Quick Intro",
+    introTitle: "Hi, I’m Reymel",
+    introPitch: "Frontend-focused IT graduate na gumagawa ng malinis, responsive, at user-friendly web applications.",
+    viewWork: "Tingnan Work",
+
     chooseTheme: "Itsura",
     liveStats: "Live Stats",
     views: "Views",
     projects: "Proyekto",
     hrsCoding: "Oras ng Coding",
     repos: "Repositories",
-    liveFirestore: "Live mula sa Firestore",
+    projectCounter: "Project counter",
+    codingActivity: "Coding activity",
+    githubRepos: "GitHub repositories",
 
     quickNav: "Quick Nav",
     about: "Tungkol",
@@ -572,7 +522,9 @@ const UI_TRANSLATIONS = {
 
     getInTouch: "Makipag-ugnayan",
     emailMe: "Email",
+    location: "Lokasyon",
     downloadCV: "I-download ang CV",
+    latestResume: "PDF • Latest Resume",
 
     commentsWall: "Puna",
     loading: "Naglo-load",
@@ -589,13 +541,23 @@ const UI_TRANSLATIONS = {
     menu: "選單",
     close: "關閉",
 
+    language: "語言",
+    chooseLanguage: "選擇語言",
+
+    quickIntro: "快速介紹",
+    introTitle: "Hi, I’m Reymel",
+    introPitch: "以前端為主的資訊科技畢業生，專注建立乾淨、響應式且易用的網頁應用程式。",
+    viewWork: "查看作品",
+
     chooseTheme: "外觀",
     liveStats: "即時數據",
     views: "瀏覽次數",
     projects: "專案",
     hrsCoding: "編碼時數",
     repos: "儲存庫",
-    liveFirestore: "Firestore 即時數據",
+    projectCounter: "專案計數器",
+    codingActivity: "編碼活動",
+    githubRepos: "GitHub 儲存庫",
 
     quickNav: "快速導覽",
     about: "關於",
@@ -611,7 +573,9 @@ const UI_TRANSLATIONS = {
 
     getInTouch: "聯絡方式",
     emailMe: "電子郵件",
+    location: "位置",
     downloadCV: "下載履歷",
+    latestResume: "PDF • 最新履歷",
 
     commentsWall: "留言板",
     loading: "載入中",
@@ -627,13 +591,21 @@ export default {
     FeedbackBubble
   },
 
+  provide() {
+    return {
+      appLang: computed(() => this.currentLang),
+      appText: computed(() => this.t),
+      setAppLang: this.setLang
+    };
+  },
+
   data() {
     return {
-      // Desktop: open by default
-      // Mobile: closed by default
       fabOpen: window.innerWidth > 640,
       showScrollTop: false,
 
+      showLanguagePanel: false,
+      showIntroPanel: false,
       showThemePanel: false,
       showNavPanel: false,
       showTechPanel: false,
@@ -650,7 +622,13 @@ export default {
       themes: [
         { id: "light", name: "Light", preview: "linear-gradient(135deg, #f8fafc, #e2e8f0)" },
         { id: "midnight", name: "Midnight", preview: "linear-gradient(135deg, #0f172a, #1e3a5f)" },
-        { id: "forest", name: "Forest", preview: "linear-gradient(135deg, #064e3b, #065f46)" },
+        { id: "forest", name: "Forest", preview: "linear-gradient(135deg, #064e3b, #065f46)" }
+      ],
+
+      languages: [
+        { id: "en", name: "English", flag: "EN" },
+        { id: "fil", name: "Filipino", flag: "PH" },
+        { id: "zh", name: "Chinese", flag: "ZH" }
       ],
 
       currentLang: "en",
@@ -672,10 +650,11 @@ export default {
   async mounted() {
     await trackVisit();
 
-    const saved = localStorage.getItem("theme") || "light";
-    this.setTheme(saved, false);
+    const savedTheme = localStorage.getItem("theme") || "light";
+    this.setTheme(savedTheme, false);
 
-    this.currentLang = localStorage.getItem("lang") || "en";
+    const savedLang = localStorage.getItem("lang") || "en";
+    this.setLang(savedLang, false);
 
     this.checkMobile();
     window.addEventListener("resize", this.checkMobile);
@@ -705,7 +684,6 @@ export default {
       const wasMobile = this.isMobile;
       this.isMobile = window.innerWidth <= 640;
 
-      // Kapag lumipat to mobile, isara para hindi takpan screen
       if (this.isMobile) {
         this.fabOpen = false;
         this.closeAllPanels();
@@ -713,7 +691,6 @@ export default {
         return;
       }
 
-      // Kapag galing mobile then balik desktop, buksan ulit buttons
       if (wasMobile && !this.isMobile) {
         this.fabOpen = true;
         document.body.style.overflow = "";
@@ -740,7 +717,7 @@ export default {
     },
 
     togglePanel(name) {
-      const panels = ["theme", "nav", "tech", "stats", "contact"];
+      const panels = ["language", "intro", "theme", "nav", "tech", "stats", "contact"];
 
       panels.forEach((panel) => {
         const key = `show${panel.charAt(0).toUpperCase() + panel.slice(1)}Panel`;
@@ -749,6 +726,8 @@ export default {
     },
 
     closeAllPanels() {
+      this.showLanguagePanel = false;
+      this.showIntroPanel = false;
       this.showThemePanel = false;
       this.showNavPanel = false;
       this.showTechPanel = false;
@@ -765,8 +744,6 @@ export default {
 
       this.closeAllPanels();
 
-      // Sa mobile lang isara buong FAB kapag outside click
-      // Sa desktop, iwan siyang nakalabas by default
       if (this.isMobile) {
         this.closeFab();
       }
@@ -811,6 +788,26 @@ export default {
         localStorage.setItem("theme", themeId);
         this.showThemePanel = false;
       }
+    },
+
+    setLang(langId, save = true) {
+      this.currentLang = langId;
+      document.documentElement.setAttribute("lang", langId);
+      document.documentElement.setAttribute("data-lang", langId);
+
+      if (save) {
+        localStorage.setItem("lang", langId);
+        this.showLanguagePanel = false;
+      }
+
+      window.dispatchEvent(
+        new CustomEvent("language-change", {
+          detail: {
+            lang: langId,
+            text: UI_TRANSLATIONS[langId] || UI_TRANSLATIONS.en
+          }
+        })
+      );
     },
 
     showToast(message) {
@@ -864,6 +861,177 @@ export default {
   }
 };
 </script>
+
+<style>
+/* add this to your existing style */
+
+/* ===== LANGUAGE PANEL ===== */
+.language-panel,
+.intro-panel {
+  width: 292px;
+  min-width: 292px;
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  padding: 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.language-btn:hover {
+  background: var(--surface-hover);
+}
+
+.language-btn.active {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.language-flag {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.language-name {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* ===== QUICK INTRO PANEL ===== */
+.intro-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.intro-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+
+.intro-avatar span {
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.intro-content h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.intro-content p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.intro-btn {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 11px 14px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+.intro-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* include new panels in your unified panel override */
+.theme-panel,
+.stats-panel,
+.contact-panel,
+.tech-panel,
+.language-panel,
+.intro-panel {
+  width: 292px;
+  min-width: 292px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.14),
+    0 8px 18px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+@media (max-width: 640px) {
+  .language-panel,
+  .intro-panel {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .intro-body {
+    padding: 20px;
+  }
+
+  .intro-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .intro-content h3 {
+    font-size: 1.05rem;
+  }
+
+  .intro-content p {
+    font-size: 0.92rem;
+  }
+
+  .intro-btn {
+    padding: 13px 16px;
+    font-size: 0.9rem;
+  }
+
+  .language-btn {
+    padding: 14px 16px;
+  }
+}
+</style>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap");

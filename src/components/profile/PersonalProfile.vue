@@ -11,10 +11,9 @@
         <!-- Header content will be in ProfileContent component -->
       </div>
     </header>
-
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Profile Content -->
+      <!-- 1. Profile / About -->
       <ProfileContent 
         :profile="profile"
         :techStack="techStack"
@@ -23,42 +22,38 @@
         @openMobileDeansList="openMobileDeansListModal"
         @open-certificates="openCertificatesListModal"   
         @openLinks="showLinksModal = true" 
-
       />
 
-      <!-- Career Timeline -->
-      <!-- <CareerTimeline :timeline="timeline" /> -->
-
-            <!-- Projects Section -->
+      <!-- 2. Featured Projects -->
       <ProjectsSection 
         :projects="projects"
         @openProjectModal="openProjectModal"
         @openDeepDive="openDeepDive"
       />
 
-
-            <!-- Live Dev Stats -->
+      <!-- 3. Highlights / Quick Stats -->
       <LiveDevStats :stats="devStats" />
 
+      <!-- 4. Career & Education Timeline -->
+      <CareerTimeline :timeline="timeline" />
 
-      <!-- Links Section -->
+      <!-- 5. Experience / Internship -->
+      <ExperienceSection :experiences="experiences" />
+
+      <!-- 6. Services -->
+      <ServicesSection :services="services" />
+
+      <!-- 7. Why Hire Me -->
+      <HighlightsSection :highlights="highlights" />
+
+      <!-- 8. Quick Links -->
       <LinksSection 
         :certificates="certificates"
         @openQRModal="openQRModal"
         @openCertificatesListModal="openCertificatesListModal"
       />
 
-                 <!-- Services Section -->
-      <ServicesSection :services="services" />
-
-            <!-- Experience / Internship Section -->
-    <ExperienceSection :experiences="experiences" />
-
-    <!-- Testimonials / Highlights Section -->
-    <HighlightsSection :highlights="highlights" />
-
-
-      <!-- Social Media Section -->
+      <!-- 9. Let's Connect -->
       <SocialSection 
         :socialLinks="socialLinks"
         :availableSocialLinks="availableSocialLinks"
@@ -66,15 +61,13 @@
         @openUnavailableSocialModal="openUnavailableSocialModal"
       />
 
-
       <Linkwebsite
         v-if="showLinksModal"
         :links="projectLinks"
         @close="showLinksModal = false"
       />
 
-
-      <!-- Footer -->
+      <!-- 10. Footer CTA -->
       <FooterSection />
     </main>
 
@@ -168,6 +161,7 @@ import socialLinks from '@/data/socialLinks.json'
 import projectLinks from '@/data/projectLinks.json'
 import experiences from '@/data/experiences.json'
 import highlights from '@/data/highlights.json'
+import timeline from '@/data/timeline.json'
 
 export default {
   name: "PersonalProfile",
@@ -205,6 +199,7 @@ components: {
       projectLinks,
       experiences,
       highlights,
+      timeline,
 
       /* ===== DEANS LIST DATA (Now inline) ===== */
       achievements: {

@@ -6,55 +6,63 @@
 <template>
   <section class="timeline-section">
     <div class="section-header">
-      <h2 class="section-title">Career & Education Journey</h2>
+      <h2 class="section-title">Career & Education Timeline</h2>
     </div>
-    
+
     <div class="timeline-container">
       <div class="timeline-line"></div>
-      
-      <div v-for="(item, index) in timeline" :key="index" class="timeline-item">
+
+      <div
+        v-for="(item, index) in visibleTimeline"
+        :key="index"
+        class="timeline-item"
+        :class="{ right: index % 2 === 0 }"
+      >
         <div class="timeline-marker">
-          <div class="marker-dot"></div>
-          <div class="marker-date">{{ formatDate(item.date) }}</div>
+          <span class="marker-dot"></span>
         </div>
-        
-        <div class="timeline-card" :class="{ 'right': index % 2 === 0 }">
-          <div class="timeline-card-header">
-            <h3 class="timeline-title">{{ item.title }}</h3>
+
+        <article class="timeline-card">
+          <div class="timeline-date">
+            {{ formatDate(item.date) }}
           </div>
-          
-          <p class="timeline-description">{{ item.description }}</p>
-          
-          <div class="timeline-features" v-if="item.features">
-            <div v-for="(feature, fIndex) in item.features.slice(0, 3)" :key="fIndex" class="feature-item">
-              <i class="fas fa-check-circle"></i>
-              <span>{{ feature }}</span>
-            </div>
-          </div>
-          
-          <div class="timeline-tags" v-if="item.tags">
-            <span v-for="tag in item.tags.slice(0, 4)" :key="tag" class="tag">
-              {{ tag }}
-            </span>
-            <span v-if="item.tags.length > 4" class="tag more">
-              +{{ item.tags.length - 4 }}
-            </span>
-          </div>
-          
-          <div class="timeline-actions" v-if="item.link">
-            <a :href="item.link" target="_blank" class="action-link">
-              View Details <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
+
+          <h3 class="timeline-title">{{ item.title }}</h3>
+
+          <p class="timeline-description">
+            {{ item.description }}
+          </p>
+
+          <a
+            v-if="item.link"
+            :href="item.link"
+            target="_blank"
+            rel="noopener"
+            class="timeline-link"
+          >
+            View Details
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </article>
       </div>
     </div>
+
+    <button
+      v-if="isMobile && timeline.length > mobileLimit"
+      type="button"
+      class="timeline-toggle"
+      @click="showAllMobile = !showAllMobile"
+    >
+      <span>{{ showAllMobile ? "Show Less" : "Show More" }}</span>
+      <i :class="showAllMobile ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+    </button>
   </section>
 </template>
 
 <script>
 export default {
   name: "CareerTimeline",
+
   props: {
     timeline: {
       type: Array,
@@ -62,10 +70,43 @@ export default {
       default: () => []
     }
   },
+
+  data() {
+    return {
+      showAllMobile: false,
+      isMobile: false,
+      mobileLimit: 3
+    }
+  },
+
+  computed: {
+    visibleTimeline() {
+      if (this.isMobile && !this.showAllMobile) {
+        return this.timeline.slice(0, this.mobileLimit)
+      }
+
+      return this.timeline
+    }
+  },
+
+  mounted() {
+    this.checkScreen()
+    window.addEventListener("resize", this.checkScreen)
+  },
+
+  beforeUnmount() {
+    window.removeEventListener("resize", this.checkScreen)
+  },
+
   methods: {
+    checkScreen() {
+      this.isMobile = window.innerWidth <= 768
+    },
+
     formatDate(date) {
-      if (date.toLowerCase() === 'present') return 'Present';
-      return date;
+      if (!date) return ""
+      if (String(date).toLowerCase() === "present") return "Present"
+      return date
     }
   }
 }
@@ -73,307 +114,321 @@ export default {
 
 <style scoped>
 .timeline-section {
-  padding: 2.5rem;
   margin: 3rem 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.timeline-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-
+  padding: 0;
 }
 
 .section-header {
-  text-align: center;
-  margin-bottom: 3rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.section-kicker {
+  display: inline-flex;
+  margin-bottom: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .section-title {
+  margin: 0;
+  text-align: left;
   font-size: 2rem;
   font-weight: 800;
   color: #2d3748;
-  margin-bottom: 0.5rem;
-  background: black;
-  text-align: left;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
 }
 
-.section-subtitle {
-  color: #718096;
-  font-size: 1.1rem;
-  font-weight: 400;
-}
-
+/* ===== TIMELINE DESKTOP ===== */
 .timeline-container {
   position: relative;
-  max-width: 900px;
+  max-width: 950px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 0.3rem 0;
 }
 
 .timeline-line {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   top: 0;
   bottom: 0;
+  left: 50%;
   width: 2px;
-  background: linear-gradient(to bottom, 
-    transparent 0%, 
-    #667eea 10%, 
-    #667eea 90%, 
-    transparent 100%);
-  z-index: 1;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #667eea 12%,
+    #667eea 88%,
+    transparent
+  );
 }
 
 .timeline-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 3rem;
   position: relative;
-  z-index: 2;
+  display: flex;
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .timeline-item:last-child {
   margin-bottom: 0;
 }
 
+.timeline-item.right {
+  justify-content: flex-end;
+}
+
 .timeline-marker {
   position: absolute;
+  top: 1.35rem;
   left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
   z-index: 3;
+  transform: translateX(-50%);
 }
 
 .marker-dot {
-  width: 16px;
-  height: 16px;
-  background: white;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #ffffff;
   border: 3px solid #667eea;
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
-  transition: all 0.3s ease;
-}
-
-.timeline-item:hover .marker-dot {
-  transform: scale(1.2);
-  box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.3);
-}
-
-.marker-date {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #667eea;
-  background: rgba(102, 126, 234, 0.1);
-  padding: 0.3rem 0.8rem;
-  border-radius: 12px;
-  white-space: nowrap;
+  box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.16);
 }
 
 .timeline-card {
-  width: calc(50% - 40px);
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
   position: relative;
-}
-
-.timeline-card.right {
-  margin-left: auto;
+  width: calc(50% - 42px);
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .timeline-card::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 20px;
-  width: 0;
-  height: 0;
-  border-style: solid;
+  top: 1.35rem;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  transform: rotate(45deg);
 }
 
-.timeline-card:not(.right)::before {
-  right: -10px;
-  border-width: 10px 0 10px 10px;
-  border-color: transparent transparent transparent #f8fafc;
+.timeline-item:not(.right) .timeline-card::before {
+  right: -7px;
 }
 
-.timeline-card.right::before {
-  left: -10px;
-  border-width: 10px 10px 10px 0;
-  border-color: transparent #f8fafc transparent transparent;
+.timeline-item.right .timeline-card::before {
+  left: -7px;
+  transform: rotate(225deg);
 }
 
 .timeline-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15);
-  border-color: #667eea;
+  border-color: rgba(102, 126, 234, 0.45);
+  box-shadow: 0 16px 34px rgba(102, 126, 234, 0.13);
 }
 
-.timeline-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  gap: 1rem;
-}
-
-.timeline-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #2d3748;
-  line-height: 1.3;
-  flex: 1;
-}
-
-.timeline-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.3rem 0.8rem;
-  border-radius: 12px;
+.timeline-date {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.55rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
   background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
   color: #667eea;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
   white-space: nowrap;
 }
 
-.timeline-description {
-  color: #4a5568;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-}
-
-.timeline-features {
-  margin-bottom: 1rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+.timeline-title {
+  margin: 0 0 0.45rem;
   color: #2d3748;
+  font-size: 1.03rem;
+  font-weight: 800;
+  line-height: 1.25;
 }
 
-.feature-item i {
-  color: #38a169;
-  font-size: 0.8rem;
-}
-
-.timeline-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.tag {
-  background: white;
+.timeline-description {
+  margin: 0;
   color: #4a5568;
-  padding: 0.3rem 0.7rem;
-  border-radius: 10px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border: 1px solid #e2e8f0;
+  font-size: 0.88rem;
+  line-height: 1.5;
 }
 
-.tag.more {
-  background: #f1f5f9;
-  color: #718096;
-  font-style: italic;
-}
-
-.timeline-actions {
-  margin-top: 1rem;
-}
-
-.action-link {
+.timeline-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
   color: #667eea;
+  font-size: 0.82rem;
+  font-weight: 800;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
 }
 
-.action-link:hover {
-  gap: 0.7rem;
+.timeline-link:hover {
   color: #5a67d8;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
+.timeline-toggle {
+  display: none;
+}
+
+/* ===== TABLET / MOBILE CLEAN LEFT TIMELINE ===== */
+@media (max-width: 900px) {
+  .timeline-container {
+    max-width: 100%;
+  }
+
   .timeline-line {
-    left: 30px;
+    left: 0.8rem;
   }
-  
+
+  .timeline-item,
+  .timeline-item.right {
+    justify-content: flex-start;
+    padding-left: 2.4rem;
+    margin-bottom: 1rem;
+  }
+
   .timeline-marker {
-    left: 30px;
+    left: 0.8rem;
+    top: 1.25rem;
+    transform: translateX(-50%);
   }
-  
+
   .timeline-card {
-    width: calc(100% - 60px);
-    margin-left: 60px !important;
+    width: 100%;
   }
-  
-  .timeline-card::before {
-    left: -10px !important;
-    right: auto !important;
-    border-width: 10px 10px 10px 0 !important;
-    border-color: transparent #f8fafc transparent transparent !important;
+
+  .timeline-card::before,
+  .timeline-item.right .timeline-card::before,
+  .timeline-item:not(.right) .timeline-card::before {
+    left: -7px;
+    right: auto;
+    transform: rotate(225deg);
   }
 }
 
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .timeline-section {
-    padding: 1.5rem;
+    margin: 2.5rem 0;
   }
-  
+
+  .section-header {
+    margin-bottom: 1.35rem;
+  }
+
   .section-title {
-    font-size: 1.6rem;
+    font-size: 1.45rem;
   }
-  
+
+  .section-kicker {
+    font-size: 0.72rem;
+  }
+
+  .timeline-line {
+    left: 0.7rem;
+  }
+
+  .timeline-item,
+  .timeline-item.right {
+    padding-left: 2rem;
+    margin-bottom: 0.95rem;
+  }
+
+  .timeline-marker {
+    left: 0.7rem;
+    top: 1.15rem;
+  }
+
+  .marker-dot {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.14);
+  }
+
   .timeline-card {
-    width: calc(100% - 50px);
-    margin-left: 50px !important;
-    padding: 1.25rem;
+    padding: 0.95rem;
+    border-radius: 15px;
   }
-  
-  .timeline-card-header {
-    flex-direction: column;
-    gap: 0.5rem;
+
+  .timeline-date {
+    margin-bottom: 0.55rem;
+    padding: 0.23rem 0.6rem;
+    font-size: 0.68rem;
+  }
+
+  .timeline-title {
+    font-size: 0.98rem;
+    line-height: 1.25;
+  }
+
+  .timeline-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .timeline-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 100%;
+    margin-top: 1.1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    border-radius: 14px;
+    background: rgba(102, 126, 234, 0.08);
+    color: #667eea;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .timeline-toggle:hover {
+    background: rgba(102, 126, 234, 0.12);
+    border-color: rgba(102, 126, 234, 0.35);
+  }
+
+  .timeline-toggle:active {
+    transform: scale(0.98);
+  }
+
+  .timeline-toggle i {
+    font-size: 0.78rem;
   }
 }
 
-@media (max-width: 480px) {
-  .timeline-section {
-    padding: 1.25rem;
-  }
-  
+@media (max-width: 420px) {
   .section-title {
-    font-size: 1.4rem;
+    font-size: 1.32rem;
   }
-  
+
+  .timeline-item,
+  .timeline-item.right {
+    padding-left: 1.8rem;
+  }
+
   .timeline-card {
-    width: calc(100% - 40px);
-    margin-left: 40px !important;
-    padding: 1rem;
+    padding: 0.9rem;
   }
 }
 </style>

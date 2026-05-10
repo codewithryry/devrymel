@@ -24,7 +24,7 @@
 
           <span class="timeline-info">
             <strong>{{ item.company }}</strong>
-            <small>{{ item.date }}</small>
+            <!-- <small>{{ item.date }}</small> -->
           </span>
         </button>
       </div>

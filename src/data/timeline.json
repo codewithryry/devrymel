@@ -1,0 +1,43 @@
+[
+  {
+    "date": "2021",
+    "title": "Started BS Information Technology",
+    "description": "Began my IT journey at Mindoro State University and learned programming fundamentals."
+  },
+  {
+    "date": "2023",
+    "title": "First Web",
+    "description": "Started building simple websites while practicing HTML, CSS, JavaScript, and Vue."
+  },
+  {
+    "date": "2023",
+    "title": "LiftUp",
+    "description": "Built a mental health support platform with AI assistance and Firebase integration."
+  },
+  {
+    "date": "2024",
+    "title": "SafePath",
+    "description": "Created a bullying reporting system with AI support and sentiment analysis."
+  },
+
+  {
+    "date": "2025",
+    "title": "Capstone",
+    "description": "Worked on Hareneth, a civil registration and analytics system for Calapan City."
+  },
+  {
+    "date": "2026",
+    "title": "Barangay Management System",
+    "description": "Developed a Barangay Management System that gained attention for its practical features in handling barangay records, resident information, and local service workflows."
+  },
+  {
+    "date": "2026",
+    "title": "Armful Media Internship",
+    "description": "Worked as a social media researcher focusing on influencer sourcing and campaign data."
+  },
+  {
+    "date": "Present",
+    "title": "Frontend Developer",
+    "description": "Improving my portfolio, frontend skills, and full-stack development experience."
+  }
+]

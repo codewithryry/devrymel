@@ -3,7 +3,6 @@
     <div class="section-header reveal-up">
       <h2 class="section-title">Why Hire Me</h2>
 
-      <!-- Mobile swipe hint - same placement as Quick Links -->
       <div class="swipe-hint">
         <span>Swipe for more..</span>
       </div>
@@ -101,7 +100,7 @@ export default {
 .section-title {
   font-size: clamp(1.85rem, 4vw, 2.35rem);
   font-weight: 900;
-  color: #2d3748;
+  color: var(--text, #2d3748);
   margin: 0;
   letter-spacing: -0.04em;
 }
@@ -110,7 +109,7 @@ export default {
   display: none;
   align-items: center;
   gap: 0.5rem;
-  color: #718096;
+  color: var(--text-secondary, #718096);
   font-size: 0.85rem;
   font-weight: 500;
   margin-top: 0.9rem;
@@ -138,10 +137,10 @@ export default {
 .highlight-card {
   position: relative;
   min-height: 230px;
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--surface, rgba(255, 255, 255, 0.94));
   border-radius: 20px;
   padding: 1.5rem;
-  border: 1px solid rgba(226, 232, 240, 0.95);
+  border: 1px solid var(--border, rgba(226, 232, 240, 0.95));
   overflow: hidden;
   transition:
     opacity 0.75s ease,
@@ -162,7 +161,7 @@ export default {
 
 .highlight-card:hover {
   transform: translateY(-7px);
-  border-color: rgba(56, 161, 105, 0.55);
+  border-color: var(--accent, rgba(56, 161, 105, 0.55));
 }
 
 .highlight-card:hover::before {
@@ -184,7 +183,7 @@ export default {
   height: 48px;
   border-radius: 15px;
   background: rgba(56, 161, 105, 0.12);
-  color: #38a169;
+  color: var(--accent, #38a169);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,6 +208,7 @@ export default {
   font-weight: 900;
   margin: 0 0 0.6rem;
   letter-spacing: -0.02em;
+  color: var(--text, #2d3748);
 }
 
 .highlight-card p {
@@ -217,6 +217,7 @@ export default {
   font-size: 0.93rem;
   line-height: 1.7;
   margin: 0;
+  color: var(--text-secondary, #4a5568);
 }
 
 /* Reveal animation */
@@ -271,7 +272,11 @@ export default {
   }
 
   .section-title {
-    font-size: 1.65rem;
+    font-size: 2rem;
+    line-height: 1.15;
+    font-weight: 900;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.04em;
   }
 
   .swipe-hint {
@@ -343,6 +348,15 @@ export default {
 }
 
 /* Small Mobile */
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.9rem;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    padding-left: 0;
+  }
+}
+
 @media (max-width: 420px) {
   .section-title {
     font-size: 1.5rem;
@@ -369,37 +383,39 @@ export default {
   }
 }
 
-/* Dark Mode */
-html[data-theme="dark"] .section-title,
-html[data-theme="dark"] .highlight-card h3 {
-  color: #f8fafc;
-}
-
-html[data-theme="dark"] .highlight-card p {
-  color: #cbd5e0;
-}
-
-html[data-theme="dark"] .highlight-card {
-  background: rgba(17, 17, 17, 0.94);
-  border-color: #242424;
+/* Theme support */
+:global(html[data-theme="midnight"]) .highlight-card,
+:global(html[data-theme="forest"]) .highlight-card {
+  background: var(--surface);
+  border-color: var(--border);
   box-shadow: none;
 }
 
-html[data-theme="dark"] .highlight-card:hover {
-  border-color: rgba(104, 211, 145, 0.45);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+:global(html[data-theme="midnight"]) .section-title,
+:global(html[data-theme="forest"]) .section-title,
+:global(html[data-theme="midnight"]) .highlight-card h3,
+:global(html[data-theme="forest"]) .highlight-card h3 {
+  color: var(--text);
 }
 
-html[data-theme="dark"] .highlight-number {
-  color: rgba(248, 250, 252, 0.1);
+:global(html[data-theme="midnight"]) .highlight-card p,
+:global(html[data-theme="forest"]) .highlight-card p {
+  color: var(--text-secondary);
 }
 
-html[data-theme="dark"] .highlight-icon {
-  background: rgba(56, 161, 105, 0.16);
-  color: #68d391;
+:global(html[data-theme="midnight"]) .highlight-number,
+:global(html[data-theme="forest"]) .highlight-number {
+  color: rgba(248, 250, 252, 0.12);
 }
 
-html[data-theme="dark"] .swipe-hint {
-  color: #cbd5e0;
+:global(html[data-theme="midnight"]) .highlight-icon,
+:global(html[data-theme="forest"]) .highlight-icon {
+  background: rgba(34, 197, 94, 0.16);
+  color: var(--accent);
+}
+
+:global(html[data-theme="midnight"]) .swipe-hint,
+:global(html[data-theme="forest"]) .swipe-hint {
+  color: var(--text-secondary);
 }
 </style>

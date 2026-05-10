@@ -5,7 +5,14 @@
 
 <template>
   <section class="services-section">
-    <h2 class="section-title">Services</h2>
+    <div class="section-header">
+      <h2 class="section-title">Services</h2>
+
+      <!-- Mobile swipe hint -->
+      <div class="swipe-hint">
+        <span>Swipe for more..</span>
+      </div>
+    </div>
     
     <!-- Desktop Carousel View -->
     <div v-if="!isMobile" class="services-carousel-container">
@@ -19,26 +26,27 @@
             :key="service.id"
             class="service-card"
             :class="{
-              'active': currentIndex === index,
-              'left': getCardPosition(index) === 'left',
-              'right': getCardPosition(index) === 'right'
+              active: currentIndex === index,
+              left: getCardPosition(index) === 'left',
+              right: getCardPosition(index) === 'right'
             }"
             @click="goToService(index)"
           >
             <h3 class="service-title">{{ service.title }}</h3>
             <p class="service-description">{{ service.description }}</p>
             
-            <!-- Features with limited display for side cards -->
             <div class="service-features">
-              <div v-for="(feature, featureIndex) in service.features" 
-                   :key="feature"
-                   class="feature-item"
-                   :class="{ 'hidden-feature': !isCardActive(index) && featureIndex >= 2 }">
+              <div 
+                v-for="(feature, featureIndex) in service.features" 
+                :key="feature"
+                class="feature-item"
+                :class="{ 'hidden-feature': !isCardActive(index) && featureIndex >= 2 }"
+              >
                 <i class="fas fa-check"></i>
                 <span>{{ feature }}</span>
               </div>
             </div>      
-            <!-- Action Button - More prominent on active card -->
+
             <div class="service-actions">
               <a 
                 :href="`mailto:reymelrey.mislang@gmail.com?subject=Inquiry%20About%20${encodeURIComponent(service.title)}`" 
@@ -50,7 +58,6 @@
               </a>
             </div>
             
-            <!-- Pricing hint for active card -->
             <div v-if="currentIndex === index" class="pricing-hint">
               <i class="fas fa-tag"></i>
               <span>Custom pricing available</span>
@@ -59,9 +66,12 @@
         </div>
       </div>
       
-      <!-- Enhanced Carousel Controls -->
       <div class="carousel-controls">
-        <button @click="prevService" class="slider-btn prev-btn" aria-label="Previous service">
+        <button 
+          @click="prevService" 
+          class="slider-btn prev-btn" 
+          aria-label="Previous service"
+        >
           <i class="fas fa-chevron-left"></i>
         </button>
         
@@ -69,66 +79,59 @@
           <span class="current-service">{{ currentIndex + 1 }}</span>
           <span class="service-separator">/</span>
           <span class="total-services">{{ services.length }}</span>
-          <span class="service-name">{{ services[currentIndex].title }}</span>
+          <span class="service-name">{{ services[currentIndex]?.title }}</span>
         </div>
         
-        <button @click="nextService" class="slider-btn next-btn" aria-label="Next service">
+        <button 
+          @click="nextService" 
+          class="slider-btn next-btn" 
+          aria-label="Next service"
+        >
           <i class="fas fa-chevron-right"></i>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Simple View (No Carousel) -->
+    <!-- Mobile Single Card View -->
     <div v-else class="mobile-services-container">
-      <div class="mobile-service-card">
-        <h3 class="service-title">{{ services[currentIndex].title }}</h3>
-        <p class="service-description">{{ services[currentIndex].description }}</p>
-        
-        <!-- All features visible on mobile -->
-        <div class="service-features">
-          <div v-for="feature in services[currentIndex].features" 
-               :key="feature"
-               class="feature-item">
-            <i class="fas fa-check"></i>
-            <span>{{ feature }}</span>
+      <transition :name="mobileTransitionName" mode="out-in">
+        <article
+          v-if="services.length"
+          :key="services[currentIndex].id"
+          class="mobile-service-card"
+          @touchstart="handleTouchStart"
+          @touchend="handleTouchEnd"
+        >
+          <h3 class="service-title">{{ services[currentIndex].title }}</h3>
+          <p class="service-description">{{ services[currentIndex].description }}</p>
+          
+          <div class="service-features">
+            <div 
+              v-for="feature in services[currentIndex].features" 
+              :key="feature"
+              class="feature-item"
+            >
+              <i class="fas fa-check"></i>
+              <span>{{ feature }}</span>
+            </div>
           </div>
-        </div>
-        
-        <!-- Action Button -->
-        <div class="service-actions">
-          <a 
-            :href="`mailto:reymelrey.mislang@gmail.com?subject=Inquiry%20About%20${encodeURIComponent(services[currentIndex].title)}`" 
-            class="service-button active-button"
-          >
-            <i class="fas fa-envelope"></i>
-            Get Started Now
-          </a>
-        </div>
-        
-        <!-- Pricing hint -->
-        <div class="pricing-hint">
-          <i class="fas fa-tag"></i>
-          <span>Custom pricing available</span>
-        </div>
-      </div>
-
-      <!-- Simple Mobile Controls -->
-      <div class="mobile-carousel-controls">
-        <button @click="prevService" class="mobile-slider-btn" aria-label="Previous service">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        
-        <div class="mobile-carousel-info">
-          <span class="current-service">{{ currentIndex + 1 }}</span>
-          <span class="service-separator">/</span>
-          <span class="total-services">{{ services.length }}</span>
-          <span class="service-name">{{ services[currentIndex].title }}</span>
-        </div>
-        
-        <button @click="nextService" class="mobile-slider-btn" aria-label="Next service">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
+          
+          <div class="service-actions">
+            <a 
+              :href="`mailto:reymelrey.mislang@gmail.com?subject=Inquiry%20About%20${encodeURIComponent(services[currentIndex].title)}`" 
+              class="service-button active-button"
+            >
+              <i class="fas fa-envelope"></i>
+              Get Started Now
+            </a>
+          </div>
+          
+          <div class="pricing-hint">
+            <i class="fas fa-tag"></i>
+            <span>Custom pricing available</span>
+          </div>
+        </article>
+      </transition>
     </div>
   </section>
 </template>
@@ -136,206 +139,223 @@
 <script>
 export default {
   name: "ServicesSection",
+
   props: {
     services: {
       type: Array,
       required: true
     }
   },
+
   data() {
     return {
-      currentIndex: 1,
+      currentIndex: 0,
       translateValue: 0,
       isTransitioning: false,
       autoRotateInterval: null,
-      isMobile: false
+      isMobile: false,
+      touchStartX: 0,
+      touchEndX: 0,
+      swipeDirection: "next"
     }
   },
+
   computed: {
     isCardActive() {
-      return (index) => this.currentIndex === index;
+      return index => this.currentIndex === index
+    },
+
+    mobileTransitionName() {
+      return this.swipeDirection === "next"
+        ? "mobile-card-next"
+        : "mobile-card-prev"
     }
   },
+
   methods: {
     getCardPosition(index) {
-      if (this.isMobile) return '';
+      if (this.isMobile) return ""
       
-      const diff = index - this.currentIndex;
-      const total = this.services.length;
+      const diff = index - this.currentIndex
+      const total = this.services.length
       
-      let normalizedDiff = diff;
+      let normalizedDiff = diff
+
       if (Math.abs(diff) > total / 2) {
-        normalizedDiff = diff > 0 ? diff - total : diff + total;
+        normalizedDiff = diff > 0 ? diff - total : diff + total
       }
       
-      if (normalizedDiff < 0) return 'left';
-      if (normalizedDiff > 0) return 'right';
-      return 'center';
+      if (normalizedDiff < 0) return "left"
+      if (normalizedDiff > 0) return "right"
+
+      return "center"
     },
     
     nextService() {
-      if (this.isTransitioning) return;
-      this.isTransitioning = true;
-      this.currentIndex = (this.currentIndex + 1) % this.services.length;
+      if (this.isTransitioning || !this.services.length) return
+
+      this.swipeDirection = "next"
+      this.isTransitioning = true
+      this.currentIndex = (this.currentIndex + 1) % this.services.length
       
       if (!this.isMobile) {
-        this.animateTransition();
+        this.animateTransition()
       } else {
-        // Simple transition for mobile
         setTimeout(() => {
-          this.isTransitioning = false;
-        }, 300);
+          this.isTransitioning = false
+        }, 300)
       }
     },
     
     prevService() {
-      if (this.isTransitioning) return;
-      this.isTransitioning = true;
-      this.currentIndex = (this.currentIndex - 1 + this.services.length) % this.services.length;
+      if (this.isTransitioning || !this.services.length) return
+
+      this.swipeDirection = "prev"
+      this.isTransitioning = true
+      this.currentIndex =
+        (this.currentIndex - 1 + this.services.length) % this.services.length
       
       if (!this.isMobile) {
-        this.animateTransition();
+        this.animateTransition()
       } else {
-        // Simple transition for mobile
         setTimeout(() => {
-          this.isTransitioning = false;
-        }, 300);
+          this.isTransitioning = false
+        }, 300)
       }
     },
     
     animateTransition() {
-      // Only for desktop
-      if (this.isMobile) return;
+      if (this.isMobile) return
       
-      const cardWidth = 33.333;
-      this.translateValue = -this.currentIndex * cardWidth + cardWidth;
+      const cardWidth = 33.333
+      this.translateValue = -this.currentIndex * cardWidth + cardWidth
 
       setTimeout(() => {
-        this.isTransitioning = false;
-      }, 400);
+        this.isTransitioning = false
+      }, 400)
     },
     
     goToService(index) {
-      if (this.isMobile) return; // Disable click navigation on mobile
-      if (this.isTransitioning || index === this.currentIndex) return;
-      this.isTransitioning = true;
-      this.currentIndex = index;
-      this.animateTransition();
+      if (this.isMobile) return
+      if (this.isTransitioning || index === this.currentIndex) return
+
+      this.swipeDirection = index > this.currentIndex ? "next" : "prev"
+      this.isTransitioning = true
+      this.currentIndex = index
+      this.animateTransition()
     },
     
     startAutoRotation() {
-      // Only auto-rotate on desktop
-      if (this.isMobile) return;
+      if (this.isMobile) return
       
       this.autoRotateInterval = setInterval(() => {
         if (!this.isTransitioning) {
-          this.nextService();
+          this.nextService()
         }
-      }, 5000);
+      }, 5000)
     },
     
     stopAutoRotation() {
       if (this.autoRotateInterval) {
-        clearInterval(this.autoRotateInterval);
-        this.autoRotateInterval = null;
+        clearInterval(this.autoRotateInterval)
+        this.autoRotateInterval = null
       }
     },
     
     checkIfMobile() {
-      const wasMobile = this.isMobile;
-      this.isMobile = window.innerWidth <= 768;
+      const wasMobile = this.isMobile
+      this.isMobile = window.innerWidth <= 768
       
       if (this.isMobile && !wasMobile) {
-        // Switching to mobile - stop desktop animations
-        this.stopAutoRotation();
+        this.stopAutoRotation()
       } else if (!this.isMobile && wasMobile) {
-        // Switching to desktop - restart animations
-        this.startAutoRotation();
+        this.startAutoRotation()
+      }
+    },
+
+    handleTouchStart(event) {
+      this.touchStartX = event.changedTouches[0].screenX
+    },
+
+    handleTouchEnd(event) {
+      this.touchEndX = event.changedTouches[0].screenX
+      this.handleSwipeGesture()
+    },
+
+    handleSwipeGesture() {
+      const swipeDistance = this.touchStartX - this.touchEndX
+
+      if (Math.abs(swipeDistance) < 45) return
+
+      if (swipeDistance > 0) {
+        this.nextService()
+      } else {
+        this.prevService()
       }
     }
   },
+
   mounted() {
-    this.checkIfMobile();
+    this.checkIfMobile()
+
     if (!this.isMobile) {
-      this.animateTransition();
-      this.startAutoRotation();
+      this.animateTransition()
+      this.startAutoRotation()
     }
     
-    window.addEventListener('resize', this.checkIfMobile);
+    window.addEventListener("resize", this.checkIfMobile)
   },
+
   beforeUnmount() {
-    this.stopAutoRotation();
-    window.removeEventListener('resize', this.checkIfMobile);
+    this.stopAutoRotation()
+    window.removeEventListener("resize", this.checkIfMobile)
   }
 }
 </script>
 
 <style scoped>
-
-/* Mobile Controls */
-.mobile-carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Changed from space-between to center */
-  gap: 1.5rem; /* Add gap between the buttons and info */
-  margin-top: 1rem;
-  padding: 0 0.5rem;
-}
-
-.mobile-slider-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: #667eea;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0; /* Prevent buttons from shrinking */
-}
-
-.mobile-slider-btn:active {
-  background: #667eea;
-  color: white;
-  transform: scale(0.95);
-}
-
-.mobile-carousel-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  white-space: nowrap; /* Prevent text wrapping */
-}
-
-.mobile-carousel-info .service-name {
-  display: none; /* Hidden on mobile to save space */
-}
-
-
 .services-section {
   margin-top: 3rem;
 }
 
-.section-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-  background: black;
+.section-header {
   text-align: left;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 1.5rem;
 }
 
+.section-title {
+  font-size: clamp(1.85rem, 4vw, 2.35rem);
+  font-weight: 900;
+  color: #2d3748;
+  margin: 0;
+  letter-spacing: -0.04em;
+  text-align: left;
+}
 
-/* DESKTOP STYLES */
+.swipe-hint {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  color: #718096;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 0.9rem;
+  padding: 0 0.5rem;
+  animation: pulseHint 2s infinite;
+}
+
+@keyframes pulseHint {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Desktop styles */
 .carousel-wrapper {
   overflow: hidden;
   margin: 0 auto;
@@ -366,14 +386,11 @@ export default {
   flex-direction: column;
   position: relative;
   min-height: 280px;
-  
-  /* Default state for side cards */
   opacity: 0.6;
   transform: scale(0.85);
   filter: blur(3px) brightness(0.95);
 }
 
-/* Left side card */
 .service-card.left {
   opacity: 0.7;
   transform: translateX(-10%) scale(0.9);
@@ -381,7 +398,6 @@ export default {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Right side card */
 .service-card.right {
   opacity: 0.7;
   transform: translateX(10%) scale(0.9);
@@ -389,7 +405,6 @@ export default {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Active center card */
 .service-card.active {
   opacity: 1;
   transform: scale(1);
@@ -407,7 +422,6 @@ export default {
   margin: 0.5rem 0 1rem 0;
   text-align: left;
   line-height: 1.3;
-  padding-top: 0;
 }
 
 .service-description {
@@ -473,7 +487,6 @@ export default {
 .active-button {
   background: linear-gradient(135deg, #5a67d8, #6b46c1);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-  transform: translateY(-2px);
 }
 
 .service-button:hover {
@@ -563,106 +576,193 @@ export default {
   border-color: #667eea;
 }
 
-/* MOBILE STYLES (SIMPLE SINGLE CARD) */
+/* Mobile single card style */
 .mobile-services-container {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 0.15rem 0 0.8rem;
+  overflow: hidden;
 }
 
 .mobile-service-card {
+  width: 100%;
+  min-height: 320px;
   background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
-  margin: 0 auto 1.5rem;
+  border-radius: 20px;
+  padding: 1.25rem;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
   display: flex;
   flex-direction: column;
-  min-height: 320px;
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  touch-action: pan-y;
+  user-select: none;
 }
 
-/* FIXED: Mobile title and description now left-aligned */
 .mobile-service-card .service-title {
-  font-size: 1.3rem;
-  text-align: left; /* Changed from center to left */
-  margin: 0 0 1rem 0;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 900;
+  margin: 0 0 0.7rem;
   color: #2d3748;
-}
-
-.mobile-service-card .service-description {
-  text-align: left; /* Changed from center to left */
-  margin-bottom: 1.5rem;
-  min-height: 70px;
-  color: #4a5568;
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
-.mobile-service-card .feature-item {
-  font-size: 0.9rem;
-  margin-bottom: 0.6rem;
   text-align: left;
 }
 
-.mobile-service-card .service-actions {
-  margin-top: 1.5rem;
+.mobile-service-card .service-description {
+  font-size: 0.9rem;
+  line-height: 1.62;
+  min-height: auto;
+  margin-bottom: 1rem;
+  color: #4a5568;
+  text-align: left;
+}
+
+.mobile-service-card .service-features {
+  margin-bottom: 1rem;
+}
+
+.mobile-service-card .feature-item {
+  font-size: 0.86rem;
+  margin-bottom: 0.55rem;
+  text-align: left;
 }
 
 .mobile-service-card .service-button {
   max-width: 100%;
 }
 
+.mobile-service-card .pricing-hint {
+  font-size: 0.8rem;
+}
 
+/* Mobile swipe direction effect */
+.mobile-card-next-enter-active,
+.mobile-card-next-leave-active,
+.mobile-card-prev-enter-active,
+.mobile-card-prev-leave-active {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
 
+/* Swipe left / next */
+.mobile-card-next-enter-from {
+  opacity: 0;
+  transform: translateX(42px) scale(0.98);
+}
 
+.mobile-card-next-leave-to {
+  opacity: 0;
+  transform: translateX(-42px) scale(0.98);
+}
 
-/* Responsive Breakpoints */
+/* Swipe right / previous */
+.mobile-card-prev-enter-from {
+  opacity: 0;
+  transform: translateX(-42px) scale(0.98);
+}
+
+.mobile-card-prev-leave-to {
+  opacity: 0;
+  transform: translateX(42px) scale(0.98);
+}
+
+/* Normal state */
+.mobile-card-next-enter-to,
+.mobile-card-next-leave-from,
+.mobile-card-prev-enter-to,
+.mobile-card-prev-leave-from {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+  .services-section {
+    margin-top: 3rem;
+    overflow: visible;
+  }
 
-  
-  /* Hide desktop controls on mobile */
+  .section-header {
+    margin-bottom: 1rem;
+    padding: 0 0.15rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    line-height: 1.15;
+    font-weight: 900;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.04em;
+  }
+
+  .swipe-hint {
+    display: flex;
+  }
+
   .carousel-controls,
   .carousel-wrapper {
     display: none;
   }
-  
-  /* Ensure mobile card text is left-aligned */
-  .mobile-service-card .service-title,
-  .mobile-service-card .service-description,
-  .mobile-service-card .feature-item {
-    text-align: left;
-  }
 }
 
 @media (min-width: 769px) {
-  /* Hide mobile view on desktop */
   .mobile-services-container {
     display: none;
   }
 }
 
-/* Extra Small Screens */
 @media (max-width: 480px) {
+  .section-title {
+    font-size: 1.9rem;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
   .mobile-service-card {
-    padding: 1.25rem;
-    min-height: 300px;
+    min-height: 305px;
+    padding: 1.15rem;
   }
   
   .mobile-service-card .service-title {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
   }
   
   .mobile-service-card .service-description {
-    font-size: 0.9rem;
+    font-size: 0.86rem;
   }
-  
-  .mobile-slider-btn {
-    width: 42px;
-    height: 42px;
+
+  .mobile-service-card .feature-item {
+    font-size: 0.84rem;
   }
+}
+
+/* Dark Mode */
+html[data-theme="dark"] .section-title,
+html[data-theme="dark"] .service-title {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .service-description,
+html[data-theme="dark"] .feature-item {
+  color: #cbd5e0;
+}
+
+html[data-theme="dark"] .service-card,
+html[data-theme="dark"] .mobile-service-card {
+  background: rgba(17, 17, 17, 0.94);
+  border-color: #242424;
+}
+
+html[data-theme="dark"] .mobile-service-card {
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .pricing-hint {
+  color: #cbd5e0;
+  border-top-color: #242424;
+}
+
+html[data-theme="dark"] .swipe-hint {
+  color: #cbd5e0;
 }
 </style>
