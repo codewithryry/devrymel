@@ -305,7 +305,7 @@ export default {
         clearInterval(this.cooldownTimer)
       }
 
-      this.cooldownRemaining = 5
+      this.cooldownRemaining = 10
 
       this.cooldownTimer = setInterval(() => {
         this.cooldownRemaining -= 1
@@ -768,14 +768,23 @@ export default {
   opacity: 0.72;
 }
 
+.fb-input-stack {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .fb-cooldown {
-  margin: 6px 4px 0;
+  align-self: stretch;
+  margin: 6px 8px 0 0;
   color: var(--fb-muted);
   font-size: 0.7rem;
   font-weight: 650;
   line-height: 1.2;
+  text-align: right;
+  width: auto;
 }
-
 .fb-send {
   width: 44px;
   height: 44px;

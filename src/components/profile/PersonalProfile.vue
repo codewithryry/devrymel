@@ -11,6 +11,7 @@
         <!-- Header content will be in ProfileContent component -->
       </div>
     </header>
+
     <!-- Main Content -->
     <main class="main-content">
       <!-- 1. Profile / About -->
@@ -34,14 +35,23 @@
       <!-- 3. Highlights / Quick Stats -->
       <LiveDevStats :stats="devStats" />
 
+      <!-- Advertisement: 300x250 box ad -->
+      <AdSlot type="box" />
+
       <!-- 4. Career & Education Timeline -->
       <CareerTimeline :timeline="timeline" />
+
+      <!-- Advertisement: responsive banner -->
+      <AdSlot type="banner" />
 
       <!-- 5. Experience / Internship -->
       <ExperienceSection :experiences="experiences" />
 
       <!-- 6. Services -->
       <ServicesSection :services="services" />
+
+      <!-- Advertisement: native ad -->
+      <AdSlot type="native" />
 
       <!-- 7. Why Hire Me -->
       <HighlightsSection :highlights="highlights" />
@@ -52,6 +62,9 @@
         @openQRModal="openQRModal"
         @openCertificatesListModal="openCertificatesListModal"
       />
+
+      <!-- Advertisement: responsive banner -->
+      <AdSlot type="banner" />
 
       <!-- 9. Let's Connect -->
       <SocialSection 
@@ -126,7 +139,6 @@
       :project="selectedProject"
       @close="closeDeepDive"
     />
-    
   </div>
 </template>
 
@@ -149,7 +161,8 @@ import ProjectDeepDiveModal from '../modals/ProjectDeepDiveModal.vue'
 import Linkwebsite from '../modals/Linkwebsite.vue'
 import ExperienceSection from './ExperienceSection.vue'
 import HighlightsSection from './HighlightsSection.vue'
-
+import TechNotesSection from './TechNotesSection.vue'
+import AdSlot from '../AdSlot.vue'
 
 /* ===== JSON DATA IMPORTS ===== */
 import profile from '@/data/profile.json'
@@ -162,30 +175,33 @@ import projectLinks from '@/data/projectLinks.json'
 import experiences from '@/data/experiences.json'
 import highlights from '@/data/highlights.json'
 import timeline from '@/data/timeline.json'
+import techNotes from '@/data/techNotes.json'
 
 export default {
   name: "PersonalProfile",
 
-components: {
-  ProfileContent,
-  ProjectsSection,
-  LinksSection,
-  SocialSection,
-  FooterSection,
-  DeansListModal,
-  MobileDeansListModal,
-  QRModal,
-  CertificatesModal,
-  ProjectModal,
-  SocialModal,
-  CareerTimeline,
-  LiveDevStats,
-  ServicesSection,
-  ExperienceSection,
-  HighlightsSection,
-  Linkwebsite,
-  ProjectDeepDiveModal
-},
+  components: {
+    ProfileContent,
+    ProjectsSection,
+    LinksSection,
+    SocialSection,
+    FooterSection,
+    DeansListModal,
+    MobileDeansListModal,
+    QRModal,
+    CertificatesModal,
+    ProjectModal,
+    SocialModal,
+    CareerTimeline,
+    LiveDevStats,
+    ServicesSection,
+    ExperienceSection,
+    HighlightsSection,
+    TechNotesSection,
+    AdSlot,
+    Linkwebsite,
+    ProjectDeepDiveModal
+  },
 
   data() {
     return {
@@ -200,6 +216,7 @@ components: {
       experiences,
       highlights,
       timeline,
+      techNotes,
 
       /* ===== DEANS LIST DATA (Now inline) ===== */
       achievements: {
@@ -253,7 +270,7 @@ components: {
             ]
           }
         ],
-       qr: [
+        qr: [
           {
             id: 1,
             bank: "GoTyme Bank",
@@ -299,7 +316,7 @@ components: {
           id: 5,
           title: "Trabahanap",
           description: "A Python-based job portal that connects job seekers and employers through profile management, job posting, and application tracking.",
-          detailedDescription: "Trabahanap is a comprehensive job portal built with Django that revolutionizes the job search experience. The platform features intelligent job matching algorithms, employer dashboards for job posting and candidate management, and a seamless application process for job seekers. The system includes real-time notifications, resume parsing, and analytics for both employers and job seekers.",
+          detailedDescription: "Trabahanap is a comprehensive job portal built with Django that helps improve the job search experience. The platform features job matching, employer dashboards for job posting and candidate management, and a seamless application process for job seekers. The system includes notifications, resume parsing, and analytics for both employers and job seekers.",
           image: require("@/assets/trabahanap.png"),
           demoUrl: "https://trabahanap-job-matching-analyzer.onrender.com",
           githubUrl: "https://github.com/codewithryry/Trabahanap-job-matching-analyzer",
@@ -327,7 +344,7 @@ components: {
           id: 2,
           title: "SafePath",
           description: "Bullying reporting system with AI support and sentiment analysis",
-          detailedDescription: "SafePath is an AI-powered platform designed to combat bullying through anonymous reporting and sentiment analysis. The system uses natural language processing to detect harmful content and provides real-time support through an AI chatbot. It features secure reporting, data analytics for schools, and a comprehensive dashboard for administrators.",
+          detailedDescription: "SafePath is an AI-powered platform designed to support bullying reporting through anonymous reports and sentiment analysis. The system uses natural language processing to detect harmful content and provides real-time support through an AI chatbot. It features secure reporting, data analytics for schools, and a dashboard for administrators.",
           image: require("@/assets/safepath.png"),
           demoUrl: "https://safepath-4pzk.onrender.com",
           githubUrl: "https://github.com/codewithryry/SafePath",
@@ -347,7 +364,7 @@ components: {
           id: 3,
           title: "LiftUp",
           description: "Mental health platform with AI assistance and community support",
-          detailedDescription: "LiftUp is a mental wellness platform that combines AI technology with community support. The platform offers personalized mental health resources, AI-guided meditation sessions, anonymous community forums, and mood tracking. It provides a safe space for users to share experiences and access professional mental health resources.",
+          detailedDescription: "LiftUp is a mental wellness platform that combines AI technology with community support. The platform offers personalized mental health resources, AI-guided meditation sessions, anonymous community forums, and mood tracking. It provides a safe space for users to share experiences and access mental health resources.",
           image: require("@/assets/liftup.png"),
           demoUrl: "https://liftupconnect.vercel.app/",
           githubUrl: "https://github.com/codewithryry/LiftUp",
@@ -528,6 +545,7 @@ components: {
         this.socialModalMessage = `My ${platform} profile is not available yet. I'll be setting it up soon!`
         this.socialModalPlatforms = []
       }
+
       this.showSocialModal = true
     },
 
@@ -540,7 +558,6 @@ components: {
   }
 }
 </script>
-
 
 
 

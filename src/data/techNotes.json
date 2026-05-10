@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "category": "Vue",
+    "title": "How I Fixed Mobile UI Overflow in My Portfolio",
+    "description": "A short guide about fixing cards, floating buttons, and responsive spacing issues in Vue.",
+    "readTime": "3 min read"
+  },
+  {
+    "id": 2,
+    "category": "GitHub",
+    "title": "How to Fix GitHub Push Protection Error",
+    "description": "Simple steps for removing exposed keys from commits and safely pushing your project again.",
+    "readTime": "4 min read"
+  },
+  {
+    "id": 3,
+    "category": "Firebase",
+    "title": "How to Move Firebase Config to Environment Variables",
+    "description": "A beginner-friendly guide for keeping Firebase config cleaner in a Vue project.",
+    "readTime": "3 min read"
+  },
+  {
+    "id": 4,
+    "category": "Web Dev",
+    "title": "How to Access Localhost Website from Phone",
+    "description": "Common fixes when your phone cannot access a local Vue dev server on the same Wi-Fi.",
+    "readTime": "4 min read"
+  }
+]

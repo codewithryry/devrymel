@@ -390,6 +390,9 @@ import { computed } from "vue";
 import { trackVisit, getViews } from "./services/analyticsService";
 import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
+import TechNotesSection from "./components/profile/TechNotesSection.vue";
+import AdSlot from "./components/AdSlot.vue";
+import techNotes from "./data/techNotes.json";
 
 const UI_TRANSLATIONS = {
   en: {
@@ -406,7 +409,8 @@ const UI_TRANSLATIONS = {
 
     quickIntro: "Quick Intro",
     introTitle: "Hi, I’m Reymel",
-    introPitch: "A frontend-focused IT graduate building clean, responsive, and user-friendly web applications.",
+    introPitch:
+      "A frontend-focused IT graduate building clean, responsive, and user-friendly web applications.",
     viewWork: "View Work",
 
     chooseTheme: "Appearance",
@@ -457,7 +461,8 @@ const UI_TRANSLATIONS = {
 
     quickIntro: "Quick Intro",
     introTitle: "Hi, I’m Reymel",
-    introPitch: "Frontend-focused IT graduate na gumagawa ng malinis, responsive, at user-friendly web applications.",
+    introPitch:
+      "Frontend-focused IT graduate na gumagawa ng malinis, responsive, at user-friendly web applications.",
     viewWork: "Tingnan Work",
 
     chooseTheme: "Itsura",
@@ -508,7 +513,8 @@ const UI_TRANSLATIONS = {
 
     quickIntro: "快速介紹",
     introTitle: "Hi, I’m Reymel",
-    introPitch: "以前端為主的資訊科技畢業生，專注建立乾淨、響應式且易用的網頁應用程式。",
+    introPitch:
+      "以前端為主的資訊科技畢業生，專注建立乾淨、響應式且易用的網頁應用程式。",
     viewWork: "查看作品",
 
     chooseTheme: "外觀",
@@ -550,7 +556,9 @@ export default {
   name: "App",
 
   components: {
-    FeedbackBubble
+    FeedbackBubble,
+    TechNotesSection,
+    AdSlot
   },
 
   provide() {
@@ -563,6 +571,8 @@ export default {
 
   data() {
     return {
+      techNotes,
+
       fabOpen: window.innerWidth > 640,
       showScrollTop: false,
 
@@ -582,9 +592,21 @@ export default {
 
       currentTheme: "light",
       themes: [
-        { id: "light", name: "Light", preview: "linear-gradient(135deg, #f8fafc, #e2e8f0)" },
-        { id: "midnight", name: "Midnight", preview: "linear-gradient(135deg, #0f172a, #1e3a5f)" },
-        { id: "forest", name: "Forest", preview: "linear-gradient(135deg, #064e3b, #065f46)" }
+        {
+          id: "light",
+          name: "Light",
+          preview: "linear-gradient(135deg, #f8fafc, #e2e8f0)"
+        },
+        {
+          id: "midnight",
+          name: "Midnight",
+          preview: "linear-gradient(135deg, #0f172a, #1e3a5f)"
+        },
+        {
+          id: "forest",
+          name: "Forest",
+          preview: "linear-gradient(135deg, #064e3b, #065f46)"
+        }
       ],
 
       languages: [
@@ -686,7 +708,15 @@ export default {
     },
 
     togglePanel(name) {
-      const panels = ["language", "intro", "theme", "nav", "tech", "stats", "contact"];
+      const panels = [
+        "language",
+        "intro",
+        "theme",
+        "nav",
+        "tech",
+        "stats",
+        "contact"
+      ];
 
       panels.forEach((panel) => {
         const key = `show${panel.charAt(0).toUpperCase() + panel.slice(1)}Panel`;
@@ -766,7 +796,9 @@ export default {
 
     handleOutsideClick(e) {
       const clickedInsideFab = e.target.closest(".fab-container");
-      const clickedInsideModal = e.target.closest(".modal-overlay, .feedback-overlay");
+      const clickedInsideModal = e.target.closest(
+        ".modal-overlay, .feedback-overlay"
+      );
       const clickedScrollTop = e.target.closest(".scroll-top");
 
       if (clickedInsideFab || clickedInsideModal || clickedScrollTop) return;
