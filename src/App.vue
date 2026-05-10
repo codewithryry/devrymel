@@ -9,85 +9,6 @@
 
       <!-- Action Items -->
       <transition-group name="fab-reveal" tag="div" class="fab-actions">
-        <!-- Language -->
-        <!-- <div v-if="fabOpen" key="language" class="fab-group" :style="{ '--delay': 0 }">
-          <button class="fab-action" @click.stop="togglePanel('language')" :title="t.language">
-            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M2 12h20" />
-              <path d="M12 2a15.3 15.3 0 0 1 0 20" />
-              <path d="M12 2a15.3 15.3 0 0 0 0 20" />
-            </svg>
-            <span class="fab-tooltip">{{ t.language }}</span>
-          </button>
-
-          <transition name="panel-appear">
-            <div v-if="showLanguagePanel" class="panel language-panel" :class="{ 'panel-mobile': isMobile }">
-              <div class="panel-head">
-                <span>{{ t.chooseLanguage }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showLanguagePanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              <div class="panel-body">
-                <button
-                  v-for="lang in languages"
-                  :key="lang.id"
-                  class="language-btn"
-                  :class="{ active: currentLang === lang.id }"
-                  @click="setLang(lang.id)"
-                >
-                  <span class="language-flag">{{ lang.flag }}</span>
-                  <span class="language-name">{{ lang.name }}</span>
-
-                  <svg v-if="currentLang === lang.id" class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </transition>
-        </div> -->
-
-        <!-- Quick Intro -->
-        <!-- <div v-if="fabOpen" key="intro" class="fab-group" :style="{ '--delay': 1 }">
-          <button class="fab-action" @click.stop="togglePanel('intro')" :title="t.quickIntro">
-            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 22c1.8-4 5-6 8-6s6.2 2 8 6" />
-            </svg>
-            <span class="fab-tooltip">{{ t.quickIntro }}</span>
-          </button>
-
-          <transition name="panel-appear">
-            <div v-if="showIntroPanel" class="panel intro-panel" :class="{ 'panel-mobile': isMobile }">
-              <div class="panel-head">
-                <span>{{ t.quickIntro }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showIntroPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              <div class="panel-body intro-body">
-
-                <div class="intro-content">
-                  <h3>{{ t.introTitle }}</h3>
-                  <p>{{ t.introPitch }}</p>
-                </div>
-
-               <button class="intro-btn" @click="scrollToSection('#projects')">
-                  {{ t.viewWork }}
-                </button> -->
-              <!-- </div>
-            </div>
-          </transition>
-        </div> -->
-
         <!-- Tech Stack -->
         <div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
           <button class="fab-action" @click.stop="togglePanel('tech')" :title="t.techStack">
@@ -169,7 +90,14 @@
                   <span class="theme-swatch" :style="{ background: theme.preview }"></span>
                   <span class="theme-name">{{ theme.name }}</span>
 
-                  <svg v-if="currentTheme === theme.id" class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <svg
+                    v-if="currentTheme === theme.id"
+                    class="check-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </button>
@@ -178,105 +106,121 @@
           </transition>
         </div>
 
-        <!-- Stats -->
-        <div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 4 }">
-          <button class="fab-action" @click.stop="togglePanel('stats')" :title="t.stats">
-            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 20V10M12 20V4M6 20v-6" />
-            </svg>
-            <span class="fab-tooltip">{{ t.stats }}</span>
-          </button>
+          <!-- Stats -->
+          <div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 4 }">
+            <button class="fab-action" @click.stop="togglePanel('stats')" :title="t.stats">
+              <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 20V10M12 20V4M6 20v-6" />
+              </svg>
+              <span class="fab-tooltip">{{ t.stats }}</span>
+            </button>
 
-          <transition name="panel-appear">
-            <div v-if="showStatsPanel" class="panel stats-panel" :class="{ 'panel-mobile': isMobile }">
-              <div class="panel-head">
-                <span>{{ t.liveStats }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showStatsPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
+            <transition name="panel-appear">
+              <div v-if="showStatsPanel" class="panel stats-panel" :class="{ 'panel-mobile': isMobile }">
+                <div class="panel-head">
+                  <span>{{ t.liveStats }}</span>
+                  <button v-if="isMobile" class="panel-close" @click="showStatsPanel = false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="panel-body stats-body">
+                  <!-- Estimated Note -->
+                  <span class="stats-top-note">
+                    Private repos and projects are not included.
+                  </span>
+
+                  <!-- Views -->
+                  <div class="stat-card stat-active">
+                    <div class="stat-left">
+                      <div class="stat-icon-wrap blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      </div>
+
+                      <div class="stat-info">
+                        <span class="stat-value">{{ visitorCount.toLocaleString() }}</span>
+                        <span class="stat-label">{{ t.views }}</span>
+                      </div>
+                    </div>
+
+                    <span class="stat-badge live">Live</span>
+                  </div>
+
+                  <!-- Projects -->
+                  <div class="stat-card stat-active">
+                    <div class="stat-left">
+                      <div class="stat-icon-wrap purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                          <polyline points="2 17 12 22 22 17" />
+                          <polyline points="2 12 12 17 22 12" />
+                        </svg>
+                      </div>
+
+                      <div class="stat-info">
+                        <span class="stat-value">{{ projectsCount }}</span>
+                        <span class="stat-label">{{ t.projects }}</span>
+                      </div>
+                    </div>
+
+                    <span class="stat-badge live">Live</span>
+                  </div>
+
+                  <!-- WakaTime Hours -->
+                  <div class="stat-card stat-active">
+                    <div class="stat-left">
+                      <div class="stat-icon-wrap green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="16 18 22 12 16 6" />
+                          <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                      </div>
+
+                      <div class="stat-info">
+                        <span class="stat-value">{{ codingHoursText }}</span>
+                        <span class="stat-label">{{ t.hrsCoding }}</span>
+                      </div>
+                    </div>
+
+                    <span class="stat-badge live">WakaTime</span>
+                  </div>
+
+                  <!-- GitHub Repositories -->
+                  <div class="stat-card stat-active">
+                    <div class="stat-left">
+                      <div class="stat-icon-wrap dark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                        </svg>
+                      </div>
+
+                      <div class="stat-info">
+                        <span class="stat-value">{{ reposCount }}</span>
+                        <span class="stat-label">{{ t.repos }}</span>
+                      </div>
+                    </div>
+
+                    <span class="stat-badge live">GitHub</span>
+                  </div>
+                </div>
               </div>
-
-              <div class="panel-body stats-body">
-                <div class="stat-card stat-active">
-                  <div class="stat-left">
-                    <div class="stat-icon-wrap blue">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    </div>
-
-                    <div class="stat-info">
-                      <span class="stat-value">{{ visitorCount.toLocaleString() }}</span>
-                      <span class="stat-label">{{ t.views }}</span>
-                    </div>
-                  </div>
-
-                  <span class="stat-badge live">Live</span>
-                </div>
-
-                <div class="stat-card stat-coming">
-                  <div class="stat-left">
-                    <div class="stat-icon-wrap muted">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                        <polyline points="2 17 12 22 22 17" />
-                        <polyline points="2 12 12 17 22 12" />
-                      </svg>
-                    </div>
-
-                    <div class="stat-info">
-                      <span class="stat-value muted-text">{{ t.projects }}</span>
-                      <span class="stat-label">{{ t.projectCounter }}</span>
-                    </div>
-                  </div>
-
-                  <span class="stat-badge soon">Soon</span>
-                </div>
-
-                <div class="stat-card stat-coming">
-                  <div class="stat-left">
-                    <div class="stat-icon-wrap muted">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="16 18 22 12 16 6" />
-                        <polyline points="8 6 2 12 8 18" />
-                      </svg>
-                    </div>
-
-                    <div class="stat-info">
-                      <span class="stat-value muted-text">{{ t.hrsCoding }}</span>
-                      <span class="stat-label">{{ t.codingActivity }}</span>
-                    </div>
-                  </div>
-
-                  <span class="stat-badge soon">Soon</span>
-                </div>
-
-                <div class="stat-card stat-coming">
-                  <div class="stat-left">
-                    <div class="stat-icon-wrap muted">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                      </svg>
-                    </div>
-
-                    <div class="stat-info">
-                      <span class="stat-value muted-text">{{ t.repos }}</span>
-                      <span class="stat-label">{{ t.githubRepos }}</span>
-                    </div>
-                  </div>
-
-                  <span class="stat-badge soon">Soon</span>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </div>
+            </transition>
+          </div>
 
         <!-- Feedback -->
-        <button v-if="fabOpen" key="fb" class="fab-action" :style="{ '--delay': 5 }" @click="openFeedback" :title="t.comments">
+        <button
+          v-if="fabOpen"
+          key="fb"
+          class="fab-action"
+          :style="{ '--delay': 5 }"
+          @click="openFeedback"
+          :title="t.comments"
+        >
           <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
@@ -319,7 +263,12 @@
                   </div>
                 </a>
 
-                <a href="https://www.linkedin.com/in/reymel-mislang/" target="_blank" rel="noopener noreferrer" class="contact-row">
+                <a
+                  href="https://www.linkedin.com/in/reymel-mislang/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="contact-row"
+                >
                   <div class="contact-icon linkedin">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                       <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
@@ -415,7 +364,6 @@
       @count-change="feedbackCount = $event"
     />
 
-    <!-- important: key reloads routed page when language changes -->
     <router-view
       :key="currentLang"
       :lang="currentLang"
@@ -427,6 +375,7 @@
 <script>
 import { computed } from "vue";
 import { trackVisit, getViews } from "./services/analyticsService";
+import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
 
 const UI_TRANSLATIONS = {
@@ -633,7 +582,11 @@ export default {
 
       currentLang: "en",
       visitorCount: 0,
-      feedbackCount: 0
+      feedbackCount: 0,
+
+      projectsCount: 0,
+      codingHoursText: "Loading...",
+      reposCount: 0
     };
   },
 
@@ -663,6 +616,32 @@ export default {
       this.visitorCount = await getViews();
     } catch (e) {
       console.error("Views error:", e);
+    }
+
+    try {
+      const wakaStats = await getWakaTimeStats();
+      this.codingHoursText = wakaStats.hoursText;
+    } catch (e) {
+      console.error("WakaTime load error:", e);
+      this.codingHoursText = "Unavailable";
+    }
+
+    try {
+      this.reposCount = await getGitHubReposCount();
+    } catch (e) {
+      console.error("GitHub repos load error:", e);
+      this.reposCount = 0;
+    }
+
+    try {
+      const projectsModule = await import("@/data/projects.json");
+
+      this.projectsCount = Array.isArray(projectsModule.default)
+        ? projectsModule.default.length
+        : 0;
+    } catch (e) {
+      console.error("Projects count error:", e);
+      this.projectsCount = 0;
     }
 
     window.addEventListener("scroll", this.handleScroll);
@@ -2661,6 +2640,71 @@ html[data-theme="purple"] .stat-card {
   .nav-row {
     min-height: 64px;
     padding: 12px 14px;
+  }
+}
+
+/* ===== MOBILE STATS PANEL FIX ===== */
+@media (max-width: 640px) {
+  .stats-panel.panel-mobile {
+    left: 14px !important;
+    right: 14px !important;
+    bottom: 0 !important;
+    width: auto !important;
+    max-width: calc(100vw - 28px) !important;
+    max-height: 78dvh !important;
+    border-radius: 22px 22px 0 0 !important;
+  }
+
+  .stats-panel.panel-mobile .panel-head {
+    padding: 18px 20px;
+  }
+
+  .stats-panel.panel-mobile .stats-body {
+    padding: 14px 14px 18px;
+    gap: 10px;
+    max-height: calc(78dvh - 65px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .stats-top-note {
+    margin: 0 4px 6px;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+  }
+
+  .stats-panel .stat-card {
+    min-height: 64px;
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+
+  .stats-panel .stat-left {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .stats-panel .stat-info {
+    min-width: 0;
+  }
+
+  .stats-panel .stat-value {
+    max-width: 140px;
+    font-size: 0.9rem;
+    white-space: normal;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+  }
+
+  .stats-panel .stat-label {
+    font-size: 0.72rem;
+  }
+
+  .stats-panel .stat-badge {
+    flex-shrink: 0;
+    font-size: 0.62rem;
+    padding: 5px 9px;
   }
 }
 </style>
