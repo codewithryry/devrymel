@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-let analytics = null;
-
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
@@ -14,13 +12,22 @@ const firebaseConfig = {
   measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
 };
 
+const requiredConfig = [
+  "apiKey",
+  "authDomain",
+  "projectId",
+  "storageBucket",
+  "messagingSenderId",
+  "appId"
+];
+
+const missingConfig = requiredConfig.filter((key) => !firebaseConfig[key]);
+
+if (missingConfig.length) {
+  console.error("Missing Firebase env values:", missingConfig);
+}
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-if (typeof window !== "undefined") {
-  import("firebase/analytics").then(({ getAnalytics }) => {
-    analytics = getAnalytics(app);
-  });
-}
-
-export { app, db, analytics };
+export { app, db };

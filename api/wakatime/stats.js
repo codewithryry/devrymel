@@ -17,7 +17,7 @@ function getDateString(date) {
   return date.toISOString().split("T")[0];
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.WAKATIME_API_KEY;
 
   if (!apiKey) {
-    return res.status(400).json({
+    return res.status(500).json({
       hoursText: "No API key",
       totalSeconds: 0
     });
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       {
         method: "GET",
         headers: {
-          Authorization: `Basic ${Buffer.from(`${apiKey}:`).toString("base64")}`
+          Authorization: `Basic ${Buffer.from(apiKey).toString("base64")}`
         }
       }
     );
@@ -90,4 +90,4 @@ export default async function handler(req, res) {
       totalSeconds: 0
     });
   }
-}
+};

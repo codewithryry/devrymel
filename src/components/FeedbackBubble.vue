@@ -141,7 +141,15 @@
 </template>
 
 <script>
-import { addDoc, collection, getDocs, query, orderBy, limit } from "firebase/firestore"
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+  serverTimestamp
+} from "firebase/firestore"
 import { db } from "@/services/firebase"
 
 export default {
@@ -165,7 +173,8 @@ export default {
       sending: false,
       visibleLimit: 8,
       cooldownRemaining: 0,
-      cooldownTimer: null
+      cooldownTimer: null,
+      hasLoadedFeedbacks: false
     }
   },
 
@@ -182,6 +191,7 @@ export default {
       if (this.loading) return "Loading visitor messages"
       if (this.feedbacks.length === 0) return "Share a quick thought"
       if (this.feedbacks.length === 1) return "1 visitor message"
+
       return `${this.feedbacks.length} visitor messages`
     }
   },
@@ -190,18 +200,18 @@ export default {
     open(val) {
       document.body.style.overflow = val ? "hidden" : ""
 
-      if (val) {
+      if (!val) return
+
+      if (!this.hasLoadedFeedbacks) {
         this.loadFeedbacks()
-
-        this.$nextTick(() => {
-          if (this.$refs.feedbackInput) this.$refs.feedbackInput.focus()
-        })
       }
-    }
-  },
 
-  async mounted() {
-    await this.loadFeedbacks()
+      this.$nextTick(() => {
+        if (this.$refs.feedbackInput) {
+          this.$refs.feedbackInput.focus()
+        }
+      })
+    }
   },
 
   beforeUnmount() {
@@ -221,35 +231,39 @@ export default {
       this.open = false
     },
 
-    async loadFeedbacks() {
+    async loadFeedbacks(forceRefresh = false) {
+      if (this.loading) return
+      if (this.hasLoadedFeedbacks && !forceRefresh) return
+
       this.loading = true
 
       try {
-        const q = query(
+        const feedbackQuery = query(
           collection(db, "feedback"),
           orderBy("created", "desc"),
           limit(50)
         )
 
-        const snapshot = await getDocs(q)
+        const snapshot = await getDocs(feedbackQuery)
 
-        this.feedbacks = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
+        this.feedbacks = snapshot.docs.map((item) => ({
+          id: item.id,
+          ...item.data()
         }))
 
+        this.hasLoadedFeedbacks = true
         this.$emit("count-change", this.feedbacks.length)
-      } catch (e) {
-        console.error("Error loading feedback:", e)
+      } catch (error) {
+        console.error("Error loading feedback:", error)
       } finally {
         this.loading = false
-      }
 
-      this.$nextTick(() => {
-        if (this.$refs.messageList) {
-          this.$refs.messageList.scrollTop = 0
-        }
-      })
+        this.$nextTick(() => {
+          if (this.$refs.messageList) {
+            this.$refs.messageList.scrollTop = 0
+          }
+        })
+      }
     },
 
     async submitFeedback() {
@@ -262,16 +276,25 @@ export default {
       try {
         await addDoc(collection(db, "feedback"), {
           message: text,
-          created: new Date()
+          created: serverTimestamp()
         })
 
         this.message = ""
         this.resetTextarea()
         this.startCooldown()
-        await this.loadFeedbacks()
-      } catch (e) {
-        console.error("Error submitting feedback:", e)
-        alert("Failed to send. Please try again.")
+
+        this.hasLoadedFeedbacks = false
+        await this.loadFeedbacks(true)
+      } catch (error) {
+        console.error("Error submitting feedback:", error)
+
+        if (error?.code === "permission-denied") {
+          alert("Hindi allowed ang write sa Firestore rules. Check Firebase rules.")
+        } else if (error?.code === "invalid-argument") {
+          alert("May invalid data sa feedback. Check created/message fields.")
+        } else {
+          alert("Failed to send. Please try again.")
+        }
       } finally {
         this.sending = false
       }
@@ -316,7 +339,10 @@ export default {
 
     toDate(timestamp) {
       if (!timestamp) return null
-      if (timestamp.toDate) return timestamp.toDate()
+
+      if (timestamp.toDate) {
+        return timestamp.toDate()
+      }
 
       const date = new Date(timestamp)
 
@@ -332,10 +358,9 @@ export default {
     formatTime(timestamp) {
       const date = this.toDate(timestamp)
 
-      if (!date) return ""
+      if (!date) return "Now"
 
-      const now = new Date()
-      const diff = now - date
+      const diff = Date.now() - date.getTime()
       const mins = Math.floor(diff / 60000)
       const hrs = Math.floor(diff / 3600000)
       const days = Math.floor(diff / 86400000)

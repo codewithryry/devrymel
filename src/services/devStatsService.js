@@ -9,7 +9,8 @@ export async function getGitHubReposCount() {
     }
 
     const data = await response.json();
-    return data.public_repos || 0;
+
+    return Number(data.public_repos) || 0;
   } catch (error) {
     console.error("GitHub repos error:", error);
     return 0;
@@ -17,8 +18,20 @@ export async function getGitHubReposCount() {
 }
 
 export async function getWakaTimeStats() {
+  const isLocal =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
+  const apiUrl =
+    process.env.VUE_APP_WAKATIME_API_URL ||
+    (isLocal
+      ? "http://localhost:5000/api/wakatime/stats"
+      : "/api/wakatime/stats");
+
+  console.log("WakaTime API URL:", apiUrl);
+
   try {
-    const response = await fetch("/api/wakatime/stats");
+    const response = await fetch(apiUrl);
 
     if (!response.ok) {
       throw new Error(`WakaTime proxy error: ${response.status}`);
@@ -28,7 +41,7 @@ export async function getWakaTimeStats() {
 
     return {
       hoursText: data.hoursText || "0 secs",
-      totalSeconds: data.totalSeconds || 0
+      totalSeconds: Number(data.totalSeconds) || 0
     };
   } catch (error) {
     console.error("WakaTime stats error:", error);
