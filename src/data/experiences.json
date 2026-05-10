@@ -1,0 +1,87 @@
+[
+  {
+    "role": "Social Media Researcher Intern",
+    "company": "Armful Media",
+    "date": "2026",
+    "description": "Researched and organized influencer profiles for brand campaigns, including social links, niche, location, audience details, and profile information.",
+    "tasks": [
+      "Sourced influencers from social media platforms",
+      "Checked influencer profiles for relevance and authenticity",
+      "Collected profile details such as handle, niche, location, and contact information",
+      "Organized influencer data using spreadsheets",
+      "Supported campaign research for brand partnerships",
+      "Reviewed social media accounts based on campaign requirements"
+    ]
+  },
+  {
+    "role": "Frontend / Full-Stack Developer Intern",
+    "company": "Instroom.io",
+    "date": "2026",
+    "description": "Worked on influencer CRM features, dashboard pages, pipeline boards, profile drawers, analytics UI, and database-connected sections for internal team workflows.",
+    "tasks": [
+      "Built responsive Vue, React, and Next.js interface components",
+      "Improved dashboard layout and user experience",
+      "Created and refined influencer management table features",
+      "Worked on pipeline board and post tracker UI",
+      "Integrated database-driven pages using Prisma and MySQL",
+      "Fixed UI bugs, layout issues, and component behavior problems",
+      "Improved action buttons, filters, sorting, and profile drawer interactions"
+    ]
+  },
+  {
+    "role": "Capstone Project Developer",
+    "company": "Hareneth Civil Registration System",
+    "date": "2024 - 2026",
+    "description": "Developed a mobile-app based system for civil registration and analytics focused on improving appointment scheduling, document verification, and client support for civil registry services.",
+    "tasks": [
+      "Designed system modules for birth, marriage, and death record services",
+      "Created appointment scheduling and document request workflows",
+      "Planned chatbot support for common client inquiries",
+      "Applied Agile development for iterative progress and feedback",
+      "Focused on user-friendly screens for clients and registry staff",
+      "Prepared documentation, system descriptions, and project presentation materials"
+    ]
+  },
+  {
+    "role": "Web Application Developer",
+    "company": "SafePath",
+    "date": "2024",
+    "description": "Built a bullying reporting system with AI-supported responses, sentiment analysis, and an admin-focused reporting workflow for MINSU Calapan Campus.",
+    "tasks": [
+      "Developed anonymous reporting features",
+      "Integrated AI chatbot support for comfort and guidance messages",
+      "Used sentiment analysis to assess report severity",
+      "Created redirection flow for formal report submission",
+      "Worked with Node.js, MySQL, Wit.ai, TensorFlow, and VADER",
+      "Designed admin-side features for reviewing submitted reports"
+    ]
+  },
+  {
+    "role": "Full-Stack Developer",
+    "company": "Trabahanap",
+    "date": "2024",
+    "description": "Developed a Python and Django-based job portal designed to connect job seekers and employers through job posting, profile management, and application tracking.",
+    "tasks": [
+      "Built job seeker and employer account features",
+      "Created job posting and job search workflows",
+      "Implemented profile management features",
+      "Developed application tracking functions",
+      "Designed responsive pages using HTML, CSS, and JavaScript",
+      "Worked with Django, SQLite, and Django REST Framework"
+    ]
+  },
+  {
+    "role": "Full-Stack Developer",
+    "company": "LiftUp",
+    "date": "2023",
+    "description": "Created a mental health support platform with AI assistance, mood-related support features, and community-focused resources for users.",
+    "tasks": [
+      "Built user-facing pages using Vue.js",
+      "Integrated Firebase for backend and data handling",
+      "Developed AI chatbot support features",
+      "Created community and mental wellness sections",
+      "Designed responsive layouts for better accessibility",
+      "Focused on safe, supportive, and user-friendly interaction flows"
+    ]
+  }
+]

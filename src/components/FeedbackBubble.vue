@@ -1,62 +1,140 @@
 <template>
-  <div>
-    <!-- Floating Button -->
-    <button class="feedback-button" @click="open = true">
-      <i class="fas fa-comment-dots"></i>
-      <span class="feedback-count" v-if="feedbacks.length">{{ feedbacks.length }}</span>
+  <div class="feedback-root">
+    <button
+      v-if="showButton"
+      type="button"
+      class="feedback-button"
+      :class="{ 'is-open': open }"
+      :aria-expanded="open"
+      aria-label="Open feedback wall"
+      title="Feedback"
+      @click="open = true"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+
+      <span v-if="feedbacks.length" class="feedback-count">
+        {{ feedbacks.length > 99 ? "99+" : feedbacks.length }}
+      </span>
     </button>
 
-    <!-- Feedback Modal -->
     <transition name="fade">
-      <div v-if="open" class="feedback-overlay" @click.self="open = false">
-        <div class="feedback-box">
-          
-          <!-- Header -->
-          <div class="fb-header">
-            <h3><i class="fas fa-comments"></i> Feedback Wall</h3>
-            <button class="fb-close" @click="open = false">
-              <i class="fas fa-times"></i>
+      <div
+        v-if="open"
+        ref="overlay"
+        class="feedback-overlay"
+        tabindex="-1"
+        @click.self="closeFeedback"
+        @keydown.esc="closeFeedback"
+      >
+        <section
+          class="feedback-box"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="feedback-title"
+        >
+          <header class="fb-header">
+            <span id="feedback-title" class="fb-title">Feedback</span>
+
+            <button
+              type="button"
+              class="fb-close"
+              aria-label="Close feedback wall"
+              @click="closeFeedback"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
             </button>
-          </div>
+          </header>
 
-          <!-- Messages List -->
-          <div class="fb-messages" ref="messageList">
-            <div v-if="loading" class="fb-loading">
-              <i class="fas fa-spinner fa-spin"></i> Loading...
+          <main class="fb-messages" ref="messageList" aria-live="polite">
+            <p v-if="!loading && feedbacks.length" class="fb-count-label">
+              {{ feedbackLabel }}
+            </p>
+
+            <div v-if="loading" class="fb-state">
+              <span class="fb-spinner"></span>
+              <p>Loading feedback...</p>
             </div>
 
-            <div v-else-if="feedbacks.length === 0" class="fb-empty">
-              <i class="fas fa-comment-slash"></i>
-              <p>No feedback yet. Be the first!</p>
+            <div v-else-if="feedbacks.length === 0" class="fb-state fb-empty">
+              <span class="fb-empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:24px;height:24px">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              </span>
+              <h4>No feedback yet</h4>
+              <p>Be the first to leave a quick thought.</p>
             </div>
 
-            <div 
-              v-else 
-              v-for="fb in feedbacks" 
-              :key="fb.id" 
+            <article
+              v-else
+              v-for="fb in visibleFeedbacks"
+              :key="fb.id"
               class="fb-bubble"
             >
               <div class="fb-bubble-content">
+                <time class="fb-time" :datetime="toIsoDate(fb.created)">
+                  {{ formatTime(fb.created) }}
+                </time>
+
                 <p class="fb-text">{{ fb.message }}</p>
-                <span class="fb-time">{{ formatTime(fb.created) }}</span>
               </div>
+            </article>
+          </main>
+
+          <form class="fb-input-area" @submit.prevent="submitFeedback">
+            <label class="sr-only" for="feedback-message">Write your feedback</label>
+
+            <div class="fb-input-stack">
+              <div class="fb-input-shell">
+                <textarea
+                  id="feedback-message"
+                  ref="feedbackInput"
+                  v-model="message"
+                  placeholder="Write your feedback..."
+                  rows="1"
+                  maxlength="280"
+                  :disabled="sending || isCoolingDown"
+                  @input="autoResize"
+                  @keydown.enter.exact.prevent="submitFeedback"
+                ></textarea>
+              </div>
+
+              <p v-if="isCoolingDown" class="fb-cooldown">
+                Send again in {{ cooldownRemaining }}s
+              </p>
             </div>
-          </div>
 
-          <!-- Input Area -->
-          <div class="fb-input-area">
-            <textarea
-              v-model="message"
-              placeholder="Write your feedback..."
-              rows="2"
-              @keydown.enter.ctrl="submitFeedback"
-            ></textarea>
-            <button class="fb-send" @click="submitFeedback" :disabled="sending">
-              <i :class="sending ? 'fas fa-spinner fa-spin' : 'fas fa-paper-plane'"></i>
+            <button
+              type="submit"
+              class="fb-send"
+              :disabled="sending || isCoolingDown || !message.trim()"
+              aria-label="Send feedback"
+              :title="isCoolingDown ? `Send again in ${cooldownRemaining}s` : 'Send feedback'"
+            >
+              <svg
+                v-if="!sending"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                style="width:16px;height:16px"
+              >
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+
+              <span
+                v-else
+                class="fb-spinner"
+                style="width:18px;height:18px;border-width:2px"
+              ></span>
             </button>
-          </div>
-
-        </div>
+          </form>
+        </section>
       </div>
     </transition>
   </div>
@@ -69,19 +147,56 @@ import { db } from "@/services/firebase"
 export default {
   name: "FeedbackBubble",
 
+  props: {
+    showButton: {
+      type: Boolean,
+      default: true
+    }
+  },
+
+  emits: ["count-change"],
+
   data() {
     return {
       open: false,
       message: "",
       feedbacks: [],
       loading: false,
-      sending: false
+      sending: false,
+      visibleLimit: 8,
+      cooldownRemaining: 0,
+      cooldownTimer: null
+    }
+  },
+
+  computed: {
+    visibleFeedbacks() {
+      return this.feedbacks.slice(0, this.visibleLimit)
+    },
+
+    isCoolingDown() {
+      return this.cooldownRemaining > 0
+    },
+
+    feedbackLabel() {
+      if (this.loading) return "Loading visitor messages"
+      if (this.feedbacks.length === 0) return "Share a quick thought"
+      if (this.feedbacks.length === 1) return "1 visitor message"
+      return `${this.feedbacks.length} visitor messages`
     }
   },
 
   watch: {
     open(val) {
-      if (val) this.loadFeedbacks()
+      document.body.style.overflow = val ? "hidden" : ""
+
+      if (val) {
+        this.loadFeedbacks()
+
+        this.$nextTick(() => {
+          if (this.$refs.feedbackInput) this.$refs.feedbackInput.focus()
+        })
+      }
     }
   },
 
@@ -89,24 +204,46 @@ export default {
     await this.loadFeedbacks()
   },
 
+  beforeUnmount() {
+    document.body.style.overflow = ""
+
+    if (this.cooldownTimer) {
+      clearInterval(this.cooldownTimer)
+    }
+  },
+
   methods: {
+    openFeedback() {
+      this.open = true
+    },
+
+    closeFeedback() {
+      this.open = false
+    },
+
     async loadFeedbacks() {
       this.loading = true
+
       try {
         const q = query(
           collection(db, "feedback"),
           orderBy("created", "desc"),
           limit(50)
         )
+
         const snapshot = await getDocs(q)
+
         this.feedbacks = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }))
+
+        this.$emit("count-change", this.feedbacks.length)
       } catch (e) {
         console.error("Error loading feedback:", e)
+      } finally {
+        this.loading = false
       }
-      this.loading = false
 
       this.$nextTick(() => {
         if (this.$refs.messageList) {
@@ -116,37 +253,98 @@ export default {
     },
 
     async submitFeedback() {
-      if (!this.message.trim() || this.sending) return
+      const text = this.message.trim()
+
+      if (!text || this.sending || this.isCoolingDown) return
 
       this.sending = true
+
       try {
         await addDoc(collection(db, "feedback"), {
-          message: this.message.trim(),
+          message: text,
           created: new Date()
         })
 
         this.message = ""
+        this.resetTextarea()
+        this.startCooldown()
         await this.loadFeedbacks()
       } catch (e) {
         console.error("Error submitting feedback:", e)
         alert("Failed to send. Please try again.")
+      } finally {
+        this.sending = false
       }
-      this.sending = false
+    },
+
+    startCooldown() {
+      if (this.cooldownTimer) {
+        clearInterval(this.cooldownTimer)
+      }
+
+      this.cooldownRemaining = 5
+
+      this.cooldownTimer = setInterval(() => {
+        this.cooldownRemaining -= 1
+
+        if (this.cooldownRemaining <= 0) {
+          this.cooldownRemaining = 0
+          clearInterval(this.cooldownTimer)
+          this.cooldownTimer = null
+        }
+      }, 1000)
+    },
+
+    autoResize(event) {
+      const field = event?.target || this.$refs.feedbackInput
+
+      if (!field) return
+
+      field.style.height = "auto"
+      field.style.height = `${Math.min(field.scrollHeight, 126)}px`
+    },
+
+    resetTextarea() {
+      this.$nextTick(() => {
+        const field = this.$refs.feedbackInput
+
+        if (field) {
+          field.style.height = ""
+        }
+      })
+    },
+
+    toDate(timestamp) {
+      if (!timestamp) return null
+      if (timestamp.toDate) return timestamp.toDate()
+
+      const date = new Date(timestamp)
+
+      return Number.isNaN(date.getTime()) ? null : date
+    },
+
+    toIsoDate(timestamp) {
+      const date = this.toDate(timestamp)
+
+      return date ? date.toISOString() : ""
     },
 
     formatTime(timestamp) {
-      if (!timestamp) return ""
-      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
+      const date = this.toDate(timestamp)
+
+      if (!date) return ""
+
       const now = new Date()
       const diff = now - date
       const mins = Math.floor(diff / 60000)
       const hrs = Math.floor(diff / 3600000)
       const days = Math.floor(diff / 86400000)
 
-      if (mins < 1) return "Just now"
-      if (mins < 60) return `${mins}m ago`
-      if (hrs < 24) return `${hrs}h ago`
-      if (days < 7) return `${days}d ago`
+      if (mins < 1) return "Now"
+      if (mins < 60) return `${mins}m`
+      if (hrs < 24) return `${hrs}h`
+      if (days < 7) return `${days}d`
+
       return date.toLocaleDateString()
     }
   }
@@ -154,263 +352,511 @@ export default {
 </script>
 
 <style scoped>
-/* Floating Button */
-.feedback-button {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-  z-index: 9998;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.feedback-root {
+  --fb-bg: var(--t-bg, var(--bg, #f8fafc));
+  --fb-surface: var(--t-bg-card, var(--surface, #ffffff));
+  --fb-surface-soft: var(--t-bg-elevated, var(--surface-hover, #f1f5f9));
+  --fb-text: var(--t-text, var(--text, #0f172a));
+  --fb-muted: var(--t-text-muted, var(--text-secondary, #64748b));
+  --fb-faint: var(--text-muted, #94a3b8);
+  --fb-border: var(--t-border, var(--border, #e2e8f0));
+  --fb-accent: var(--t-accent, var(--accent, #6366f1));
+  --fb-accent-hover: var(--t-accent-hover, var(--accent-hover, #4f46e5));
+  --fb-danger: #ef4444;
+  --fb-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
 }
 
-.feedback-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.feedback-button {
+  position: fixed;
+  right: max(22px, env(safe-area-inset-right));
+  bottom: max(22px, env(safe-area-inset-bottom));
+  z-index: 9998;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  color: #ffffff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 8px 24px -4px rgba(99, 102, 241, 0.4),
+    0 4px 12px -2px rgba(99, 102, 241, 0.2);
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.22s ease;
+}
+
+.feedback-button,
+.fb-send {
+  color: #ffffff !important;
+}
+
+.feedback-button:hover,
+.feedback-button.is-open {
+  transform: scale(1.08);
+  box-shadow: 0 12px 32px -4px rgba(99, 102, 241, 0.5);
+}
+
+.feedback-button:focus-visible,
+.fb-close:focus-visible,
+.fb-send:focus-visible,
+.fb-input-shell:focus-within {
+  outline: 3px solid color-mix(in srgb, var(--fb-accent) 24%, transparent);
+  outline-offset: 3px;
 }
 
 .feedback-count {
   position: absolute;
   top: -4px;
   right: -4px;
-  background: #ef4444;
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--fb-danger) !important;
+  color: #ffffff;
+  border: 2px solid var(--fb-surface);
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
-/* Overlay */
+.feedback-count {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 .feedback-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  z-index: 10000;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  z-index: 10000;
-  padding: 20px;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.42) !important;
 }
 
-/* Box */
 .feedback-box {
-  background: #ffffff;
-  border-radius: 20px;
-  width: 380px;
-  max-height: 520px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  width: min(424px, calc(100vw - 32px));
+  max-height: min(620px, calc(100vh - 48px));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
-  animation: slideUp 0.3s ease;
+  border: 1px solid color-mix(in srgb, var(--fb-border) 78%, transparent);
+  border-radius: 18px;
+  background: var(--fb-surface) !important;
+  box-shadow: var(--fb-shadow);
+  color: var(--fb-text);
+  animation: feedback-slide-up 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes feedback-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* Header */
 .fb-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid #f0f0f0;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--fb-border) 72%, transparent);
+  background: color-mix(in srgb, var(--fb-surface-soft) 42%, transparent) !important;
 }
 
-.fb-header h3 {
-  font-size: 1.1rem;
+.fb-title {
+  color: var(--fb-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.fb-count-label {
+  margin: -4px 0 2px;
+  min-width: 0;
+  color: var(--fb-muted);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #1a1a1a;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.fb-header h3 i {
-  color: #3b82f6;
+.fb-empty-icon {
+  color: var(--fb-accent) !important;
+}
+
+.fb-state h4,
+.fb-text {
+  color: var(--fb-text) !important;
+}
+
+.fb-title,
+.fb-count-label,
+.fb-state p,
+.fb-empty p,
+.fb-cooldown,
+.fb-time {
+  color: var(--fb-muted) !important;
 }
 
 .fb-close {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
+  border: 0;
   border-radius: 50%;
-  border: none;
-  background: #f5f5f5;
-  color: #666;
+  background: var(--fb-surface-soft) !important;
+  color: var(--fb-muted);
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
+  flex-shrink: 0;
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+.fb-close {
+  color: var(--fb-muted) !important;
 }
 
 .fb-close:hover {
-  background: #e0e0e0;
+  color: var(--fb-text);
+  background: var(--fb-border) !important;
+  transform: none;
 }
 
-/* Messages */
+.fb-close:hover {
+  color: var(--fb-text) !important;
+}
+
 .fb-messages {
-  flex: 1;
+  height: min(360px, calc(100vh - 230px));
+  min-height: 240px;
+  max-height: 360px;
   overflow-y: auto;
-  padding: 16px;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 200px;
-  max-height: 320px;
+  gap: 14px;
+  padding: 18px 20px;
+  background: color-mix(in srgb, var(--fb-bg) 78%, var(--fb-surface) 22%) !important;
 }
 
-.fb-loading,
-.fb-empty {
+.fb-state {
+  min-height: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  color: #999;
-  gap: 8px;
-  font-size: 0.9rem;
+  gap: 12px;
+  text-align: center;
+  color: var(--fb-muted);
 }
 
-.fb-empty i {
-  font-size: 2rem;
-  color: #ccc;
+.fb-state p,
+.fb-state h4 {
+  margin: 0;
 }
 
-/* Bubble */
+.fb-state h4 {
+  color: var(--fb-text);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.fb-empty p,
+.fb-state p {
+  max-width: 230px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.fb-empty-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  color: var(--fb-accent);
+  background: color-mix(in srgb, var(--fb-accent) 10%, var(--fb-surface)) !important;
+  font-size: 1.25rem;
+}
+
+.fb-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid var(--fb-border);
+  border-top-color: var(--fb-accent);
+  animation: fb-spin 0.75s linear infinite;
+}
+
+@keyframes fb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .fb-bubble {
-  display: flex;
-  justify-content: flex-start;
+  width: 100%;
+  display: block;
 }
 
 .fb-bubble-content {
-  background: #f0f4ff;
-  border-radius: 16px 16px 16px 4px;
-  padding: 12px 16px;
-  max-width: 90%;
-  position: relative;
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--fb-border) 72%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--fb-surface) 88%, var(--fb-surface-soft) 12%) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.fb-text {
-  font-size: 0.9rem;
-  color: #1a1a1a;
-  line-height: 1.5;
-  margin: 0 0 4px 0;
-  word-break: break-word;
+.fb-bubble-content:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--fb-accent) 34%, var(--fb-border));
+  background: color-mix(in srgb, var(--fb-surface-soft) 72%, var(--fb-surface) 28%) !important;
+  box-shadow:
+    0 10px 22px rgba(15, 23, 42, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 .fb-time {
-  font-size: 0.7rem;
-  color: #999;
+  float: right;
+  margin-left: 10px;
+  margin-top: 3px;
+  color: var(--fb-muted);
+  font-size: 0.68rem;
+  font-weight: 650;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-align: right;
 }
 
-/* Input Area */
+.fb-text {
+  margin: 0;
+  color: var(--fb-text);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
 .fb-input-area {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  padding: 12px 16px;
-  border-top: 1px solid #f0f0f0;
-  background: #fafafa;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--fb-border);
+  background: var(--fb-surface) !important;
 }
 
-.fb-input-area textarea {
+.fb-input-stack {
   flex: 1;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 0.9rem;
-  font-family: inherit;
-  resize: none;
-  outline: none;
-  background: #fff;
-  transition: border-color 0.2s;
+  min-width: 0;
 }
 
-.fb-input-area textarea:focus {
-  border-color: #3b82f6;
+.fb-input-shell {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--fb-border);
+  border-radius: 18px;
+  background: var(--fb-surface-soft) !important;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.fb-input-shell:focus-within {
+  border-color: color-mix(in srgb, var(--fb-accent) 70%, var(--fb-border));
+  background: var(--fb-surface) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--fb-accent) 12%, transparent);
+}
+
+.fb-input-shell textarea {
+  width: 100%;
+  max-height: 126px;
+  min-height: 42px;
+  padding: 11px 14px;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  color: var(--fb-text);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  display: block;
+}
+
+.fb-input-shell textarea {
+  background: transparent !important;
+  color: var(--fb-text) !important;
+}
+
+.fb-input-shell textarea::placeholder {
+  color: var(--fb-muted);
+}
+
+.fb-input-shell textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.fb-cooldown {
+  margin: 6px 4px 0;
+  color: var(--fb-muted);
+  font-size: 0.7rem;
+  font-weight: 650;
+  line-height: 1.2;
 }
 
 .fb-send {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
+  border: 0;
   border-radius: 50%;
-  border: none;
-  background: #3b82f6;
-  color: white;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: var(--fb-accent) !important;
+  color: #ffffff;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  transition: all 0.2s;
-  flex-shrink: 0;
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--fb-accent) 25%, transparent);
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    opacity 0.18s ease;
 }
 
 .fb-send:hover:not(:disabled) {
-  background: #2563eb;
-  transform: scale(1.05);
+  background: var(--fb-accent-hover) !important;
+  transform: translateY(-1px);
 }
 
 .fb-send:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-  .feedback-overlay {
-    padding: 0;
-    align-items: flex-end;
-    justify-content: center;
-  }
-
-  .feedback-box {
-    width: 100%;
-    max-height: 80vh;
-    border-radius: 20px 20px 0 0;
-  }
-}
-
-/* Scrollbar */
 .fb-messages::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 
 .fb-messages::-webkit-scrollbar-thumb {
-  background: #ddd;
-  border-radius: 4px;
+  background: color-mix(in srgb, var(--fb-muted) 32%, transparent);
+  border-radius: 999px;
 }
 
-/* Transitions */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 520px) {
+  .feedback-button {
+    right: 18px;
+    bottom: 18px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .feedback-overlay {
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .feedback-box {
+    width: 100%;
+    max-height: 86vh;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .fb-header {
+    padding: 16px;
+  }
+
+  .fb-heading-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+  }
+
+  .fb-messages {
+    height: min(340px, calc(86vh - 170px));
+    min-height: 220px;
+    max-height: 340px;
+    padding: 16px;
+  }
+
+  .fb-input-area {
+    padding: 12px 12px max(14px, env(safe-area-inset-bottom));
+  }
+
+  .fb-input-shell textarea {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-button,
+  .fb-close,
+  .fb-send,
+  .feedback-box,
+  .fade-enter-active,
+  .fade-leave-active {
+    animation: none;
+    transition: none;
+  }
 }
 </style>

@@ -9,7 +9,148 @@
 
       <!-- Action Items -->
       <transition-group name="fab-reveal" tag="div" class="fab-actions">
-        <!-- Theme -->
+
+        <!-- Quick Navigation -->
+        <!-- <div v-if="fabOpen" key="nav" class="fab-group" :style="{ '--delay': 1 }">
+          <button class="fab-action" @click.stop="togglePanel('nav')" :title="t.quickNav">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12h18"/>
+              <path d="M3 6h18"/>
+              <path d="M3 18h18"/>
+            </svg>
+            <span class="fab-tooltip">{{ t.quickNav }}</span>
+          </button>
+
+          <transition name="panel-appear">
+            <div v-if="showNavPanel" class="panel nav-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>{{ t.quickNav }}</span>
+                <button v-if="isMobile" class="panel-close" @click="showNavPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="panel-body">
+                <button class="nav-row" @click="scrollToSection('#about')">
+                  <div class="nav-icon indigo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="8" r="4"/>
+                      <path d="M4 22c1.8-4 5-6 8-6s6.2 2 8 6"/>
+                    </svg>
+                  </div>
+                  <div class="nav-info">
+                    <span class="nav-title">{{ t.about }}</span>
+                    <span class="nav-sub">Profile overview</span>
+                  </div>
+                </button>
+
+                <button class="nav-row" @click="scrollToSection('#skills')">
+                  <div class="nav-icon emerald">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.8 5.5 21l2-7.5L2 9h7z"/>
+                    </svg>
+                  </div>
+                  <div class="nav-info">
+                    <span class="nav-title">{{ t.skills }}</span>
+                    <span class="nav-sub">Tools and technologies</span>
+                  </div>
+                </button>
+
+                <button class="nav-row" @click="scrollToSection('#projects')">
+                  <div class="nav-icon violet">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="14" rx="2"/>
+                      <path d="M8 22h8"/>
+                      <path d="M12 18v4"/>
+                    </svg>
+                  </div>
+                  <div class="nav-info">
+                    <span class="nav-title">{{ t.projectsNav }}</span>
+                    <span class="nav-sub">Featured work</span>
+                  </div>
+                </button>
+
+                <button class="nav-row" @click="scrollToSection('#experience')">
+                  <div class="nav-icon amber">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="7" width="20" height="14" rx="2"/>
+                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                    </svg>
+                  </div>
+                  <div class="nav-info">
+                    <span class="nav-title">{{ t.experience }}</span>
+                    <span class="nav-sub">Internship and work</span>
+                  </div>
+                </button>
+
+                <button class="nav-row" @click="scrollToSection('#contact')">
+                  <div class="nav-icon rose">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16v16H4z"/>
+                      <path d="M22 6l-10 7L2 6"/>
+                    </svg>
+                  </div>
+                  <div class="nav-info">
+                    <span class="nav-title">{{ t.contact }}</span>
+                    <span class="nav-sub">Send a message</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </transition>
+        </div> -->
+
+<!-- Tech Stack -->
+<div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
+  <button class="fab-action" @click.stop="togglePanel('tech')" :title="t.techStack">
+    <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M16 18l6-6-6-6"/>
+      <path d="M8 6l-6 6 6 6"/>
+      <path d="M14.5 4l-5 16"/>
+    </svg>
+    <span class="fab-tooltip">{{ t.techStack }}</span>
+  </button>
+
+  <transition name="panel-appear">
+    <div v-if="showTechPanel" class="panel tech-panel" :class="{ 'panel-mobile': isMobile }">
+      <div class="panel-head">
+        <span>{{ t.techStack }}</span>
+        <button v-if="isMobile" class="panel-close" @click="showTechPanel = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="panel-body tech-body">
+        <div class="tech-grid">
+          <span class="tech-pill">Vue.js</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">Firebase</span>
+          <span class="tech-pill">HTML</span>
+          <span class="tech-pill">CSS</span>
+          <span class="tech-pill">Node.js</span>
+          <span class="tech-pill">MySQL</span>
+          <span class="tech-pill">GitHub</span>
+        </div>
+
+        <div class="hire-card">
+          <div>
+            <span class="hire-title">{{ t.availableWork }}</span>
+            <span class="hire-sub">{{ t.frontendDev }}</span>
+          </div>
+
+          <a href="mailto:reymelrey.mislang@gmail.com" class="hire-btn">
+            {{ t.hireMe }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </transition>
+</div>
+
         <div v-if="fabOpen" key="theme" class="fab-group" :style="{ '--delay': 0 }">
           <button class="fab-action" @click.stop="togglePanel('theme')" :title="t.theme">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -48,6 +189,7 @@
           </transition>
         </div>
 
+
         <!-- Stats -->
         <div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 1 }">
           <button class="fab-action" @click.stop="togglePanel('stats')" :title="t.stats">
@@ -67,65 +209,89 @@
                   </svg>
                 </button>
               </div>
-              <div class="panel-body">
-                <div class="stat-item">
-                  <div class="stat-icon-wrap blue">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </svg>
+
+              <div class="panel-body stats-body">
+                <!-- Active Live Views -->
+                <div class="stat-card stat-active">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap blue">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value">{{ visitorCount.toLocaleString() }}</span>
+                      <span class="stat-label">{{ t.views }}</span>
+                    </div>
                   </div>
-                  <div class="stat-info">
-                    <span class="stat-value">{{ visitorCount.toLocaleString() }}</span>
-                    <span class="stat-label">{{ t.views }}</span>
-                  </div>
+
+                  <span class="stat-badge live">Live</span>
                 </div>
-                <div class="stat-item">
-                  <div class="stat-icon-wrap purple">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                      <polyline points="2 17 12 22 22 17"/>
-                      <polyline points="2 12 12 17 22 12"/>
-                    </svg>
+
+                <!-- Coming Soon Projects -->
+                <div class="stat-card stat-coming">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap muted">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                        <polyline points="2 17 12 22 22 17"/>
+                        <polyline points="2 12 12 17 22 12"/>
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value muted-text">{{ t.projects }}</span>
+                      <span class="stat-label">Project counter</span>
+                    </div>
                   </div>
-                  <div class="stat-info">
-                    <span class="stat-value">10+</span>
-                    <span class="stat-label">{{ t.projects }}</span>
-                  </div>
+
+                  <span class="stat-badge soon">Soon</span>
                 </div>
-                <div class="stat-item">
-                  <div class="stat-icon-wrap green">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="16 18 22 12 16 6"/>
-                      <polyline points="8 6 2 12 8 18"/>
-                    </svg>
+
+                <!-- Coming Soon Coding Hours -->
+                <div class="stat-card stat-coming">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap muted">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value muted-text">{{ t.hrsCoding }}</span>
+                      <span class="stat-label">Coding activity</span>
+                    </div>
                   </div>
-                  <div class="stat-info">
-                    <span class="stat-value">737+</span>
-                    <span class="stat-label">{{ t.hrsCoding }}</span>
-                  </div>
+
+                  <span class="stat-badge soon">Soon</span>
                 </div>
-                <div class="stat-item">
-                  <div class="stat-icon-wrap orange">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                    </svg>
+
+                <!-- Coming Soon Repositories -->
+                <div class="stat-card stat-coming">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap muted">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value muted-text">{{ t.repos }}</span>
+                      <span class="stat-label">GitHub repositories</span>
+                    </div>
                   </div>
-                  <div class="stat-info">
-                    <span class="stat-value">52+</span>
-                    <span class="stat-label">{{ t.repos }}</span>
-                  </div>
-                </div>
-                <div class="stat-live">
-                  <span class="live-dot"></span>
-                  <span>{{ t.liveFirestore }}</span>
+
+                  <span class="stat-badge soon">Soon</span>
                 </div>
               </div>
             </div>
           </transition>
         </div>
 
-        <!-- Comments -->
+        <!-- Feedback -->
         <button v-if="fabOpen" key="fb" class="fab-action" :style="{ '--delay': 2 }" @click="openFeedback" :title="t.comments">
           <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -144,67 +310,135 @@
             <span class="fab-tooltip">{{ t.contact }}</span>
           </button>
 
-          <transition name="panel-appear">
-            <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
-              <div class="panel-head">
-                <span>{{ t.getInTouch }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12"/>
-                  </svg>
-                </button>
+      <transition name="panel-appear">
+        <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
+          <div class="panel-head">
+            <span>{{ t.getInTouch }}</span>
+            <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="panel-body">
+            <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
+              <div class="contact-icon red">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
               </div>
-              <div class="panel-body">
-                <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
-                  <div class="contact-icon red">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                      <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.emailMe }}</span>
-                    <span class="contact-sub">reymelrey.mislang@gmail.com</span>
-                  </div>
-                </a>
-                <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="contact-row">
-                  <div class="contact-icon blue">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.03 2 10.89c0 2.31 1.11 4.38 2.85 5.76V22l5.36-2.94c.72.2 1.48.31 2.27.31 5.52 0 10-4.03 10-8.89S17.52 2 12 2zm1.09 11.77l-2.56-2.73-4.99 2.73 5.49-5.82 2.62 2.73 4.93-2.73-5.49 5.82z"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">Messenger</span>
-                    <span class="contact-sub">Facebook</span>
-                  </div>
-                </a>
-                <a href="https://github.com/codewithryry" target="_blank" class="contact-row">
-                  <div class="contact-icon dark">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">GitHub</span>
-                    <span class="contact-sub">@codewithryry</span>
-                  </div>
-                </a>
-                <a href="/Reymel Mislang Resume  (8.5 x 13 in).pdf" download class="contact-row resume">
-                  <div class="contact-icon accent">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                      <polyline points="7 10 12 15 17 10"/>
-                      <line x1="12" y1="15" x2="12" y2="3"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.downloadCV }}</span>
-                    <span class="contact-sub">PDF • 8.5 x 13 in</span>
-                  </div>
-                </a>
+              <div class="contact-info">
+                <span class="contact-title">{{ t.emailMe }}</span>
+                <span class="contact-sub">reymelrey.mislang@gmail.com</span>
+              </div>
+            </a>
+
+            <!-- <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <div class="contact-icon blue">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.03 2 10.89c0 2.31 1.11 4.38 2.85 5.76V22l5.36-2.94c.72.2 1.48.31 2.27.31 5.52 0 10-4.03 10-8.89S17.52 2 12 2zm1.09 11.77l-2.56-2.73-4.99 2.73 5.49-5.82 2.62 2.73 4.93-2.73-5.49 5.82z"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">Messenger</span>
+                <span class="contact-sub">Facebook</span>
+              </div>
+            </a> -->
+
+            <!-- <a href="https://github.com/codewithryry" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <div class="contact-icon dark">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">GitHub</span>
+                <span class="contact-sub">@codewithryry</span>
+              </div>
+            </a> -->
+
+            <!-- <a href="https://devrymel.vercel.app" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <div class="contact-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 0 20"/>
+                  <path d="M12 2a15.3 15.3 0 0 0 0 20"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">Portfolio</span>
+                <span class="contact-sub">devrymel.vercel.app</span>
+              </div>
+            </a> -->
+
+            <a href="https://www.linkedin.com/in/reymel-mislang/" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <div class="contact-icon linkedin">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">LinkedIn</span>
+                <span class="contact-sub">Reymel Mislang</span>
+              </div>
+            </a>
+
+            <!-- <a href="https://facebook.com/imrymel/" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <div class="contact-icon facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.25c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06z"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">Facebook</span>
+                <span class="contact-sub">facebook.com/imrymel</span>
+              </div>
+            </a> -->
+
+            <!-- <a href="tel:+639761025310" class="contact-row">
+              <div class="contact-icon phone">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3.09 5.18 2 2 0 0 1 5.11 3h3a2 2 0 0 1 2 1.72c.13.96.35 1.89.66 2.78a2 2 0 0 1-.45 2.11L9.05 10.88a16 16 0 0 0 4.07 4.07l1.27-1.27a2 2 0 0 1 2.11-.45c.89.31 1.82.53 2.78.66A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">Phone / GCash</span>
+                <span class="contact-sub">0976 102 5310</span>
+              </div>
+            </a> -->
+
+            <div class="contact-row">
+              <div class="contact-icon location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">Location</span>
+                <span class="contact-sub">Calapan City, Oriental Mindoro</span>
               </div>
             </div>
-          </transition>
+
+            <a href="/Resume.pdf" download class="contact-row resume">
+              <div class="contact-icon accent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+              </div>
+              <div class="contact-info">
+                <span class="contact-title">{{ t.downloadCV }}</span>
+                <span class="contact-sub">PDF • Latest Resume</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </transition>
         </div>
       </transition-group>
 
@@ -253,64 +487,11 @@
       </div>
     </transition>
 
-    <!-- Comments Modal -->
-    <transition name="fade">
-      <div v-if="feedbackOpen" class="modal-overlay" @click.self="feedbackOpen = false">
-        <div class="modal-box" :class="{ 'modal-mobile': isMobile }">
-          <div class="modal-head">
-            <h3>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              {{ t.commentsWall }}
-            </h3>
-            <button class="modal-close" @click="feedbackOpen = false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
-
-          <div class="modal-body" ref="messageList">
-            <div v-if="fbLoading" class="state-loading">
-              <div class="spinner"></div>
-              <span>{{ t.loading }}</span>
-            </div>
-            <div v-else-if="feedbacks.length === 0" class="state-empty">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              <p>{{ t.noFeedback }}</p>
-            </div>
-            <div v-else v-for="fb in feedbacks" :key="fb.id" class="msg-bubble">
-              <div class="msg-content">
-                <p>{{ fb.message }}</p>
-                <time>{{ formatTime(fb.created) }}</time>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-foot">
-            <div class="input-wrap">
-              <textarea
-                v-model="fbMessage"
-                :placeholder="t.writeFeedback"
-                rows="1"
-                @input="autoResize"
-                @keydown.enter.ctrl="submitFeedback"
-              ></textarea>
-              <button class="send-btn" @click="submitFeedback" :disabled="fbSending || !fbMessage.trim()">
-                <svg v-if="!fbSending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-                <div v-else class="spinner small"></div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
+    <FeedbackBubble
+      ref="feedbackBubble"
+      :show-button="false"
+      @count-change="feedbackCount = $event"
+    />
 
     <router-view :lang="currentLang" />
   </div>
@@ -318,40 +499,122 @@
 
 <script>
 import { trackVisit, getViews } from "./services/analyticsService";
-import { addDoc, collection, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { db } from "@/services/firebase";
+import FeedbackBubble from "@/components/FeedbackBubble.vue";
 
 const UI_TRANSLATIONS = {
   en: {
-    theme: "Theme", stats: "Stats", comments: "Comments", contact: "Contact",
-    top: "Back to top", menu: "Menu", close: "Close",
-    chooseTheme: "Appearance", liveStats: "Live Stats",
-    views: "Views", projects: "Projects", hrsCoding: "Hours Coding", repos: "Repositories",
+    theme: "Theme",
+    stats: "Stats",
+    comments: "Feedback",
+    contact: "Contact",
+    top: "Back to top",
+    menu: "Menu",
+    close: "Close",
+
+    chooseTheme: "Appearance",
+    liveStats: "Live Stats",
+    views: "Views",
+    projects: "Projects",
+    hrsCoding: "Hours Coding",
+    repos: "Repositories",
     liveFirestore: "Live from Firestore",
-    getInTouch: "Get in Touch", emailMe: "Email", downloadCV: "Download Resume",
-    commentsWall: "Comments", loading: "Loading",
-    noFeedback: "No comments yet. Start the conversation!",
-    writeFeedback: "Write a comment..."
+
+    quickNav: "Quick Nav",
+    about: "About",
+    skills: "Skills",
+    projectsNav: "Projects",
+    experience: "Experience",
+    certificates: "Certificates",
+
+    techStack: "Tech Stack",
+    availableWork: "Available for work",
+    frontendDev: "Frontend Developer",
+    hireMe: "Hire Me",
+
+    getInTouch: "Get in Touch",
+    emailMe: "Email",
+    downloadCV: "Download Resume",
+
+    commentsWall: "Feedback",
+    loading: "Loading",
+    noFeedback: "No feedback yet. Start the conversation!",
+    writeFeedback: "Write feedback..."
   },
+
   fil: {
-    theme: "Tema", stats: "Stats", comments: "Puna", contact: "Kontak",
-    top: "Itaas", menu: "Menu", close: "Isara",
-    chooseTheme: "Itsura", liveStats: "Live Stats",
-    views: "Views", projects: "Proyekto", hrsCoding: "Oras ng Coding", repos: "Repositories",
+    theme: "Tema",
+    stats: "Stats",
+    comments: "Puna",
+    contact: "Kontak",
+    top: "Itaas",
+    menu: "Menu",
+    close: "Isara",
+
+    chooseTheme: "Itsura",
+    liveStats: "Live Stats",
+    views: "Views",
+    projects: "Proyekto",
+    hrsCoding: "Oras ng Coding",
+    repos: "Repositories",
     liveFirestore: "Live mula sa Firestore",
-    getInTouch: "Makipag-ugnayan", emailMe: "Email", downloadCV: "I-download ang CV",
-    commentsWall: "Puna", loading: "Naglo-load",
+
+    quickNav: "Quick Nav",
+    about: "Tungkol",
+    skills: "Skills",
+    projectsNav: "Mga Proyekto",
+    experience: "Karanasan",
+    certificates: "Certificates",
+
+    techStack: "Tech Stack",
+    availableWork: "Available sa work",
+    frontendDev: "Frontend Developer",
+    hireMe: "Hire Me",
+
+    getInTouch: "Makipag-ugnayan",
+    emailMe: "Email",
+    downloadCV: "I-download ang CV",
+
+    commentsWall: "Puna",
+    loading: "Naglo-load",
     noFeedback: "Wala pang puna. Magsimula ng usapan!",
     writeFeedback: "Magsulat ng puna..."
   },
+
   zh: {
-    theme: "主題", stats: "統計", comments: "留言", contact: "聯絡",
-    top: "回到頂部", menu: "選單", close: "關閉",
-    chooseTheme: "外觀", liveStats: "即時數據",
-    views: "瀏覽次數", projects: "專案", hrsCoding: "編碼時數", repos: "儲存庫",
+    theme: "主題",
+    stats: "統計",
+    comments: "留言",
+    contact: "聯絡",
+    top: "回到頂部",
+    menu: "選單",
+    close: "關閉",
+
+    chooseTheme: "外觀",
+    liveStats: "即時數據",
+    views: "瀏覽次數",
+    projects: "專案",
+    hrsCoding: "編碼時數",
+    repos: "儲存庫",
     liveFirestore: "Firestore 即時數據",
-    getInTouch: "聯絡方式", emailMe: "電子郵件", downloadCV: "下載履歷",
-    commentsWall: "留言板", loading: "載入中",
+
+    quickNav: "快速導覽",
+    about: "關於",
+    skills: "技能",
+    projectsNav: "專案",
+    experience: "經驗",
+    certificates: "證書",
+
+    techStack: "技術棧",
+    availableWork: "可接受工作",
+    frontendDev: "前端開發者",
+    hireMe: "雇用我",
+
+    getInTouch: "聯絡方式",
+    emailMe: "電子郵件",
+    downloadCV: "下載履歷",
+
+    commentsWall: "留言板",
+    loading: "載入中",
     noFeedback: "尚無留言，開始對話吧！",
     writeFeedback: "寫下留言..."
   }
@@ -359,41 +622,48 @@ const UI_TRANSLATIONS = {
 
 export default {
   name: "App",
+
+  components: {
+    FeedbackBubble
+  },
+
   data() {
     return {
-      fabOpen: false,
+      // Desktop: open by default
+      // Mobile: closed by default
+      fabOpen: window.innerWidth > 640,
       showScrollTop: false,
+
       showThemePanel: false,
-      showContactPanel: false,
+      showNavPanel: false,
+      showTechPanel: false,
       showStatsPanel: false,
-      isMobile: false,
+      showContactPanel: false,
+
+      isMobile: window.innerWidth <= 640,
+
       toastVisible: false,
       toastMessage: "",
       toastTimer: null,
+
       currentTheme: "light",
       themes: [
         { id: "light", name: "Light", preview: "linear-gradient(135deg, #f8fafc, #e2e8f0)" },
-        { id: "dark", name: "Dark", preview: "#0f172a" },
         { id: "midnight", name: "Midnight", preview: "linear-gradient(135deg, #0f172a, #1e3a5f)" },
         { id: "forest", name: "Forest", preview: "linear-gradient(135deg, #064e3b, #065f46)" },
-        // { id: "sunset", name: "Sunset", preview: "linear-gradient(135deg, #7c2d12, #c2410c)" },
-        { id: "purple", name: "Purple", preview: "linear-gradient(135deg, #2e1065, #6b21a8)" },
-        // { id: "material", name: "Material U", preview: "linear-gradient(135deg, #d0bcff, #e8def8)" },
-        // { id: "glass", name: "Liquid Glass", preview: "linear-gradient(135deg, #e8ecf1, #f0f4f8)" },
       ],
+
       currentLang: "en",
       visitorCount: 0,
-      feedbackOpen: false,
-      feedbacks: [],
-      feedbackCount: 0,
-      fbMessage: "",
-      fbLoading: false,
-      fbSending: false
+      feedbackCount: 0
     };
   },
 
   computed: {
-    t() { return UI_TRANSLATIONS[this.currentLang] || UI_TRANSLATIONS.en; },
+    t() {
+      return UI_TRANSLATIONS[this.currentLang] || UI_TRANSLATIONS.en;
+    },
+
     totalNotifications() {
       return this.feedbackCount > 0 ? 1 : 0;
     }
@@ -401,8 +671,10 @@ export default {
 
   async mounted() {
     await trackVisit();
+
     const saved = localStorage.getItem("theme") || "light";
     this.setTheme(saved, false);
+
     this.currentLang = localStorage.getItem("lang") || "en";
 
     this.checkMobile();
@@ -410,131 +682,184 @@ export default {
 
     try {
       this.visitorCount = await getViews();
-    } catch (e) { console.error("Views error:", e); }
+    } catch (e) {
+      console.error("Views error:", e);
+    }
 
     window.addEventListener("scroll", this.handleScroll);
     document.addEventListener("click", this.handleOutsideClick);
-    await this.loadFeedbacks();
   },
 
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.checkMobile);
     document.removeEventListener("click", this.handleOutsideClick);
+
+    document.body.style.overflow = "";
+
     if (this.toastTimer) clearTimeout(this.toastTimer);
   },
 
   methods: {
     checkMobile() {
+      const wasMobile = this.isMobile;
       this.isMobile = window.innerWidth <= 640;
-    },
-    toggleFab() {
-      this.fabOpen = !this.fabOpen;
-      if (!this.fabOpen) this.closeAllPanels();
+
+      // Kapag lumipat to mobile, isara para hindi takpan screen
       if (this.isMobile) {
-        document.body.style.overflow = this.fabOpen ? 'hidden' : '';
+        this.fabOpen = false;
+        this.closeAllPanels();
+        document.body.style.overflow = "";
+        return;
+      }
+
+      // Kapag galing mobile then balik desktop, buksan ulit buttons
+      if (wasMobile && !this.isMobile) {
+        this.fabOpen = true;
+        document.body.style.overflow = "";
       }
     },
+
+    toggleFab() {
+      this.fabOpen = !this.fabOpen;
+
+      if (!this.fabOpen) this.closeAllPanels();
+
+      if (this.isMobile) {
+        document.body.style.overflow = this.fabOpen ? "hidden" : "";
+      }
+    },
+
     closeFab() {
       this.fabOpen = false;
       this.closeAllPanels();
-      if (this.isMobile) document.body.style.overflow = '';
+
+      if (this.isMobile) {
+        document.body.style.overflow = "";
+      }
     },
+
     togglePanel(name) {
-      const panels = ['theme', 'contact', 'stats'];
-      panels.forEach(p => {
-        const key = `show${p.charAt(0).toUpperCase() + p.slice(1)}Panel`;
-        this[key] = (p === name) ? !this[key] : false;
+      const panels = ["theme", "nav", "tech", "stats", "contact"];
+
+      panels.forEach((panel) => {
+        const key = `show${panel.charAt(0).toUpperCase() + panel.slice(1)}Panel`;
+        this[key] = panel === name ? !this[key] : false;
       });
     },
+
     closeAllPanels() {
       this.showThemePanel = false;
-      this.showContactPanel = false;
+      this.showNavPanel = false;
+      this.showTechPanel = false;
       this.showStatsPanel = false;
+      this.showContactPanel = false;
     },
+
     handleOutsideClick(e) {
-      if (!e.target.closest(".fab-container") && !e.target.closest(".modal-overlay") && !e.target.closest(".scroll-top")) {
-        this.closeAllPanels();
+      const clickedInsideFab = e.target.closest(".fab-container");
+      const clickedInsideModal = e.target.closest(".modal-overlay, .feedback-overlay");
+      const clickedScrollTop = e.target.closest(".scroll-top");
+
+      if (clickedInsideFab || clickedInsideModal || clickedScrollTop) return;
+
+      this.closeAllPanels();
+
+      // Sa mobile lang isara buong FAB kapag outside click
+      // Sa desktop, iwan siyang nakalabas by default
+      if (this.isMobile) {
         this.closeFab();
       }
     },
-    handleScroll() { 
-      this.showScrollTop = window.scrollY > 400; 
+
+    handleScroll() {
+      this.showScrollTop = window.scrollY > 400;
     },
-    scrollToTop() { 
-      window.scrollTo({ top: 0, behavior: "smooth" }); 
+
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     },
+
+    scrollToSection(id) {
+      const section = document.querySelector(id);
+
+      if (!section) {
+        this.showToast("Section not found");
+        return;
+      }
+
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      this.closeAllPanels();
+
+      if (this.isMobile) {
+        this.closeFab();
+      }
+    },
+
     setTheme(themeId, save = true) {
       this.currentTheme = themeId;
       document.documentElement.setAttribute("data-theme", themeId);
+
       if (save) {
         localStorage.setItem("theme", themeId);
         this.showThemePanel = false;
       }
     },
+
     showToast(message) {
       this.toastMessage = message;
       this.toastVisible = true;
+
       if (this.toastTimer) clearTimeout(this.toastTimer);
-      this.toastTimer = setTimeout(() => this.toastVisible = false, 3000);
+
+      this.toastTimer = setTimeout(() => {
+        this.toastVisible = false;
+      }, 3000);
     },
+
     openFeedback() {
-      this.feedbackOpen = true;
-      this.closeFab();
-      this.loadFeedbacks();
-    },
-    async loadFeedbacks() {
-      this.fbLoading = true;
-      try {
-        const q = query(collection(db, "feedback"), orderBy("created", "desc"), limit(50));
-        const snap = await getDocs(q);
-        this.feedbacks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        this.feedbackCount = this.feedbacks.length;
-      } catch (e) { console.error("Feedback load error:", e); }
-      this.fbLoading = false;
-    },
-    async submitFeedback() {
-      if (!this.fbMessage.trim() || this.fbSending) return;
-      this.fbSending = true;
-      try {
-        await addDoc(collection(db, "feedback"), {
-          message: this.fbMessage.trim(),
-          created: new Date()
-        });
-        this.fbMessage = "";
-        this.resetTextarea();
-        await this.loadFeedbacks();
-      } catch (e) {
-        console.error("Submit error:", e);
-        alert("Failed to send.");
+      this.closeAllPanels();
+
+      if (this.isMobile) {
+        this.closeFab();
       }
-      this.fbSending = false;
+
+      if (this.$refs.feedbackBubble) {
+        this.$refs.feedbackBubble.openFeedback();
+      }
     },
-    autoResize(e) {
-      const el = e.target;
-      el.style.height = 'auto';
-      el.style.height = el.scrollHeight + 'px';
-    },
-    resetTextarea() {
-      this.$nextTick(() => {
-        const ta = this.$el.querySelector('.input-wrap textarea');
-        if (ta) {
-          ta.style.height = 'auto';
-        }
-      });
-    },
+
     formatTime(ts) {
       if (!ts) return "";
-      const d = ts.toDate ? ts.toDate() : new Date(ts);
-      const diff = Date.now() - d;
-      const m = Math.floor(diff / 60000);
-      const h = Math.floor(diff / 3600000);
-      const dy = Math.floor(diff / 86400000);
-      if (m < 1) return this.currentLang === 'zh' ? '\u525b\u525b' : (this.currentLang === 'fil' ? 'Ngayon lang' : 'Just now');
-      if (m < 60) return `${m}m`;
-      if (h < 24) return `${h}h`;
-      if (dy < 7) return `${dy}d`;
-      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+      const date = ts.toDate ? ts.toDate() : new Date(ts);
+      const diff = Date.now() - date;
+
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+
+      if (minutes < 1) {
+        if (this.currentLang === "zh") return "剛剛";
+        if (this.currentLang === "fil") return "Ngayon lang";
+        return "Just now";
+      }
+
+      if (minutes < 60) return `${minutes}m`;
+      if (hours < 24) return `${hours}h`;
+      if (days < 7) return `${days}d`;
+
+      return date.toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric"
+      });
     }
   }
 };
@@ -1451,5 +1776,644 @@ html[data-theme="sunset"] .msg-content,
 html[data-theme="purple"] .msg-content {
   background: rgba(99, 102, 241, 0.12);
   border-color: rgba(99, 102, 241, 0.2);
+}
+
+.contact-icon.green {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.contact-icon.linkedin {
+  background: rgba(10, 102, 194, 0.12);
+  color: #0a66c2;
+}
+
+.contact-icon.facebook {
+  background: rgba(24, 119, 242, 0.12);
+  color: #1877f2;
+}
+
+.contact-icon.phone {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.contact-icon.location {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+.stats-panel {
+  width: 285px;
+  overflow: hidden;
+}
+
+.stats-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 62px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(255, 255, 255, 0.78);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.stat-active {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(59, 130, 246, 0.08));
+  border-color: rgba(99, 102, 241, 0.22);
+}
+
+.stat-coming {
+  background: rgba(248, 250, 252, 0.9);
+}
+
+.stat-left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.stat-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-wrap svg {
+  width: 18px;
+  height: 18px;
+}
+
+.stat-icon-wrap.blue {
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.14);
+}
+
+.stat-icon-wrap.muted {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.11);
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stat-value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.stat-value.muted-text {
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.74rem;
+  line-height: 1.1;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.stat-badge {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stat-badge.live {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.stat-badge.soon {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.12);
+}
+
+.stat-live {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2px;
+  padding: 9px 10px;
+  border-radius: 999px;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(248, 250, 252, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+@media (max-width: 640px) {
+  .stats-panel {
+    width: calc(100vw - 32px);
+  }
+
+  .stat-card {
+    min-height: 58px;
+  }
+}
+
+
+/* ===== UNIFIED PANEL UI OVERRIDE ===== */
+
+/* Same width and shape for all floating panels */
+.theme-panel,
+.stats-panel,
+.contact-panel {
+  width: 292px;
+  min-width: 292px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.14),
+    0 8px 18px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+/* Same panel title header */
+.panel-head {
+  min-height: 52px;
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--surface-hover) 42%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.panel-head span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+/* Same spacing inside all panels */
+.panel-body,
+.stats-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+/* Make Theme, Contact, and Stats rows look like same card system */
+.theme-btn,
+.contact-row,
+.stat-card {
+  min-height: 62px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, var(--surface-hover) 12%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.theme-btn:hover,
+.contact-row:hover,
+.stat-card:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--surface-hover) 72%, var(--surface) 28%);
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+  box-shadow:
+    0 10px 22px rgba(15, 23, 42, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+/* Active theme card */
+.theme-btn.active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+  color: var(--accent);
+}
+
+/* Same icon size for all panel icons */
+.theme-swatch,
+.contact-icon,
+.stat-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.contact-icon,
+.stat-icon-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.contact-icon svg,
+.stat-icon-wrap svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Fix old stat CSS forcing icon color */
+.stat-card .stat-icon-wrap svg {
+  color: currentColor;
+}
+
+/* Contact text same as stats text */
+.contact-info,
+.stat-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contact-title,
+.stat-value,
+.stat-value.muted-text,
+.theme-name {
+  font-size: 0.86rem;
+  font-weight: 750;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.contact-sub,
+.stat-label {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stats active card */
+.stat-active {
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(59, 130, 246, 0.08)),
+    var(--surface);
+  border-color: rgba(99, 102, 241, 0.26);
+}
+
+/* Stats coming soon cards */
+.stat-coming {
+  background: color-mix(in srgb, var(--surface-hover) 46%, var(--surface) 54%);
+}
+
+.stat-icon-wrap.blue {
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.14);
+}
+
+.stat-icon-wrap.muted {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.12);
+}
+
+.stat-badge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.stat-badge.live {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.11);
+}
+
+.stat-badge.soon {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.12);
+}
+
+/* Contact icon colors refined */
+.contact-icon.red {
+  background: rgba(239, 68, 68, 0.11);
+  color: #ef4444;
+}
+
+.contact-icon.blue {
+  background: rgba(59, 130, 246, 0.11);
+  color: #3b82f6;
+}
+
+.contact-icon.linkedin {
+  background: rgba(10, 102, 194, 0.12);
+  color: #0a66c2;
+}
+
+.contact-icon.location {
+  background: rgba(245, 158, 11, 0.13);
+  color: #f59e0b;
+}
+
+.contact-icon.accent {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+
+/* Resume row highlight but still same style */
+.contact-row.resume {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent),
+    color-mix(in srgb, var(--surface) 90%, var(--surface-hover) 10%);
+}
+
+.contact-row.resume:hover {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent),
+    color-mix(in srgb, var(--surface-hover) 65%, var(--surface) 35%);
+}
+
+/* Theme swatch cleaner */
+.theme-swatch {
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.45),
+    0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.check-icon {
+  width: 17px;
+  height: 17px;
+  color: var(--accent);
+}
+
+/* Better mobile panel consistency */
+@media (max-width: 640px) {
+  .theme-panel,
+  .stats-panel,
+  .contact-panel {
+    width: 100% !important;
+    min-width: 100% !important;
+    border-radius: 22px 22px 0 0 !important;
+  }
+
+  .panel-body,
+  .stats-body {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .theme-btn,
+  .contact-row,
+  .stat-card {
+    min-height: 64px;
+    padding: 12px 14px;
+  }
+}
+
+/* Dark mode polish */
+html[data-theme="dark"] .theme-panel,
+html[data-theme="dark"] .stats-panel,
+html[data-theme="dark"] .contact-panel,
+html[data-theme="midnight"] .theme-panel,
+html[data-theme="midnight"] .stats-panel,
+html[data-theme="midnight"] .contact-panel,
+html[data-theme="forest"] .theme-panel,
+html[data-theme="forest"] .stats-panel,
+html[data-theme="forest"] .contact-panel,
+html[data-theme="purple"] .theme-panel,
+html[data-theme="purple"] .stats-panel,
+html[data-theme="purple"] .contact-panel {
+  background: color-mix(in srgb, var(--surface) 92%, black 8%);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.35),
+    0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+html[data-theme="dark"] .theme-btn,
+html[data-theme="dark"] .contact-row,
+html[data-theme="dark"] .stat-card,
+html[data-theme="midnight"] .theme-btn,
+html[data-theme="midnight"] .contact-row,
+html[data-theme="midnight"] .stat-card,
+html[data-theme="forest"] .theme-btn,
+html[data-theme="forest"] .contact-row,
+html[data-theme="forest"] .stat-card,
+html[data-theme="purple"] .theme-btn,
+html[data-theme="purple"] .contact-row,
+html[data-theme="purple"] .stat-card {
+  background: color-mix(in srgb, var(--surface-hover) 38%, var(--surface) 62%);
+  box-shadow: none;
+}
+
+.nav-panel,
+.tech-panel {
+  width: 292px;
+  min-width: 292px;
+}
+
+.nav-row {
+  width: 100%;
+  min-height: 62px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, var(--surface-hover) 12%);
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.nav-row:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--surface-hover) 72%, var(--surface) 28%);
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+.nav-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.nav-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-icon.indigo {
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.12);
+}
+
+.nav-icon.emerald {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.12);
+}
+
+.nav-icon.violet {
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.12);
+}
+
+.nav-icon.amber {
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.12);
+}
+
+.nav-icon.rose {
+  color: #e11d48;
+  background: rgba(225, 29, 72, 0.12);
+}
+
+.nav-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-title {
+  font-size: 0.86rem;
+  font-weight: 750;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.nav-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tech-body {
+  gap: 12px;
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-pill {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-hover) 72%, var(--surface) 28%);
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.hire-card {
+  padding: 14px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(59, 130, 246, 0.08)),
+    var(--surface);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hire-title,
+.hire-sub {
+  display: block;
+}
+
+.hire-title {
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.hire-sub {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+
+.hire-btn {
+  flex-shrink: 0;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.24);
+}
+
+.hire-btn:hover {
+  background: var(--accent-hover);
+}
+
+@media (max-width: 640px) {
+  .nav-panel,
+  .tech-panel {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .nav-row {
+    min-height: 64px;
+    padding: 12px 14px;
+  }
 }
 </style>

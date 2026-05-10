@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Frontend Focused",
+    "description": "I build clean, responsive, and user-friendly interfaces using Vue.js, JavaScript, and modern CSS."
+  },
+  {
+    "title": "Full-Stack Capable",
+    "description": "I have hands-on experience with Node.js, MySQL, Firebase, Django, and API integration for web-based systems."
+  },
+  {
+    "title": "Research-Oriented",
+    "description": "I handle influencer research, profile checking, data organization, and social media campaign support."
+  },
+  {
+    "title": "UI/UX Mindset",
+    "description": "I focus on layouts, spacing, readability, and user flow to make websites easier and more comfortable to use."
+  },
+  {
+    "title": "Fast Learner",
+    "description": "I adapt quickly to new tools, project requirements, and team workflows while improving through feedback."
+  },
+  {
+    "title": "Detail-Oriented",
+    "description": "I pay attention to small UI details, data accuracy, and consistency across pages, forms, and components."
+  }
+]

@@ -19,7 +19,7 @@
         <!-- DESCRIPTION (LEFT ALIGNED, NOT CENTERED) -->
         <div class="cert-description">
           <i class="fas fa-certificate"></i>
-<p>Credentials that represent my learning journey and technical progress.</p>
+          <p>Credentials that represent my learning journey and technical progress.</p>
 
         </div>
 

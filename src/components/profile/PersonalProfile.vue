@@ -51,6 +51,12 @@
                  <!-- Services Section -->
       <ServicesSection :services="services" />
 
+            <!-- Experience / Internship Section -->
+    <ExperienceSection :experiences="experiences" />
+
+    <!-- Testimonials / Highlights Section -->
+    <HighlightsSection :highlights="highlights" />
+
 
       <!-- Social Media Section -->
       <SocialSection 
@@ -148,6 +154,9 @@ import LiveDevStats from './LiveDevStats.vue'
 import ServicesSection from './ServicesSection.vue'
 import ProjectDeepDiveModal from '../modals/ProjectDeepDiveModal.vue'
 import Linkwebsite from '../modals/Linkwebsite.vue'
+import ExperienceSection from './ExperienceSection.vue'
+import HighlightsSection from './HighlightsSection.vue'
+
 
 /* ===== JSON DATA IMPORTS ===== */
 import profile from '@/data/profile.json'
@@ -157,28 +166,32 @@ import services from '@/data/services.json'
 import certificates from '@/data/certificates.json'
 import socialLinks from '@/data/socialLinks.json'
 import projectLinks from '@/data/projectLinks.json'
+import experiences from '@/data/experiences.json'
+import highlights from '@/data/highlights.json'
 
 export default {
   name: "PersonalProfile",
 
-  components: {
-    ProfileContent,
-    ProjectsSection,
-    LinksSection,
-    SocialSection,
-    FooterSection,
-    DeansListModal,
-    MobileDeansListModal,
-    QRModal,
-    CertificatesModal,
-    ProjectModal,
-    SocialModal,
-    CareerTimeline,
-    LiveDevStats,
-    ServicesSection,
-    Linkwebsite,
-    ProjectDeepDiveModal
-  },
+components: {
+  ProfileContent,
+  ProjectsSection,
+  LinksSection,
+  SocialSection,
+  FooterSection,
+  DeansListModal,
+  MobileDeansListModal,
+  QRModal,
+  CertificatesModal,
+  ProjectModal,
+  SocialModal,
+  CareerTimeline,
+  LiveDevStats,
+  ServicesSection,
+  ExperienceSection,
+  HighlightsSection,
+  Linkwebsite,
+  ProjectDeepDiveModal
+},
 
   data() {
     return {
@@ -190,6 +203,8 @@ export default {
       certificates,
       socialLinks,
       projectLinks,
+      experiences,
+      highlights,
 
       /* ===== DEANS LIST DATA (Now inline) ===== */
       achievements: {

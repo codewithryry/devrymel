@@ -5,7 +5,7 @@
 
 <template>
   <section class="social-section">
-    <h2 class="section-title">Connect Online</h2>
+    <h2 class="section-title">Let’s Connect</h2>
     <br>
     <div class="social-grid">
       <!-- Available Social Media -->

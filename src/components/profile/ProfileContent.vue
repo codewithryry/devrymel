@@ -170,12 +170,12 @@
           <!-- Brand Statement -->
           <div class="brand-statement">
           <p class="statement-text">
-  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding. I also build workflow automations using n8n to connect apps and automate repetitive tasks. My focus is on turning ideas into real, functional systems people use.
-</p>
+            I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding. I also build workflow automations using n8n to connect apps and automate repetitive tasks. My focus is on turning ideas into real, functional systems people use.
+          </p>
 
-<p class="statement-text">
-  I enjoy learning new technologies, improving my skills each day, and creating digital projects for freelance work, affiliate systems, and real-world applications. I am also open for commission-based projects involving web development and automation. My goal is to build useful, simple, and practical solutions that create real value.
-</p>
+          <p class="statement-text">
+            I enjoy learning new technologies, improving my skills each day, and creating digital projects for freelance work, affiliate systems, and real-world applications. I am also open for commission-based projects involving web development and automation. My goal is to build useful, simple, and practical solutions that create real value.
+          </p>
           </div>
              
           <!-- Contact Information -->
@@ -194,7 +194,7 @@
                 <i class="fas fa-external-link-alt contact-arrow"></i>
               </a>
               <!-- Messenger -->
-              <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="contact-item">
+              <!-- <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="contact-item">
                 <div class="contact-icon">
                   <i class="fab fa-facebook-messenger"></i>
                 </div>
@@ -203,7 +203,7 @@
                   <span class="contact-value">Chat on Facebook</span>
                 </div>
                 <i class="fas fa-external-link-alt contact-arrow"></i>
-              </a>
+              </a> -->
             </div>
           </div>
         </div>

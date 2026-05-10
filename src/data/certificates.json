@@ -1,48 +1,64 @@
 [
-  {
+
+    {
     "id": 1,
+    "title": "INSTROOM.io",
+    "file": "armful-completion-instroom.jpg",
+    "description": "Completed role as Front-End and Back-End Developer for INSTROOM.io in the Marketing Department from February 2, 2026 to April 30, 2026.",
+    "category": "Internship"
+  },
+  {
+    "id": 2,
+    "title": "Internship Completion - 486 Hours",
+    "file": "armful-internship-hours.jpg",
+    "description": "Completed 486 hours of internship in the Marketing Department from February 2, 2026 to April 29, 2026.",
+    "category": "Internship"
+  },
+
+  {
+    "id": 3,
     "title": "FortiGate 7.6 Operator",
     "file": "FortiGate 7.6 Operator.pdf",
     "description": "Fortinet FortiGate firewall operator certification",
     "category": "Cybersecurity"
   },
   {
-    "id": 2,
+    "id": 4,
     "title": "Cybersecurity Associate",
     "file": "Fortinet Certified Associate in Cybersecurity.pdf",
     "description": "Associate level cybersecurity certification",
     "category": "Cybersecurity"
   },
   {
-    "id": 3,
+    "id": 5,
     "title": "Cybersecurity Fundamentals",
     "file": "Fortinet Certified Fundamentals in Cybersecurity.pdf",
     "description": "Fundamental cybersecurity knowledge certification",
     "category": "Cybersecurity"
   },
   {
-    "id": 4,
+    "id": 6,
     "title": "Networking Fundamentals",
     "file": "Fortinet Networking Fundamentals Self-Paced.pdf",
     "description": "Self-paced networking fundamentals course",
     "category": "Networking"
   },
   {
-    "id": 5,
+    "id": 7,
     "title": "Cybersecurity 3.0 Starter",
     "file": "Getting Started In Cybersecurity 3.0.pdf",
     "description": "Cybersecurity beginner course",
     "category": "Cybersecurity"
   },
   {
-    "id": 6,
+    "id": 8,
     "title": "Threat Landscape 3.0",
     "file": "Introduction to the Threat Landscape 3.0.pdf",
     "description": "Threat landscape analysis course",
     "category": "Cybersecurity"
   },
   {
-    "id": 7,
+    "id": 9,
     "title": "Technical Cybersecurity 3.0",
     "file": "Technical Introduction to Cybersecurity 3.0.pdf",
     "description": "Technical cybersecurity fundamentals",
