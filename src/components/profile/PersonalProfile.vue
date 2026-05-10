@@ -67,6 +67,8 @@
       <!-- Advertisement: responsive banner -->
       <AdSlot type="banner" />
 
+            <!-- 4. Tech Notes / Guides -->
+      <TechNotesSection :notes="techNotes" />
 
       <!-- 9. Let's Connect -->
       <SocialSection 
@@ -81,6 +83,8 @@
         :links="projectLinks"
         @close="showLinksModal = false"
       />
+
+      
 
       <!-- 10. Footer CTA -->
       <FooterSection />

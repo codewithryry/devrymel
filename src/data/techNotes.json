@@ -1,30 +1,26 @@
 [
   {
     "id": 1,
-    "category": "Vue",
-    "title": "How I Fixed Mobile UI Overflow in My Portfolio",
-    "description": "A short guide about fixing cards, floating buttons, and responsive spacing issues in Vue.",
-    "readTime": "3 min read"
+    "category": "GitHub",
+    "title": "How to Fix GitHub Push Protection Error",
+    "description": "A quick guide for fixing GitHub push protection when secrets or API keys are detected in your commits.",
+    "readTime": "4 min read",
+    "url": "https://dev.to/codewithryry/how-to-fix-github-push-protection-error-514g"
   },
   {
     "id": 2,
-    "category": "GitHub",
-    "title": "How to Fix GitHub Push Protection Error",
-    "description": "Simple steps for removing exposed keys from commits and safely pushing your project again.",
-    "readTime": "4 min read"
+    "category": "Firebase",
+    "title": "How to Setup Firebase ENV in Vue",
+    "description": "Learn how to move Firebase config values into environment variables for a cleaner Vue project setup.",
+    "readTime": "3 min read",
+    "url": "https://dev.to/codewithryry/how-to-setup-firebase-env-in-vue"
   },
   {
     "id": 3,
-    "category": "Firebase",
-    "title": "How to Move Firebase Config to Environment Variables",
-    "description": "A beginner-friendly guide for keeping Firebase config cleaner in a Vue project.",
-    "readTime": "3 min read"
-  },
-  {
-    "id": 4,
-    "category": "Web Dev",
-    "title": "How to Access Localhost Website from Phone",
-    "description": "Common fixes when your phone cannot access a local Vue dev server on the same Wi-Fi.",
-    "readTime": "4 min read"
+    "category": "Tools",
+    "title": "Best VS Code Extensions for IT Students",
+    "description": "Useful VS Code extensions for students working with HTML, CSS, JavaScript, Vue, Firebase, and GitHub.",
+    "readTime": "4 min read",
+    "url": "https://dev.to/codewithryry/best-vs-code-extensions-for-it-students"
   }
 ]
