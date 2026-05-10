@@ -101,6 +101,61 @@ export default {
 </script>
 
 <style scoped>
+.view-full {
+  color: #ffffff !important;
+  background: var(--accent, #6366f1) !important;
+  border-color: var(--accent, #6366f1) !important;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--accent, #6366f1) 28%, transparent);
+}
+
+.view-full i,
+.view-full svg,
+.view-full span {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.view-full:hover {
+  color: #ffffff !important;
+  background: var(--accent-hover, var(--accent, #6366f1)) !important;
+  border-color: var(--accent-hover, var(--accent, #6366f1)) !important;
+}
+
+/* Theme-specific */
+:global(html[data-theme="light"]) .view-full {
+  background: #6366f1 !important;
+  border-color: #6366f1 !important;
+  color: #ffffff !important;
+}
+
+:global(html[data-theme="midnight"]) .view-full {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+:global(html[data-theme="forest"]) .view-full {
+  background: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+:global(html[data-theme="forest"]) .view-full:hover {
+  background: #059669 !important;
+  border-color: #059669 !important;
+}
+
+/* Prevent global link/icon styles */
+.action-btn,
+.action-btn:visited,
+.action-btn:hover,
+.action-btn:active {
+  text-decoration: none;
+}
+
+.action-btn i {
+  color: inherit !important;
+}
 .modal-overlay {
   position: fixed;
   top: 0;

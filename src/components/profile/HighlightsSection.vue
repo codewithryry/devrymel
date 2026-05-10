@@ -1,7 +1,7 @@
 <template>
   <section class="highlights-section">
     <div class="section-header reveal-up">
-      <h2 class="section-title">Why Hire Me</h2>
+      <h2 class="section-title">Why Work With Me</h2>
 
       <div class="swipe-hint">
         <span>Swipe for more..</span>

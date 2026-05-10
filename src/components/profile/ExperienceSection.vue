@@ -10,22 +10,38 @@
         <span>Swipe for more..</span>
       </div>
 
-      <!-- Timeline selector -->
+      <!-- Company selector -->
       <div class="timeline-strip">
         <button
-          v-for="(item, index) in experiences"
-          :key="index"
+          v-for="company in companies"
+          :key="company"
           type="button"
           class="timeline-item"
-          :class="{ active: activeIndex === index }"
-          @click="setActive(index)"
+          :class="{ active: activeCompany === company }"
+          @click="setActiveCompany(company)"
         >
           <span class="timeline-dot"></span>
 
           <span class="timeline-info">
-            <strong>{{ item.company }}</strong>
-            <!-- <small>{{ item.date }}</small> -->
+            <strong>{{ company }}</strong>
           </span>
+        </button>
+      </div>
+
+      <!-- Role selector under selected company -->
+      <div
+        v-if="companyExperiences.length > 1"
+        class="company-role-tabs"
+      >
+        <button
+          v-for="(item, index) in companyExperiences"
+          :key="`${item.role}-${index}`"
+          type="button"
+          class="role-tab"
+          :class="{ active: activeRoleIndex === index }"
+          @click="setActiveRole(index)"
+        >
+          {{ item.role }}
         </button>
       </div>
 
@@ -38,7 +54,7 @@
 
           <div class="experience-heading">
             <span class="experience-count">
-              {{ activeIndex + 1 }} / {{ experiences.length }}
+              {{ activeRoleIndex + 1 }} / {{ companyExperiences.length }}
             </span>
             <h3>{{ activeExperience.role }}</h3>
             <p>{{ activeExperience.company }}</p>
@@ -64,13 +80,21 @@
 
         <!-- Mobile only show more -->
         <button
-          v-if="isMobile && activeExperience.tasks && activeExperience.tasks.length > mobileTaskLimit"
+          v-if="
+            isMobile &&
+            activeExperience.tasks &&
+            activeExperience.tasks.length > mobileTaskLimit
+          "
           type="button"
           class="mobile-show-more-btn"
           @click="showAllMobileTasks = !showAllMobileTasks"
         >
           <span>
-            {{ showAllMobileTasks ? 'Show less' : `Show ${activeExperience.tasks.length - mobileTaskLimit} more` }}
+            {{
+              showAllMobileTasks
+                ? "Show less"
+                : `Show ${activeExperience.tasks.length - mobileTaskLimit} more`
+            }}
           </span>
           <i
             class="fas"
@@ -95,7 +119,8 @@ export default {
 
   data() {
     return {
-      activeIndex: 0,
+      activeCompany: "",
+      activeRoleIndex: 0,
       isMobile: false,
       showAllMobileTasks: false,
       mobileTaskLimit: 3
@@ -103,8 +128,22 @@ export default {
   },
 
   computed: {
+    companies() {
+      return [...new Set(this.experiences.map((item) => item.company))]
+    },
+
+    companyExperiences() {
+      return this.experiences.filter(
+        (item) => item.company === this.activeCompany
+      )
+    },
+
     activeExperience() {
-      return this.experiences[this.activeIndex] || {}
+      return (
+        this.companyExperiences[this.activeRoleIndex] ||
+        this.experiences[0] ||
+        {}
+      )
     },
 
     displayedTasks() {
@@ -122,9 +161,26 @@ export default {
     }
   },
 
+  watch: {
+    experiences: {
+      immediate: true,
+      handler(newExperiences) {
+        if (newExperiences.length && !this.activeCompany) {
+          this.activeCompany = this.companies[0] || ""
+        }
+      }
+    }
+  },
+
   methods: {
-    setActive(index) {
-      this.activeIndex = index
+    setActiveCompany(company) {
+      this.activeCompany = company
+      this.activeRoleIndex = 0
+      this.showAllMobileTasks = false
+    },
+
+    setActiveRole(index) {
+      this.activeRoleIndex = index
       this.showAllMobileTasks = false
     },
 
@@ -134,6 +190,7 @@ export default {
   },
 
   mounted() {
+    this.activeCompany = this.companies[0] || ""
     this.checkIfMobile()
     window.addEventListener("resize", this.checkIfMobile)
   },
@@ -195,7 +252,7 @@ export default {
   }
 }
 
-/* Timeline selector */
+/* Company selector */
 .timeline-strip {
   display: flex;
   gap: 0.75rem;
@@ -265,6 +322,45 @@ export default {
   color: #718096;
   font-size: 0.74rem;
   font-weight: 700;
+}
+
+/* Role tabs */
+.company-role-tabs {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.5rem 1rem;
+  margin-bottom: 0.2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.company-role-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.role-tab {
+  flex: 0 0 auto;
+  border: 1px solid rgba(102, 126, 234, 0.18);
+  border-radius: 999px;
+  padding: 0.55rem 0.85rem;
+  background: #ffffff;
+  color: #4a5568;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.22s ease;
+}
+
+.role-tab:hover,
+.role-tab.active {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.08);
+  border-color: rgba(102, 126, 234, 0.45);
+  box-shadow: 0 8px 18px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
 }
 
 /* Main active card */
@@ -412,6 +508,10 @@ export default {
   .timeline-strip {
     padding: 0.75rem 0 1rem;
   }
+
+  .company-role-tabs {
+    padding: 0.25rem 0 1rem;
+  }
 }
 
 /* Mobile */
@@ -435,7 +535,7 @@ export default {
 
   .timeline-strip {
     gap: 0.55rem;
-    padding: 0.75rem 0.5rem 1rem;
+    padding: 0.75rem 0.5rem 0.8rem;
   }
 
   .timeline-item {
@@ -450,6 +550,16 @@ export default {
 
   .timeline-info small {
     font-size: 0.68rem;
+  }
+
+  .company-role-tabs {
+    gap: 0.5rem;
+    padding: 0.1rem 0.5rem 0.85rem;
+  }
+
+  .role-tab {
+    padding: 0.48rem 0.75rem;
+    font-size: 0.72rem;
   }
 
   .experience-feature-card {
@@ -555,7 +665,8 @@ export default {
 
 /* Dark Mode */
 html[data-theme="dark"] .experience-feature-card,
-html[data-theme="dark"] .timeline-item {
+html[data-theme="dark"] .timeline-item,
+html[data-theme="dark"] .role-tab {
   background: #111111;
   border-color: #242424;
   box-shadow: none;
@@ -596,5 +707,12 @@ html[data-theme="dark"] .mobile-show-more-btn {
 
 html[data-theme="dark"] .timeline-item.active {
   border-color: rgba(142, 162, 255, 0.55);
+}
+
+html[data-theme="dark"] .role-tab.active,
+html[data-theme="dark"] .role-tab:hover {
+  background: rgba(142, 162, 255, 0.12);
+  border-color: rgba(142, 162, 255, 0.55);
+  color: #8ea2ff;
 }
 </style>

@@ -203,6 +203,11 @@
               </a>
             </div>
           </div>
+
+          <!-- Desktop Only Ad Slot -->
+        <div class="desktop-contact-ad">
+          <AdSlot type="wide-box" />
+        </div>
         </div>
       </div>
     </section>
@@ -210,6 +215,8 @@
 </template>
 
 <script>
+import AdSlot from "@/components/AdSlot.vue";
+
 const PROFILE_TRANSLATIONS = {
   en: {
     contactMe: "Contact me",
@@ -321,6 +328,10 @@ const PROFILE_TRANSLATIONS = {
 export default {
   name: "ProfileContent",
 
+  components: {
+    AdSlot
+  },
+
   props: {
     profile: {
       type: Object,
@@ -400,6 +411,89 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* DESKTOP GET IN TOUCH AD - FULL EMPTY SPACE BOX */
+@media (min-width: 901px) {
+  .brand-narrative {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 600px;
+  }
+
+  .brand-contact {
+    margin-top: 1rem;
+  }
+
+  .desktop-contact-ad {
+    flex: 1;
+    width: 100%;
+    margin-top: 32px !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    overflow: hidden !important;
+  }
+
+  .desktop-contact-ad :deep(.ad-slot) {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    margin: 0 !important;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .desktop-contact-ad :deep(.ad-label-wrapper) {
+    margin-bottom: 10px;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  .desktop-contact-ad :deep(.ad-box) {
+    flex: 1;
+    width: 100%;
+    min-height: 230px !important;
+    border-radius: 18px;
+    border: 1.5px dashed rgba(148, 163, 184, 0.32);
+    background: rgba(248, 250, 252, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .desktop-contact-ad :deep(.ad-box-loaded) {
+    border-color: rgba(148, 163, 184, 0.32) !important;
+    background: rgba(248, 250, 252, 0.72) !important;
+  }
+
+  .desktop-contact-ad :deep(.ad-frame-container) {
+    width: 100%;
+    min-height: 60px !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .desktop-contact-ad :deep(.ad-frame) {
+    width: 468px !important;
+    height: 60px !important;
+    max-width: 92%;
+    display: block;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .desktop-contact-ad {
+    display: none !important;
+  }
+}
+</style>
+
 
 <style scoped>
 .mobile-optimization-notice {
