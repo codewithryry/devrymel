@@ -1,6 +1,11 @@
 <template>
   <main class="admin-page">
     <section class="admin-shell">
+      <router-link to="/" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Portfolio
+      </router-link>
+
       <div class="admin-header">
         <div>
           <span class="eyebrow">Private Admin Panel</span>
@@ -13,7 +18,6 @@
         </button>
       </div>
 
-      <!-- Unauthorized screen -->
       <div v-if="blockedAccess" class="blocked-box">
         <div class="blocked-icon">
           <i class="fas fa-lock"></i>
@@ -27,7 +31,6 @@
         </button>
       </div>
 
-      <!-- Login screen -->
       <div v-else-if="!user" class="login-box">
         <h2>Admin Login</h2>
         <p>Sign in with your admin Google account to view Firestore data.</p>
@@ -39,12 +42,9 @@
         <p v-if="errorMessage" class="error-text">{{ errorMessage }}</p>
       </div>
 
-      <!-- Admin content -->
       <div v-else class="admin-layout">
-        <!-- Desktop sidebar only -->
         <aside class="admin-sidebar">
           <div class="sidebar-card">
-
             <nav class="sidebar-nav">
               <button
                 v-for="tab in tabs"
@@ -93,7 +93,6 @@
         </aside>
 
         <section class="admin-content">
-          <!-- Mobile tabs only -->
           <div class="tabs-wrap">
             <button
               v-for="tab in tabs"
@@ -131,7 +130,6 @@
             </div>
           </div>
 
-          <!-- Dashboard Graphs -->
           <div class="graphs-grid">
             <section class="graph-card">
               <div class="graph-head">
@@ -294,7 +292,6 @@
             No {{ activeTabLabel }} found.
           </div>
 
-          <!-- Visitors tab -->
           <div v-else-if="activeTab === 'visitors'" class="data-list">
             <article
               v-for="visitor in currentVisibleItems"
@@ -365,7 +362,6 @@
             </article>
           </div>
 
-          <!-- Feedback tab -->
           <div v-else-if="activeTab === 'feedback'" class="data-list">
             <article
               v-for="item in currentVisibleItems"
@@ -406,7 +402,6 @@
             </article>
           </div>
 
-          <!-- Analytics tab -->
           <div v-else class="data-list">
             <article
               v-for="item in currentVisibleItems"
@@ -522,11 +517,6 @@ export default {
   },
 
   computed: {
-    adminInitial() {
-      const email = this.user?.email || "A";
-      return email.charAt(0).toUpperCase();
-    },
-
     tabs() {
       return [
         {
@@ -888,6 +878,37 @@ export default {
   backdrop-filter: blur(18px);
 }
 
+.back-link {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: #bbf7d0;
+  text-decoration: none;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(134, 239, 172, 0.18);
+  font-size: 0.82rem;
+  font-weight: 800;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.back-link:hover {
+  transform: translateY(-1px);
+  color: #dcfce7;
+  background: rgba(34, 197, 94, 0.16);
+  border-color: rgba(134, 239, 172, 0.28);
+}
+
+.back-link i {
+  font-size: 0.78rem;
+}
+
 .admin-header {
   display: flex;
   align-items: flex-start;
@@ -1010,43 +1031,6 @@ export default {
     radial-gradient(circle at top left, rgba(34, 197, 94, 0.12), transparent 42%),
     rgba(255, 255, 255, 0.055);
   border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.sidebar-profile {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 12px;
-  margin-bottom: 14px;
-  border-radius: 17px;
-  background: rgba(15, 23, 42, 0.58);
-}
-
-.profile-avatar {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 15px;
-  color: #052e16;
-  background: #86efac;
-  font-weight: 900;
-}
-
-.sidebar-profile strong {
-  display: block;
-  font-size: 0.86rem;
-}
-
-.sidebar-profile small {
-  display: block;
-  max-width: 170px;
-  margin-top: 3px;
-  color: rgba(248, 250, 252, 0.54);
-  font-size: 0.68rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .sidebar-nav {
@@ -1209,10 +1193,6 @@ export default {
 .bar-list {
   display: grid;
   gap: 12px;
-}
-
-.bar-item {
-  min-width: 0;
 }
 
 .bar-meta {
@@ -1497,10 +1477,6 @@ export default {
     grid-template-columns: 240px minmax(0, 1fr);
   }
 
-  .sidebar-profile small {
-    max-width: 135px;
-  }
-
   .stats-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1589,6 +1565,12 @@ export default {
     min-height: calc(100vh - 24px);
     padding: 16px;
     border-radius: 20px;
+  }
+
+  .back-link {
+    margin-bottom: 14px;
+    padding: 9px 12px;
+    font-size: 0.76rem;
   }
 
   .admin-header {
