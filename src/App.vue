@@ -2643,68 +2643,24 @@ html[data-theme="purple"] .stat-card {
   }
 }
 
-/* ===== MOBILE STATS PANEL FIX ===== */
+.stats-top-note {
+  display: block;
+  margin: 0 0 7px;
+  max-width: 100%;
+  color: #64748b;
+  font-size: 9.3px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 640px) {
-  .stats-panel.panel-mobile {
-    left: 14px !important;
-    right: 14px !important;
-    bottom: 0 !important;
-    width: auto !important;
-    max-width: calc(100vw - 28px) !important;
-    max-height: 78dvh !important;
-    border-radius: 22px 22px 0 0 !important;
-  }
-
-  .stats-panel.panel-mobile .panel-head {
-    padding: 18px 20px;
-  }
-
-  .stats-panel.panel-mobile .stats-body {
-    padding: 14px 14px 18px;
-    gap: 10px;
-    max-height: calc(78dvh - 65px);
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
   .stats-top-note {
-    margin: 0 4px 6px;
-    font-size: 0.72rem;
-    line-height: 1.45;
-    color: var(--text-secondary);
-  }
-
-  .stats-panel .stat-card {
-    min-height: 64px;
-    padding: 10px 12px;
-    border-radius: 16px;
-  }
-
-  .stats-panel .stat-left {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .stats-panel .stat-info {
-    min-width: 0;
-  }
-
-  .stats-panel .stat-value {
-    max-width: 140px;
-    font-size: 0.9rem;
-    white-space: normal;
-    line-height: 1.2;
-    overflow-wrap: break-word;
-  }
-
-  .stats-panel .stat-label {
-    font-size: 0.72rem;
-  }
-
-  .stats-panel .stat-badge {
-    flex-shrink: 0;
-    font-size: 0.62rem;
-    padding: 5px 9px;
+    margin-bottom: 6px;
+    font-size: 8.8px;
   }
 }
 </style>
