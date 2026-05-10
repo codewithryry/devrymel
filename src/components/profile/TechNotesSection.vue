@@ -775,4 +775,147 @@ html[data-theme="dark"] .note-hint {
 html[data-theme="dark"] .swipe-hint {
   color: #cbd5e0;
 }
+
+/* Dark Mode */
+html[data-theme="dark"] .section-title,
+html[data-theme="dark"] .note-title {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .note-description {
+  color: #cbd5e0;
+}
+
+html[data-theme="dark"] .note-card,
+html[data-theme="dark"] .mobile-note-card {
+  background: rgba(17, 17, 17, 0.94);
+  border-color: #242424;
+}
+
+html[data-theme="dark"] .mobile-note-card {
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .note-read-time,
+html[data-theme="dark"] .swipe-hint {
+  color: #cbd5e0;
+}
+
+/* Midnight Theme */
+html[data-theme="midnight"] .section-title,
+html[data-theme="midnight"] .note-title {
+  color: #e5f0ff;
+}
+
+html[data-theme="midnight"] .note-description {
+  color: #b8c7dc;
+}
+
+html[data-theme="midnight"] .note-card,
+html[data-theme="midnight"] .mobile-note-card {
+  background: rgba(10, 20, 38, 0.96);
+  border-color: rgba(96, 165, 250, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="midnight"] .note-card.active {
+  border-color: rgba(96, 165, 250, 0.42);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.18);
+}
+
+html[data-theme="midnight"] .note-category {
+  background: rgba(96, 165, 250, 0.14);
+  color: #93c5fd;
+}
+
+html[data-theme="midnight"] .note-icon {
+  background: rgba(96, 165, 250, 0.14);
+  color: #93c5fd;
+}
+
+html[data-theme="midnight"] .note-read-time,
+html[data-theme="midnight"] .swipe-hint {
+  color: #9fb3ca;
+}
+
+html[data-theme="midnight"] .note-button,
+html[data-theme="midnight"] .active-button {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.26);
+}
+
+html[data-theme="midnight"] .slider-btn {
+  background: rgba(10, 20, 38, 0.96);
+  border-color: rgba(96, 165, 250, 0.22);
+  color: #93c5fd;
+}
+
+html[data-theme="midnight"] .slider-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+html[data-theme="midnight"] .note-name {
+  color: #b8c7dc;
+}
+
+/* Forest Theme */
+html[data-theme="forest"] .section-title,
+html[data-theme="forest"] .note-title {
+  color: #ecfdf5;
+}
+
+html[data-theme="forest"] .note-description {
+  color: #bbf7d0;
+}
+
+html[data-theme="forest"] .note-card,
+html[data-theme="forest"] .mobile-note-card {
+  background: rgba(8, 47, 32, 0.96);
+  border-color: rgba(34, 197, 94, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+html[data-theme="forest"] .note-card.active {
+  border-color: rgba(34, 197, 94, 0.42);
+  box-shadow: 0 20px 40px rgba(34, 197, 94, 0.16);
+}
+
+html[data-theme="forest"] .note-category {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+}
+
+html[data-theme="forest"] .note-icon {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+}
+
+html[data-theme="forest"] .note-read-time,
+html[data-theme="forest"] .swipe-hint {
+  color: #a7f3d0;
+}
+
+html[data-theme="forest"] .note-button,
+html[data-theme="forest"] .active-button {
+  background: linear-gradient(135deg, #16a34a, #166534);
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.26);
+}
+
+html[data-theme="forest"] .slider-btn {
+  background: rgba(8, 47, 32, 0.96);
+  border-color: rgba(34, 197, 94, 0.22);
+  color: #86efac;
+}
+
+html[data-theme="forest"] .slider-btn:hover {
+  background: #16a34a;
+  color: #ffffff;
+  border-color: #16a34a;
+}
+
+html[data-theme="forest"] .note-name {
+  color: #bbf7d0;
+}
 </style>

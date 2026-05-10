@@ -106,124 +106,124 @@
           </transition>
         </div>
 
-<!-- Stats -->
-<div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 4 }">
-  <button class="fab-action" @click.stop="togglePanel('stats')" :title="t.stats">
-    <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M18 20V10M12 20V4M6 20v-6" />
-    </svg>
-    <span class="fab-tooltip">{{ t.stats }}</span>
-  </button>
+        <!-- Stats -->
+        <div v-if="fabOpen" key="stats" class="fab-group" :style="{ '--delay': 4 }">
+          <button class="fab-action" @click.stop="togglePanel('stats')" :title="t.stats">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 20V10M12 20V4M6 20v-6" />
+            </svg>
+            <span class="fab-tooltip">{{ t.stats }}</span>
+          </button>
 
-  <transition name="panel-appear">
-    <div v-if="showStatsPanel" class="panel stats-panel" :class="{ 'panel-mobile': isMobile }">
-      <div class="panel-head">
-        <span>{{ t.liveStats }}</span>
+          <transition name="panel-appear">
+            <div v-if="showStatsPanel" class="panel stats-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>{{ t.liveStats }}</span>
 
-        <button v-if="isMobile" class="panel-close" @click="showStatsPanel = false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+                <button v-if="isMobile" class="panel-close" @click="showStatsPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-      <div class="panel-body stats-body">
-        <!-- Estimated Note -->
-        <span class="stats-top-note">
-          Private repos and projects are not included.
-        </span>
+              <div class="panel-body stats-body">
+                <!-- Estimated Note -->
+                <span class="stats-top-note">
+                  Private repos and projects are not included.
+                </span>
 
-        <!-- Views -->
-        <div class="stat-card stat-active">
-          <div class="stat-left">
-            <div class="stat-icon-wrap blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
+                <!-- Views -->
+                <div class="stat-card stat-active">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap blue">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value">
+                        {{ statsLoading ? "..." : visitorCount.toLocaleString() }}
+                      </span>
+                      <span class="stat-label">{{ t.views }}</span>
+                    </div>
+                  </div>
+
+                  <span class="stat-badge live">
+                    {{ statsLoading ? "Loading" : "Live" }}
+                  </span>
+                </div>
+
+                <!-- Projects -->
+                <div class="stat-card stat-active">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap purple">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                        <polyline points="2 17 12 22 22 17" />
+                        <polyline points="2 12 12 17 22 12" />
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value">
+                        {{ statsLoading ? "..." : projectsCount }}
+                      </span>
+                      <span class="stat-label">{{ t.projects }}</span>
+                    </div>
+                  </div>
+
+                  <span class="stat-badge live">
+                    {{ statsLoading ? "Loading" : "Live" }}
+                  </span>
+                </div>
+
+                <!-- WakaTime Hours -->
+                <div class="stat-card stat-active">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap green">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value">
+                        {{ statsLoading ? "Loading..." : codingHoursText }}
+                      </span>
+                      <span class="stat-label">{{ t.hrsCoding }}</span>
+                    </div>
+                  </div>
+
+                  <span class="stat-badge live">WakaTime</span>
+                </div>
+
+                <!-- GitHub Repositories -->
+                <div class="stat-card stat-active">
+                  <div class="stat-left">
+                    <div class="stat-icon-wrap dark">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                      </svg>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value">
+                        {{ statsLoading ? "..." : reposCount }}
+                      </span>
+                      <span class="stat-label">{{ t.repos }}</span>
+                    </div>
+                  </div>
+
+                  <span class="stat-badge live">GitHub</span>
+                </div>
+              </div>
             </div>
-
-            <div class="stat-info">
-              <span class="stat-value">
-                {{ statsLoading ? "..." : visitorCount.toLocaleString() }}
-              </span>
-              <span class="stat-label">{{ t.views }}</span>
-            </div>
-          </div>
-
-          <span class="stat-badge live">
-            {{ statsLoading ? "Loading" : "Live" }}
-          </span>
+          </transition>
         </div>
-
-        <!-- Projects -->
-        <div class="stat-card stat-active">
-          <div class="stat-left">
-            <div class="stat-icon-wrap purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-            </div>
-
-            <div class="stat-info">
-              <span class="stat-value">
-                {{ statsLoading ? "..." : projectsCount }}
-              </span>
-              <span class="stat-label">{{ t.projects }}</span>
-            </div>
-          </div>
-
-          <span class="stat-badge live">
-            {{ statsLoading ? "Loading" : "Live" }}
-          </span>
-        </div>
-
-        <!-- WakaTime Hours -->
-        <div class="stat-card stat-active">
-          <div class="stat-left">
-            <div class="stat-icon-wrap green">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
-            </div>
-
-            <div class="stat-info">
-              <span class="stat-value">
-                {{ statsLoading ? "Loading..." : codingHoursText }}
-              </span>
-              <span class="stat-label">{{ t.hrsCoding }}</span>
-            </div>
-          </div>
-
-          <span class="stat-badge live">WakaTime</span>
-        </div>
-
-        <!-- GitHub Repositories -->
-        <div class="stat-card stat-active">
-          <div class="stat-left">
-            <div class="stat-icon-wrap dark">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-              </svg>
-            </div>
-
-            <div class="stat-info">
-              <span class="stat-value">
-                {{ statsLoading ? "..." : reposCount }}
-              </span>
-              <span class="stat-label">{{ t.repos }}</span>
-            </div>
-          </div>
-
-          <span class="stat-badge live">GitHub</span>
-        </div>
-      </div>
-    </div>
-  </transition>
-</div>
 
         <!-- Feedback -->
         <button
@@ -591,23 +591,23 @@ export default {
       toastTimer: null,
 
       currentTheme: "light",
-      themes: [
-        {
-          id: "light",
-          name: "Light",
-          preview: "linear-gradient(135deg, #f8fafc, #e2e8f0)"
-        },
-        {
-          id: "midnight",
-          name: "Midnight",
-          preview: "linear-gradient(135deg, #0f172a, #1e3a5f)"
-        },
-        {
-          id: "forest",
-          name: "Forest",
-          preview: "linear-gradient(135deg, #064e3b, #065f46)"
-        }
-      ],
+        themes: [
+          {
+            id: "light",
+            name: "Default",
+            preview: "linear-gradient(135deg, #f8fafc, #e2e8f0)"
+          },
+          {
+            id: "midnight",
+            name: "Executive",
+            preview: "linear-gradient(135deg, #0f172a, #1e3a5f)"
+          },
+          {
+            id: "forest",
+            name: "Professional",
+            preview: "linear-gradient(135deg, #064e3b, #065f46)"
+          }
+        ],
 
       languages: [
         { id: "en", name: "English", flag: "EN" },
