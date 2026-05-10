@@ -35,9 +35,6 @@
       <!-- 3. Highlights / Quick Stats -->
       <LiveDevStats :stats="devStats" />
 
-      <!-- Advertisement: 300x250 box ad -->
-      <AdSlot type="box" />
-
       <!-- 4. Career & Education Timeline -->
       <CareerTimeline :timeline="timeline" />
 
