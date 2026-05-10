@@ -18,7 +18,7 @@ export async function getGitHubReposCount() {
 
 export async function getWakaTimeStats() {
   try {
-    const response = await fetch("http://localhost:5000/api/wakatime/stats");
+    const response = await fetch("/api/wakatime/stats");
 
     if (!response.ok) {
       throw new Error(`WakaTime proxy error: ${response.status}`);
@@ -38,4 +38,17 @@ export async function getWakaTimeStats() {
       totalSeconds: 0
     };
   }
+}
+
+export async function getLiveDevStats() {
+  const [reposCount, wakaTimeStats] = await Promise.all([
+    getGitHubReposCount(),
+    getWakaTimeStats()
+  ]);
+
+  return {
+    reposCount,
+    codingHours: wakaTimeStats.hoursText,
+    codingSeconds: wakaTimeStats.totalSeconds
+  };
 }
