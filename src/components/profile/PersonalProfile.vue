@@ -127,6 +127,7 @@
       :project="selectedProject"
       @close="closeDeepDive"
     />
+    
   </div>
 </template>
 
@@ -549,7 +550,38 @@ export default {
 
 
 
+<style>
+/* DARK MODE - GRADIENT KILLERS (non-scoped para ma-override lahat) */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background: #000000 !important;
+  background-image: none !important;
+}
 
+html[data-theme="dark"] .header,
+html[data-theme="dark"] .header-footer,
+html[data-theme="dark"] .header::before,
+html[data-theme="dark"] .header-footer::before,
+html[data-theme="dark"] .brand-visual,
+html[data-theme="dark"] .profile-container,
+html[data-theme="dark"] .profile-brand-card,
+html[data-theme="dark"] .mobile-profile-content,
+html[data-theme="dark"] .cta-section,
+html[data-theme="dark"] .cta-section::before,
+html[data-theme="dark"] .social-card.more-card,
+html[data-theme="dark"] .footer-contact-btn::before,
+html[data-theme="dark"] .profile-glow,
+html[data-theme="dark"] .overlay-gradient,
+html[data-theme="dark"] .image-overlay {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-image: none !important;
+}
+
+html[data-theme="dark"] .brand-visual {
+  background: #111111 !important;
+}
+</style>
 
 
 
@@ -2360,7 +2392,6 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(8px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -5146,7 +5177,6 @@ export default {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
 }
 
 .modal {
@@ -5565,7 +5595,6 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.55); /* darker + modern */
-  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;

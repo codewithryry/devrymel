@@ -6,7 +6,7 @@
 <template>
   <section class="dev-stats-section">
     <div class="section-header">
-    <h3 class="section-title">Stats</h3>
+      <h3 class="section-title">Stats</h3>
     </div>
 
     <div class="stats-container">
@@ -16,7 +16,7 @@
             <!-- Stat Indicator -->
             <div class="stat-indicator">
               <span class="current-index">{{ index + 1 }}</span>
-              <span class="total-stats">/{{ stats.length }}</span>
+              <span class="total-stats">/{{ localStats.length }}</span>
             </div>
             
             <!-- Main Content -->
@@ -51,7 +51,7 @@
             <div class="stat-navigation">
               <div class="nav-dots">
                 <button
-                  v-for="(stat, i) in stats"
+                  v-for="(stat, i) in localStats"
                   :key="i"
                   class="nav-dot"
                   :class="{ active: i === index }"
@@ -75,85 +75,114 @@
 </template>
 
 <script>
+import { getViews } from "@/services/analyticsService";
+
 export default {
   name: "DevStats",
+
   props: {
     stats: {
       type: Array,
       required: true,
     }
   },
+
   data() {
     return {
       index: 0,
       touchStartY: 0,
-      scrollThrottle: false
+      scrollThrottle: false,
+      localStats: this.stats ? [...this.stats] : []
     }
   },
+
   computed: {
     currentStat() {
-      return this.stats[this.index]
+      return this.localStats[this.index] || {}
     },
     isMobile() {
       return window.innerWidth <= 768
     }
   },
-  mounted() {
+
+  async mounted() {
+    // Dynamically add views stat
+    const views = await getViews()
+    
+    this.localStats.push({
+      id: "views",
+      icon: "fas fa-eye",
+      value: views.toLocaleString(),
+      label: "Portfolio Views • Live Visitor Count",
+      trend: "Live from Firestore",
+      trendIcon: "fas fa-chart-line",
+      trendClass: "up",
+      chartHeight: "70%",
+      color: "#3b82f6"
+    })
+
     this.setupEventListeners()
   },
+
   beforeUnmount() {
     this.removeEventListeners()
   },
+
   methods: {
     nextStat() {
-      this.index = (this.index + 1) % this.stats.length
+      this.index = (this.index + 1) % this.localStats.length
     },
+
     prevStat() {
-      this.index = (this.index - 1 + this.stats.length) % this.stats.length
+      this.index = (this.index - 1 + this.localStats.length) % this.localStats.length
     },
+
     handleWheel(e) {
       if (this.scrollThrottle) return
-      
+
       this.scrollThrottle = true
       setTimeout(() => {
         this.scrollThrottle = false
       }, 300)
-      
+
       if (e.deltaY > 0) this.nextStat()
       else this.prevStat()
     },
+
     handleTouchStart(e) {
       this.touchStartY = e.touches[0].clientY
     },
+
     handleTouchEnd(e) {
       const endY = e.changedTouches[0].clientY
       const diff = this.touchStartY - endY
-      
+
       if (Math.abs(diff) > 30) {
         if (diff > 0) this.nextStat()
         else this.prevStat()
       }
     },
+
     setupEventListeners() {
-      const card = this.$el.querySelector('.stat-card')
+      const card = this.$el.querySelector(".stat-card")
       if (card) {
-        card.addEventListener('wheel', this.handleWheel)
-        card.addEventListener('touchstart', this.handleTouchStart)
-        card.addEventListener('touchend', this.handleTouchEnd)
+        card.addEventListener("wheel", this.handleWheel)
+        card.addEventListener("touchstart", this.handleTouchStart)
+        card.addEventListener("touchend", this.handleTouchEnd)
       }
     },
+
     removeEventListeners() {
-      const card = this.$el.querySelector('.stat-card')
+      const card = this.$el.querySelector(".stat-card")
       if (card) {
-        card.removeEventListener('wheel', this.handleWheel)
-        card.removeEventListener('touchstart', this.handleTouchStart)
-        card.removeEventListener('touchend', this.handleTouchEnd)
+        card.removeEventListener("wheel", this.handleWheel)
+        card.removeEventListener("touchstart", this.handleTouchStart)
+        card.removeEventListener("touchend", this.handleTouchEnd)
       }
     }
   }
 }
 </script>
-
 <style scoped>
 .dev-stats-section {
   margin: 3rem 0;

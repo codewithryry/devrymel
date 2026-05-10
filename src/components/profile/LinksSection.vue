@@ -18,6 +18,24 @@
       
       <div class="mobile-links-scroll">
 
+                <!-- Email Card (mobile only) -->
+        <a href="mailto:your.email@example.com" class="mobile-link-card">
+          <div class="mobile-icon email">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <span class="mobile-label">Email</span>
+          <small class="mobile-desc">Contact me</small>
+        </a>
+
+                        <!-- Resume Card (mobile only) -->
+        <a href="/Reymel Mislang Resume  (8.5 x 13 in).pdf" download class="mobile-link-card">
+          <div class="mobile-icon resume">
+            <i class="fas fa-file-download"></i>
+          </div>
+          <span class="mobile-label">Resume</span>
+          <small class="mobile-desc">Download PDF</small>
+        </a>
+        
         <!-- Coffee Card -->
         <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card">
           <div class="mobile-icon coffee">
@@ -71,22 +89,6 @@
           <small class="mobile-desc">View my work</small>
         </a>
         
-        <!-- Resume Card (mobile only) -->
-        <a href="/Reymel Mislang Resume  (8.5 x 13 in).pdf" download class="mobile-link-card">
-          <div class="mobile-icon resume">
-            <i class="fas fa-file-download"></i>
-          </div>
-          <span class="mobile-label">Resume</span>
-          <small class="mobile-desc">Download PDF</small>
-        </a>
-        <!-- Email Card (mobile only) -->
-        <a href="mailto:your.email@example.com" class="mobile-link-card">
-          <div class="mobile-icon email">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <span class="mobile-label">Email</span>
-          <small class="mobile-desc">Contact me</small>
-        </a>
         <a href="https://docs.google.com/document/d/1QzKrdfaPNfefuENiuya64RzHRCDPMTtvkVF1y8vzuA4/edit?usp=sharing" 
             target="_blank" 
             class="mobile-link-card">          

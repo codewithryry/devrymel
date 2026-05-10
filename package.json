@@ -8,9 +8,14 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "axios": "^1.13.6",
     "baseline-browser-mapping": "^2.9.18",
     "caniuse-lite": "^1.0.30001766",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
     "firebase": "^12.8.0",
+    "node-fetch": "^3.3.2",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
@@ -19,7 +24,8 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "file-loader": "^6.2.0"
+    "file-loader": "^6.2.0",
+    "nodemon": "^3.1.14"
   },
   "browserslist": [
     "> 1%",

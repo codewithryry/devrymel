@@ -15,15 +15,17 @@
             <span class="name-last">Mislang</span>
           </h2>
 
-          <div class="mobile-title">
-  <i class="fas fa-terminal"></i>
-  <span style="color:black;"></span>
-</div>
+          <div style="display:inline-flex; align-items:center; gap:6px; padding:5px 10px; font-size:12px; border-radius:999px; background:linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.12));">
+            <i class="fas fa-envelope" style="font-size:12px;"></i>
+            <a href="mailto:reymelrey.mislang@gmail.com" style="color:#333; text-decoration:none; font-size:12px; font-weight:500;">
+              Contact me
+            </a>
+          </div>
 
         <!-- CENTERED BADGES SECTION -->
         <div class="mobile-badges-section">
           <div class="badge-instructions">
-           <span>Tap to view details</span>
+           <span >Tap an icon to view details</span>
 
           </div>
           <div class="center-badges">
@@ -53,28 +55,24 @@
       <!-- About Section (without title) -->
       <div class="mobile-card about-card">
         <div class="card-content">
-<p class="statement-text">
-  I build modern web applications and progressive web apps (PWA) using AI tools, modern technologies, and vibe coding. I also build workflow automations using n8n to connect apps and automate repetitive tasks. My focus is on turning ideas into real, functional systems people use.
-</p>
-
-<p class="statement-text">
-  I enjoy learning new technologies, improving my skills each day, and creating digital projects for freelance work, affiliate systems, and real-world applications. I am also open for commission-based projects involving web development and automation. My goal is to build useful, simple, and practical solutions that create real value.
-</p>
-          <div class="mobile-contact-section">
-            <div class="mobile-contact-grid"> 
+          <p class="statement-text">
+            I specialize in developing modern web applications and Progressive Web Apps (PWAs) using current technologies and AI-assisted workflows. I also design and implement workflow automations with n8n to streamline processes, integrate systems, and reduce repetitive tasks. My work focuses on transforming ideas into functional, scalable solutions that deliver real-world value.          </p>
+          <p class="statement-text">
+            I continuously expand my technical skill set and apply best practices in development to build efficient and user-focused systems. My experience includes freelance projects, affiliate platforms, and practical business applications. I am open to commission-based opportunities in web development and automation, with a strong focus on delivering reliable, simple, and impactful solutions.          </p>
+          <!-- <div class="mobile-contact-section"> -->
+            <!-- <div class="mobile-contact-grid">  -->
               <!-- Improved Mobile Contact Section -->
-              <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
+              <!-- <a href="mailto:reymelrey.mislang@gmail.com" target="_blank" class="mobile-contact-item email">
                 <div class="contact-left">
                   <div class="contact-icon">
                     <i class="fas fa-envelope"></i>
                   </div>
                   <div class="contact-text">
-                    <span class="contact-title">Email Me</span>
+                    <span class="contact-title">Send Me an Email</span>
                     <span class="contact-sub">Let's collaborate</span>
                   </div>
                 </div>
-                <!-- <i class="fas fa-arrow-right contact-arrow"></i> -->
-              </a> 
+              </a>  -->
 
               <!-- <a href="https://www.messenger.com/t/reymelrey.528191/" target="_blank" class="mobile-contact-item messenger">
                 <div class="contact-left">
@@ -88,8 +86,8 @@
                 </div>
                 <i class="fas fa-arrow-right contact-arrow"></i>
               </a> -->
-            </div>
-          </div>
+            <!-- </div> -->
+          <!-- </div> -->
 
         </div>
       </div>
@@ -266,7 +264,59 @@ export default {
 
 <style scoped>
 
+.mobile-contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f4f6fb;
+  padding: 14px 16px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+}
 
+.mobile-contact-item:active {
+  transform: scale(0.98);
+}
+
+.contact-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #e8ecff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-icon i {
+  color: #4c6fff;
+  font-size: 16px;
+}
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.contact-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.contact-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
 
 /* Mobile Optimization Notice Styles */
 .mobile-optimization-notice {
@@ -921,17 +971,20 @@ export default {
   }
   
 .mobile-title {
-  display: flex;                 /* instead of inline-flex */
-  align-items: left;
-  justify-content: left;       /* center content */
-  gap: 0.5rem;
-  padding: 0.5rem 0.9rem;
+  display: inline-flex;          /* 🔥 better than flex for content-based size */
+  align-items: center;           /* vertical align */
+  justify-content: flex-start;   /* proper value */
+  gap: 0.4rem;
+
+  padding: 0.35rem 0.7rem;       /* 🔥 reduce size */
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-  border-radius: 10px;
+  border-radius: 8px;
+
   color: #667eea;
-  font-weight: 700;
-  margin: 0 auto;                /* 🔥 force horizontal centering */
-  width: fit-content;            /* 🔥 content-based width */
+  font-weight: 600;              /* slightly lighter looks cleaner */
+  
+  width: auto;                   /* 🔥 let content define width */
+  margin: 0 auto;
 }
 
 .mobile-title span:empty::before {

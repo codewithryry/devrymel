@@ -68,7 +68,6 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(8px);
   display: flex;
   align-items: flex-end;
   justify-content: center;

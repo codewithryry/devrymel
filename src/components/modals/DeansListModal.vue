@@ -2029,7 +2029,6 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(8px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -4815,7 +4814,6 @@ export default {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
 }
 
 .modal {
@@ -5234,7 +5232,6 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.55); /* darker + modern */
-  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
