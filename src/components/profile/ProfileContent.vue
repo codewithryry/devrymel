@@ -220,7 +220,7 @@ const PROFILE_TRANSLATIONS = {
     certificates: "Certificates",
     projectLinks: "Project Links",
 
-    desktopSubtitle: "Frontend-Focused Web Developer",
+    desktopSubtitle: "Web Developer",
     coreTechnologies: "Core Technologies",
     deanListerAward: "DEAN LISTER AWARD",
     viewAllAwards: "View all",

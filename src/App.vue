@@ -864,7 +864,86 @@ export default {
 
 <style>
 /* add this to your existing style */
+/* ===== MOBILE MODAL / FAB OVERFLOW FIX ===== */
+@media (max-width: 640px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
+  .fab-container {
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 90;
+  }
+
+  .fab-container.is-open {
+    z-index: 120;
+  }
+
+  .fab-actions {
+    max-height: calc(100dvh - 120px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px 2px;
+    scrollbar-width: none;
+  }
+
+  .fab-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fab-backdrop {
+    overflow: hidden;
+  }
+
+  .panel-mobile {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 0 !important;
+    width: auto !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: 72dvh !important;
+    overflow: hidden !important;
+  }
+
+  .panel-mobile .panel-body {
+    max-height: calc(72dvh - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .modal-overlay,
+  .feedback-overlay {
+    z-index: 9999 !important;
+    overflow: hidden;
+  }
+
+  .modal-box,
+  .modal-mobile,
+  .feedback-modal {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: 86dvh !important;
+    overflow: hidden !important;
+  }
+
+  .modal-body,
+  .feedback-body {
+    max-height: 58dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  body:has(.modal-overlay) .fab-container,
+  body:has(.feedback-overlay) .fab-container,
+  body:has(.mobile-modal-overlay) .fab-container {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
 /* ===== LANGUAGE PANEL ===== */
 .language-panel,
 .intro-panel {

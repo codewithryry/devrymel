@@ -32,6 +32,42 @@ export default {
 </script>
 
 <style scoped>
+
+@media (max-width: 768px) {
+  .modal-overlay {
+    z-index: 99999 !important;
+  }
+
+  .modal,
+  .links-modal,
+  .project-links-modal {
+    position: relative;
+    z-index: 100000 !important;
+  }
+
+  .fab-container,
+  .floating-button,
+  .floating-actions,
+  .quick-fab,
+  .fab {
+    z-index: 1000 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body:has(.modal-overlay) .fab-container,
+  body:has(.modal-overlay) .floating-button,
+  body:has(.modal-overlay) .floating-actions,
+  body:has(.modal-overlay) .quick-fab,
+  body:has(.mobile-modal-overlay) .fab-container,
+  body:has(.mobile-modal-overlay) .floating-button,
+  body:has(.mobile-modal-overlay) .floating-actions,
+  body:has(.mobile-modal-overlay) .quick-fab {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
 .modal-overlay {
   position: fixed;
   top: 0;
