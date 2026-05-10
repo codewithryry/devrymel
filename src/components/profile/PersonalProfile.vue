@@ -6,9 +6,11 @@
 <template>
   <div class="profile-container">
     <!-- Header Section -->
+     
+
     <header class="header">
       <div class="header-content">
-        <!-- Header content will be in ProfileContent component -->
+        <!-- Header content will be in ProfileContent component --> 
       </div>
     </header>
 
@@ -35,6 +37,9 @@
       <!-- 3. Highlights / Quick Stats -->
       <LiveDevStats :stats="devStats" />
 
+      <!-- Advertisement: responsive banner -->
+      <AdSlot type="banner" />
+
       <!-- 4. Career & Education Timeline -->
       <CareerTimeline :timeline="timeline" />
 
@@ -46,10 +51,8 @@
 
       <!-- 6. Services -->
       <ServicesSection :services="services" />
-
-      <!-- Advertisement: native ad -->
-      <AdSlot type="native" />
-
+      <!-- Advertisement: responsive banner -->
+      <AdSlot type="banner" />
       <!-- 7. Why Hire Me -->
       <HighlightsSection :highlights="highlights" />
 
@@ -60,8 +63,10 @@
         @openCertificatesListModal="openCertificatesListModal"
       />
 
+
       <!-- Advertisement: responsive banner -->
       <AdSlot type="banner" />
+
 
       <!-- 9. Let's Connect -->
       <SocialSection 
