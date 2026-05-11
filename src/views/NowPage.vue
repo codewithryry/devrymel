@@ -19,9 +19,7 @@
 
       <div class="status-grid">
         <article class="status-card featured">
-          <div class="card-icon">
-            <i class="fas fa-code"></i>
-          </div>
+          
 
           <div>
             <span class="card-label">Current Focus</span>
@@ -34,10 +32,7 @@
         </article>
 
         <article class="status-card">
-          <div class="card-icon green">
-            <i class="fas fa-briefcase"></i>
-          </div>
-
+         
           <div>
             <span class="card-label">Availability</span>
             <h2>Open for work</h2>
@@ -49,9 +44,7 @@
         </article>
 
         <article class="status-card">
-          <div class="card-icon blue">
-            <i class="fas fa-layer-group"></i>
-          </div>
+         
 
           <div>
             <span class="card-label">Learning</span>

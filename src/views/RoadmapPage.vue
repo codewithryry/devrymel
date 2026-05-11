@@ -21,9 +21,6 @@
           :key="column.title"
           class="info-card"
         >
-          <div class="icon-box">
-            <i :class="column.icon"></i>
-          </div>
 
           <h2>{{ column.title }}</h2>
 

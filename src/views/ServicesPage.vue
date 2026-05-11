@@ -18,9 +18,6 @@
 
       <div class="info-grid">
         <article class="info-card" v-for="service in services" :key="service.title">
-          <div class="icon-box">
-            <i :class="service.icon"></i>
-          </div>
 
           <h2>{{ service.title }}</h2>
           <p>{{ service.description }}</p>

@@ -17,10 +17,6 @@
 
       <div class="info-grid">
         <article class="info-card" v-for="item in setup" :key="item.title">
-          <div class="icon-box">
-            <i :class="item.icon"></i>
-          </div>
-
           <h2>{{ item.title }}</h2>
           <p>{{ item.description }}</p>
         </article>

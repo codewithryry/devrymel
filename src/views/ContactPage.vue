@@ -17,9 +17,6 @@
 
       <div class="info-grid">
         <article class="info-card">
-          <div class="icon-box">
-            <i class="fas fa-envelope"></i>
-          </div>
 
           <h2>Email</h2>
           <p>Send project details, timeline, and examples of your target design.</p>
@@ -30,10 +27,6 @@
         </article>
 
         <article class="info-card">
-          <div class="icon-box">
-            <i class="fab fa-linkedin"></i>
-          </div>
-
           <h2>LinkedIn</h2>
           <p>Connect with me for professional updates and work opportunities.</p>
 
@@ -43,9 +36,6 @@
         </article>
 
         <article class="info-card">
-          <div class="icon-box">
-            <i class="fab fa-github"></i>
-          </div>
 
           <h2>GitHub</h2>
           <p>View my code, experiments, and public development work.</p>
