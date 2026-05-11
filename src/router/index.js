@@ -46,6 +46,16 @@ const routes = [
       title: "Case Studies | Reymel Mislang"
     }
   },
+
+{
+  path: "/deployment",
+  name: "deployment",
+  component: () => import("@/views/DeploymentPage.vue"),
+  meta: {
+    title: "Deployment Journey | Reymel Mislang"
+  }
+},
+
   {
     path: "/privacy",
     name: "privacy",

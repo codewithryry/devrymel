@@ -424,16 +424,6 @@
                   <small>Views</small>
                   <strong>{{ item.views ?? item.count ?? item.total ?? "N/A" }}</strong>
                 </div>
-
-                <div>
-                  <small>Created</small>
-                  <strong>{{ formatDate(item.createdAt || item.created) }}</strong>
-                </div>
-
-                <div>
-                  <small>Updated</small>
-                  <strong>{{ formatDate(item.updatedAt || item.updated) }}</strong>
-                </div>
               </div>
 
               <details class="technical-details" open>

@@ -692,6 +692,12 @@ export default {
           title: "Services",
           description: "Work I offer"
         },
+          {
+            path: "/deployment",
+            icon: "fas fa-rocket",
+            title: "Deployment",
+            description: "Build and launch photos"
+          },
         {
           path: "/case-studies",
           icon: "fas fa-layer-group",
@@ -704,7 +710,13 @@ export default {
           title: "Roadmap",
           description: "Planned updates"
         },
-        {
+                {
+          path: "/contact",
+          icon: "fas fa-envelope",
+          title: "Contact",
+          description: "Reach out"
+        },
+                {
           path: "/changelog",
           icon: "fas fa-clock-rotate-left",
           title: "Changelog",
@@ -716,19 +728,13 @@ export default {
           title: "Privacy",
           description: "Data notice"
         },
-        {
-          path: "/contact",
-          icon: "fas fa-envelope",
-          title: "Contact",
-          description: "Reach out"
-        },
-        {
-          path: "/admin",
-          icon: "fas fa-user-shield",
-          title: "Admin",
-          description: "Owner panel",
-          admin: true
-        }
+        // {
+        //   path: "/admin",
+        //   icon: "fas fa-user-shield",
+        //   title: "Admin",
+        //   description: "Owner panel",
+        //   admin: true
+        // }
       ],
 
       languages: [
@@ -1236,8 +1242,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: rgba(15, 23, 42, 0.42);
-  backdrop-filter: blur(2px);
+
 }
 
 html[data-theme="dark"] .fab-backdrop,
