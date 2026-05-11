@@ -426,10 +426,10 @@
       @count-change="feedbackCount = $event"
     />
 
-    <AdBlockWarning
+    <!-- <AdBlockWarning
       v-if="!isAdminRoute"
       :show="isAdBlockEnabled"
-    />
+    /> -->
 
     <router-view
       :key="currentLang"
