@@ -47,7 +47,10 @@ export default {
     show: {
       immediate: true,
       handler(value) {
-        this.visible = value;
+        const alreadyClosed =
+          sessionStorage.getItem("adblock_warning_closed") === "true";
+
+        this.visible = value === true && !alreadyClosed;
       }
     }
   },

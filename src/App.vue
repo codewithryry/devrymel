@@ -14,7 +14,7 @@
       <!-- Action Items -->
       <transition-group name="fab-reveal" tag="div" class="fab-actions">
         <!-- Tech Stack -->
-        <div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
+        <!-- <div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
           <button class="fab-action" @click.stop="togglePanel('tech')" :title="t.techStack">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M16 18l6-6-6-6" />
@@ -60,7 +60,7 @@
               </div>
             </div>
           </transition>
-        </div>
+        </div> -->
 
         <!-- Theme -->
         <div v-if="fabOpen" key="theme" class="fab-group" :style="{ '--delay': 3 }">

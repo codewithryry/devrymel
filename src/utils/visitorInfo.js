@@ -139,6 +139,48 @@ function getScreenInfo() {
   };
 }
 
+export function detectAdBlocker() {
+  return new Promise((resolve) => {
+    try {
+      const bait = document.createElement("div");
+
+      bait.className = "adsbygoogle";
+      bait.setAttribute("aria-hidden", "true");
+
+      bait.style.cssText = `
+        position: fixed;
+        left: -10000px;
+        top: -10000px;
+        width: 300px;
+        height: 250px;
+        pointer-events: none;
+        opacity: 1;
+        visibility: visible;
+        display: block;
+      `;
+
+      document.body.appendChild(bait);
+
+      setTimeout(() => {
+        const style = window.getComputedStyle(bait);
+
+        const isBlocked =
+          bait.offsetHeight === 0 ||
+          bait.offsetWidth === 0 ||
+          style.display === "none" ||
+          style.visibility === "hidden";
+
+        bait.remove();
+
+        resolve(isBlocked ? "Detected" : "Not detected");
+      }, 500);
+    } catch (error) {
+      console.warn("Ad blocker detection unavailable:", error);
+      resolve("Unavailable");
+    }
+  });
+}
+
 async function getNetworkIdentity() {
   try {
     const controller = new AbortController();
@@ -212,7 +254,11 @@ async function getNetworkIdentity() {
 
 export async function getVisitorInfo() {
   const visitorId = getOrCreateVisitorId();
-  const networkIdentity = await getNetworkIdentity();
+
+  const [networkIdentity, adBlocker] = await Promise.all([
+    getNetworkIdentity(),
+    detectAdBlocker()
+  ]);
 
   return {
     visitorId,
@@ -222,6 +268,7 @@ export async function getVisitorInfo() {
     browserName: getBrowserName(),
     operatingSystem: getOperatingSystem(),
     deviceType: getDeviceType(),
+    adBlocker,
 
     userAgent: navigator.userAgent,
     platform: navigator.platform || "Unknown",
@@ -258,12 +305,15 @@ export async function saveVisitorInfo(info) {
       createdAt: serverTimestamp()
     };
 
-    await setDoc(doc(db, "visitor_logs", visitorId), visitorData);
+    await setDoc(doc(db, "visitor_logs", visitorId), visitorData, {
+      merge: true
+    });
 
     markVisitorTracked();
 
     saveVisitorInfoLocal({
       ...info,
+      visitorId,
       saveStatus: "Saved to Firestore"
     });
 
