@@ -201,6 +201,15 @@ const routes = [
     title: "Meta Tag Generator | Devrymel"
   }
 },
+  {
+    path: "/callback",
+    name: "spotify-callback",
+    component: {
+      template: `<div style="font-family:monospace;padding:40px;word-break:break-all;background:#111;color:#1db954;min-height:100vh"><h2 style="color:#fff">Spotify Code</h2><p style="font-size:0.85rem;color:#aaa">Copy everything below and paste it to Claude:</p><p style="background:#1a1a1a;padding:16px;border-radius:8px;border:1px solid #1db954">{{ code }}</p></div>`,
+      computed: { code() { return new URLSearchParams(window.location.search).get("code") || "No code found" } }
+    }
+  },
+
   // Keep this always at the bottom
   {
     path: "/:pathMatch(.*)*",
