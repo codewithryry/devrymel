@@ -96,12 +96,6 @@
         </div>
       </transition>
 
-      <!-- Ad -->
-      <AdSlot type="banner" />
-
-      <!-- Suggestions -->
-      <tool-suggestions current="/tools/youtube-thumbnail" />
-
       <!-- How to -->
       <div v-if="!videoId" class="tt-howto">
         <h3>How to use</h3>
@@ -124,6 +118,12 @@
           Thumbnails are loaded directly from YouTube's CDN. No data stored.
         </p>
       </div>
+
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/youtube-thumbnail" />
 
     </div>
   </div>

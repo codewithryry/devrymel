@@ -126,12 +126,6 @@
         </div>
       </transition>
 
-      <!-- Ad -->
-      <AdSlot type="banner" />
-
-      <!-- Suggestions -->
-      <tool-suggestions current="/tools/tiktok" />
-
       <!-- How to use -->
       <div v-if="!result" class="tt-howto">
         <h3>How to use</h3>
@@ -154,6 +148,12 @@
           No data is stored. Works on any public TikTok video.
         </p>
       </div>
+
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/tiktok" />
 
     </div>
   </div>

@@ -132,12 +132,6 @@
         </div>
       </transition>
 
-      <!-- Ad -->
-      <AdSlot type="banner" />
-
-      <!-- Suggestions -->
-      <tool-suggestions current="/tools/youtube-downloader" />
-
       <!-- How to use -->
       <div v-if="!videoInfo" class="tt-howto">
         <h3>How to use</h3>
@@ -160,6 +154,12 @@
           Powered by cobalt.tools. No data is stored.
         </p>
       </div>
+
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/youtube-downloader" />
 
     </div>
   </div>
