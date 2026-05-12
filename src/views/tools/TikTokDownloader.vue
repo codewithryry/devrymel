@@ -19,7 +19,6 @@
 
       <!-- Input -->
       <div class="tt-card">
-      <div class="tt-input-row">
         <div class="tt-input-wrap" :class="{ focused: inputFocused, error: !!error }">
           <i class="fas fa-link tt-input-icon"></i>
           <input
@@ -49,7 +48,6 @@
           </span>
           <span v-else class="tt-spinner"></span>
         </button>
-      </div>
       </div>
 
       <!-- Error -->
@@ -349,22 +347,18 @@ export default {
   border-radius: 20px;
   padding: 16px;
   margin-bottom: 16px;
-}
-
-/* Input row */
-.tt-input-row {
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
 .tt-input-wrap {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 14px;
   height: 52px;
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--bg);
   border: 1.5px solid var(--border);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -434,7 +428,8 @@ export default {
   gap: 8px;
   white-space: nowrap;
   transition: opacity 0.18s ease, transform 0.18s ease;
-  flex-shrink: 0;
+  width: 100%;
+  justify-content: center;
 }
 
 .tt-btn:hover:not(:disabled) {
@@ -736,30 +731,6 @@ export default {
 
 /* Mobile */
 @media (max-width: 640px) {
-  .tt-card {
-    padding: 12px;
-    border-radius: 16px;
-  }
-  .tt-input-row {
-    flex-direction: column !important;
-    gap: 8px;
-  }
-  .tt-input-wrap {
-    height: 54px;
-    border-radius: 14px;
-    width: 100%;
-  }
-  .tt-input {
-    font-size: 1rem;
-  }
-  .tt-btn {
-    width: 100% !important;
-    height: 54px;
-    border-radius: 14px;
-    justify-content: center;
-    font-size: 1rem;
-    flex-shrink: unset;
-  }
   .tt-media {
     flex-direction: column;
   }

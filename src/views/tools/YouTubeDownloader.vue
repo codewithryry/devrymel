@@ -17,7 +17,6 @@
 
       <!-- Input -->
       <div class="tt-card">
-      <div class="tt-input-row">
         <div class="tt-input-wrap" :class="{ focused: inputFocused, error: !!error }">
           <i class="fab fa-youtube tt-input-icon" style="color:#ff0000;"></i>
           <input
@@ -45,7 +44,6 @@
           <span v-if="!loading"><i class="fas fa-search"></i> Fetch</span>
           <span v-else class="tt-spinner"></span>
         </button>
-      </div>
       </div>
 
       <!-- Error -->
@@ -393,22 +391,18 @@ export default {
   border-radius: 20px;
   padding: 16px;
   margin-bottom: 14px;
-}
-
-/* Input */
-.tt-input-row {
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
 .tt-input-wrap {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 14px;
   height: 52px;
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--bg);
   border: 1.5px solid var(--border);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -463,7 +457,8 @@ export default {
   align-items: center;
   gap: 8px;
   white-space: nowrap;
-  flex-shrink: 0;
+  width: 100%;
+  justify-content: center;
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 .tt-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
@@ -696,11 +691,6 @@ export default {
 }
 
 @media (max-width: 640px) {
-  .tt-card { padding: 12px; border-radius: 16px; }
-  .tt-input-row { flex-direction: column !important; gap: 8px; }
-  .tt-input-wrap { height: 54px; border-radius: 14px; width: 100%; }
-  .tt-input { font-size: 1rem; }
-  .tt-btn { width: 100% !important; height: 54px; border-radius: 14px; justify-content: center; font-size: 1rem; flex-shrink: unset; }
   .yt-video-card { flex-direction: column; }
   .yt-thumb { width: 100%; height: 180px; }
 }
