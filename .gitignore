@@ -1,11 +1,19 @@
-.DS_Store
-node_modules
-/dist
+# dependencies
+node_modules/
+
+# production build
+dist/
+build/
 
 # local env files
 .env
 .env.local
+.env.production
+.env.development
 .env.*.local
+
+# macOS system file
+.DS_Store
 
 # Log files
 npm-debug.log*
@@ -14,8 +22,8 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea
-.vscode
+.idea/
+.vscode/
 *.suo
 *.ntvs*
 *.njsproj

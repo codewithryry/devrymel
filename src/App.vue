@@ -165,6 +165,38 @@
 
                   <span class="stat-badge live">GitHub</span>
                 </div>
+
+                <a
+                  :href="spotifyTrack.url || 'https://open.spotify.com/'"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="stat-card stat-active spotify-card"
+                >
+                  <div class="stat-left">
+                    <div class="spotify-art-wrap">
+                      <img
+                        v-if="spotifyTrack.image"
+                        :src="spotifyTrack.image"
+                        :alt="spotifyTrack.title"
+                        class="spotify-art"
+                      />
+                      <i v-else class="fab fa-spotify"></i>
+                    </div>
+
+                    <div class="stat-info">
+                      <span class="stat-value spotify-title">
+                        {{ statsLoading ? "Loading..." : spotifyTrack.title }}
+                      </span>
+                      <span class="stat-label spotify-artist">
+                        {{ statsLoading ? "Spotify" : spotifyTrack.artist }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <span class="stat-badge spotify-live">
+                    {{ spotifyTrack.isPlaying ? "Playing" : "Paused" }}
+                  </span>
+                </a>
               </div>
             </div>
           </transition>
@@ -503,6 +535,8 @@ import { computed } from "vue";
 import { trackVisit, getViews } from "./services/analyticsService";
 import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
+import { getSpotifyNowPlaying } from "./services/spotifyService";
+
 import {
   getVisitorInfo,
   saveVisitorInfo,
@@ -601,6 +635,17 @@ export default {
       toastVisible: false,
       toastMessage: "",
       toastTimer: null,
+
+      spotifyTrack: {
+        isPlaying: false,
+        title: "Not playing",
+        artist: "Spotify",
+        album: "",
+        image: "",
+        url: "",
+        progressMs: 0,
+        durationMs: 0
+      },
 
       currentTheme: "light",
       themes: [
@@ -1058,10 +1103,11 @@ miniTools: [
           getViews(),
           getWakaTimeStats(),
           getGitHubReposCount(),
+          getSpotifyNowPlaying(),
           import("@/data/projects.json")
         ]);
 
-        const [viewsResult, wakaResult, githubResult, projectsResult] = results;
+        const [viewsResult, wakaResult, githubResult, spotifyResult, projectsResult] = results;
 
         if (viewsResult.status === "fulfilled") {
           this.visitorCount = Number(viewsResult.value) || 0;
@@ -1081,6 +1127,22 @@ miniTools: [
         } else {
           console.error("GitHub repos load error:", githubResult.reason);
           this.reposCount = 0;
+        }
+
+        if (spotifyResult.status === "fulfilled") {
+          this.spotifyTrack = spotifyResult.value;
+        } else {
+          console.error("Spotify load error:", spotifyResult.reason);
+          this.spotifyTrack = {
+            isPlaying: false,
+            title: "Spotify unavailable",
+            artist: "Check API setup",
+            album: "",
+            image: "",
+            url: "",
+            progressMs: 0,
+            durationMs: 0
+          };
         }
 
         if (projectsResult.status === "fulfilled") {
@@ -1973,6 +2035,53 @@ body {
 .stat-badge.soon {
   color: #64748b;
   background: rgba(100, 116, 139, 0.12);
+}
+
+.spotify-card {
+  text-decoration: none;
+}
+
+.spotify-art-wrap {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  overflow: hidden;
+  color: #1db954;
+  background: rgba(29, 185, 84, 0.12);
+  font-size: 1.2rem;
+}
+
+.spotify-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spotify-title {
+  max-width: 135px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spotify-artist {
+  max-width: 135px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-badge.spotify-live {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+}
+
+html[data-theme="forest"] .stat-badge.spotify-live {
+  color: #bbf7d0;
+  background: rgba(34, 197, 94, 0.22);
 }
 
 /* ===== CONTACT PANEL ===== */
