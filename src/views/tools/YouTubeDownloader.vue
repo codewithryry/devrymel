@@ -132,6 +132,9 @@
         </div>
       </transition>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- How to use -->
       <div v-if="!videoInfo" class="tt-howto">
         <h3>How to use</h3>
@@ -154,9 +157,6 @@
           Powered by cobalt.tools. No data is stored.
         </p>
       </div>
-
-      <!-- Ad -->
-      <AdSlot type="banner" />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-downloader" />
@@ -695,12 +695,12 @@ export default {
   transform: translateY(8px);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .tt-card { padding: 12px; border-radius: 16px; }
-  .tt-input-row { flex-direction: column; gap: 8px; }
-  .tt-input-wrap { height: 54px; border-radius: 14px; }
+  .tt-input-row { flex-direction: column !important; gap: 8px; }
+  .tt-input-wrap { height: 54px; border-radius: 14px; width: 100%; }
   .tt-input { font-size: 1rem; }
-  .tt-btn { width: 100%; height: 54px; border-radius: 14px; justify-content: center; font-size: 1rem; }
+  .tt-btn { width: 100% !important; height: 54px; border-radius: 14px; justify-content: center; font-size: 1rem; flex-shrink: unset; }
   .yt-video-card { flex-direction: column; }
   .yt-thumb { width: 100%; height: 180px; }
 }

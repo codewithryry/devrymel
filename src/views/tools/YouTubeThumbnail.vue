@@ -18,7 +18,7 @@
       </div>
 
       <!-- Input -->
-      <div class="tt-card">
+      <div class="tt-input-card">
       <div class="tt-input-row">
         <div class="tt-input-wrap" :class="{ focused: inputFocused, error: !!error }">
           <i class="fab fa-youtube tt-input-icon"></i>
@@ -41,7 +41,7 @@
           <i class="fas fa-search"></i> Get Thumbnails
         </button>
       </div>
-      </div>
+      </div><!-- tt-input-card -->
 
       <!-- Error -->
       <transition name="fade-slide">
@@ -96,6 +96,9 @@
         </div>
       </transition>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- How to -->
       <div v-if="!videoId" class="tt-howto">
         <h3>How to use</h3>
@@ -118,9 +121,6 @@
           Thumbnails are loaded directly from YouTube's CDN. No data stored.
         </p>
       </div>
-
-      <!-- Ad -->
-      <AdSlot type="banner" />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-thumbnail" />
@@ -304,7 +304,7 @@ export default {
 }
 
 /* Input card */
-.tt-card {
+.tt-input-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -653,28 +653,30 @@ export default {
 }
 
 /* Mobile */
-@media (max-width: 540px) {
-  .tt-card {
+@media (max-width: 640px) {
+  .tt-input-card {
     padding: 12px;
     border-radius: 16px;
   }
   .tt-input-row {
-    flex-direction: column;
+    flex-direction: column !important;
     gap: 8px;
   }
   .tt-input-wrap {
     height: 54px;
     border-radius: 14px;
+    width: 100%;
   }
   .tt-input {
     font-size: 1rem;
   }
   .tt-btn {
-    width: 100%;
+    width: 100% !important;
     height: 54px;
     border-radius: 14px;
     justify-content: center;
     font-size: 1rem;
+    flex-shrink: unset;
   }
   .tt-grid {
     grid-template-columns: 1fr;

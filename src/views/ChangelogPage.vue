@@ -50,6 +50,12 @@ export default {
       changelog: [
         {
           date: "May 2026",
+          title: "Improved Tool Pages Layout & Mobile Input",
+          description:
+            "Fixed mobile input stacking on TikTok, YouTube Thumbnail, and YouTube Downloader tools. Unified input card style across all tools. Added ad banner above How to Use, and Other Tools suggestions section at the bottom of every tool page."
+        },
+        {
+          date: "May 2026",
           title: "Added Pages & Tools Navigation Section",
           description:
             "Added a compact app-icon style navigation section on the profile page — all pages and tools accessible as icon tiles without needing the FAB."

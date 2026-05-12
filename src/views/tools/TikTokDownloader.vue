@@ -126,6 +126,9 @@
         </div>
       </transition>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- How to use -->
       <div v-if="!result" class="tt-howto">
         <h3>How to use</h3>
@@ -148,9 +151,6 @@
           No data is stored. Works on any public TikTok video.
         </p>
       </div>
-
-      <!-- Ad -->
-      <AdSlot type="banner" />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/tiktok" />
@@ -178,7 +178,7 @@ export default {
   },
 
   methods: {
-    onPaste(e) {
+    onPaste() {
       this.$nextTick(() => {
         if (this.url.trim()) this.fetchVideo();
       });
@@ -735,28 +735,30 @@ export default {
 }
 
 /* Mobile */
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .tt-card {
     padding: 12px;
     border-radius: 16px;
   }
   .tt-input-row {
-    flex-direction: column;
+    flex-direction: column !important;
     gap: 8px;
   }
   .tt-input-wrap {
     height: 54px;
     border-radius: 14px;
+    width: 100%;
   }
   .tt-input {
     font-size: 1rem;
   }
   .tt-btn {
-    width: 100%;
+    width: 100% !important;
     height: 54px;
     border-radius: 14px;
     justify-content: center;
     font-size: 1rem;
+    flex-shrink: unset;
   }
   .tt-media {
     flex-direction: column;

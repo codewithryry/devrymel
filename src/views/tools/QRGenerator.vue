@@ -81,6 +81,9 @@
         </transition>
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- Tips -->
       <div class="tt-howto">
         <h3>Tips</h3>
@@ -99,9 +102,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Ad -->
-      <AdSlot type="banner" />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/qr-generator" />
