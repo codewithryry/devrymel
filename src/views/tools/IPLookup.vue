@@ -61,13 +61,19 @@
         </div>
       </transition>
 
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/ip-lookup" />
+
     </div>
   </div>
 </template>
 
 <script>
+import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+
 export default {
   name: "IPLookup",
+  components: { ToolSuggestions },
 
   data() {
     return {

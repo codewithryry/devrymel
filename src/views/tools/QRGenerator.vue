@@ -81,6 +81,9 @@
         </transition>
       </div>
 
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/qr-generator" />
+
       <!-- Tips -->
       <div class="tt-howto">
         <h3>Tips</h3>
@@ -105,8 +108,11 @@
 </template>
 
 <script>
+import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+
 export default {
   name: "QRGenerator",
+  components: { ToolSuggestions },
 
   data() {
     return {

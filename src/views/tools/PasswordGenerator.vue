@@ -115,13 +115,19 @@
         Generated entirely in your browser. Zero data leaves your device.
       </p>
 
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/password" />
+
     </div>
   </div>
 </template>
 
 <script>
+import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+
 export default {
   name: "PasswordGenerator",
+  components: { ToolSuggestions },
 
   data() {
     return {

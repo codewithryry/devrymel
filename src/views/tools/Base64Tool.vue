@@ -98,13 +98,19 @@
         Processing is done entirely in your browser. No data is sent to any server.
       </p>
 
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/base64" />
+
     </div>
   </div>
 </template>
 
 <script>
+import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+
 export default {
   name: "Base64Tool",
+  components: { ToolSuggestions },
 
   data() {
     return {

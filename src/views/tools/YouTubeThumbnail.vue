@@ -18,6 +18,7 @@
       </div>
 
       <!-- Input -->
+      <div class="tt-card">
       <div class="tt-input-row">
         <div class="tt-input-wrap" :class="{ focused: inputFocused, error: !!error }">
           <i class="fab fa-youtube tt-input-icon"></i>
@@ -39,6 +40,7 @@
         <button class="tt-btn" @click="extractThumbnails" :disabled="!inputVal.trim()">
           <i class="fas fa-search"></i> Get Thumbnails
         </button>
+      </div>
       </div>
 
       <!-- Error -->
@@ -94,6 +96,9 @@
         </div>
       </transition>
 
+      <!-- Suggestions -->
+      <tool-suggestions current="/tools/youtube-thumbnail" />
+
       <!-- How to -->
       <div v-if="!videoId" class="tt-howto">
         <h3>How to use</h3>
@@ -122,8 +127,11 @@
 </template>
 
 <script>
+import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+
 export default {
   name: "YouTubeThumbnail",
+  components: { ToolSuggestions },
 
   data() {
     return {
@@ -291,11 +299,19 @@ export default {
   line-height: 1.5;
 }
 
+/* Input card */
+.tt-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
 /* Input row */
 .tt-input-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 16px;
 }
 
 .tt-input-wrap {
@@ -306,7 +322,7 @@ export default {
   padding: 0 14px;
   height: 52px;
   border-radius: 16px;
-  background: var(--surface);
+  background: var(--bg);
   border: 1.5px solid var(--border);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
