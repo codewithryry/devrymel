@@ -86,6 +86,9 @@
 
       
 
+      <!-- Pages & Tools Nav -->
+      <!-- <PageNavSection /> -->
+
       <!-- 10. Footer CTA -->
       <FooterSection />
     </main>
@@ -168,6 +171,7 @@ import Linkwebsite from '../modals/Linkwebsite.vue'
 import ExperienceSection from './ExperienceSection.vue'
 import HighlightsSection from './HighlightsSection.vue'
 import TechNotesSection from './TechNotesSection.vue'
+import PageNavSection from './PageNavSection.vue'
 import AdSlot from '../AdSlot.vue'
 
 /* ===== JSON DATA IMPORTS ===== */
@@ -204,6 +208,7 @@ export default {
     ExperienceSection,
     HighlightsSection,
     TechNotesSection,
+    PageNavSection,
     AdSlot,
     Linkwebsite,
     ProjectDeepDiveModal

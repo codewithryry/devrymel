@@ -4,13 +4,8 @@
     <div
       v-if="showFloatingTools"
       class="fab-container"
-      :class="{ 'is-open': fabOpen, 'is-mobile': isMobile }"
+      :class="{ 'is-open': fabOpen, 'is-mobile': isMobile, 'fab-scroll-hide': fabScrollHide, 'fab-gone': fabGone }"
     >
-      <!-- Backdrop -->
-      <transition name="backdrop-fade">
-        <div v-if="fabOpen && isMobile" class="fab-backdrop" @click="closeFab"></div>
-      </transition>
-
       <!-- Action Items -->
       <transition-group name="fab-reveal" tag="div" class="fab-actions">
         <!-- Theme -->
@@ -175,105 +170,7 @@
           </transition>
         </div>
 
-        <!-- Feedback -->
-        <button
-          v-if="fabOpen"
-          key="fb"
-          class="fab-action"
-          :style="{ '--delay': 6 }"
-          @click="openFeedback"
-          :title="t.comments"
-        >
-          <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-          <span class="fab-tooltip">{{ t.comments }}</span>
-          <span v-if="feedbackCount" class="fab-badge">{{ feedbackCount }}</span>
-        </button>
-
-        <!-- Contact -->
-        <div v-if="fabOpen" key="contact" class="fab-group" :style="{ '--delay': 7 }">
-          <button class="fab-action" @click.stop="togglePanel('contact')" :title="t.contact">
-            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-              <polyline points="22,6 12,13 2,6" />
-            </svg>
-            <span class="fab-tooltip">{{ t.contact }}</span>
-          </button>
-
-          <transition name="panel-appear">
-            <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
-              <div class="panel-head">
-                <span>{{ t.getInTouch }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              <div class="panel-body">
-                <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
-                  <div class="contact-icon red">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.emailMe }}</span>
-                    <span class="contact-sub">reymelrey.mislang@gmail.com</span>
-                  </div>
-                </a>
-
-                <a
-                  href="https://www.linkedin.com/in/reymel-mislang/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="contact-row"
-                >
-                  <div class="contact-icon linkedin">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">LinkedIn</span>
-                    <span class="contact-sub">Reymel Mislang</span>
-                  </div>
-                </a>
-
-                <div class="contact-row">
-                  <div class="contact-icon location">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.location }}</span>
-                    <span class="contact-sub">Calapan City, Oriental Mindoro</span>
-                  </div>
-                </div>
-
-                <a href="/Resume.pdf" download class="contact-row resume">
-                  <div class="contact-icon accent">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.downloadCV }}</span>
-                    <span class="contact-sub">{{ t.latestResume }}</span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </transition>
-        </div>
-                <!-- Tools -->
+        <!-- Tools -->
         <div v-if="fabOpen" key="tools" class="fab-group" :style="{ '--delay': 8 }">
           <button class="fab-action" @click.stop="togglePanel('tools')" title="Tools">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -364,14 +261,17 @@
           </transition>
         </div>
 
-                <!-- AI -->
-        <!-- <div v-if="fabOpen" key="ai" class="fab-group" :style="{ '--delay': 7 }">
+      </transition-group>
+
+      <!-- Main Toggle (wrapped for hint positioning) -->
+      <div class="fab-trigger-wrap">
+        <!-- AI: beside main trigger (leftmost) -->
+        <div v-if="showSideBtns" class="fab-group fab-contact-side">
           <button class="fab-action" @click.stop="togglePanel('ai')" title="AI Chat">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2a9 9 0 0 1 9 9c0 3.6-2.1 6.7-5.2 8.2L15 21H9l-.8-1.8A9 9 0 0 1 12 2z"/>
-              <circle cx="9" cy="11" r="1" fill="currentColor" stroke="none"/>
-              <circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/>
-              <circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/>
+              <path d="M12 3l1.2 3.6L16.8 8l-3.6 1.2L12 12.8l-1.2-3.6L7.2 8l3.6-1.2L12 3z" stroke-linejoin="round"/>
+              <path d="M19 13l.7 2L21.7 16l-2 .7L19 18.4l-.7-2L16.3 16l2-.7L19 13z" stroke-linejoin="round"/>
+              <path d="M5.5 16l.5 1.5 1.5.5-1.5.5-.5 1.5-.5-1.5L3.5 18l1.5-.5.5-1.5z" stroke-linejoin="round"/>
             </svg>
             <span class="fab-tooltip">AI Chat</span>
           </button>
@@ -386,7 +286,6 @@
                   </svg>
                 </button>
               </div>
-
               <div class="panel-body ai-body">
                 <router-link
                   v-for="model in aiModels"
@@ -407,14 +306,103 @@
               </div>
             </div>
           </transition>
-        </div> -->
-      </transition-group>
+        </div>
 
-      <!-- Main Toggle (wrapped for hint positioning) -->
-      <div class="fab-trigger-wrap">
+        <!-- Feedback: beside main trigger (middle) -->
+        <button
+          v-if="showSideBtns"
+          class="fab-action"
+          @click.stop="openFeedback"
+          :title="t.comments"
+        >
+          <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span class="fab-tooltip">{{ t.comments }}</span>
+          <span v-if="feedbackCount" class="fab-badge">{{ feedbackCount }}</span>
+        </button>
+
+        <!-- Contact: beside main trigger (nearest) -->
+        <div v-if="showSideBtns" class="fab-group fab-contact-side">
+          <button class="fab-action" @click.stop="togglePanel('contact')" :title="t.contact">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span class="fab-tooltip">{{ t.contact }}</span>
+          </button>
+
+          <transition name="panel-appear">
+            <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>{{ t.getInTouch }}</span>
+                <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="panel-body">
+                <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
+                  <div class="contact-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">{{ t.emailMe }}</span>
+                    <span class="contact-sub">reymelrey.mislang@gmail.com</span>
+                  </div>
+                </a>
+
+                <a href="https://www.linkedin.com/in/reymel-mislang/" target="_blank" rel="noopener noreferrer" class="contact-row">
+                  <div class="contact-icon linkedin">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">LinkedIn</span>
+                    <span class="contact-sub">Reymel Mislang</span>
+                  </div>
+                </a>
+
+                <div class="contact-row">
+                  <div class="contact-icon location">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">{{ t.location }}</span>
+                    <span class="contact-sub">Calapan City, Oriental Mindoro</span>
+                  </div>
+                </div>
+
+                <a href="/Resume.pdf" download class="contact-row resume">
+                  <div class="contact-icon accent">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                  </div>
+                  <div class="contact-info">
+                    <span class="contact-title">{{ t.downloadCV }}</span>
+                    <span class="contact-sub">{{ t.latestResume }}</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </transition>
+        </div>
+
         <!-- Desktop hint: to the left, arrow points right -->
         <transition name="hint-fade">
-          <div v-if="showFabHint && !fabOpen" class="fab-hint fab-hint--desktop" aria-hidden="true">
+          <div v-if="showFabHint && fabTapCount === 0" class="fab-hint fab-hint--desktop" aria-hidden="true">
             <span class="fab-hint-label">Tap me!</span>
             <svg class="fab-hint-arrow" viewBox="0 0 44 24" fill="none">
               <path d="M4 12 Q24 4 36 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
@@ -425,7 +413,7 @@
 
         <!-- Mobile hint: above, arrow points down -->
         <transition name="hint-fade-up">
-          <div v-if="showFabHint && !fabOpen" class="fab-hint fab-hint--mobile" aria-hidden="true">
+          <div v-if="showFabHint && fabTapCount === 0" class="fab-hint fab-hint--mobile" aria-hidden="true">
             <span class="fab-hint-label">Tap me!</span>
             <svg class="fab-hint-arrow-down" viewBox="0 0 24 44" fill="none">
               <path d="M12 4 Q4 24 12 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
@@ -436,23 +424,30 @@
 
         <button
           class="fab-trigger"
-          :class="{ active: fabOpen }"
+          :class="{ active: fabTapCount === 2 }"
           @click.stop="toggleFab"
-          :aria-label="fabOpen ? t.close : t.menu"
+          :aria-label="fabTapCount === 0 ? t.menu : fabTapCount === 1 ? 'Expand' : t.close"
         >
           <span class="trigger-icon">
-            <svg v-if="!fabOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- State 0: closed — compass -->
+            <svg v-if="fabTapCount === 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10" />
               <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
             </svg>
-
+            <!-- State 1: stack open — three dots (more) -->
+            <svg v-else-if="fabTapCount === 1" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <circle cx="5" cy="12" r="2.2"/>
+              <circle cx="12" cy="12" r="2.2"/>
+              <circle cx="19" cy="12" r="2.2"/>
+            </svg>
+            <!-- State 2: everything open — × to dismiss -->
             <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </span>
 
-          <span v-if="!fabOpen && totalNotifications" class="trigger-pulse"></span>
+          <span v-if="fabTapCount === 0 && totalNotifications" class="trigger-pulse"></span>
         </button>
       </div>
 
@@ -488,7 +483,6 @@
     />
 
     <router-view
-      :key="$route.fullPath"
       lang="en"
       :translations="t"
     />
@@ -576,7 +570,12 @@ export default {
 
   data() {
     return {
-      fabOpen: window.innerWidth > 640,
+      fabOpen: false,
+      showSideBtns: false,
+      fabGone: false,
+      fabScrollHide: false,
+      fabTapCount: 0,
+      lastScrollY: 0,
       showScrollTop: false,
 
       showThemePanel: false,
@@ -818,9 +817,13 @@ export default {
   },
 
   watch: {
-    $route() {
-      this.closeFab();
-      document.body.style.overflow = "";
+    $route(to) {
+      this.closeAllPanels();
+      if (this.isMobile) {
+        this.closeFab();
+      } else if (to.path !== "/") {
+        this.showSideBtns = false;
+      }
     }
   },
 
@@ -917,24 +920,26 @@ export default {
     },
 
     toggleFab() {
-      this.fabOpen = !this.fabOpen;
+      if (this.fabGone) return;
 
-      if (!this.fabOpen) {
+      this.fabTapCount++;
+
+      if (this.fabTapCount === 1) {
+        this.fabOpen = true;
+        this.showSideBtns = false;
         this.closeAllPanels();
-      }
-
-      if (this.isMobile) {
-        document.body.style.overflow = this.fabOpen ? "hidden" : "";
+      } else if (this.fabTapCount === 2) {
+        this.showSideBtns = true;
+      } else {
+        this.closeFab();
       }
     },
 
     closeFab() {
       this.fabOpen = false;
+      this.showSideBtns = false;
+      this.fabTapCount = 0;
       this.closeAllPanels();
-
-      if (this.isMobile) {
-        document.body.style.overflow = "";
-      }
     },
 
     togglePanel(name) {
@@ -1051,7 +1056,17 @@ export default {
     },
 
     handleScroll() {
-      this.showScrollTop = window.scrollY > 400;
+      const y = window.scrollY;
+      this.showScrollTop = y > 400;
+
+      if (y < 60) {
+        this.fabScrollHide = false;
+      } else if (y > this.lastScrollY + 8) {
+        this.fabScrollHide = true;
+      } else if (y < this.lastScrollY - 8) {
+        this.fabScrollHide = false;
+      }
+      this.lastScrollY = y;
     },
 
     scrollToTop() {
@@ -1273,20 +1288,22 @@ body {
   z-index: 160;
 }
 
-.fab-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-
+.fab-container {
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-html[data-theme="dark"] .fab-backdrop,
-html[data-theme="midnight"] .fab-backdrop,
-html[data-theme="forest"] .fab-backdrop,
-html[data-theme="sunset"] .fab-backdrop,
-html[data-theme="purple"] .fab-backdrop {
-  background: rgba(2, 6, 23, 0.7);
+.fab-container.fab-scroll-hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
 }
+
+.fab-container.fab-gone {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.7);
+}
+
 
 .fab-actions {
   display: flex;
@@ -2236,6 +2253,22 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .fab-trigger-wrap {
+    gap: 6px;
+  }
+}
+
+.fab-contact-side {
+  position: relative;
+}
+
+.fab-contact-side .panel {
+  bottom: 0;
+  right: 56px;
 }
 
 /* shared label */
@@ -2420,6 +2453,7 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
   .fab-container.is-mobile .theme-panel,
   .fab-container.is-mobile .stats-panel,
   .fab-container.is-mobile .contact-panel,
+  .fab-container.is-mobile .ai-panel,
   .fab-container.is-mobile .tech-panel,
   .fab-container.is-mobile .language-panel,
   .fab-container.is-mobile .intro-panel,
@@ -2444,7 +2478,7 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
     box-shadow:
       0 24px 70px rgba(15, 23, 42, 0.28),
       0 8px 20px rgba(15, 23, 42, 0.12);
-    backdrop-filter: blur(18px);
+
     transform: translateX(-50%);
     z-index: 320;
   }
@@ -2723,6 +2757,7 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
   .fab-container.is-mobile .theme-panel,
   .fab-container.is-mobile .stats-panel,
   .fab-container.is-mobile .contact-panel,
+  .fab-container.is-mobile .ai-panel,
   .fab-container.is-mobile .tech-panel,
   .fab-container.is-mobile .language-panel,
   .fab-container.is-mobile .intro-panel,

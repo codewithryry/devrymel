@@ -47,33 +47,51 @@ export default {
           icon: "fas fa-check-circle",
           items: [
             "Responsive portfolio layout",
-            "Theme selector",
-            "Floating action buttons",
-            "Live stats panel",
-            "Firestore visitor logs",
+            "Theme selector with 4 themes",
+            "Floating action button system",
+            "Live GitHub & WakaTime stats panel",
+            "Firestore visitor logs (production fixed)",
             "Private admin dashboard",
-            "Ad blocker warning"
+            "Ad blocker detection",
+            "Mini tools panel in FAB",
+            "TikTok Downloader",
+            "YouTube Thumbnail Downloader",
+            "YouTube Downloader",
+            "QR Code Generator",
+            "Password Generator",
+            "IP Address Lookup",
+            "Base64 Encoder / Decoder",
+            "Theme-based profile image switching",
+            "Deployment Gallery page",
+            "Feedback modal glassmorphic polish",
+            "FAB hint arrow",
+            "FAB responsive fix for small laptops",
+            "React & n8n added to tech stack"
           ]
         },
         {
           title: "In Progress",
           icon: "fas fa-spinner",
           items: [
-            "More content pages",
+            "AI Chat FAB panel (3 models)",
             "Admin dashboard UI polish",
             "Better analytics visualization",
-            "Portfolio copy improvements"
+            "More case studies"
           ]
         },
         {
           title: "Planned",
           icon: "fas fa-map",
           items: [
+            "AI Chatbot — Chat Mode",
+            "AI Chatbot — Code Helper",
+            "AI Chatbot — Creative Mode",
+            "URL Shortener tool",
+            "Color Palette Generator",
             "Project CMS with Firestore",
-            "Tech notes CMS",
             "Feedback status management",
-            "More case studies",
-            "Export admin data"
+            "Export admin data",
+            "Tech notes / blog section"
           ]
         }
       ]
