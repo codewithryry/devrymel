@@ -17,10 +17,11 @@
         </p>
       </div>
 
+      <!-- Sponsored Ad -->
+      <AdSlot type="banner" />
+
       <div class="status-grid">
         <article class="status-card featured">
-          
-
           <div>
             <span class="card-label">Current Focus</span>
             <h2>Building better web experiences</h2>
@@ -32,7 +33,6 @@
         </article>
 
         <article class="status-card">
-         
           <div>
             <span class="card-label">Availability</span>
             <h2>Open for work</h2>
@@ -44,8 +44,6 @@
         </article>
 
         <article class="status-card">
-         
-
           <div>
             <span class="card-label">Learning</span>
             <h2>Vue, Firebase, and n8n</h2>
@@ -79,7 +77,6 @@
           </div>
         </div>
       </section>
-
       <section class="tools-panel">
         <div class="section-heading">
           <span class="eyebrow">Stack</span>
@@ -112,8 +109,14 @@
 </template>
 
 <script>
+import AdSlot from "@/components/AdSlot.vue";
+
 export default {
   name: "NowPage",
+
+  components: {
+    AdSlot
+  },
 
   data() {
     return {

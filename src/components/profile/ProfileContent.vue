@@ -6,7 +6,7 @@
       <div class="mobile-header">
         <div class="mobile-profile-frame">
           <div class="profile-glow"></div>
-          <img :src="profile.image" alt="Reymel Mislang" class="profile-image" />
+          <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
         </div>
 
         <div class="mobile-identity">
@@ -111,7 +111,7 @@
 
           <div class="profile-frame">
             <div class="profile-glow"></div>
-            <img :src="profile.image" alt="Reymel Mislang" class="profile-image" />
+            <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
 
             <div class="image-overlay">
               <div class="overlay-gradient"></div>
@@ -227,7 +227,7 @@ const PROFILE_TRANSLATIONS = {
     certificates: "Certificates",
     projectLinks: "Project Links",
 
-    desktopSubtitle: "Web Developer",
+    desktopSubtitle: "Frontend Developer & IT Support",
     coreTechnologies: "Core Technologies",
     deanListerAward: "DEAN LISTER AWARD",
     viewAllAwards: "View all",
@@ -365,7 +365,8 @@ export default {
   data() {
     return {
       showNotice: true,
-      noticeTimer: null
+      noticeTimer: null,
+      currentTheme: document.documentElement.getAttribute("data-theme") || "light"
     };
   },
 
@@ -377,6 +378,15 @@ export default {
     latestTwoAchievements() {
       if (!this.achievements || !this.achievements.deansList) return [];
       return this.achievements.deansList.slice(0, 2);
+    },
+
+    profileImage() {
+      const map = {
+        light:    "profilelight.jpg",
+        midnight: "prfo.lo.png",
+        forest:   "profile3.jpg"
+      };
+      return map[this.currentTheme] || map.light;
     }
   },
 
@@ -384,6 +394,18 @@ export default {
     this.noticeTimer = setTimeout(() => {
       this.showNotice = false;
     }, 4000);
+
+    this._themeObserver = new MutationObserver(() => {
+      this.currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+    });
+    this._themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"]
+    });
+  },
+
+  beforeUnmount() {
+    if (this._themeObserver) this._themeObserver.disconnect();
   },
 
   beforeUnmount() {
@@ -413,7 +435,7 @@ export default {
 </script>
 
 <style scoped>
-/* DESKTOP GET IN TOUCH AD - FULL EMPTY SPACE BOX */
+/* DESKTOP GET IN TOUCH AD */
 @media (min-width: 901px) {
   .brand-narrative {
     display: flex !important;
@@ -430,15 +452,14 @@ export default {
     width: 100%;
     margin-top: 32px !important;
     display: flex !important;
-    align-items: stretch !important;
-    justify-content: stretch !important;
-    overflow: hidden !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
   }
 
   .desktop-contact-ad :deep(.ad-slot) {
     width: 100%;
-    height: 100%;
-    min-height: 260px;
+    height: auto;
     margin: 0 !important;
     padding: 0;
     display: flex;
@@ -451,31 +472,28 @@ export default {
     flex-shrink: 0;
   }
 
-  .desktop-contact-ad :deep(.ad-box) {
-    flex: 1;
+  .desktop-contact-ad :deep(.ad-box),
+  .desktop-contact-ad :deep(.ad-box-loaded) {
     width: 100%;
-    min-height: 230px !important;
-    border-radius: 18px;
-    border: 1.5px dashed rgba(148, 163, 184, 0.32);
-    background: rgba(248, 250, 252, 0.72);
+    min-height: auto !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-  }
-
-  .desktop-contact-ad :deep(.ad-box-loaded) {
-    border-color: rgba(148, 163, 184, 0.32) !important;
-    background: rgba(248, 250, 252, 0.72) !important;
+    overflow: visible !important;
   }
 
   .desktop-contact-ad :deep(.ad-frame-container) {
     width: 100%;
-    min-height: 60px !important;
+    min-height: auto !important;
     height: auto !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    overflow: visible !important;
   }
 
   .desktop-contact-ad :deep(.ad-frame) {
@@ -483,7 +501,14 @@ export default {
     height: 60px !important;
     max-width: 92%;
     display: block;
+    border: none !important;
     border-radius: 8px;
+    background: transparent !important;
+  }
+
+  .desktop-contact-ad :deep(.ad-fallback-strip) {
+    width: min(100%, 420px);
+    margin-top: 0;
   }
 }
 

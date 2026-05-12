@@ -1,6 +1,8 @@
 [
+  { "name": "React", "icon": "fab fa-react" },
   { "name": "Vue.js", "icon": "fab fa-vuejs" },
   { "name": "Node.js", "icon": "fab fa-node-js" },
   { "name": "Django", "icon": "fas fa-server" },
-  { "name": "JavaScript", "icon": "fab fa-js" }
+  { "name": "JavaScript", "icon": "fab fa-js" },
+  { "name": "n8n", "icon": "fas fa-project-diagram" }
 ]

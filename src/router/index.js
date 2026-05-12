@@ -97,6 +97,71 @@ const routes = [
     }
   },
 
+  {
+    path: "/tools/tiktok",
+    name: "tiktok-downloader",
+    component: () => import("@/views/tools/TikTokDownloader.vue"),
+    meta: {
+      title: "TikTok Downloader | Devrymel Tools"
+    }
+  },
+
+  {
+    path: "/tools/youtube-downloader",
+    name: "youtube-downloader",
+    component: () => import("@/views/tools/YouTubeDownloader.vue"),
+    meta: { title: "YouTube Downloader | Devrymel Tools" }
+  },
+  {
+    path: "/tools/youtube-thumbnail",
+    name: "youtube-thumbnail",
+    component: () => import("@/views/tools/YouTubeThumbnail.vue"),
+    meta: { title: "YouTube Thumbnail Downloader | Devrymel Tools" }
+  },
+  {
+    path: "/tools/qr-generator",
+    name: "qr-generator",
+    component: () => import("@/views/tools/QRGenerator.vue"),
+    meta: { title: "QR Code Generator | Devrymel Tools" }
+  },
+  {
+    path: "/tools/password",
+    name: "password-generator",
+    component: () => import("@/views/tools/PasswordGenerator.vue"),
+    meta: { title: "Password Generator | Devrymel Tools" }
+  },
+  {
+    path: "/tools/ip-lookup",
+    name: "ip-lookup",
+    component: () => import("@/views/tools/IPLookup.vue"),
+    meta: { title: "IP Address Lookup | Devrymel Tools" }
+  },
+  {
+    path: "/tools/base64",
+    name: "base64",
+    component: () => import("@/views/tools/Base64Tool.vue"),
+    meta: { title: "Base64 Encoder/Decoder | Devrymel Tools" }
+  },
+
+  {
+    path: "/tools/url-shortener",
+    name: "url-shortener",
+    component: () => import("@/views/tools/URLShortener.vue"),
+    meta: { title: "URL Shortener | Coming Soon · Devrymel Tools" }
+  },
+  {
+    path: "/tools/color-palette",
+    name: "color-palette",
+    component: () => import("@/views/tools/ColorPalette.vue"),
+    meta: { title: "Color Palette Generator | Coming Soon · Devrymel Tools" }
+  },
+  {
+    path: "/tools/ai-chat",
+    name: "ai-chat",
+    component: () => import("@/views/tools/AIChatbot.vue"),
+    meta: { title: "AI Chatbot | Coming Soon · Devrymel Tools" }
+  },
+
   // Keep this always at the bottom
   {
     path: "/:pathMatch(.*)*",

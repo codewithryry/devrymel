@@ -2,7 +2,7 @@
   <div>
     <!-- ===== MODERN FLOATING ACTION BUTTON ===== -->
     <div
-      v-if="!isAdminRoute"
+      v-if="showFloatingTools"
       class="fab-container"
       :class="{ 'is-open': fabOpen, 'is-mobile': isMobile }"
     >
@@ -13,55 +13,6 @@
 
       <!-- Action Items -->
       <transition-group name="fab-reveal" tag="div" class="fab-actions">
-        <!-- Tech Stack -->
-        <!-- <div v-if="fabOpen" key="tech" class="fab-group" :style="{ '--delay': 2 }">
-          <button class="fab-action" @click.stop="togglePanel('tech')" :title="t.techStack">
-            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M16 18l6-6-6-6" />
-              <path d="M8 6l-6 6 6 6" />
-              <path d="M14.5 4l-5 16" />
-            </svg>
-            <span class="fab-tooltip">{{ t.techStack }}</span>
-          </button>
-
-          <transition name="panel-appear">
-            <div v-if="showTechPanel" class="panel tech-panel" :class="{ 'panel-mobile': isMobile }">
-              <div class="panel-head">
-                <span>{{ t.techStack }}</span>
-                <button v-if="isMobile" class="panel-close" @click="showTechPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              <div class="panel-body tech-body">
-                <div class="tech-grid">
-                  <span class="tech-pill">Vue.js</span>
-                  <span class="tech-pill">JavaScript</span>
-                  <span class="tech-pill">Firebase</span>
-                  <span class="tech-pill">HTML</span>
-                  <span class="tech-pill">CSS</span>
-                  <span class="tech-pill">Node.js</span>
-                  <span class="tech-pill">MySQL</span>
-                  <span class="tech-pill">GitHub</span>
-                </div>
-
-                <div class="hire-card">
-                  <div>
-                    <span class="hire-title">{{ t.availableWork }}</span>
-                    <span class="hire-sub">{{ t.frontendDev }}</span>
-                  </div>
-
-                  <a href="mailto:reymelrey.mislang@gmail.com" class="hire-btn">
-                    {{ t.hireMe }}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </div> -->
-
         <!-- Theme -->
         <div v-if="fabOpen" key="theme" class="fab-group" :style="{ '--delay': 3 }">
           <button class="fab-action" @click.stop="togglePanel('theme')" :title="t.theme">
@@ -322,8 +273,49 @@
             </div>
           </transition>
         </div>
+                <!-- Tools -->
+        <div v-if="fabOpen" key="tools" class="fab-group" :style="{ '--delay': 8 }">
+          <button class="fab-action" @click.stop="togglePanel('tools')" title="Tools">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+            <span class="fab-tooltip">Tools</span>
+          </button>
 
-                <!-- Pages -->
+          <transition name="panel-appear">
+            <div v-if="showToolsPanel" class="panel tools-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>Mini Tools</span>
+                <button v-if="isMobile" class="panel-close" @click="showToolsPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="panel-body tools-body">
+                <router-link
+                  v-for="tool in miniTools"
+                  :key="tool.path"
+                  :to="tool.path"
+                  class="tool-link"
+                  @click="handleQuickPageClick"
+                >
+                  <span class="tool-icon" :style="{ background: tool.bg, color: tool.color }">
+                    <i :class="tool.icon"></i>
+                  </span>
+                  <span class="page-info">
+                    <strong>{{ tool.title }}</strong>
+                    <small>{{ tool.description }}</small>
+                  </span>
+                  <span v-if="tool.status === 'live'" class="tool-badge live">Live</span>
+                  <span v-else class="tool-badge soon">Soon</span>
+                </router-link>
+              </div>
+            </div>
+          </transition>
+        </div>
+        <!-- Pages -->
         <div v-if="fabOpen" key="pages" class="fab-group" :style="{ '--delay': 4 }">
           <button class="fab-action" @click.stop="togglePanel('pages')" title="Pages">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -371,29 +363,98 @@
             </div>
           </transition>
         </div>
+
+                <!-- AI -->
+        <!-- <div v-if="fabOpen" key="ai" class="fab-group" :style="{ '--delay': 7 }">
+          <button class="fab-action" @click.stop="togglePanel('ai')" title="AI Chat">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a9 9 0 0 1 9 9c0 3.6-2.1 6.7-5.2 8.2L15 21H9l-.8-1.8A9 9 0 0 1 12 2z"/>
+              <circle cx="9" cy="11" r="1" fill="currentColor" stroke="none"/>
+              <circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/>
+              <circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+            <span class="fab-tooltip">AI Chat</span>
+          </button>
+
+          <transition name="panel-appear">
+            <div v-if="showAiPanel" class="panel ai-panel" :class="{ 'panel-mobile': isMobile }">
+              <div class="panel-head">
+                <span>AI Models</span>
+                <button v-if="isMobile" class="panel-close" @click="showAiPanel = false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="panel-body ai-body">
+                <router-link
+                  v-for="model in aiModels"
+                  :key="model.id"
+                  to="/tools/ai-chat"
+                  class="tool-link"
+                  @click="handleQuickPageClick"
+                >
+                  <span class="tool-icon" :style="{ background: model.bg, color: '#fff' }">
+                    <i :class="model.icon"></i>
+                  </span>
+                  <span class="page-info">
+                    <strong>{{ model.title }}</strong>
+                    <small>{{ model.description }}</small>
+                  </span>
+                  <span class="tool-badge soon">Soon</span>
+                </router-link>
+              </div>
+            </div>
+          </transition>
+        </div> -->
       </transition-group>
 
-      <!-- Main Toggle -->
-      <button
-        class="fab-trigger"
-        :class="{ active: fabOpen }"
-        @click.stop="toggleFab"
-        :aria-label="fabOpen ? t.close : t.menu"
-      >
-        <span class="trigger-icon">
-          <svg v-if="!fabOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-          </svg>
+      <!-- Main Toggle (wrapped for hint positioning) -->
+      <div class="fab-trigger-wrap">
+        <!-- Desktop hint: to the left, arrow points right -->
+        <transition name="hint-fade">
+          <div v-if="showFabHint && !fabOpen" class="fab-hint fab-hint--desktop" aria-hidden="true">
+            <span class="fab-hint-label">Tap me!</span>
+            <svg class="fab-hint-arrow" viewBox="0 0 44 24" fill="none">
+              <path d="M4 12 Q24 4 36 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <polyline points="30,6 36,12 30,18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+        </transition>
 
-          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </span>
+        <!-- Mobile hint: above, arrow points down -->
+        <transition name="hint-fade-up">
+          <div v-if="showFabHint && !fabOpen" class="fab-hint fab-hint--mobile" aria-hidden="true">
+            <span class="fab-hint-label">Tap me!</span>
+            <svg class="fab-hint-arrow-down" viewBox="0 0 24 44" fill="none">
+              <path d="M12 4 Q4 24 12 36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <polyline points="6,30 12,36 18,30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+        </transition>
 
-        <span v-if="!fabOpen && totalNotifications" class="trigger-pulse"></span>
-      </button>
+        <button
+          class="fab-trigger"
+          :class="{ active: fabOpen }"
+          @click.stop="toggleFab"
+          :aria-label="fabOpen ? t.close : t.menu"
+        >
+          <span class="trigger-icon">
+            <svg v-if="!fabOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+            </svg>
+
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </span>
+
+          <span v-if="!fabOpen && totalNotifications" class="trigger-pulse"></span>
+        </button>
+      </div>
 
       <!-- Scroll to Top -->
       <transition name="fade-up">
@@ -419,21 +480,16 @@
     </transition>
 
     <FeedbackBubble
-      v-if="!isAdminRoute"
+      v-if="showFloatingTools"
       ref="feedbackBubble"
       :show-button="false"
-      :lang="currentLang"
+      lang="en"
       @count-change="feedbackCount = $event"
     />
 
-    <!-- <AdBlockWarning
-      v-if="!isAdminRoute"
-      :show="isAdBlockEnabled"
-    /> -->
-
     <router-view
-      :key="currentLang"
-      :lang="currentLang"
+      :key="$route.fullPath"
+      lang="en"
       :translations="t"
     />
   </div>
@@ -444,9 +500,6 @@ import { computed } from "vue";
 import { trackVisit, getViews } from "./services/analyticsService";
 import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
-import TechNotesSection from "./components/profile/TechNotesSection.vue";
-import AdSlot from "./components/AdSlot.vue";
-import AdBlockWarning from "@/components/AdBlockWarning.vue";
 import {
   getVisitorInfo,
   saveVisitorInfo,
@@ -454,7 +507,6 @@ import {
   getOrCreateVisitorId
 } from "@/utils/visitorInfo";
 import { detectAdBlocker } from "@/utils/adBlockDetector";
-import techNotes from "./data/techNotes.json";
 
 const UI_TRANSLATIONS = {
   en: {
@@ -466,15 +518,6 @@ const UI_TRANSLATIONS = {
     menu: "Menu",
     close: "Close",
 
-    language: "Language",
-    chooseLanguage: "Choose Language",
-
-    quickIntro: "Quick Intro",
-    introTitle: "Hi, I’m Reymel",
-    introPitch:
-      "A frontend-focused IT graduate building clean, responsive, and user-friendly web applications.",
-    viewWork: "View Work",
-
     chooseTheme: "Appearance",
     liveStats: "Live Stats",
     views: "Views",
@@ -484,6 +527,12 @@ const UI_TRANSLATIONS = {
     projectCounter: "Project counter",
     codingActivity: "Coding activity",
     githubRepos: "GitHub repositories",
+
+    quickIntro: "Quick Intro",
+    introTitle: "Hi, I’m Reymel",
+    introPitch:
+      "A frontend-focused IT graduate building clean, responsive, and user-friendly web applications.",
+    viewWork: "View Work",
 
     quickNav: "Quick Nav",
     about: "About",
@@ -507,110 +556,6 @@ const UI_TRANSLATIONS = {
     loading: "Loading",
     noFeedback: "No feedback yet. Start the conversation!",
     writeFeedback: "Write feedback..."
-  },
-
-  fil: {
-    theme: "Tema",
-    stats: "Stats",
-    comments: "Puna",
-    contact: "Kontak",
-    top: "Itaas",
-    menu: "Menu",
-    close: "Isara",
-
-    language: "Wika",
-    chooseLanguage: "Pumili ng Wika",
-
-    quickIntro: "Quick Intro",
-    introTitle: "Hi, I’m Reymel",
-    introPitch:
-      "Frontend-focused IT graduate na gumagawa ng malinis, responsive, at user-friendly web applications.",
-    viewWork: "Tingnan Work",
-
-    chooseTheme: "Itsura",
-    liveStats: "Live Stats",
-    views: "Views",
-    projects: "Proyekto",
-    hrsCoding: "Oras ng Coding",
-    repos: "Repositories",
-    projectCounter: "Project counter",
-    codingActivity: "Coding activity",
-    githubRepos: "GitHub repositories",
-
-    quickNav: "Quick Nav",
-    about: "Tungkol",
-    skills: "Skills",
-    projectsNav: "Mga Proyekto",
-    experience: "Karanasan",
-    certificates: "Certificates",
-
-    techStack: "Tech Stack",
-    availableWork: "Available sa work",
-    frontendDev: "Frontend Developer",
-    hireMe: "Hire Me",
-
-    getInTouch: "Makipag-ugnayan",
-    emailMe: "Email",
-    location: "Lokasyon",
-    downloadCV: "I-download ang CV",
-    latestResume: "PDF • Latest Resume",
-
-    commentsWall: "Puna",
-    loading: "Naglo-load",
-    noFeedback: "Wala pang puna. Magsimula ng usapan!",
-    writeFeedback: "Magsulat ng puna..."
-  },
-
-  zh: {
-    theme: "主題",
-    stats: "統計",
-    comments: "留言",
-    contact: "聯絡",
-    top: "回到頂部",
-    menu: "選單",
-    close: "關閉",
-
-    language: "語言",
-    chooseLanguage: "選擇語言",
-
-    quickIntro: "快速介紹",
-    introTitle: "Hi, I’m Reymel",
-    introPitch:
-      "以前端為主的資訊科技畢業生，專注建立乾淨、響應式且易用的網頁應用程式。",
-    viewWork: "查看作品",
-
-    chooseTheme: "外觀",
-    liveStats: "即時數據",
-    views: "瀏覽次數",
-    projects: "專案",
-    hrsCoding: "編碼時數",
-    repos: "儲存庫",
-    projectCounter: "專案計數器",
-    codingActivity: "編碼活動",
-    githubRepos: "GitHub 儲存庫",
-
-    quickNav: "快速導覽",
-    about: "關於",
-    skills: "技能",
-    projectsNav: "專案",
-    experience: "經驗",
-    certificates: "證書",
-
-    techStack: "技術棧",
-    availableWork: "可接受工作",
-    frontendDev: "前端開發者",
-    hireMe: "雇用我",
-
-    getInTouch: "聯絡方式",
-    emailMe: "電子郵件",
-    location: "位置",
-    downloadCV: "下載履歷",
-    latestResume: "PDF • 最新履歷",
-
-    commentsWall: "留言板",
-    loading: "載入中",
-    noFeedback: "尚無留言，開始對話吧！",
-    writeFeedback: "寫下留言..."
   }
 };
 
@@ -618,35 +563,30 @@ export default {
   name: "App",
 
   components: {
-    FeedbackBubble,
-    TechNotesSection,
-    AdSlot,
-    AdBlockWarning
+    FeedbackBubble
   },
 
   provide() {
     return {
-      appLang: computed(() => this.currentLang),
+      appLang: computed(() => "en"),
       appText: computed(() => this.t),
-      setAppLang: this.setLang
+      setAppLang: () => {}
     };
   },
 
   data() {
     return {
-      techNotes,
-
       fabOpen: window.innerWidth > 640,
       showScrollTop: false,
 
-      showLanguagePanel: false,
-      showIntroPanel: false,
       showThemePanel: false,
       showPagesPanel: false,
       showNavPanel: false,
       showTechPanel: false,
       showStatsPanel: false,
       showContactPanel: false,
+      showToolsPanel: false,
+      showAiPanel: false,
 
       isMobile: window.innerWidth <= 640,
 
@@ -692,12 +632,12 @@ export default {
           title: "Services",
           description: "Work I offer"
         },
-          {
-            path: "/deployment",
-            icon: "fas fa-rocket",
-            title: "Deployment",
-            description: "Build and launch photos"
-          },
+        {
+          path: "/deployment",
+          icon: "fas fa-rocket",
+          title: "Deployment",
+          description: "Build and launch photos"
+        },
         {
           path: "/case-studies",
           icon: "fas fa-layer-group",
@@ -710,13 +650,13 @@ export default {
           title: "Roadmap",
           description: "Planned updates"
         },
-                {
+        {
           path: "/contact",
           icon: "fas fa-envelope",
           title: "Contact",
           description: "Reach out"
         },
-                {
+        {
           path: "/changelog",
           icon: "fas fa-clock-rotate-left",
           title: "Changelog",
@@ -727,23 +667,93 @@ export default {
           icon: "fas fa-shield-alt",
           title: "Privacy",
           description: "Data notice"
+        }
+      ],
+
+      miniTools: [
+        {
+          path: "/tools/tiktok",
+          icon: "fab fa-tiktok",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #010101, #2d2d2d)",
+          title: "TikTok Downloader",
+          description: "No watermark · Free",
+          status: "live"
         },
-        // {
-        //   path: "/admin",
-        //   icon: "fas fa-user-shield",
-        //   title: "Admin",
-        //   description: "Owner panel",
-        //   admin: true
-        // }
+        {
+          path: "/tools/youtube-thumbnail",
+          icon: "fas fa-image",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #ff0000, #cc0000)",
+          title: "YT Thumbnail",
+          description: "All quality sizes",
+          status: "live"
+        },
+        {
+          path: "/tools/youtube-downloader",
+          icon: "fab fa-youtube",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #b91c1c, #7f1d1d)",
+          title: "YT Downloader",
+          description: "Video & audio · Free",
+          status: "live"
+        },
+        {
+          path: "/tools/qr-generator",
+          icon: "fas fa-qrcode",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #0f172a, #1e293b)",
+          title: "QR Generator",
+          description: "Text or URL to QR",
+          status: "live"
+        },
+        {
+          path: "/tools/password",
+          icon: "fas fa-key",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+          title: "Password Generator",
+          description: "Secure & customizable",
+          status: "live"
+        },
+        {
+          path: "/tools/ip-lookup",
+          icon: "fas fa-map-marker-alt",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #0ea5e9, #0284c7)",
+          title: "IP Lookup",
+          description: "Your IP & location",
+          status: "live"
+        },
+        {
+          path: "/tools/base64",
+          icon: "fas fa-code",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #059669, #047857)",
+          title: "Base64 Tool",
+          description: "Encode & decode",
+          status: "live"
+        },
+        {
+          path: "/tools/url-shortener",
+          icon: "fas fa-compress-alt",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #f59e0b, #d97706)",
+          title: "URL Shortener",
+          description: "Shorten any link",
+          status: "soon"
+        },
+        {
+          path: "/tools/color-palette",
+          icon: "fas fa-palette",
+          color: "#ffffff",
+          bg: "linear-gradient(135deg, #ec4899, #db2777)",
+          title: "Color Palette",
+          description: "Generate palettes",
+          status: "soon"
+        }
       ],
 
-      languages: [
-        { id: "en", name: "English", flag: "EN" },
-        { id: "fil", name: "Filipino", flag: "PH" },
-        { id: "zh", name: "Chinese", flag: "ZH" }
-      ],
-
-      currentLang: "en",
       visitorCount: 0,
       feedbackCount: 0,
 
@@ -755,13 +765,39 @@ export default {
       statsLoading: false,
 
       isAdBlockEnabled: false,
-      visitorInfo: null
+      visitorInfo: null,
+
+      showFabHint: true,
+
+      aiModels: [
+        {
+          id: "chat",
+          icon: "fas fa-comment-dots",
+          bg: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+          title: "Chat Mode",
+          description: "General Q&A · Assistant"
+        },
+        {
+          id: "code",
+          icon: "fas fa-code",
+          bg: "linear-gradient(135deg, #0ea5e9, #0284c7)",
+          title: "Code Helper",
+          description: "Debug & explain code"
+        },
+        {
+          id: "creative",
+          icon: "fas fa-wand-magic-sparkles",
+          bg: "linear-gradient(135deg, #ec4899, #db2777)",
+          title: "Creative",
+          description: "Write & brainstorm ideas"
+        }
+      ]
     };
   },
 
   computed: {
     t() {
-      return UI_TRANSLATIONS[this.currentLang] || UI_TRANSLATIONS.en;
+      return UI_TRANSLATIONS.en;
     },
 
     totalNotifications() {
@@ -770,6 +806,21 @@ export default {
 
     isAdminRoute() {
       return this.$route.path.startsWith("/admin");
+    },
+
+    isHomeRoute() {
+      return this.$route.path === "/";
+    },
+
+    showFloatingTools() {
+      return this.isHomeRoute && !this.isAdminRoute;
+    }
+  },
+
+  watch: {
+    $route() {
+      this.closeFab();
+      document.body.style.overflow = "";
     }
   },
 
@@ -777,8 +828,8 @@ export default {
     const savedTheme = localStorage.getItem("theme") || "light";
     this.setTheme(savedTheme, false);
 
-    const savedLang = localStorage.getItem("lang") || "en";
-    this.setLang(savedLang, false);
+    document.documentElement.setAttribute("lang", "en");
+    document.documentElement.setAttribute("data-lang", "en");
 
     this.checkMobile();
 
@@ -845,6 +896,13 @@ export default {
       const wasMobile = this.isMobile;
       this.isMobile = window.innerWidth <= 640;
 
+      if (!this.showFloatingTools) {
+        this.fabOpen = false;
+        this.closeAllPanels();
+        document.body.style.overflow = "";
+        return;
+      }
+
       if (this.isMobile) {
         this.fabOpen = false;
         this.closeAllPanels();
@@ -881,14 +939,14 @@ export default {
 
     togglePanel(name) {
       const panels = [
-        "language",
-        "intro",
         "theme",
         "pages",
         "nav",
         "tech",
         "stats",
-        "contact"
+        "contact",
+        "tools",
+        "ai"
       ];
 
       panels.forEach((panel) => {
@@ -902,14 +960,14 @@ export default {
     },
 
     closeAllPanels() {
-      this.showLanguagePanel = false;
-      this.showIntroPanel = false;
       this.showThemePanel = false;
       this.showPagesPanel = false;
       this.showNavPanel = false;
       this.showTechPanel = false;
       this.showStatsPanel = false;
       this.showContactPanel = false;
+      this.showToolsPanel = false;
+      this.showAiPanel = false;
     },
 
     handleQuickPageClick() {
@@ -1033,26 +1091,6 @@ export default {
       }
     },
 
-    setLang(langId, save = true) {
-      this.currentLang = langId;
-      document.documentElement.setAttribute("lang", langId);
-      document.documentElement.setAttribute("data-lang", langId);
-
-      if (save) {
-        localStorage.setItem("lang", langId);
-        this.showLanguagePanel = false;
-      }
-
-      window.dispatchEvent(
-        new CustomEvent("language-change", {
-          detail: {
-            lang: langId,
-            text: UI_TRANSLATIONS[langId] || UI_TRANSLATIONS.en
-          }
-        })
-      );
-    },
-
     showToast(message) {
       this.toastMessage = message;
       this.toastVisible = true;
@@ -1089,9 +1127,6 @@ export default {
       const days = Math.floor(diff / 86400000);
 
       if (minutes < 1) {
-        if (this.currentLang === "zh") return "剛剛";
-        if (this.currentLang === "fil") return "Ngayon lang";
-
         return "Just now";
       }
 
@@ -1446,7 +1481,9 @@ html[data-theme="purple"] .fab-backdrop {
 .language-panel,
 .intro-panel,
 .nav-panel,
-.pages-panel {
+.pages-panel,
+.tools-panel,
+.ai-panel {
   width: 306px;
   min-width: 306px;
 }
@@ -1498,8 +1535,9 @@ html[data-theme="purple"] .fab-backdrop {
 .stats-body,
 .pages-body,
 .tech-body,
-.intro-body {
-  max-height: 380px;
+.intro-body,
+.ai-body {
+  max-height: min(380px, calc(100vh - 180px));
   overflow-y: auto;
   padding: 13px;
   display: flex;
@@ -1606,7 +1644,7 @@ html[data-theme="purple"] .fab-backdrop {
 .pages-body {
   display: grid;
   gap: 10px;
-  max-height: 430px;
+  max-height: min(430px, calc(100vh - 180px));
 }
 
 .page-link {
@@ -1630,14 +1668,14 @@ html[data-theme="purple"] .fab-backdrop {
   display: grid;
   place-items: center;
   border-radius: 15px;
-  color: #052e16;
-  background: #86efac;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #8b5cf6));
   font-size: 0.92rem;
 }
 
 .page-link.admin .page-icon {
-  color: #ecfdf5;
-  background: #0f172a;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
 }
 
 .page-info {
@@ -1663,6 +1701,75 @@ html[data-theme="purple"] .fab-backdrop {
 .page-arrow {
   color: var(--accent);
   font-size: 0.72rem;
+}
+
+/* ===== TOOLS PANEL ===== */
+.tools-panel {
+  width: 306px;
+  min-width: 306px;
+}
+
+.tools-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: min(380px, calc(100vh - 180px));
+  overflow-y: auto;
+  padding: 13px;
+}
+
+.tool-link {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 11px 12px;
+  border-radius: 17px;
+  border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 88%, var(--surface-hover) 12%);
+  text-decoration: none;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.tool-link:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--surface-hover) 72%, var(--surface) 28%);
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+}
+
+.tool-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  font-size: 1rem;
+}
+
+.tool-badge {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tool-badge.live {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.tool-badge.soon {
+  color: #64748b;
+  background: rgba(100, 116, 139, 0.12);
 }
 
 /* ===== STATS PANEL ===== */
@@ -2113,8 +2220,8 @@ html[data-theme="purple"] .fab-backdrop {
 html[data-theme="midnight"] .page-link.admin .page-icon,
 html[data-theme="forest"] .page-link.admin .page-icon,
 html[data-theme="dark"] .page-link.admin .page-icon {
-  color: #0f172a;
-  background: #86efac;
+  color: #ffffff;
+  background: linear-gradient(135deg, #334155, #475569);
 }
 
 html[data-theme="midnight"] .stat-icon-wrap.dark,
@@ -2122,6 +2229,164 @@ html[data-theme="forest"] .stat-icon-wrap.dark,
 html[data-theme="dark"] .stat-icon-wrap.dark {
   color: #f8fafc;
   background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== FAB HINT ARROW ===== */
+.fab-trigger-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* shared label */
+.fab-hint-label {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  background: var(--surface);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  padding: 5px 11px;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+}
+
+/* ── DESKTOP: left of trigger, arrow → right ── */
+.fab-hint--desktop {
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  animation: hint-bob-x 1.5s ease-in-out infinite;
+}
+
+.fab-hint-arrow {
+  width: 44px;
+  height: 24px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+@keyframes hint-bob-x {
+  0%, 100% { transform: translateY(-50%) translateX(0px); }
+  50%       { transform: translateY(-50%) translateX(6px); }
+}
+
+.hint-fade-enter-active,
+.hint-fade-leave-active {
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.hint-fade-enter-from,
+.hint-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-50%) translateX(-10px);
+}
+
+/* ── MOBILE: above trigger, arrow ↓ down ── */
+.fab-hint--mobile {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+  animation: hint-bob-y 1.5s ease-in-out infinite;
+}
+
+.fab-hint-arrow-down {
+  width: 24px;
+  height: 44px;
+  color: var(--accent);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+@keyframes hint-bob-y {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.hint-fade-up-enter-active,
+.hint-fade-up-leave-active {
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.hint-fade-up-enter-from,
+.hint-fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@media (max-width: 640px) {
+  .fab-hint--desktop { display: none; }
+  .fab-hint--mobile  { display: flex; }
+}
+
+/* ===== LAPTOP (14-inch ~1366px) ===== */
+@media (max-width: 1280px) and (min-width: 641px) {
+  .fab-container {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .fab-actions {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .fab-action {
+    width: 50px;
+    height: 50px;
+  }
+
+  .fab-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .panel,
+  .theme-panel,
+  .stats-panel,
+  .contact-panel,
+  .pages-panel {
+    width: 280px;
+    min-width: 280px;
+  }
+
+  .panel-body,
+  .stats-body,
+  .pages-body,
+  .tech-body,
+  .intro-body {
+    max-height: min(320px, calc(100vh - 160px));
+    padding: 11px;
+    gap: 8px;
+  }
+
+  .theme-btn,
+  .contact-row,
+  .stat-card,
+  .nav-row,
+  .page-link,
+  .hire-card {
+    min-height: 58px;
+    padding: 10px 11px;
+  }
+
+  .stat-icon-wrap,
+  .contact-icon,
+  .page-icon,
+  .theme-swatch {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+  }
 }
 
 /* ===== MOBILE: ALL FAB PANELS SAME AS FEEDBACK BOTTOM SHEET ===== */
@@ -2159,7 +2424,8 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
   .fab-container.is-mobile .language-panel,
   .fab-container.is-mobile .intro-panel,
   .fab-container.is-mobile .nav-panel,
-  .fab-container.is-mobile .pages-panel {
+  .fab-container.is-mobile .pages-panel,
+  .fab-container.is-mobile .tools-panel {
     position: fixed;
     left: 50%;
     right: auto;
@@ -2461,7 +2727,8 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
   .fab-container.is-mobile .language-panel,
   .fab-container.is-mobile .intro-panel,
   .fab-container.is-mobile .nav-panel,
-  .fab-container.is-mobile .pages-panel {
+  .fab-container.is-mobile .pages-panel,
+  .fab-container.is-mobile .tools-panel {
     bottom: 12px;
     width: calc(100vw - 20px);
     max-width: calc(100vw - 20px);

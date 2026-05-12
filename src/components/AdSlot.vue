@@ -46,12 +46,35 @@
           referrerpolicy="no-referrer-when-downgrade"
           title="Advertisement"
           :style="adFrameStyle"
+          @load="handleAdFrameLoad"
         ></iframe>
+
+        <div class="ad-fallback-strip">
+          <span>Ad not showing?</span>
+
+          <a
+            class="ad-smartlink"
+            :href="smartlinkUrl"
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+          >
+            Visit Sponsor
+          </a>
+        </div>
       </div>
 
       <div v-else class="ad-placeholder-wrapper">
         <span class="ad-placeholder">Advertisement space</span>
         <span class="ad-dimensions">{{ adWidth }} × {{ adHeight }}</span>
+
+        <a
+          class="ad-smartlink"
+          :href="smartlinkUrl"
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+        >
+          Visit Sponsor
+        </a>
       </div>
     </div>
   </section>
@@ -80,7 +103,10 @@ export default {
   data() {
     return {
       windowWidth: 0,
-      showInfo: false
+      showInfo: false,
+      adFrameLoaded: false,
+      smartlinkUrl:
+        "https://elementalconsessionconsession.com/s4jbimyi6x?key=6dc926395dacffb78750e2b2edb79e17"
     };
   },
 
@@ -167,6 +193,7 @@ export default {
           <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
             <style>
               html,
               body {
@@ -224,6 +251,10 @@ export default {
   methods: {
     handleResize() {
       this.windowWidth = window.innerWidth;
+    },
+
+    handleAdFrameLoad() {
+      this.adFrameLoaded = true;
     },
 
     toggleInfo() {
@@ -321,26 +352,28 @@ export default {
 
 .ad-box {
   width: 100%;
-  border-radius: 12px;
-  border: 1.5px dashed rgba(148, 163, 184, 0.3);
-  background: rgba(248, 250, 252, 0.6);
+  border: none;
+  border-radius: 0;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .ad-box-loaded {
-  border-color: transparent;
+  border: none;
   background: transparent;
 }
 
 .ad-frame-container {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  gap: 7px;
+  overflow: visible;
 }
 
 .ad-frame {
@@ -349,6 +382,21 @@ export default {
   border: 0;
   overflow: hidden;
   background: transparent;
+}
+
+.ad-fallback-strip {
+  width: min(100%, 420px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  color: rgba(15, 23, 42, 0.48);
+  font-size: 0.66rem;
+  line-height: 1;
 }
 
 .ad-placeholder-wrapper {
@@ -371,6 +419,31 @@ export default {
   color: rgba(0, 0, 0, 0.25);
   font-size: 0.65rem;
   letter-spacing: 0.04em;
+}
+
+.ad-smartlink {
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.ad-smartlink:hover {
+  transform: translateY(-1px);
+  background: rgba(15, 23, 42, 0.14);
+  border-color: rgba(15, 23, 42, 0.14);
+  color: rgba(15, 23, 42, 0.9);
 }
 
 /* Size-specific spacing */
@@ -441,15 +514,11 @@ export default {
 }
 
 [data-theme="midnight"] .ad-box,
-[data-theme="forest"] .ad-box {
-  background: rgba(30, 41, 59, 0.4);
-  border-color: rgba(148, 163, 184, 0.2);
-}
-
+[data-theme="forest"] .ad-box,
 [data-theme="midnight"] .ad-box-loaded,
 [data-theme="forest"] .ad-box-loaded {
   background: transparent;
-  border-color: transparent;
+  border: none;
 }
 
 [data-theme="midnight"] .ad-placeholder,
@@ -460,6 +529,27 @@ export default {
 [data-theme="midnight"] .ad-dimensions,
 [data-theme="forest"] .ad-dimensions {
   color: rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="midnight"] .ad-fallback-strip,
+[data-theme="forest"] .ad-fallback-strip {
+  background: rgba(15, 23, 42, 0.58);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.48);
+}
+
+[data-theme="midnight"] .ad-smartlink,
+[data-theme="forest"] .ad-smartlink {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="midnight"] .ad-smartlink:hover,
+[data-theme="forest"] .ad-smartlink:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Animation */
@@ -483,7 +573,9 @@ export default {
   }
 
   .ad-box {
-    border-radius: 10px;
+    border-radius: 0;
+    border: none;
+    background: transparent;
   }
 
   .ad-label {
@@ -508,6 +600,18 @@ export default {
 
   .ad-info-popover p {
     font-size: 0.68rem;
+  }
+
+  .ad-fallback-strip {
+    width: min(100%, 320px);
+    gap: 6px;
+    padding: 6px 8px;
+    font-size: 0.6rem;
+  }
+
+  .ad-smartlink {
+    padding: 6px 10px;
+    font-size: 0.6rem;
   }
 }
 </style>
