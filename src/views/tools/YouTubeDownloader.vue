@@ -182,9 +182,9 @@ export default {
       mode: "auto",
       quality: "1080",
       modes: [
-        { value: "auto",  icon: "fas fa-film",        label: "Video + Audio" },
-        { value: "mute",  icon: "fas fa-video-slash",  label: "Video Only" },
-        { value: "audio", icon: "fas fa-music",        label: "Audio Only" }
+        { value: "auto", icon: "fas fa-film", label: "Video + Audio" },
+        { value: "mute", icon: "fas fa-video-slash", label: "Video Only" },
+        { value: "audio", icon: "fas fa-music", label: "Audio Only" }
       ],
       qualities: ["2160", "1440", "1080", "720", "480", "360"]
     };
@@ -198,20 +198,32 @@ export default {
     },
 
     extractVideoId(url) {
-      const match = url.match(/(?:v=|\/embed\/|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      const match = url.match(
+        /(?:v=|\/embed\/|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+      );
+
       return match ? match[1] : null;
+    },
+
+    isValidYouTubeUrl(url) {
+      return url.includes("youtube.com") || url.includes("youtu.be");
     },
 
     async fetchVideo() {
       const raw = this.url.trim();
-      if (!raw) return;
 
-      if (!raw.includes("youtube.com") && !raw.includes("youtu.be")) {
+      if (!raw) {
+        this.error = "Please paste a YouTube URL first.";
+        return;
+      }
+
+      if (!this.isValidYouTubeUrl(raw)) {
         this.error = "Please enter a valid YouTube URL.";
         return;
       }
 
       const videoId = this.extractVideoId(raw);
+
       if (!videoId) {
         this.error = "Could not extract video ID. Make sure the URL is correct.";
         return;
@@ -222,71 +234,150 @@ export default {
       this.videoInfo = null;
 
       try {
-        const res = await fetch(
+        const response = await fetch(
           `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
         );
 
-        if (!res.ok) throw new Error("Video not found or is private.");
+        if (!response.ok) {
+          throw new Error("Video not found or is private.");
+        }
 
-        const data = await res.json();
+        const data = await response.json();
 
         this.videoInfo = {
           id: videoId,
-          title: data.title,
-          author: data.author_name,
+          title: data.title || "YouTube Video",
+          author: data.author_name || "Unknown creator",
           thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
         };
-      } catch (e) {
-        this.error = e.message || "Could not fetch video info. The video may be private or unavailable.";
+      } catch (error) {
+        this.error =
+          error.message ||
+          "Could not fetch video info. The video may be private or unavailable.";
       } finally {
         this.loading = false;
       }
     },
 
+    getDownloadBody() {
+      const body = {
+        url: this.url.trim(),
+        downloadMode: this.mode,
+        filenameStyle: "pretty"
+      };
+
+      if (this.mode === "audio") {
+        body.audioFormat = "mp3";
+        body.audioBitrate = "128";
+      } else {
+        body.videoQuality = this.quality;
+      }
+
+      return body;
+    },
+
+    openDownloadUrl(downloadUrl) {
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+
+    getReadableError(errorCode) {
+      const errors = {
+        "error.api.auth.jwt.missing":
+          "Downloader API is missing authentication. Configure your backend Cobalt API key.",
+        "error.api.auth.api-key.missing":
+          "Downloader API key is missing. Add your Cobalt API key in your backend environment variables.",
+        "error.api.auth.api-key.invalid":
+          "Downloader API key is invalid. Check your Cobalt API key.",
+        "error.api.link.unsupported":
+          "This YouTube link is not supported.",
+        "error.api.link.invalid":
+          "Invalid YouTube link. Please check the URL.",
+        "error.api.fetch.fail":
+          "Failed to fetch download data. Try another video or quality.",
+        "error.api.content.too-long":
+          "This video is too long to process.",
+        "error.api.content.blocked":
+          "This video is restricted and cannot be downloaded.",
+        "error.api.content.region":
+          "This video is region-restricted.",
+        "error.api.content.private":
+          "This video is private or unavailable."
+      };
+
+      return errors[errorCode] || errorCode || "Download failed. Please try again.";
+    },
+
     async download() {
+      const raw = this.url.trim();
+
+      if (!raw) {
+        this.error = "Please paste a YouTube URL first.";
+        return;
+      }
+
+      if (!this.isValidYouTubeUrl(raw)) {
+        this.error = "Please enter a valid YouTube URL.";
+        return;
+      }
+
       this.downloading = true;
       this.error = "";
 
       try {
-        const body = {
-          url: this.url.trim(),
-          downloadMode: this.mode,
-          videoQuality: this.quality,
-          filenameStyle: "pretty"
-        };
-
-        const res = await fetch("https://api.cobalt.tools/", {
+        const response = await fetch("/api/cobalt-download", {
           method: "POST",
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(this.getDownloadBody())
         });
 
-        const json = await res.json();
+        const data = await response.json().catch(() => null);
 
-        if (json.status === "error") {
-          throw new Error(json.error?.code || "Download failed. Try a different quality.");
+        if (!data) {
+          throw new Error("Invalid response from downloader server.");
         }
 
-        if (json.status === "redirect" || json.status === "tunnel") {
-          const a = document.createElement("a");
-          a.href = json.url;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          a.click();
-        } else if (json.status === "picker" && json.picker?.length) {
-          const a = document.createElement("a");
-          a.href = json.picker[0].url;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          a.click();
-        } else {
-          throw new Error("Unexpected response. Please try again.");
+        if (!response.ok || data.status === "error") {
+          const code =
+            data.error?.code ||
+            data.code ||
+            data.message ||
+            "Download failed. Try another quality.";
+
+          throw new Error(this.getReadableError(code));
         }
-      } catch (e) {
-        this.error = e.message || "Download failed. The video may be restricted.";
+
+        if ((data.status === "redirect" || data.status === "tunnel") && data.url) {
+          this.openDownloadUrl(data.url);
+          return;
+        }
+
+        if (
+          data.status === "picker" &&
+          Array.isArray(data.picker) &&
+          data.picker.length
+        ) {
+          const firstItem = data.picker.find((item) => item.url) || data.picker[0];
+
+          if (firstItem?.url) {
+            this.openDownloadUrl(firstItem.url);
+            return;
+          }
+        }
+
+        throw new Error("Unexpected downloader response. Please try again.");
+      } catch (error) {
+        this.error =
+          error.message ||
+          "Download failed. The video may be restricted or unavailable.";
       } finally {
         this.downloading = false;
       }

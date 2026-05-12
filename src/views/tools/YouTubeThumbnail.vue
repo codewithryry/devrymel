@@ -1,7 +1,6 @@
 <template>
   <div class="tool-page">
     <div class="tool-shell">
-
       <!-- Back -->
       <router-link to="/" class="back-link">
         <i class="fas fa-arrow-left"></i>
@@ -13,14 +12,19 @@
         <div class="tt-icon-wrap">
           <i class="fab fa-youtube"></i>
         </div>
+
         <h1 class="tt-title">YouTube Thumbnail Downloader</h1>
-        <p class="tt-subtitle">Paste any YouTube URL or video ID to download thumbnails in all quality sizes.</p>
+
+        <p class="tt-subtitle">
+          Paste any YouTube URL or video ID to view and download thumbnails in multiple quality sizes.
+        </p>
       </div>
 
       <!-- Input -->
       <div class="tt-input-card">
         <div class="tt-input-wrap" :class="{ focused: inputFocused, error: !!error }">
           <i class="fab fa-youtube tt-input-icon"></i>
+
           <input
             v-model="inputVal"
             type="text"
@@ -29,15 +33,31 @@
             @focus="inputFocused = true"
             @blur="inputFocused = false"
             @input="onInput"
+            @keydown.enter="extractThumbnails"
             spellcheck="false"
             autocomplete="off"
           />
-          <button v-if="inputVal" class="tt-clear" @click="reset" title="Clear">
+
+          <button
+            v-if="inputVal"
+            class="tt-clear"
+            type="button"
+            @click="reset"
+            title="Clear"
+            aria-label="Clear input"
+          >
             <i class="fas fa-times"></i>
           </button>
         </div>
-        <button class="tt-btn" @click="extractThumbnails" :disabled="!inputVal.trim()">
-          <i class="fas fa-search"></i> Get Thumbnails
+
+        <button
+          class="tt-btn"
+          type="button"
+          @click="extractThumbnails"
+          :disabled="!inputVal.trim()"
+        >
+          <i class="fas fa-search"></i>
+          Get Thumbnails
         </button>
       </div>
 
@@ -49,47 +69,100 @@
         </div>
       </transition>
 
-      <!-- Thumbnails Grid -->
+      <!-- Results -->
       <transition name="fade-slide">
         <div v-if="videoId && thumbnails.length" class="tt-results">
           <div class="tt-results-header">
-            <p class="tt-video-id">Video ID: <code>{{ videoId }}</code></p>
+            <div>
+              <p class="tt-video-id">
+                Video ID:
+                <code>{{ videoId }}</code>
+              </p>
+
+              <a
+                :href="youtubeUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="tt-open-video"
+              >
+                <i class="fas fa-external-link-alt"></i>
+                Open YouTube Video
+              </a>
+            </div>
+
+            <button class="tt-copy-btn" type="button" @click="copyVideoId">
+              <i class="fas fa-copy"></i>
+              Copy ID
+            </button>
           </div>
+
           <div class="tt-grid">
-            <div v-for="thumb in thumbnails" :key="thumb.quality" class="tt-card">
+            <div
+              v-for="thumb in thumbnails"
+              :key="thumb.quality"
+              class="tt-card"
+            >
               <div class="tt-card-img-wrap">
                 <img
+                  v-if="!thumb.broken"
                   :src="thumb.url"
                   :alt="thumb.label"
                   class="tt-card-img"
-                  @error="thumb.broken = true"
-                  @load="thumb.broken = false"
-                  :class="{ broken: thumb.broken }"
+                  @error="markBroken(thumb.quality)"
+                  @load="markAvailable(thumb.quality)"
                 />
+
                 <div v-if="thumb.broken" class="tt-img-unavailable">
                   <i class="fas fa-image"></i>
                   <span>Not available</span>
                 </div>
               </div>
+
               <div class="tt-card-info">
                 <strong class="tt-card-label">{{ thumb.label }}</strong>
                 <small class="tt-card-res">{{ thumb.resolution }}</small>
               </div>
-              <a
-                :href="thumb.url"
-                :download="`youtube-${videoId}-${thumb.quality}.jpg`"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="tt-dl-btn"
-                :class="{ disabled: thumb.broken }"
-              >
-                <i class="fas fa-download"></i> Download
-              </a>
+
+              <div class="tt-card-actions">
+                <a
+                  :href="thumb.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="tt-action-btn"
+                  :class="{ disabled: thumb.broken }"
+                >
+                  <i class="fas fa-eye"></i>
+                  View
+                </a>
+
+                <button
+                  type="button"
+                  class="tt-action-btn"
+                  :class="{ disabled: thumb.broken }"
+                  :disabled="thumb.broken"
+                  @click="copyThumbnailUrl(thumb.url)"
+                >
+                  <i class="fas fa-link"></i>
+                  Copy
+                </button>
+
+                <button
+                  type="button"
+                  class="tt-action-btn primary"
+                  :class="{ disabled: thumb.broken }"
+                  :disabled="thumb.broken"
+                  @click="downloadThumbnail(thumb)"
+                >
+                  <i class="fas fa-download"></i>
+                  Download
+                </button>
+              </div>
             </div>
           </div>
 
-          <button class="tt-reset-btn" @click="reset">
-            <i class="fas fa-redo"></i> Try another video
+          <button class="tt-reset-btn" type="button" @click="reset">
+            <i class="fas fa-redo"></i>
+            Try another video
           </button>
         </div>
       </transition>
@@ -100,20 +173,31 @@
       <!-- How to -->
       <div v-if="!videoId" class="tt-howto">
         <h3>How to use</h3>
+
         <div class="tt-steps">
           <div class="tt-step">
             <span class="step-num">1</span>
-            <span>Copy any YouTube video URL or just the video ID (e.g. <code>dQw4w9WgXcQ</code>)</span>
+            <span>
+              Copy any YouTube video URL or video ID.
+              Example: <code>dQw4w9WgXcQ</code>
+            </span>
           </div>
+
           <div class="tt-step">
             <span class="step-num">2</span>
-            <span>Paste it in the box above and click <strong>Get Thumbnails</strong></span>
+            <span>
+              Paste it in the box above and click <strong>Get Thumbnails</strong>.
+            </span>
           </div>
+
           <div class="tt-step">
             <span class="step-num">3</span>
-            <span>Download any quality — from SD up to Max Resolution (1280×720)</span>
+            <span>
+              View, copy, or download any thumbnail quality.
+            </span>
           </div>
         </div>
+
         <p class="tt-note">
           <i class="fas fa-shield-alt"></i>
           Thumbnails are loaded directly from YouTube's CDN. No data stored.
@@ -122,7 +206,6 @@
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-thumbnail" />
-
     </div>
   </div>
 </template>
@@ -139,15 +222,25 @@ export default {
     return {
       inputVal: "",
       videoId: "",
-      error: "",
       inputFocused: false,
-      thumbnails: []
+      error: "",
+      thumbnails: [],
+      copiedTimer: null
     };
+  },
+
+  computed: {
+    youtubeUrl() {
+      return this.videoId
+        ? `https://www.youtube.com/watch?v=${this.videoId}`
+        : "";
+    }
   },
 
   methods: {
     onInput() {
       this.error = "";
+
       if (!this.inputVal.trim()) {
         this.videoId = "";
         this.thumbnails = [];
@@ -156,30 +249,41 @@ export default {
 
     extractVideoId(input) {
       const trimmed = input.trim();
-      // Try regex for full URLs first
-      const match = trimmed.match(/(?:v=|\/embed\/|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-      if (match) return match[1];
-      // Check if bare video ID (11 alphanumeric + _ -)
-      if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+
+      const patterns = [
+        /(?:youtube\.com\/watch\?.*v=)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+        /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /(?:v=)([a-zA-Z0-9_-]{11})/
+      ];
+
+      for (const pattern of patterns) {
+        const match = trimmed.match(pattern);
+        if (match) return match[1];
+      }
+
+      if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+        return trimmed;
+      }
+
       return null;
     },
 
-    extractThumbnails() {
-      const id = this.extractVideoId(this.inputVal);
-      if (!id) {
-        this.error = "Could not find a valid YouTube video ID. Please check the URL or ID.";
-        this.videoId = "";
-        this.thumbnails = [];
-        return;
-      }
-      this.error = "";
-      this.videoId = id;
-      this.thumbnails = [
+    buildThumbnails(id) {
+      return [
         {
           quality: "maxresdefault",
           label: "Max Resolution",
           resolution: "1280 × 720",
           url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+          broken: false
+        },
+        {
+          quality: "sddefault",
+          label: "Standard Definition",
+          resolution: "640 × 480",
+          url: `https://img.youtube.com/vi/${id}/sddefault.jpg`,
           broken: false
         },
         {
@@ -197,13 +301,99 @@ export default {
           broken: false
         },
         {
-          quality: "sddefault",
-          label: "Standard Definition",
-          resolution: "640 × 480",
-          url: `https://img.youtube.com/vi/${id}/sddefault.jpg`,
+          quality: "default",
+          label: "Default",
+          resolution: "120 × 90",
+          url: `https://img.youtube.com/vi/${id}/default.jpg`,
           broken: false
         }
       ];
+    },
+
+    extractThumbnails() {
+      const id = this.extractVideoId(this.inputVal);
+
+      if (!id) {
+        this.error = "Could not find a valid YouTube video ID. Please check the URL or ID.";
+        this.videoId = "";
+        this.thumbnails = [];
+        return;
+      }
+
+      this.error = "";
+      this.videoId = id;
+      this.thumbnails = this.buildThumbnails(id);
+    },
+
+    markBroken(quality) {
+      this.thumbnails = this.thumbnails.map((thumb) =>
+        thumb.quality === quality ? { ...thumb, broken: true } : thumb
+      );
+    },
+
+    markAvailable(quality) {
+      this.thumbnails = this.thumbnails.map((thumb) =>
+        thumb.quality === quality ? { ...thumb, broken: false } : thumb
+      );
+    },
+
+    async downloadThumbnail(thumb) {
+      if (!thumb?.url || thumb.broken) {
+        this.error = "Thumbnail is not available.";
+        return;
+      }
+
+      try {
+        const response = await fetch(thumb.url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = `youtube-${this.videoId}-${thumb.quality}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+        const link = document.createElement("a");
+        link.href = thumb.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.download = `youtube-${this.videoId}-${thumb.quality}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    },
+
+    async copyThumbnailUrl(url) {
+      if (!url) {
+        this.error = "Thumbnail URL is missing.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        this.error = "";
+      } catch (error) {
+        this.error = "Could not copy thumbnail URL.";
+      }
+    },
+
+    async copyVideoId() {
+      if (!this.videoId) {
+        this.error = "No video ID to copy.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(this.videoId);
+        this.error = "";
+      } catch (error) {
+        this.error = "Could not copy video ID.";
+      }
     },
 
     reset() {
@@ -217,23 +407,20 @@ export default {
 </script>
 
 <style scoped>
-/* Page wrapper */
 .tool-page {
   min-height: 100vh;
   padding: 34px 18px;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
+    radial-gradient(circle at top left, color-mix(in srgb, #ff0000 12%, transparent), transparent 34%),
     var(--bg);
 }
 
-/* Shell container */
 .tool-shell {
   width: min(760px, 100%);
   margin: 0 auto;
 }
 
-/* Back button */
 .back-link {
   width: fit-content;
   display: inline-flex;
@@ -251,6 +438,7 @@ export default {
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
   transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
+
 .back-link:hover {
   transform: translateY(-1px);
   color: var(--accent);
@@ -258,7 +446,6 @@ export default {
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
 }
 
-/* Header card */
 .tool-hero {
   margin-bottom: 22px;
   padding: clamp(20px, 4vw, 36px);
@@ -301,7 +488,6 @@ export default {
   line-height: 1.5;
 }
 
-/* Input card */
 .tt-input-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -326,8 +512,8 @@ export default {
 }
 
 .tt-input-wrap.focused {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: #ff0000;
+  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
 }
 
 .tt-input-wrap.error {
@@ -403,7 +589,6 @@ export default {
   cursor: not-allowed;
 }
 
-/* Error */
 .tt-error {
   display: flex;
   align-items: center;
@@ -418,7 +603,6 @@ export default {
   margin-bottom: 16px;
 }
 
-/* Results */
 .tt-results {
   display: flex;
   flex-direction: column;
@@ -429,27 +613,68 @@ export default {
 .tt-results-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .tt-video-id {
-  margin: 0;
+  margin: 0 0 7px;
   color: var(--text-secondary);
   font-size: 0.86rem;
 }
 
 .tt-video-id code {
-  background: var(--surface);
+  background: var(--bg);
   border: 1px solid var(--border);
   padding: 2px 8px;
   border-radius: 6px;
   font-size: 0.83rem;
-  color: var(--accent);
+  color: #ff0000;
 }
 
-/* Grid */
+.tt-open-video {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.tt-open-video:hover {
+  color: #ff0000;
+}
+
+.tt-copy-btn {
+  flex-shrink: 0;
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.tt-copy-btn:hover {
+  color: #ff0000;
+  border-color: rgba(255, 0, 0, 0.35);
+}
+
 .tt-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -482,10 +707,6 @@ export default {
   display: block;
 }
 
-.tt-card-img.broken {
-  display: none;
-}
-
 .tt-img-unavailable {
   position: absolute;
   inset: 0;
@@ -496,6 +717,7 @@ export default {
   gap: 6px;
   color: var(--text-muted);
   font-size: 0.78rem;
+  background: var(--surface-hover);
 }
 
 .tt-img-unavailable i {
@@ -508,7 +730,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  flex: 1;
 }
 
 .tt-card-label {
@@ -522,33 +743,56 @@ export default {
   font-size: 0.76rem;
 }
 
-.tt-dl-btn {
-  display: flex;
+.tt-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  padding: 0 12px 12px;
+}
+
+.tt-action-btn {
+  min-height: 38px;
+  padding: 8px 8px;
+  border-radius: 11px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  margin: 0 12px 12px;
-  padding: 9px 14px;
-  border-radius: 12px;
+  gap: 5px;
+  transition: opacity 0.18s ease, transform 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.tt-action-btn:hover:not(.disabled) {
+  transform: translateY(-1px);
+  color: #ff0000;
+  border-color: rgba(255, 0, 0, 0.35);
+}
+
+.tt-action-btn.primary {
+  border-color: transparent;
   background: linear-gradient(135deg, #ff0000, #cc0000);
   color: #ffffff;
-  text-decoration: none;
-  font-size: 0.82rem;
-  font-weight: 800;
-  transition: opacity 0.18s ease;
 }
 
-.tt-dl-btn:hover:not(.disabled) {
-  opacity: 0.85;
+.tt-action-btn.primary:hover:not(.disabled) {
+  color: #ffffff;
+  opacity: 0.88;
 }
 
-.tt-dl-btn.disabled {
-  background: var(--surface-hover);
-  color: var(--text-muted);
+.tt-action-btn.disabled,
+.tt-action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
   pointer-events: none;
 }
 
-/* Reset */
 .tt-reset-btn {
   background: none;
   border: 1px solid var(--border);
@@ -567,11 +811,10 @@ export default {
 }
 
 .tt-reset-btn:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: #ff0000;
+  border-color: #ff0000;
 }
 
-/* How to */
 .tt-howto {
   display: flex;
   flex-direction: column;
@@ -607,8 +850,8 @@ export default {
 }
 
 .tt-step code {
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  color: var(--accent);
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
   padding: 1px 6px;
   border-radius: 5px;
   font-size: 0.82rem;
@@ -619,8 +862,8 @@ export default {
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent);
+  background: rgba(255, 0, 0, 0.12);
+  color: #ff0000;
   font-size: 0.76rem;
   font-weight: 900;
   display: grid;
@@ -636,20 +879,45 @@ export default {
   gap: 7px;
 }
 
-/* Transitions */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
+
 .fade-slide-enter-from,
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(8px);
 }
 
-/* Mobile */
 @media (max-width: 640px) {
+  .tool-page {
+    padding: 24px 14px;
+  }
+
+  .tool-hero {
+    border-radius: 22px;
+  }
+
+  .tt-title {
+    font-size: 1.45rem;
+  }
+
   .tt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tt-results-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .tt-copy-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tt-card-actions {
     grid-template-columns: 1fr;
   }
 }

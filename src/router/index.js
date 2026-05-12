@@ -147,7 +147,7 @@ const routes = [
     path: "/tools/url-shortener",
     name: "url-shortener",
     component: () => import("@/views/tools/URLShortener.vue"),
-    meta: { title: "URL Shortener | Coming Soon · Devrymel Tools" }
+    meta: { title: "URL Shortener | Devrymel Tools" }
   },
   {
     path: "/tools/color-palette",
@@ -162,6 +162,45 @@ const routes = [
     meta: { title: "AI Chatbot | Coming Soon · Devrymel Tools" }
   },
 
+  {
+  path: "/tools/speedtest",
+  name: "speedtest",
+  component: () => import("@/views/tools/SpeedTest.vue"),
+  meta: { title: "Speed Test | Devrymel Tools" }
+},
+
+{
+  path: "/tools/json-formatter",
+  name: "json-formatter",
+  component: () => import("@/views/tools/ToolComingSoon.vue"),
+  meta: {
+    title: "JSON Formatter | Devrymel"
+  }
+},
+{
+  path: "/tools/text-counter",
+  name: "text-counter",
+  component: () => import("@/views/tools/ToolComingSoon.vue"),
+  meta: {
+    title: "Text Counter | Devrymel"
+  }
+},
+{
+  path: "/tools/case-converter",
+  name: "case-converter",
+  component: () => import("@/views/tools/ToolComingSoon.vue"),
+  meta: {
+    title: "Case Converter | Devrymel"
+  }
+},
+{
+  path: "/tools/meta-tag-generator",
+  name: "meta-tag-generator",
+  component: () => import("@/views/tools/ToolComingSoon.vue"),
+  meta: {
+    title: "Meta Tag Generator | Devrymel"
+  }
+},
   // Keep this always at the bottom
   {
     path: "/:pathMatch(.*)*",

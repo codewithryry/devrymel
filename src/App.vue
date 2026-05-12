@@ -212,6 +212,8 @@
             </div>
           </transition>
         </div>
+
+
         <!-- Pages -->
         <div v-if="fabOpen" key="pages" class="fab-group" :style="{ '--delay': 4 }">
           <button class="fab-action" @click.stop="togglePanel('pages')" title="Pages">
@@ -676,89 +678,142 @@ export default {
         }
       ],
 
-      miniTools: [
-        {
-          path: "/tools/tiktok",
-          icon: "fab fa-tiktok",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #010101, #2d2d2d)",
-          title: "TikTok Downloader",
-          description: "No watermark · Free",
-          status: "live"
-        },
-        {
-          path: "/tools/youtube-thumbnail",
-          icon: "fas fa-image",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #ff0000, #cc0000)",
-          title: "YT Thumbnail",
-          description: "All quality sizes",
-          status: "live"
-        },
-        {
-          path: "/tools/youtube-downloader",
-          icon: "fab fa-youtube",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #b91c1c, #7f1d1d)",
-          title: "YT Downloader",
-          description: "Video & audio · Free",
-          status: "live"
-        },
-        {
-          path: "/tools/qr-generator",
-          icon: "fas fa-qrcode",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #0f172a, #1e293b)",
-          title: "QR Generator",
-          description: "Text or URL to QR",
-          status: "live"
-        },
-        {
-          path: "/tools/password",
-          icon: "fas fa-key",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-          title: "Password Generator",
-          description: "Secure & customizable",
-          status: "live"
-        },
-        {
-          path: "/tools/ip-lookup",
-          icon: "fas fa-map-marker-alt",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #0ea5e9, #0284c7)",
-          title: "IP Lookup",
-          description: "Your IP & location",
-          status: "live"
-        },
-        {
-          path: "/tools/base64",
-          icon: "fas fa-code",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #059669, #047857)",
-          title: "Base64 Tool",
-          description: "Encode & decode",
-          status: "live"
-        },
-        {
-          path: "/tools/url-shortener",
-          icon: "fas fa-compress-alt",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #f59e0b, #d97706)",
-          title: "URL Shortener",
-          description: "Shorten any link",
-          status: "soon"
-        },
-        {
-          path: "/tools/color-palette",
-          icon: "fas fa-palette",
-          color: "#ffffff",
-          bg: "linear-gradient(135deg, #ec4899, #db2777)",
-          title: "Color Palette",
-          description: "Generate palettes",
-          status: "soon"
-        }
-      ],
+miniTools: [
+  // Social media tools
+  {
+    path: "/tools/tiktok",
+    icon: "fab fa-tiktok",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #010101, #2d2d2d)",
+    title: "TikTok Downloader",
+    description: "No watermark · Free",
+    status: "live"
+  },
+  {
+    path: "/tools/youtube-downloader",
+    icon: "fab fa-youtube",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #b91c1c, #7f1d1d)",
+    title: "YT Downloader",
+    description: "Video & audio · Free",
+    status: "live"
+  },
+  {
+    path: "/tools/youtube-thumbnail",
+    icon: "fas fa-image",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #ff0000, #cc0000)",
+    title: "YT Thumbnail",
+    description: "All quality sizes",
+    status: "live"
+  },
+  // Generator tools
+  {
+    path: "/tools/qr-generator",
+    icon: "fas fa-qrcode",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #0f172a, #1e293b)",
+    title: "QR Generator",
+    description: "Text or URL to QR",
+    status: "live"
+  },
+  {
+    path: "/tools/password",
+    icon: "fas fa-key",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+    title: "Password Generator",
+    description: "Secure & customizable",
+    status: "live"
+  },
+  {
+    path: "/tools/color-palette",
+    icon: "fas fa-palette",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #ec4899, #db2777)",
+    title: "Color Palette",
+    description: "Generate palettes",
+    status: "live"
+  },
+
+  // Utility tools
+  {
+    path: "/tools/ip-lookup",
+    icon: "fas fa-map-marker-alt",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #0ea5e9, #0284c7)",
+    title: "IP Lookup",
+    description: "Your IP & location",
+    status: "live"
+  },
+  {
+    path: "/tools/speedtest",
+    icon: "fas fa-gauge-high",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+    title: "Speed Test",
+    description: "Check internet speed",
+    status: "live"
+  },
+  {
+    path: "/tools/url-shortener",
+    icon: "fas fa-compress-alt",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #f59e0b, #d97706)",
+    title: "URL Shortener",
+    description: "Shorten any link",
+    status: "live"
+  },
+
+  // Developer tools
+  {
+    path: "/tools/base64",
+    icon: "fas fa-code",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #059669, #047857)",
+    title: "Base64 Tool",
+    description: "Encode & decode",
+    status: "live"
+  },
+
+  // Coming soon developer tools
+  {
+    path: "/tools/json-formatter",
+    icon: "fas fa-code",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #334155, #0f172a)",
+    title: "JSON Formatter",
+    description: "Format & validate JSON",
+    status: "soon"
+  },
+  {
+    path: "/tools/text-counter",
+    icon: "fas fa-font",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #14b8a6, #0f766e)",
+    title: "Text Counter",
+    description: "Words, chars & lines",
+    status: "soon"
+  },
+  {
+    path: "/tools/case-converter",
+    icon: "fas fa-text-height",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #8b5cf6, #6d28d9)",
+    title: "Case Converter",
+    description: "Upper, lower & slug",
+    status: "soon"
+  },
+  {
+    path: "/tools/meta-tag-generator",
+    icon: "fas fa-tags",
+    color: "#ffffff",
+    bg: "linear-gradient(135deg, #0891b2, #155e75)",
+    title: "Meta Tag Generator",
+    description: "SEO tags for pages",
+    status: "soon"
+  }
+],
 
       visitorCount: 0,
       feedbackCount: 0,
