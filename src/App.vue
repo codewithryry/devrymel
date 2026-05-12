@@ -422,6 +422,13 @@
           </div>
         </transition>
 
+        <!-- "Tap for more" pill — shows after first tap -->
+        <transition name="hint-fade">
+          <div v-if="fabTapCount === 1 && !showSideBtns" class="fab-more-hint" aria-hidden="true">
+            Tap for more
+          </div>
+        </transition>
+
         <button
           class="fab-trigger"
           :class="{ active: fabTapCount === 2 }"
@@ -2359,6 +2366,24 @@ html[data-theme="dark"] .stat-icon-wrap.dark {
 @media (max-width: 640px) {
   .fab-hint--desktop { display: none; }
   .fab-hint--mobile  { display: flex; }
+}
+
+/* ── "Tap for more" pill ── */
+.fab-more-hint {
+  position: absolute;
+  right: calc(100% + 10px);
+  bottom: 50%;
+  transform: translateY(50%);
+  white-space: nowrap;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
 }
 
 /* ===== LAPTOP (14-inch ~1366px) ===== */
