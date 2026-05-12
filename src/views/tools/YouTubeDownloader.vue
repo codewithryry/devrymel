@@ -132,6 +132,9 @@
         </div>
       </transition>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-downloader" />
 
@@ -164,10 +167,11 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "YouTubeDownloader",
-  components: { ToolSuggestions },
+  components: { ToolSuggestions, AdSlot },
 
   data() {
     return {
@@ -692,8 +696,11 @@ export default {
 }
 
 @media (max-width: 480px) {
-  .tt-input-row { flex-direction: column; }
-  .tt-btn { width: 100%; height: 48px; justify-content: center; }
+  .tt-card { padding: 12px; border-radius: 16px; }
+  .tt-input-row { flex-direction: column; gap: 8px; }
+  .tt-input-wrap { height: 54px; border-radius: 14px; }
+  .tt-input { font-size: 1rem; }
+  .tt-btn { width: 100%; height: 54px; border-radius: 14px; justify-content: center; font-size: 1rem; }
   .yt-video-card { flex-direction: column; }
   .yt-thumb { width: 100%; height: 180px; }
 }

@@ -98,6 +98,9 @@
         Processing is done entirely in your browser. No data is sent to any server.
       </p>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- Suggestions -->
       <tool-suggestions current="/tools/base64" />
 
@@ -107,10 +110,11 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "Base64Tool",
-  components: { ToolSuggestions },
+  components: { ToolSuggestions, AdSlot },
 
   data() {
     return {

@@ -81,6 +81,9 @@
         </transition>
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- Suggestions -->
       <tool-suggestions current="/tools/qr-generator" />
 
@@ -109,10 +112,11 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "QRGenerator",
-  components: { ToolSuggestions },
+  components: { ToolSuggestions, AdSlot },
 
   data() {
     return {

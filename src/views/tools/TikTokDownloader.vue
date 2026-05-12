@@ -126,6 +126,9 @@
         </div>
       </transition>
 
+      <!-- Ad -->
+      <AdSlot type="banner" />
+
       <!-- Suggestions -->
       <tool-suggestions current="/tools/tiktok" />
 
@@ -158,10 +161,11 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "TikTokDownloader",
-  components: { ToolSuggestions },
+  components: { ToolSuggestions, AdSlot },
 
   data() {
     return {
@@ -732,13 +736,27 @@ export default {
 
 /* Mobile */
 @media (max-width: 480px) {
+  .tt-card {
+    padding: 12px;
+    border-radius: 16px;
+  }
   .tt-input-row {
     flex-direction: column;
+    gap: 8px;
+  }
+  .tt-input-wrap {
+    height: 54px;
+    border-radius: 14px;
+  }
+  .tt-input {
+    font-size: 1rem;
   }
   .tt-btn {
     width: 100%;
-    height: 48px;
+    height: 54px;
+    border-radius: 14px;
     justify-content: center;
+    font-size: 1rem;
   }
   .tt-media {
     flex-direction: column;
