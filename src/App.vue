@@ -312,10 +312,9 @@
                 </button>
               </div>
               <div class="panel-body ai-body">
-                <router-link v-for="model in aiModels" :key="model.id" to="/tools/ai-chat" class="tool-link" @click="handleQuickPageClick">
+                <router-link v-for="model in aiModels" :key="model.id" :to="`/tools/ai-chat?model=${model.id}`" class="tool-link" @click="handleQuickPageClick">
                   <span class="tool-icon" :style="{ background: model.bg, color: '#fff' }"><i :class="model.icon"></i></span>
                   <span class="page-info"><strong>{{ model.title }}</strong><small>{{ model.description }}</small></span>
-                  <span class="tool-badge soon">Soon</span>
                 </router-link>
               </div>
             </div>

@@ -252,6 +252,38 @@ async function getNetworkIdentity() {
   }
 }
 
+const BOT_UA_KEYWORDS = [
+  "headlesschrome", "headless", "bot", "crawler", "spider",
+  "puppeteer", "playwright", "selenium", "phantomjs", "wget", "curl"
+];
+
+const CLOUD_ASNS = new Set([
+  "AS16509", // Amazon AWS
+  "AS15169", // Google Cloud
+  "AS8075",  // Microsoft Azure
+  "AS14061", // DigitalOcean
+  "AS63949", // Linode/Akamai
+  "AS20473", // Vultr
+  "AS13335"  // Cloudflare
+]);
+
+const CLOUD_ISP_KEYWORDS = [
+  "amazon", "google cloud", "microsoft azure", "digitalocean",
+  "linode", "vultr", "cloudflare", "ovh", "hetzner", "contabo"
+];
+
+function detectTrafficType(userAgent, network) {
+  const ua = (userAgent || "").toLowerCase();
+  const isp = (network?.isp || "").toLowerCase();
+  const asn = network?.asn || "";
+
+  const isBotUA = BOT_UA_KEYWORDS.some((kw) => ua.includes(kw));
+  const isCloudASN = CLOUD_ASNS.has(asn);
+  const isCloudISP = CLOUD_ISP_KEYWORDS.some((kw) => isp.includes(kw));
+
+  return isBotUA || isCloudASN || isCloudISP ? "bot" : "human";
+}
+
 export async function getVisitorInfo() {
   const visitorId = getOrCreateVisitorId();
 
@@ -259,6 +291,9 @@ export async function getVisitorInfo() {
     getNetworkIdentity(),
     detectAdBlocker()
   ]);
+
+  const userAgent = navigator.userAgent;
+  const trafficType = detectTrafficType(userAgent, networkIdentity);
 
   return {
     visitorId,
@@ -269,8 +304,9 @@ export async function getVisitorInfo() {
     operatingSystem: getOperatingSystem(),
     deviceType: getDeviceType(),
     adBlocker,
+    trafficType,
 
-    userAgent: navigator.userAgent,
+    userAgent,
     platform: navigator.platform || "Unknown",
     vendor: navigator.vendor || "Unknown",
 

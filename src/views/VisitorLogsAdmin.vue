@@ -91,6 +91,14 @@
               </div>
 
               <div>
+                <i class="fas fa-robot"></i>
+                <span>
+                  <strong>{{ visitorStats.bots }}</strong>
+                  <small>Bot Traffic</small>
+                </span>
+              </div>
+
+              <div>
                 <i class="fas fa-comment-dots"></i>
                 <span>
                   <strong>{{ feedbackStats.total }}</strong>
@@ -139,6 +147,14 @@
               <div>
                 <span>{{ visitorStats.unique }}</span>
                 <small>Unique Devices</small>
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <i class="fas fa-robot"></i>
+              <div>
+                <span>{{ visitorStats.bots }}</span>
+                <small>Bot Traffic</small>
               </div>
             </div>
 
@@ -345,16 +361,26 @@
                   </p>
                 </div>
 
-                <span
-                  class="status-pill"
-                  :class="{ 
-                    danger: visitor.adBlocker === 'Detected',
-                    success: visitor.adBlocker !== 'Detected'
-                  }"
-                >
-                  <i :class="visitor.adBlocker === 'Detected' ? 'fas fa-shield-alt' : 'fas fa-check-circle'"></i>
-                  {{ visitor.adBlocker || "Unknown" }}
-                </span>
+                <div class="pill-group">
+                  <span
+                    v-if="visitor.trafficType === 'bot'"
+                    class="status-pill bot-pill"
+                  >
+                    <i class="fas fa-robot"></i>
+                    Bot
+                  </span>
+
+                  <span
+                    class="status-pill"
+                    :class="{
+                      danger: visitor.adBlocker === 'Detected',
+                      success: visitor.adBlocker !== 'Detected'
+                    }"
+                  >
+                    <i :class="visitor.adBlocker === 'Detected' ? 'fas fa-shield-alt' : 'fas fa-check-circle'"></i>
+                    {{ visitor.adBlocker || "Unknown" }}
+                  </span>
+                </div>
               </div>
 
               <div class="info-grid">
@@ -667,11 +693,15 @@ export default {
       const adBlockers = this.visitors.filter(
         (visitor) => visitor.adBlocker === "Detected"
       );
+      const bots = this.visitors.filter(
+        (visitor) => visitor.trafficType === "bot"
+      );
 
       return {
         total: this.visitors.length,
         unique: unique.size,
-        adBlockers: adBlockers.length
+        adBlockers: adBlockers.length,
+        bots: bots.length
       };
     },
 
@@ -1265,7 +1295,7 @@ export default {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(10px, 2vw, 12px);
   margin-bottom: 16px;
 }
@@ -1586,6 +1616,18 @@ export default {
   background: rgba(244, 63, 94, 0.16);
 }
 
+.status-pill.bot-pill {
+  color: #fde68a;
+  background: rgba(234, 179, 8, 0.16);
+}
+
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
 .status-pill i {
   font-size: 0.65rem;
 }
@@ -1747,7 +1789,7 @@ export default {
   }
 
   .stats-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .info-grid {
@@ -1834,7 +1876,10 @@ export default {
     border-color: rgba(134, 239, 172, 0.22);
   }
 
-  .stats-row,
+  .stats-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .graphs-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
