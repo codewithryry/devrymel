@@ -3,7 +3,7 @@
     <!-- ===== SPOTIFY SIDEBAR BUBBLE ===== -->
     <transition name="spotify-float-fade">
       <div
-        v-if="!spotifyDismissed && spotifyTrack.isPlaying"
+        v-if="!spotifyDismissed && spotifyTrack.isPlaying && !spotifyScrollHide"
         class="spotify-sidebar"
         :class="{ 'spotify-sidebar--open': spotifySidebarOpen }"
         @mouseenter="!isMobile && (spotifySidebarOpen = true)"
@@ -590,6 +590,7 @@ export default {
       spotifySidebarOpen: false,
       spotifyScrollHide: false,
       spotifyScrollTimer: null,
+      spotifyAutoTimer: null,
       spotifyInterval: null,
       spotifyTrack: {
         isPlaying: false,
@@ -914,6 +915,12 @@ miniTools: [
 
     getSpotifyNowPlaying().then((result) => {
       this.spotifyTrack = result;
+      if (result.isPlaying) {
+        this.spotifySidebarOpen = true;
+        this.spotifyAutoTimer = setTimeout(() => {
+          this.spotifySidebarOpen = false;
+        }, 5000);
+      }
     });
 
     this.spotifyInterval = setInterval(async () => {
@@ -936,6 +943,7 @@ miniTools: [
 
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
     if (this.spotifyScrollTimer) clearTimeout(this.spotifyScrollTimer);
+    if (this.spotifyAutoTimer) clearTimeout(this.spotifyAutoTimer);
   },
 
   methods: {
@@ -2203,17 +2211,27 @@ html[data-theme="forest"] .stat-badge.spotify-live {
 
 @media (max-width: 640px) {
   .spotify-sidebar {
-    top: 56px;
-    width: 220px;
-    transform: translateX(calc(100% - 46px));
+    top: 28px;
+    width: 210px;
+    transform: translateX(calc(100% - 44px));
+    border-radius: 12px 0 0 12px;
   }
   .spotify-sidebar--open {
     transform: translateX(0);
   }
   .spotify-sidebar-art {
-    width: 46px;
-    height: 46px;
-    flex: 0 0 46px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+  }
+  .spotify-sidebar-info {
+    padding: 8px 26px 8px 10px;
+  }
+  .spotify-sidebar-title {
+    font-size: 0.78rem;
+  }
+  .spotify-sidebar-artist {
+    font-size: 0.65rem;
   }
 }
 
