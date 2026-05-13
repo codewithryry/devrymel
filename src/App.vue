@@ -14,9 +14,9 @@
           <div class="spotify-sidebar-info">
             <div class="spotify-sidebar-top-row">
               <span class="spotify-float-now-label">Now Playing</span>
-              <button class="spotify-sidebar-close" @click.stop="spotifyDismissed = true" title="Close">
+              <!-- <button class="spotify-sidebar-close" @click.stop="spotifyDismissed = true" title="Close">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
+              </button> -->
             </div>
             <span class="spotify-sidebar-title">{{ spotifyTrack.title }}</span>
             <span class="spotify-sidebar-artist">{{ spotifyTrack.artist }}</span>
@@ -24,7 +24,6 @@
           <div class="spotify-sidebar-art">
             <img v-if="spotifyTrack.image" :src="spotifyTrack.image" :alt="spotifyTrack.title" />
             <i v-else class="fab fa-spotify"></i>
-            <span class="spotify-dot"></span>
           </div>
         </div>
       </div>
