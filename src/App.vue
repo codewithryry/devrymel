@@ -1,5 +1,33 @@
 <template>
   <div>
+    <!-- ===== SPOTIFY SIDEBAR BUBBLE ===== -->
+    <transition name="spotify-float-fade">
+      <div
+        v-if="!spotifyDismissed && spotifyTrack.isPlaying"
+        class="spotify-sidebar"
+        :class="{ 'spotify-sidebar--open': spotifySidebarOpen }"
+        @mouseenter="!isMobile && (spotifySidebarOpen = true)"
+        @mouseleave="!isMobile && (spotifySidebarOpen = false)"
+        @click="isMobile && (spotifySidebarOpen = !spotifySidebarOpen)"
+      >
+        <button class="spotify-sidebar-close" @click.stop="spotifyDismissed = true" title="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="spotify-sidebar-inner">
+          <div class="spotify-sidebar-art">
+            <img v-if="spotifyTrack.image" :src="spotifyTrack.image" :alt="spotifyTrack.title" />
+            <i v-else class="fab fa-spotify"></i>
+            <span class="spotify-dot"></span>
+          </div>
+          <div class="spotify-sidebar-info">
+            <span class="spotify-float-now-label">Now Playing</span>
+            <span class="spotify-sidebar-title">{{ spotifyTrack.title }}</span>
+            <span class="spotify-sidebar-artist">{{ spotifyTrack.artist }}</span>
+          </div>
+        </div>
+      </div>
+    </transition>
+
     <!-- ===== MODERN FLOATING ACTION BUTTON ===== -->
     <div
       v-if="showFloatingTools"
@@ -166,37 +194,6 @@
                   <span class="stat-badge live">GitHub</span>
                 </div>
 
-                <a
-                  :href="spotifyTrack.url || 'https://open.spotify.com/'"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="stat-card stat-active spotify-card"
-                >
-                  <div class="stat-left">
-                    <div class="spotify-art-wrap">
-                      <img
-                        v-if="spotifyTrack.image"
-                        :src="spotifyTrack.image"
-                        :alt="spotifyTrack.title"
-                        class="spotify-art"
-                      />
-                      <i v-else class="fab fa-spotify"></i>
-                    </div>
-
-                    <div class="stat-info">
-                      <span class="stat-value spotify-title">
-                        {{ statsLoading ? "Loading..." : spotifyTrack.title }}
-                      </span>
-                      <span class="stat-label spotify-artist">
-                        {{ statsLoading ? "Spotify" : spotifyTrack.artist }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <span class="stat-badge spotify-live">
-                    {{ spotifyTrack.isPlaying ? "Playing" : "Paused" }}
-                  </span>
-                </a>
               </div>
             </div>
           </transition>
@@ -246,7 +243,7 @@
         </div>
 
 
-        <!-- Pages -->
+        <!-- Pages (4th) -->
         <div v-if="fabOpen" key="pages" class="fab-group" :style="{ '--delay': 4 }">
           <button class="fab-action" @click.stop="togglePanel('pages')" title="Pages">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -295,12 +292,8 @@
           </transition>
         </div>
 
-      </transition-group>
-
-      <!-- Main Toggle (wrapped for hint positioning) -->
-      <div class="fab-trigger-wrap">
-        <!-- AI: beside main trigger (leftmost) -->
-        <div v-if="showSideBtns" class="fab-group fab-contact-side">
+        <!-- AI (5th — shown on 2nd tap) -->
+        <div v-if="showSideBtns" key="ai" class="fab-group" :style="{ '--delay': 1 }">
           <button class="fab-action" @click.stop="togglePanel('ai')" title="AI Chat">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 3l1.2 3.6L16.8 8l-3.6 1.2L12 12.8l-1.2-3.6L7.2 8l3.6-1.2L12 3z" stroke-linejoin="round"/>
@@ -309,32 +302,18 @@
             </svg>
             <span class="fab-tooltip">AI Chat</span>
           </button>
-
           <transition name="panel-appear">
             <div v-if="showAiPanel" class="panel ai-panel" :class="{ 'panel-mobile': isMobile }">
               <div class="panel-head">
                 <span>AI Models</span>
                 <button v-if="isMobile" class="panel-close" @click="showAiPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </button>
               </div>
               <div class="panel-body ai-body">
-                <router-link
-                  v-for="model in aiModels"
-                  :key="model.id"
-                  to="/tools/ai-chat"
-                  class="tool-link"
-                  @click="handleQuickPageClick"
-                >
-                  <span class="tool-icon" :style="{ background: model.bg, color: '#fff' }">
-                    <i :class="model.icon"></i>
-                  </span>
-                  <span class="page-info">
-                    <strong>{{ model.title }}</strong>
-                    <small>{{ model.description }}</small>
-                  </span>
+                <router-link v-for="model in aiModels" :key="model.id" to="/tools/ai-chat" class="tool-link" @click="handleQuickPageClick">
+                  <span class="tool-icon" :style="{ background: model.bg, color: '#fff' }"><i :class="model.icon"></i></span>
+                  <span class="page-info"><strong>{{ model.title }}</strong><small>{{ model.description }}</small></span>
                   <span class="tool-badge soon">Soon</span>
                 </router-link>
               </div>
@@ -342,22 +321,19 @@
           </transition>
         </div>
 
-        <!-- Feedback: beside main trigger (middle) -->
-        <button
-          v-if="showSideBtns"
-          class="fab-action"
-          @click.stop="openFeedback"
-          :title="t.comments"
-        >
-          <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-          <span class="fab-tooltip">{{ t.comments }}</span>
-          <span v-if="feedbackCount" class="fab-badge">{{ feedbackCount }}</span>
-        </button>
+        <!-- Feedback (6th — shown on 2nd tap) -->
+        <div v-if="showSideBtns" key="feedback" class="fab-group" :style="{ '--delay': 2 }">
+          <button class="fab-action" @click.stop="openFeedback" :title="t.comments">
+            <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span class="fab-tooltip">{{ t.comments }}</span>
+            <span v-if="feedbackCount" class="fab-badge">{{ feedbackCount }}</span>
+          </button>
+        </div>
 
-        <!-- Contact: beside main trigger (nearest) -->
-        <div v-if="showSideBtns" class="fab-group fab-contact-side">
+        <!-- Contact (7th — shown on 2nd tap) -->
+        <div v-if="showSideBtns" key="contact" class="fab-group" :style="{ '--delay': 3 }">
           <button class="fab-action" @click.stop="togglePanel('contact')" :title="t.contact">
             <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -365,74 +341,48 @@
             </svg>
             <span class="fab-tooltip">{{ t.contact }}</span>
           </button>
-
           <transition name="panel-appear">
             <div v-if="showContactPanel" class="panel contact-panel" :class="{ 'panel-mobile': isMobile }">
               <div class="panel-head">
                 <span>{{ t.getInTouch }}</span>
                 <button v-if="isMobile" class="panel-close" @click="showContactPanel = false">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </button>
               </div>
-
               <div class="panel-body">
                 <a href="mailto:reymelrey.mislang@gmail.com" class="contact-row">
                   <div class="contact-icon red">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
                   </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.emailMe }}</span>
-                    <span class="contact-sub">reymelrey.mislang@gmail.com</span>
-                  </div>
+                  <div class="contact-info"><span class="contact-title">{{ t.emailMe }}</span><span class="contact-sub">reymelrey.mislang@gmail.com</span></div>
                 </a>
-
                 <a href="https://www.linkedin.com/in/reymel-mislang/" target="_blank" rel="noopener noreferrer" class="contact-row">
                   <div class="contact-icon linkedin">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" /></svg>
                   </div>
-                  <div class="contact-info">
-                    <span class="contact-title">LinkedIn</span>
-                    <span class="contact-sub">Reymel Mislang</span>
-                  </div>
+                  <div class="contact-info"><span class="contact-title">LinkedIn</span><span class="contact-sub">Reymel Mislang</span></div>
                 </a>
-
                 <div class="contact-row">
                   <div class="contact-icon location">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                   </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.location }}</span>
-                    <span class="contact-sub">Calapan City, Oriental Mindoro</span>
-                  </div>
+                  <div class="contact-info"><span class="contact-title">{{ t.location }}</span><span class="contact-sub">Calapan City, Oriental Mindoro</span></div>
                 </div>
-
                 <a href="/Resume.pdf" download class="contact-row resume">
                   <div class="contact-icon accent">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                   </div>
-                  <div class="contact-info">
-                    <span class="contact-title">{{ t.downloadCV }}</span>
-                    <span class="contact-sub">{{ t.latestResume }}</span>
-                  </div>
+                  <div class="contact-info"><span class="contact-title">{{ t.downloadCV }}</span><span class="contact-sub">{{ t.latestResume }}</span></div>
                 </a>
               </div>
             </div>
           </transition>
         </div>
+
+      </transition-group>
+
+      <!-- Main Toggle (wrapped for hint positioning) -->
+      <div class="fab-trigger-wrap">
 
         <!-- Desktop hint: to the left, arrow points right -->
         <transition name="hint-fade">
@@ -636,6 +586,11 @@ export default {
       toastMessage: "",
       toastTimer: null,
 
+      spotifyDismissed: false,
+      spotifySidebarOpen: false,
+      spotifyScrollHide: false,
+      spotifyScrollTimer: null,
+      spotifyInterval: null,
       spotifyTrack: {
         isPlaying: false,
         title: "Not playing",
@@ -956,6 +911,16 @@ miniTools: [
         this.trackVisitor();
       }, 600);
     }
+
+    getSpotifyNowPlaying().then((result) => {
+      this.spotifyTrack = result;
+    });
+
+    this.spotifyInterval = setInterval(async () => {
+      const result = await getSpotifyNowPlaying();
+      this.spotifyTrack = result;
+      if (!result.isPlaying) this.spotifyDismissed = false;
+    }, 30000);
   },
 
   beforeUnmount() {
@@ -968,6 +933,9 @@ miniTools: [
     if (this.toastTimer) {
       clearTimeout(this.toastTimer);
     }
+
+    if (this.spotifyInterval) clearInterval(this.spotifyInterval);
+    if (this.spotifyScrollTimer) clearTimeout(this.spotifyScrollTimer);
   },
 
   methods: {
@@ -1191,6 +1159,13 @@ miniTools: [
         this.fabScrollHide = false;
       }
       this.lastScrollY = y;
+
+      if (y > 80) {
+        this.spotifyScrollHide = true;
+        clearTimeout(this.spotifyScrollTimer);
+      } else {
+        this.spotifyScrollHide = false;
+      }
     },
 
     scrollToTop() {
@@ -2082,6 +2057,164 @@ body {
 html[data-theme="forest"] .stat-badge.spotify-live {
   color: #bbf7d0;
   background: rgba(34, 197, 94, 0.22);
+}
+
+/* ===== SPOTIFY SIDEBAR BUBBLE ===== */
+.spotify-sidebar {
+  position: fixed;
+  top: 72px;
+  right: 0;
+  transform: translateX(calc(100% - 52px));
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-right: none;
+  border-radius: 16px 0 0 16px;
+  box-shadow: -4px 4px 24px rgba(0,0,0,0.12);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  width: 260px;
+}
+
+.spotify-sidebar--open {
+  transform: translateX(0);
+}
+
+.spotify-sidebar-close {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: var(--border, #e2e8f0);
+  cursor: pointer;
+  color: var(--text-muted, #94a3b8);
+  place-items: center;
+  border-radius: 50%;
+  padding: 0;
+  transition: background 0.2s, color 0.2s;
+  z-index: 2;
+}
+
+.spotify-sidebar--open .spotify-sidebar-close {
+  display: grid;
+}
+
+.spotify-sidebar-close:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+.spotify-sidebar-close svg { width: 10px; height: 10px; }
+
+.spotify-sidebar-inner {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+.spotify-sidebar-art {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  position: relative;
+  overflow: hidden;
+  background: #1db954;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.spotify-sidebar-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.spotify-dot {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1db954;
+  border: 2px solid #fff;
+  animation: spotify-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes spotify-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.75); }
+}
+
+.spotify-sidebar-info {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 28px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spotify-float-now-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1db954;
+}
+
+.spotify-sidebar-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text, #1e293b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.spotify-sidebar-artist {
+  font-size: 0.7rem;
+  color: var(--text-muted, #64748b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spotify-float-fade-enter-active,
+.spotify-float-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.spotify-float-fade-enter-from,
+.spotify-float-fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .spotify-sidebar {
+    top: 56px;
+    width: 220px;
+    transform: translateX(calc(100% - 46px));
+  }
+  .spotify-sidebar--open {
+    transform: translateX(0);
+  }
+  .spotify-sidebar-art {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+  }
 }
 
 /* ===== CONTACT PANEL ===== */

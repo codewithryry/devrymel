@@ -2,7 +2,8 @@
 
 export async function getSpotifyNowPlaying() {
   try {
-    const response = await fetch("/api/spotify-now-playing");
+    const url = process.env.VUE_APP_SPOTIFY_API_URL || "http://127.0.0.1:5000/api/spotify-now-playing";
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(`Spotify API error: ${response.status}`);
