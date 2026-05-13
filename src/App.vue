@@ -10,19 +10,21 @@
         @mouseleave="!isMobile && (spotifySidebarOpen = false)"
         @click="isMobile && (spotifySidebarOpen = !spotifySidebarOpen)"
       >
-        <button class="spotify-sidebar-close" @click.stop="spotifyDismissed = true" title="Close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
         <div class="spotify-sidebar-inner">
+          <div class="spotify-sidebar-info">
+            <div class="spotify-sidebar-top-row">
+              <span class="spotify-float-now-label">Now Playing</span>
+              <button class="spotify-sidebar-close" @click.stop="spotifyDismissed = true" title="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <span class="spotify-sidebar-title">{{ spotifyTrack.title }}</span>
+            <span class="spotify-sidebar-artist">{{ spotifyTrack.artist }}</span>
+          </div>
           <div class="spotify-sidebar-art">
             <img v-if="spotifyTrack.image" :src="spotifyTrack.image" :alt="spotifyTrack.title" />
             <i v-else class="fab fa-spotify"></i>
             <span class="spotify-dot"></span>
-          </div>
-          <div class="spotify-sidebar-info">
-            <span class="spotify-float-now-label">Now Playing</span>
-            <span class="spotify-sidebar-title">{{ spotifyTrack.title }}</span>
-            <span class="spotify-sidebar-artist">{{ spotifyTrack.artist }}</span>
           </div>
         </div>
       </div>
@@ -2071,16 +2073,16 @@ html[data-theme="forest"] .stat-badge.spotify-live {
 .spotify-sidebar {
   position: fixed;
   top: 72px;
-  right: 0;
-  transform: translateX(calc(100% - 52px));
+  left: 0;
+  transform: translateX(calc(-100% + 64px));
   z-index: 9999;
   display: flex;
   align-items: center;
   background: var(--card-bg, #fff);
   border: 1px solid var(--border, #e2e8f0);
-  border-right: none;
-  border-radius: 16px 0 0 16px;
-  box-shadow: -4px 4px 24px rgba(0,0,0,0.12);
+  border-left: none;
+  border-radius: 0 16px 16px 0;
+  box-shadow: 4px 4px 24px rgba(0,0,0,0.12);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
   width: 260px;
@@ -2090,13 +2092,19 @@ html[data-theme="forest"] .stat-badge.spotify-live {
   transform: translateX(0);
 }
 
+.spotify-sidebar-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
 .spotify-sidebar-close {
   display: none;
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
   border: none;
   background: var(--border, #e2e8f0);
   cursor: pointer;
@@ -2105,7 +2113,6 @@ html[data-theme="forest"] .stat-badge.spotify-live {
   border-radius: 50%;
   padding: 0;
   transition: background 0.2s, color 0.2s;
-  z-index: 2;
 }
 
 .spotify-sidebar--open .spotify-sidebar-close {
@@ -2117,13 +2124,11 @@ html[data-theme="forest"] .stat-badge.spotify-live {
   color: #fff;
 }
 
-.spotify-sidebar-close svg { width: 10px; height: 10px; }
+.spotify-sidebar-close svg { width: 9px; height: 9px; }
 
 .spotify-sidebar-inner {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  color: inherit;
   width: 100%;
 }
 
@@ -2138,6 +2143,9 @@ html[data-theme="forest"] .stat-badge.spotify-live {
   place-items: center;
   color: #fff;
   font-size: 1.5rem;
+  border-radius: 50%;
+  margin: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .spotify-sidebar-art img {
@@ -2149,8 +2157,8 @@ html[data-theme="forest"] .stat-badge.spotify-live {
 
 .spotify-dot {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 3px;
+  right: 3px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -2167,10 +2175,11 @@ html[data-theme="forest"] .stat-badge.spotify-live {
 .spotify-sidebar-info {
   flex: 1;
   min-width: 0;
-  padding: 10px 28px 10px 12px;
+  padding: 10px 8px 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
+  overflow: hidden;
 }
 
 .spotify-float-now-label {
@@ -2211,10 +2220,10 @@ html[data-theme="forest"] .stat-badge.spotify-live {
 
 @media (max-width: 640px) {
   .spotify-sidebar {
-    top: 28px;
+    top: 9px;
     width: 210px;
-    transform: translateX(calc(100% - 44px));
-    border-radius: 12px 0 0 12px;
+    transform: translateX(calc(-100% + 58px));
+    border-radius: 0 12px 12px 0;
   }
   .spotify-sidebar--open {
     transform: translateX(0);
@@ -2225,7 +2234,7 @@ html[data-theme="forest"] .stat-badge.spotify-live {
     flex: 0 0 44px;
   }
   .spotify-sidebar-info {
-    padding: 8px 26px 8px 10px;
+    padding: 8px 6px 8px 10px;
   }
   .spotify-sidebar-title {
     font-size: 0.78rem;
