@@ -3,7 +3,7 @@
     <!-- ===== SPOTIFY SIDEBAR BUBBLE ===== -->
     <transition name="spotify-float-fade">
       <div
-        v-if="!spotifyDismissed && spotifyTrack.isPlaying && !spotifyScrollHide"
+        v-if="!spotifyDismissed && spotifyTrack.isPlaying && !isAiToolsRoute"
         class="spotify-sidebar"
         :class="{ 'spotify-sidebar--open': spotifySidebarOpen }"
         @mouseenter="!isMobile && (spotifySidebarOpen = true)"
@@ -494,6 +494,8 @@ import {
   getOrCreateVisitorId
 } from "@/utils/visitorInfo";
 import { detectAdBlocker } from "@/utils/adBlockDetector";
+import { subscribeToCollection } from "@/services/contentService";
+import fallbackQuickPages from "@/data/quickPages.json";
 
 const UI_TRANSLATIONS = {
   en: {
@@ -622,62 +624,8 @@ export default {
         }
       ],
 
-      quickPages: [
-        {
-          path: "/now",
-          icon: "fas fa-bolt",
-          title: "Now",
-          description: "Current focus"
-        },
-        {
-          path: "/uses",
-          icon: "fas fa-tools",
-          title: "Uses",
-          description: "Tools and setup"
-        },
-        {
-          path: "/services",
-          icon: "fas fa-briefcase",
-          title: "Services",
-          description: "Work I offer"
-        },
-        {
-          path: "/deployment",
-          icon: "fas fa-rocket",
-          title: "Deployment",
-          description: "Build and launch photos"
-        },
-        {
-          path: "/case-studies",
-          icon: "fas fa-layer-group",
-          title: "Case Studies",
-          description: "Project breakdowns"
-        },
-        {
-          path: "/roadmap",
-          icon: "fas fa-map-signs",
-          title: "Roadmap",
-          description: "Planned updates"
-        },
-        {
-          path: "/contact",
-          icon: "fas fa-envelope",
-          title: "Contact",
-          description: "Reach out"
-        },
-        {
-          path: "/changelog",
-          icon: "fas fa-clock-rotate-left",
-          title: "Changelog",
-          description: "Recent changes"
-        },
-        {
-          path: "/privacy",
-          icon: "fas fa-shield-alt",
-          title: "Privacy",
-          description: "Data notice"
-        }
-      ],
+      quickPages: fallbackQuickPages,
+      quickPagesUnsubscribe: null,
 
 miniTools: [
   // Social media tools
@@ -876,6 +824,10 @@ miniTools: [
 
     showFloatingTools() {
       return this.isHomeRoute && !this.isAdminRoute;
+    },
+
+    isAiToolsRoute() {
+      return this.$route.path.startsWith("/tools/ai-chat");
     }
   },
 
@@ -928,6 +880,18 @@ miniTools: [
       this.spotifyTrack = result;
       if (!result.isPlaying) this.spotifyDismissed = false;
     }, 30000);
+
+    this.quickPagesUnsubscribe = subscribeToCollection(
+      "quickPages",
+      (items) => {
+        if (items.length) {
+          this.quickPages = items;
+        }
+      },
+      (error) => {
+        console.error("Load live quick pages error:", error);
+      }
+    );
   },
 
   beforeUnmount() {
@@ -944,6 +908,7 @@ miniTools: [
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
     if (this.spotifyScrollTimer) clearTimeout(this.spotifyScrollTimer);
     if (this.spotifyAutoTimer) clearTimeout(this.spotifyAutoTimer);
+    if (this.quickPagesUnsubscribe) this.quickPagesUnsubscribe();
   },
 
   methods: {
@@ -1168,12 +1133,6 @@ miniTools: [
       }
       this.lastScrollY = y;
 
-      if (y > 80) {
-        this.spotifyScrollHide = true;
-        clearTimeout(this.spotifyScrollTimer);
-      } else {
-        this.spotifyScrollHide = false;
-      }
     },
 
     scrollToTop() {

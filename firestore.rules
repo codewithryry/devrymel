@@ -1,0 +1,146 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == "pAwCyoApURZu9aVk4k8tKRHzk7K2";
+    }
+
+    match /feedback/{docId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 280
+        && request.resource.data.created == request.time;
+
+      allow update, delete: if isAdmin();
+    }
+
+    match /analytics/{docId} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if isAdmin();
+    }
+
+    match /visitor_logs/{docId} {
+      allow read: if isAdmin();
+
+      allow create, update: if request.resource.data.visitorId is string
+        && request.resource.data.visitorId.size() > 0
+
+        && request.resource.data.title is string
+        && request.resource.data.page is string
+        && request.resource.data.page.size() > 0
+        && request.resource.data.origin is string
+        && request.resource.data.path is string
+        && request.resource.data.path.size() > 0
+
+        && request.resource.data.browserName is string
+        && request.resource.data.operatingSystem is string
+        && request.resource.data.deviceType is string
+        && request.resource.data.adBlocker is string
+
+        && request.resource.data.userAgent is string
+        && request.resource.data.platform is string
+        && request.resource.data.vendor is string
+
+        && request.resource.data.language is string
+        && request.resource.data.languages is list
+
+        && request.resource.data.timezone is string
+        && request.resource.data.localTime is string
+        && request.resource.data.visitedAtClient is string
+
+        && request.resource.data.online is bool
+        && request.resource.data.cookiesEnabled is bool
+        && request.resource.data.doNotTrack is string
+
+        && request.resource.data.screen is map
+        && request.resource.data.viewport is map
+        && request.resource.data.devicePixelRatio is number
+
+        && request.resource.data.connection is map
+        && request.resource.data.memory is map
+        && request.resource.data.touch is map
+
+        && request.resource.data.network is map
+        && request.resource.data.network.ipAddress is string
+        && request.resource.data.network.isp is string
+        && request.resource.data.network.country is string
+        && request.resource.data.network.city is string
+
+        && request.resource.data.createdAt == request.time;
+
+      allow delete: if false;
+    }
+
+    match /projects/{projectId} {
+      allow read: if resource.data.status == "published" || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Public site content sections managed from the admin panel.
+    // Publicly readable, only the admin account can write.
+    match /profile/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /services/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /experiences/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /timeline/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /highlights/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /techStack/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /devStats/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /socialLinks/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /projectLinks/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /techNotes/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /certificates/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /quickPages/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

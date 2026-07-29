@@ -1,29 +1,28 @@
 [
   {
-    "id": 5,
-    "title": "Trabahanap",
-    "description": "A Python-based job portal that connects job seekers and employers through profile management, job posting, and application tracking.",
-    "detailedDescription": "Trabahanap is a comprehensive job portal built with Django that revolutionizes the job search experience. The platform features intelligent job matching algorithms, employer dashboards for job posting and candidate management, and a seamless application process for job seekers. The system includes real-time notifications, resume parsing, and analytics for both employers and job seekers.",
-    "image": "trabahanap.png",
-    "demoUrl": "https://trabahanap-job-matching-analyzer.onrender.com",
-    "githubUrl": "https://github.com/codewithryry/Trabahanap-job-matching-analyzer",
+    "id": 6,
+    "title": "Cognexa",
+    "description": "A hybrid, AI-powered platform combining a RAG knowledge base with AI-driven SDLC — runs fully self-hosted with a local LLM or in the cloud with your own AI provider key.",
+    "detailedDescription": "Cognexa is a hybrid, AI-powered platform — hybrid because it runs either fully self-hosted with a local LLM (Ollama), or deployed to the cloud with a bring-your-own-key external AI provider, with every feature working the same either way. It combines a Retrieval-Augmented Generation (RAG) knowledge base with AI-driven SDLC.",
+    "image": "Cognexa-Platform.png",
+    "demoUrl": "https://cognexarag.onrender.com/",
+    "githubUrl": "https://github.com/codewithryry/Cognexa.git",
     "technologies": [
-      "Python",
-      "Django",
-      "SQLite",
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "Django REST Framework"
+      "RAG",
+      "Ollama",
+      "LLM",
+      "AI SDLC",
+      "Node.js",
+      "Vue.js"
     ],
     "features": [
-      "User registration and authentication",
-      "Job posting and search system",
-      "Job seeker profile creation",
-      "Employer application management",
-      "Responsive and user-friendly UI"
+      "Retrieval-Augmented Generation knowledge base",
+      "AI-driven SDLC workflow",
+      "Self-hosted mode with local LLM (Ollama)",
+      "Cloud mode with bring-your-own-key AI provider",
+      "Consistent feature set across both hosting modes"
     ],
-    "startDate": "2024",
+    "startDate": "2026",
     "status": "Live & Active",
     "role": "Full-Stack Developer"
   },

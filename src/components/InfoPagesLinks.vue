@@ -86,6 +86,12 @@ export default {
           icon: "fas fa-envelope",
           title: "Contact",
           description: "Reach out for work or collaboration."
+        },
+        {
+          path: "/sponsor",
+          icon: "fas fa-heart",
+          title: "Sponsor",
+          description: "Support the platform and keep it free."
         }
       ]
     };

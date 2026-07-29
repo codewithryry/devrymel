@@ -62,6 +62,7 @@ export default {
   emits: ['close'],
   methods: {
     getCertificatePath(filename) {
+      if (filename && filename.startsWith('http')) return filename;
       return `/certificates/${filename}`;
     },
     openCertificate(filename) {

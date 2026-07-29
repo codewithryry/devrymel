@@ -22,5 +22,13 @@
     "description": "Useful VS Code extensions for students working with HTML, CSS, JavaScript, Vue, Firebase, and GitHub.",
     "readTime": "4 min read",
     "url": "https://dev.to/codewithryry/best-vs-code-extensions-for-it-students"
+  },
+  {
+    "id": 4,
+    "category": "AI",
+    "title": "AI-Assisted SDLC: A Practical Guide on Using AI for Software Development",
+    "description": "A whitepaper on integrating AI across the full software development lifecycle, featuring Cognexa, a model-agnostic RAG platform for grounding AI responses in organizational knowledge.",
+    "readTime": "9 min read",
+    "url": "https://eacomm.com/blog/ai-assisted-sdlc-a-practical-guide-on-using-ai-for-software-development/"
   }
 ]

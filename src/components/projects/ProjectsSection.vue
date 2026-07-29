@@ -8,7 +8,7 @@
     <div class="projects-grid">
       <div class="project-card" v-for="project in projects" :key="project.id">
         <div class="project-image-container">
-          <img :src="project.image" :alt="project.title" class="project-image" />
+          <img :src="resolveImage(project.image)" :alt="project.title" class="project-image" />
           <div class="project-status" :class="{ 'available': project.demoUrl !== '#', 'unavailable': project.demoUrl === '#' }">
             {{ project.demoUrl !== '#' ? 'Live Demo Available' : 'Demo Coming Soon' }}
           </div>
@@ -54,6 +54,19 @@ export default {
   },
   emits: ['openProjectModal'],
   methods: {
+    resolveImage(image) {
+      if (!image) return '';
+      if (image.startsWith('http') || image.startsWith('data:') || image.startsWith('/')) {
+        return image;
+      }
+
+      try {
+        return require(`@/assets/${image}`);
+      } catch (error) {
+        return image;
+      }
+    },
+
     handleProjectClick(url, projectTitle, event) {
       if (url === "#") {
         event.preventDefault();

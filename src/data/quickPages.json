@@ -1,0 +1,56 @@
+[
+  {
+    "path": "/now",
+    "icon": "fas fa-bolt",
+    "title": "Now",
+    "description": "Current focus"
+  },
+  {
+    "path": "/uses",
+    "icon": "fas fa-tools",
+    "title": "Uses",
+    "description": "Tools and setup"
+  },
+  {
+    "path": "/services",
+    "icon": "fas fa-briefcase",
+    "title": "Services",
+    "description": "Work I offer"
+  },
+  {
+    "path": "/deployment",
+    "icon": "fas fa-rocket",
+    "title": "Deployment",
+    "description": "Build and launch photos"
+  },
+  {
+    "path": "/case-studies",
+    "icon": "fas fa-layer-group",
+    "title": "Case Studies",
+    "description": "Project breakdowns"
+  },
+  {
+    "path": "/roadmap",
+    "icon": "fas fa-map-signs",
+    "title": "Roadmap",
+    "description": "Planned updates"
+  },
+  {
+    "path": "/contact",
+    "icon": "fas fa-envelope",
+    "title": "Contact",
+    "description": "Reach out"
+  },
+  {
+    "path": "/changelog",
+    "icon": "fas fa-clock-rotate-left",
+    "title": "Changelog",
+    "description": "Recent changes"
+  },
+  {
+    "path": "/privacy",
+    "icon": "fas fa-shield-alt",
+    "title": "Privacy",
+    "description": "Data notice"
+  }
+]

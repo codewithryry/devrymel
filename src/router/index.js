@@ -89,11 +89,19 @@ const routes = [
     }
   },
   {
-    path: "/admin",
-    name: "VisitorLogsAdmin",
-    component: () => import("@/views/VisitorLogsAdmin.vue"),
+    path: "/sponsor",
+    name: "sponsor",
+    component: () => import("@/views/SponsorPage.vue"),
     meta: {
-      title: "Admin Panel | Devrymel"
+      title: "Sponsor | Devrymel"
+    }
+  },
+  {
+    path: "/admin-cms-x7f2q",
+    name: "ProjectsAdminPanel",
+    component: () => import("@/views/ProjectsAdminPanel.vue"),
+    meta: {
+      title: "Projects Admin | Devrymel"
     }
   },
 

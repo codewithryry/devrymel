@@ -173,8 +173,17 @@ import HighlightsSection from './HighlightsSection.vue'
 import TechNotesSection from './TechNotesSection.vue'
 import PageNavSection from './PageNavSection.vue'
 import AdSlot from '../AdSlot.vue'
+import { subscribeToCollection, subscribeToDoc } from '@/services/contentService'
+import rawFallbackProjects from '@/data/projects.json'
 
-/* ===== JSON DATA IMPORTS ===== */
+const fallbackProjects = rawFallbackProjects.map((project) => ({
+  ...project,
+  image: project.image && !project.image.startsWith('http')
+    ? require(`@/assets/${project.image}`)
+    : project.image
+}))
+
+/* ===== JSON FALLBACKS (used until Firestore live data arrives) ===== */
 import profile from '@/data/profile.json'
 import techStack from '@/data/techStack.json'
 import devStats from '@/data/devStats.json'
@@ -182,10 +191,43 @@ import services from '@/data/services.json'
 import certificates from '@/data/certificates.json'
 import socialLinks from '@/data/socialLinks.json'
 import projectLinks from '@/data/projectLinks.json'
-import experiences from '@/data/experiences.json'
+import experiencesFromJson from '@/data/experiences.json'
 import highlights from '@/data/highlights.json'
 import timeline from '@/data/timeline.json'
 import techNotes from '@/data/techNotes.json'
+
+/*
+ * Pinned experience entry — always shown first, regardless of what admin
+ * panel entries get added/inserted on top of it in Firestore or the JSON fallback.
+ */
+const PINNED_EXPERIENCE = {
+  role: "SIL Trainee (TESDA 120 Hours) — AI/Full-Stack Developer",
+  company: "EACOMM Corporation",
+  date: "2026",
+  description: "Completed a 120-hour Supervised Industrial Learning (SIL) program under TESDA at EACOMM Corporation. My best contribution was building Cognexa (https://github.com/codewithryry/Cognexa.git), a hybrid AI-powered platform combining a RAG knowledge base with AI-driven SDLC — featured in EACOMM's published whitepaper: https://eacomm.com/blog/ai-assisted-sdlc-a-practical-guide-on-using-ai-for-software-development/",
+  tasks: [
+    "Completed 120 hours of Supervised Industrial Learning (SIL) under TESDA requirements",
+    "Built Cognexa, a hybrid AI-powered platform with a RAG knowledge base and AI-driven SDLC support",
+    "Implemented both self-hosted (local LLM via Ollama) and cloud (bring-your-own-key) operating modes",
+    "Contributed to EACOMM Corporation's published research on AI-assisted software development",
+    "Strongest at combining RAG knowledge retrieval with practical, AI-driven development workflows"
+  ]
+}
+
+const experiences = [PINNED_EXPERIENCE, ...experiencesFromJson]
+
+/* Live Firestore collections mirroring the JSON fallbacks above. */
+const LIVE_COLLECTIONS = [
+  'techStack',
+  'devStats',
+  'services',
+  'certificates',
+  'socialLinks',
+  'projectLinks',
+  'highlights',
+  'timeline',
+  'techNotes'
+]
 
 export default {
   name: "PersonalProfile",
@@ -321,77 +363,9 @@ export default {
         ]
       },
 
-      /* ===== PROJECTS (INLINE - STAY HERE) ===== */
-      projects: [
-        {
-          id: 5,
-          title: "Trabahanap",
-          description: "A Python-based job portal that connects job seekers and employers through profile management, job posting, and application tracking.",
-          detailedDescription: "Trabahanap is a comprehensive job portal built with Django that helps improve the job search experience. The platform features job matching, employer dashboards for job posting and candidate management, and a seamless application process for job seekers. The system includes notifications, resume parsing, and analytics for both employers and job seekers.",
-          image: require("@/assets/trabahanap.png"),
-          demoUrl: "https://trabahanap-job-matching-analyzer.onrender.com",
-          githubUrl: "https://github.com/codewithryry/Trabahanap-job-matching-analyzer",
-          technologies: [
-            "Python",
-            "Django",
-            "SQLite",
-            "HTML",
-            "CSS",
-            "JavaScript",
-            "Django REST Framework"
-          ],
-          features: [
-            "User registration and authentication",
-            "Job posting and search system",
-            "Job seeker profile creation",
-            "Employer application management",
-            "Responsive and user-friendly UI"
-          ],
-          startDate: "2024",
-          status: "Live & Active",
-          role: "Full-Stack Developer"
-        },
-        {
-          id: 2,
-          title: "SafePath",
-          description: "Bullying reporting system with AI support and sentiment analysis",
-          detailedDescription: "SafePath is an AI-powered platform designed to support bullying reporting through anonymous reports and sentiment analysis. The system uses natural language processing to detect harmful content and provides real-time support through an AI chatbot. It features secure reporting, data analytics for schools, and a dashboard for administrators.",
-          image: require("@/assets/safepath.png"),
-          demoUrl: "https://safepath-4pzk.onrender.com",
-          githubUrl: "https://github.com/codewithryry/SafePath",
-          technologies: ["Node.js", "MySQL", "Wit.ai", "TensorFlow", "VADER"],
-          features: [
-            "Anonymous reporting system",
-            "AI-powered sentiment analysis",
-            "Real-time chatbot support",
-            "Administrator dashboard",
-            "Data analytics and reporting"
-          ],
-          startDate: "2024",
-          status: "Live",
-          role: "Backend Developer & AI Integration"
-        },
-        {
-          id: 3,
-          title: "LiftUp",
-          description: "Mental health platform with AI assistance and community support",
-          detailedDescription: "LiftUp is a mental wellness platform that combines AI technology with community support. The platform offers personalized mental health resources, AI-guided meditation sessions, anonymous community forums, and mood tracking. It provides a safe space for users to share experiences and access mental health resources.",
-          image: require("@/assets/liftup.png"),
-          demoUrl: "https://liftupconnect.vercel.app/",
-          githubUrl: "https://github.com/codewithryry/LiftUp",
-          technologies: ["Vue.js", "AI Chatbot", "Firebase", "Community Forums"],
-          features: [
-            "AI mental health assistant",
-            "Anonymous community forums",
-            "Mood tracking and analytics",
-            "Guided meditation sessions",
-            "Resource library"
-          ],
-          startDate: "2023",
-          status: "Active Development",
-          role: "Full-Stack Developer"
-        }
-      ],
+      /* ===== PROJECTS (static, managed directly in src/data/projects.json) ===== */
+      projects: fallbackProjects,
+      contentUnsubscribes: [],
 
       /* ===== MODAL STATES ===== */
       showDeansListModal: false,
@@ -412,6 +386,53 @@ export default {
       socialModalPlatforms: [],
       selectedProject: null
     }
+  },
+
+  mounted() {
+    LIVE_COLLECTIONS.forEach((key) => {
+      const unsubscribe = subscribeToCollection(
+        key,
+        (items) => {
+          if (items.length) {
+            this[key] = items
+          }
+        },
+        (error) => {
+          console.error(`Load live ${key} error:`, error)
+        }
+      )
+      this.contentUnsubscribes.push(unsubscribe)
+    })
+
+    const unsubscribeExperiences = subscribeToCollection(
+      'experiences',
+      (items) => {
+        this.experiences = [PINNED_EXPERIENCE, ...items]
+      },
+      (error) => {
+        console.error('Load live experiences error:', error)
+      }
+    )
+    this.contentUnsubscribes.push(unsubscribeExperiences)
+
+    const unsubscribeProfile = subscribeToDoc(
+      'profile',
+      'main',
+      (data) => {
+        if (data) {
+          this.profile = { ...this.profile, ...data }
+        }
+      },
+      (error) => {
+        console.error('Load live profile error:', error)
+      }
+    )
+    this.contentUnsubscribes.push(unsubscribeProfile)
+  },
+
+  beforeUnmount() {
+    this.contentUnsubscribes.forEach((unsubscribe) => unsubscribe())
+    this.contentUnsubscribes = []
   },
 
   computed: {
@@ -504,6 +525,7 @@ export default {
     },
 
     getCertificatePath(filename) {
+      if (filename && filename.startsWith('http')) return filename
       return `/certificates/${filename}`
     },
 

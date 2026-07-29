@@ -81,19 +81,6 @@
 
     <!-- DESKTOP LAYOUT -->
     <section class="profile-section desktop-profile-content">
-      <!-- Mobile Optimization Notice -->
-      <div class="mobile-optimization-notice" v-if="showNotice">
-        <div class="notice-content">
-          <div class="notice-text">
-            <strong>{{ text.mobileNoticeStrong }}</strong> {{ text.mobileNoticeText }}
-          </div>
-
-          <a class="notice-close" @click.prevent="hideNotice">
-            <i class="fas fa-times"></i>
-          </a>
-        </div>
-      </div>
-
       <div class="profile-brand-card">
         <!-- Left Column: Visual Identity -->
         <div class="brand-visual">
@@ -237,9 +224,6 @@ const PROFILE_TRANSLATIONS = {
     email: "Email",
     sendEmail: "Send an Email",
 
-    mobileNoticeStrong: "Mobile Optimized:",
-    mobileNoticeText: "This portfolio is best viewed on mobile for optimal experience",
-
     aboutMobile1:
       "I specialize in developing modern web applications and Progressive Web Apps (PWAs) using current technologies and AI-assisted workflows. I also design and implement workflow automations with n8n to streamline processes, integrate systems, and reduce repetitive tasks. My work focuses on transforming ideas into functional, scalable solutions that deliver real-world value.",
 
@@ -272,10 +256,6 @@ const PROFILE_TRANSLATIONS = {
     email: "Email",
     sendEmail: "Mag-send ng Email",
 
-    mobileNoticeStrong: "Mobile Optimized:",
-    mobileNoticeText:
-      "Mas magandang tingnan ang portfolio na ito sa mobile para sa mas maayos na experience",
-
     aboutMobile1:
       "Nagfo-focus ako sa paggawa ng modern web applications at Progressive Web Apps (PWAs) gamit ang kasalukuyang technologies at AI-assisted workflows. Gumagawa rin ako ng workflow automations gamit ang n8n para mapabilis ang proseso, ma-connect ang systems, at mabawasan ang paulit-ulit na tasks. Ang focus ko ay gawing functional, scalable, at kapaki-pakinabang na solutions ang mga ideas.",
 
@@ -307,9 +287,6 @@ const PROFILE_TRANSLATIONS = {
     getInTouch: "聯絡方式",
     email: "電子郵件",
     sendEmail: "發送電子郵件",
-
-    mobileNoticeStrong: "行動裝置最佳化：",
-    mobileNoticeText: "此作品集在手機上瀏覽會有更好的體驗",
 
     aboutMobile1:
       "我專注於使用現代技術與 AI 輔助流程開發現代網頁應用程式和 Progressive Web Apps（PWA）。我也使用 n8n 設計並建置工作流程自動化，以簡化流程、整合系統並減少重複性任務。我的工作重點是把想法轉化為具有實際價值的功能性與可擴展解決方案。",
@@ -364,8 +341,6 @@ export default {
 
   data() {
     return {
-      showNotice: true,
-      noticeTimer: null,
       currentTheme: document.documentElement.getAttribute("data-theme") || "light"
     };
   },
@@ -391,10 +366,6 @@ export default {
   },
 
   mounted() {
-    this.noticeTimer = setTimeout(() => {
-      this.showNotice = false;
-    }, 4000);
-
     this._themeObserver = new MutationObserver(() => {
       this.currentTheme = document.documentElement.getAttribute("data-theme") || "light";
     });
@@ -408,12 +379,6 @@ export default {
     if (this._themeObserver) this._themeObserver.disconnect();
   },
 
-  beforeUnmount() {
-    if (this.noticeTimer) {
-      clearTimeout(this.noticeTimer);
-    }
-  },
-
   methods: {
     openMobileDeansList() {
       this.$emit("openMobileDeansList");
@@ -421,14 +386,6 @@ export default {
 
     openCertificatesListModal() {
       this.$emit("openCertificatesListModal");
-    },
-
-    hideNotice() {
-      this.showNotice = false;
-
-      if (this.noticeTimer) {
-        clearTimeout(this.noticeTimer);
-      }
     }
   }
 };

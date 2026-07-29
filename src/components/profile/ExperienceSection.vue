@@ -449,6 +449,7 @@ export default {
   font-size: 0.9rem;
   line-height: 1.65;
   margin-bottom: 1rem;
+  word-break: break-word;
 }
 
 .experience-task-grid {
@@ -600,11 +601,7 @@ export default {
     font-size: 0.82rem;
     line-height: 1.55;
     margin-bottom: 0.85rem;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    word-break: break-word;
   }
 
   .experience-task-grid {
