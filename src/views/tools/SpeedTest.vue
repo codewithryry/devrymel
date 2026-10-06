@@ -7,21 +7,17 @@
   <div class="tool-page">
     <div class="tool-shell">
 
-      <!-- Back -->
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <!-- Header -->
       <div class="tool-hero">
         <div class="st-icon-wrap">
           <i class="fas fa-gauge-high"></i>
         </div>
-        <h1 class="st-title">Speed Test</h1>
-        <p class="st-subtitle">
-          Check your estimated internet speed, latency, and connection quality.
-        </p>
+        <div class="tt-hero-text">
+          <h1 class="st-title">Speed Test</h1>
+          <p class="st-subtitle">
+            Check your estimated internet speed, latency, and connection quality.
+          </p>
+        </div>
       </div>
 
       <!-- Test Card -->
@@ -169,6 +165,7 @@ import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "SpeedTest",
+
   components: { ToolSuggestions, AdSlot },
 
   data() {
@@ -327,7 +324,7 @@ export default {
 
 /* Shell container */
 .tool-shell {
-  width: min(760px, 100%);
+  width: min(var(--container-width), 100%);
   margin: 0 auto;
 }
 
@@ -358,47 +355,9 @@ export default {
 }
 
 /* Header card */
-.tool-hero {
-  margin-bottom: 22px;
-  padding: clamp(20px, 4vw, 36px);
-  border-radius: 26px;
-  background: color-mix(in srgb, var(--surface) 84%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
-  backdrop-filter: blur(16px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-}
 
-.st-icon-wrap {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #ffffff;
-  font-size: 1.55rem;
-  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.28);
-}
 
-.st-title {
-  margin: 0;
-  color: var(--text);
-  font-size: 1.7rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
 
-.st-subtitle {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
 
 /* Main card */
 .st-card {
@@ -784,5 +743,53 @@ export default {
   .st-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===== Tool header (same layout as TikTok) ===== */
+.tool-hero {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 18px);
+  margin-bottom: 18px;
+  padding: clamp(16px, 4vw, 24px);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.st-icon-wrap {
+  width: clamp(48px, 10vw, 60px);
+  height: clamp(48px, 10vw, 60px);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.28);
+}
+
+.tt-hero-text { min-width: 0; }
+
+.st-title {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: clamp(1.2rem, 4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.st-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+  .tool-hero { gap: 12px; padding: 14px; border-radius: 18px; }
 }
 </style>

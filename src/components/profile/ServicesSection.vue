@@ -4,9 +4,12 @@
  -->
 
 <template>
-  <section class="services-section">
+  <section id="services" class="services-section">
     <div class="section-header">
-      <h2 class="section-title">Services</h2>
+      <div>
+        <span class="section-kicker">What I Offer</span>
+        <h2 class="section-title">Services</h2>
+      </div>
 
       <!-- Mobile swipe hint -->
       <div class="swipe-hint">
@@ -315,20 +318,40 @@ export default {
 
 <style scoped>
 .services-section {
-  margin-top: 3rem;
+  margin: 0;
 }
 
 .section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
   text-align: left;
   margin-bottom: 1.5rem;
 }
 
+.section-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .section-title {
-  font-size: clamp(1.85rem, 4vw, 2.35rem);
-  font-weight: 900;
-  color: #2d3748;
   margin: 0;
-  letter-spacing: -0.04em;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
   text-align: left;
 }
 
@@ -336,23 +359,11 @@ export default {
   display: none;
   align-items: center;
   gap: 0.5rem;
-  color: #718096;
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   margin-top: 0.9rem;
   padding: 0 0.5rem;
-  animation: pulseHint 2s infinite;
-}
-
-@keyframes pulseHint {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-
-  50% {
-    opacity: 1;
-  }
 }
 
 /* Desktop styles */
@@ -374,62 +385,50 @@ export default {
 
 .service-card {
   flex: 0 0 calc(33.333% - 1rem);
-  background: white;
-  border-radius: 20px;
-  margin-top: -32px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-top: 0;
   padding: 1.75rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
+  transition: border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   position: relative;
   min-height: 280px;
-  opacity: 0.6;
-  transform: scale(0.85);
-  filter: blur(3px) brightness(0.95);
+  opacity: 0.55;
+  transform: scale(0.94);
 }
 
-.service-card.left {
-  opacity: 0.7;
-  transform: translateX(-10%) scale(0.9);
-  filter: blur(2px) brightness(0.97);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
-}
-
+.service-card.left,
 .service-card.right {
   opacity: 0.7;
-  transform: translateX(10%) scale(0.9);
-  filter: blur(2px) brightness(0.97);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  transform: scale(0.97);
 }
 
 .service-card.active {
   opacity: 1;
   transform: scale(1);
-  filter: blur(0) brightness(1);
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
   z-index: 10;
-  border: 1px solid rgba(102, 126, 234, 0.3);
-  min-height: 320px;
+  border-color: var(--text);
+  min-height: 300px;
 }
 
 .service-title {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #2d3748;
+  color: var(--text);
   margin: 0.5rem 0 1rem 0;
   text-align: left;
   line-height: 1.3;
 }
 
 .service-description {
-  color: #4a5568;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1.25rem;
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   min-height: 60px;
 }
 
@@ -443,21 +442,21 @@ export default {
   align-items: flex-start;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #2d3748;
-  transition: all 0.3s ease;
+  font-size: 0.88rem;
+  color: var(--text);
+  transition: opacity 0.3s ease;
   line-height: 1.4;
 }
 
 .feature-item i {
-  color: #48bb78;
-  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
   flex-shrink: 0;
-  margin-top: 0.1rem;
+  margin-top: 0.15rem;
 }
 
 .hidden-feature {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .service-actions {
@@ -472,26 +471,27 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border-radius: 10px;
+  padding: 0.7rem 1.5rem;
+  background: var(--surface-soft);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   text-decoration: none;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease;
   width: 100%;
   max-width: 280px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .active-button {
-  background: linear-gradient(135deg, #5a67d8, #6b46c1);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
 }
 
 .service-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  opacity: 0.85;
 }
 
 .pricing-hint {
@@ -500,11 +500,11 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   margin-top: 0.75rem;
-  color: #718096;
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   font-weight: 500;
   padding-top: 0.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border);
 }
 
 .carousel-controls {
@@ -526,54 +526,51 @@ export default {
 }
 
 .current-service {
-  font-size: 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.3rem;
+  color: var(--text);
+  font-weight: 700;
   line-height: 1;
 }
 
 .service-separator {
-  color: #cbd5e0;
-  font-size: 1.2rem;
+  color: var(--border);
+  font-size: 1.1rem;
   line-height: 1;
 }
 
 .total-services {
-  color: #a0aec0;
+  color: var(--text-muted);
   font-size: 1rem;
   line-height: 1;
 }
 
 .service-name {
-  color: #4a5568;
-  font-size: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
   margin-left: 1rem;
   font-weight: 500;
   line-height: 1;
 }
 
 .slider-btn {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: #667eea;
-  font-size: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s ease;
   flex-shrink: 0;
   z-index: 20;
 }
 
 .slider-btn:hover {
-  background: #667eea;
-  color: white;
-  border-color: #667eea;
+  border-color: var(--text);
 }
 
 /* Mobile single card style */
@@ -588,11 +585,10 @@ export default {
 .mobile-service-card {
   width: 100%;
   min-height: 320px;
-  background: white;
-  border-radius: 20px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   padding: 1.25rem;
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   touch-action: pan-y;
@@ -600,10 +596,10 @@ export default {
 }
 
 .mobile-service-card .service-title {
-  font-size: 1.1rem;
-  font-weight: 900;
+  font-size: 1.05rem;
+  font-weight: 700;
   margin: 0 0 0.7rem;
-  color: #2d3748;
+  color: var(--text);
   text-align: left;
 }
 
@@ -612,7 +608,7 @@ export default {
   line-height: 1.62;
   min-height: auto;
   margin-bottom: 1rem;
-  color: #4a5568;
+  color: var(--text-secondary);
   text-align: left;
 }
 
@@ -678,7 +674,7 @@ export default {
 /* Responsive */
 @media (max-width: 768px) {
   .services-section {
-    margin-top: 3rem;
+    margin: 0;
     overflow: visible;
   }
 
@@ -688,11 +684,11 @@ export default {
   }
 
   .section-title {
-    font-size: 2rem;
-    line-height: 1.15;
-    font-weight: 900;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 700;
     margin-bottom: 0.85rem;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
   }
 
   .swipe-hint {
@@ -713,8 +709,8 @@ export default {
 
 @media (max-width: 480px) {
   .section-title {
-    font-size: 1.9rem;
-    line-height: 1.15;
+    font-size: 1.35rem;
+    line-height: 1.2;
     margin-bottom: 0.75rem;
   }
 
@@ -736,33 +732,4 @@ export default {
   }
 }
 
-/* Dark Mode */
-html[data-theme="dark"] .section-title,
-html[data-theme="dark"] .service-title {
-  color: #f8fafc;
-}
-
-html[data-theme="dark"] .service-description,
-html[data-theme="dark"] .feature-item {
-  color: #cbd5e0;
-}
-
-html[data-theme="dark"] .service-card,
-html[data-theme="dark"] .mobile-service-card {
-  background: rgba(17, 17, 17, 0.94);
-  border-color: #242424;
-}
-
-html[data-theme="dark"] .mobile-service-card {
-  box-shadow: none;
-}
-
-html[data-theme="dark"] .pricing-hint {
-  color: #cbd5e0;
-  border-top-color: #242424;
-}
-
-html[data-theme="dark"] .swipe-hint {
-  color: #cbd5e0;
-}
 </style>

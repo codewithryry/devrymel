@@ -1,12 +1,8 @@
 <template>
   <main class="info-page">
     <section class="info-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="info-hero">
+        <HeroArt name="uses" />
         <span class="eyebrow">Uses</span>
         <h1>Tools and setup I use for development</h1>
         <p>
@@ -30,15 +26,24 @@
           <span v-for="tool in tools" :key="tool">{{ tool }}</span>
         </div>
       </section>
+
+      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
+import HeroArt from "@/components/HeroArt.vue";
+import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
 export default {
   name: "UsesPage",
+
+  components: {
+    ExploreLinks,
+    HeroArt
+  },
 
   data() {
     return {

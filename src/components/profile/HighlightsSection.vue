@@ -1,7 +1,10 @@
 <template>
   <section class="highlights-section">
     <div class="section-header reveal-up">
-      <h2 class="section-title">Why Work With Me</h2>
+      <div>
+        <span class="section-kicker">Benefits</span>
+        <h2 class="section-title">Why Work With Me</h2>
+      </div>
 
       <div class="swipe-hint">
         <span>Swipe for more..</span>
@@ -88,44 +91,52 @@ export default {
 
 <style scoped>
 .highlights-section {
-  margin: 4rem 0;
+  margin: 0;
   overflow: hidden;
 }
 
 .section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
   text-align: left;
   margin-bottom: 1.5rem;
 }
 
+.section-header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .section-title {
-  font-size: clamp(1.85rem, 4vw, 2.35rem);
-  font-weight: 900;
-  color: var(--text, #2d3748);
   margin: 0;
-  letter-spacing: -0.04em;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
 }
 
 .swipe-hint {
   display: none;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-secondary, #718096);
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   margin-top: 0.9rem;
   padding: 0 0.5rem;
-  animation: pulseHint 2s infinite;
-}
-
-@keyframes pulseHint {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-
-  50% {
-    opacity: 1;
-  }
 }
 
 .highlights-grid {
@@ -136,36 +147,20 @@ export default {
 
 .highlight-card {
   position: relative;
-  min-height: 230px;
-  background: var(--surface, rgba(255, 255, 255, 0.94));
-  border-radius: 20px;
+  min-height: 210px;
+  background: var(--surface);
+  border-radius: var(--radius);
   padding: 1.5rem;
-  border: 1px solid var(--border, rgba(226, 232, 240, 0.95));
+  border: 1px solid var(--border);
   overflow: hidden;
   transition:
-    opacity 0.75s ease,
-    transform 0.75s ease,
-    box-shadow 0.35s ease,
-    border-color 0.35s ease,
-    background 0.35s ease;
-}
-
-.highlight-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    border-color 0.2s ease;
 }
 
 .highlight-card:hover {
-  transform: translateY(-7px);
-  border-color: var(--accent, rgba(56, 161, 105, 0.55));
-}
-
-.highlight-card:hover::before {
-  opacity: 1;
+  border-color: var(--text-muted);
 }
 
 .highlight-top {
@@ -179,11 +174,12 @@ export default {
 }
 
 .highlight-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 15px;
-  background: rgba(56, 161, 105, 0.12);
-  color: var(--accent, #38a169);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -191,33 +187,33 @@ export default {
 }
 
 .highlight-icon i {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
 }
 
 .highlight-number {
-  color: rgba(45, 55, 72, 0.12);
-  font-size: 1.65rem;
-  font-weight: 900;
+  color: var(--border);
+  font-size: 1.5rem;
+  font-weight: 700;
   line-height: 1;
 }
 
 .highlight-card h3 {
   position: relative;
   z-index: 1;
-  font-size: 1.1rem;
-  font-weight: 900;
+  font-size: 1.05rem;
+  font-weight: 700;
   margin: 0 0 0.6rem;
-  letter-spacing: -0.02em;
-  color: var(--text, #2d3748);
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
 
 .highlight-card p {
   position: relative;
   z-index: 1;
-  font-size: 0.93rem;
-  line-height: 1.7;
+  font-size: 0.92rem;
+  line-height: 1.6;
   margin: 0;
-  color: var(--text-secondary, #4a5568);
+  color: var(--text-secondary);
 }
 
 /* Reveal animation */
@@ -262,7 +258,7 @@ export default {
 /* Mobile */
 @media (max-width: 768px) {
   .highlights-section {
-    margin: 3rem 0;
+    margin: 0;
     overflow: visible;
   }
 
@@ -272,11 +268,11 @@ export default {
   }
 
   .section-title {
-    font-size: 2rem;
-    line-height: 1.15;
-    font-weight: 900;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 700;
     margin-bottom: 0.85rem;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
   }
 
   .swipe-hint {
@@ -303,25 +299,19 @@ export default {
   .highlight-card {
     min-width: 82%;
     max-width: 82%;
-    min-height: 210px;
+    min-height: 200px;
     scroll-snap-align: start;
-    border-radius: 20px;
+    border-radius: var(--radius);
     padding: 1.25rem;
   }
 
   .highlight-card:hover {
     transform: none;
-    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
-  }
-
-  .highlight-card:hover::before {
-    opacity: 0;
   }
 
   .highlight-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
   }
 
   .highlight-number {
@@ -347,19 +337,9 @@ export default {
   }
 }
 
-/* Small Mobile */
-@media (max-width: 480px) {
-  .section-title {
-    font-size: 1.9rem;
-    line-height: 1.15;
-    margin-bottom: 0.75rem;
-    padding-left: 0;
-  }
-}
-
 @media (max-width: 420px) {
   .section-title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 
   .highlight-card {
@@ -383,39 +363,4 @@ export default {
   }
 }
 
-/* Theme support */
-:global(html[data-theme="midnight"]) .highlight-card,
-:global(html[data-theme="forest"]) .highlight-card {
-  background: var(--surface);
-  border-color: var(--border);
-  box-shadow: none;
-}
-
-:global(html[data-theme="midnight"]) .section-title,
-:global(html[data-theme="forest"]) .section-title,
-:global(html[data-theme="midnight"]) .highlight-card h3,
-:global(html[data-theme="forest"]) .highlight-card h3 {
-  color: var(--text);
-}
-
-:global(html[data-theme="midnight"]) .highlight-card p,
-:global(html[data-theme="forest"]) .highlight-card p {
-  color: var(--text-secondary);
-}
-
-:global(html[data-theme="midnight"]) .highlight-number,
-:global(html[data-theme="forest"]) .highlight-number {
-  color: rgba(248, 250, 252, 0.12);
-}
-
-:global(html[data-theme="midnight"]) .highlight-icon,
-:global(html[data-theme="forest"]) .highlight-icon {
-  background: rgba(34, 197, 94, 0.16);
-  color: var(--accent);
-}
-
-:global(html[data-theme="midnight"]) .swipe-hint,
-:global(html[data-theme="forest"]) .swipe-hint {
-  color: var(--text-secondary);
-}
 </style>

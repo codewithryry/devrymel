@@ -1,12 +1,8 @@
 <template>
   <main class="info-page">
     <section class="info-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="info-hero">
+        <HeroArt name="services" />
         <span class="eyebrow">Services</span>
         <h1>Web development services I offer</h1>
         <p>
@@ -39,15 +35,24 @@
           Email Me
         </a>
       </section>
+
+      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
+import HeroArt from "@/components/HeroArt.vue";
+import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
 export default {
   name: "ServicesPage",
+
+  components: {
+    ExploreLinks,
+    HeroArt
+  },
 
   data() {
     return {

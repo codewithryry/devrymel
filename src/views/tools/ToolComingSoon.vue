@@ -6,27 +6,22 @@
 <template>
   <div class="tool-page">
     <div class="tool-shell">
-      <!-- Back -->
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <!-- Header -->
       <div class="tool-hero">
         <div class="tt-icon-wrap" :style="{ background: toolBg }">
           <i :class="toolIcon"></i>
         </div>
+        <div class="tt-hero-text">
+          <h1 class="tt-title">{{ toolTitle }}</h1>
+          <p class="tt-subtitle">
+            This mini tool is currently under construction and will be available soon.
+          </p>
 
-        <h1 class="tt-title">{{ toolTitle }}</h1>
-        <p class="tt-subtitle">
-          This mini tool is currently under construction and will be available soon.
-        </p>
-
-        <span class="soon-badge">
-          <i class="fas fa-clock"></i>
-          Coming Soon
-        </span>
+          <span class="soon-badge">
+            <i class="fas fa-clock"></i>
+            Coming Soon
+          </span>
+        </div>
       </div>
 
       <!-- Main card -->
@@ -156,7 +151,7 @@ export default {
 }
 
 .tool-shell {
-  width: min(760px, 100%);
+  width: min(var(--container-width), 100%);
   margin: 0 auto;
 }
 
@@ -188,47 +183,9 @@ export default {
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
 }
 
-.tool-hero {
-  margin-bottom: 22px;
-  padding: clamp(20px, 4vw, 36px);
-  border-radius: 26px;
-  background: color-mix(in srgb, var(--surface) 84%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
-  backdrop-filter: blur(16px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
 
-.tt-icon-wrap {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border-radius: 20px;
-  color: #ffffff;
-  font-size: 1.55rem;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
-  margin-bottom: 14px;
-}
 
-.tt-title {
-  margin: 0;
-  color: var(--text);
-  font-size: 1.7rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
 
-.tt-subtitle {
-  max-width: 520px;
-  margin: 8px auto 0;
-  color: var(--text-secondary);
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
 
 .soon-badge {
   display: inline-flex;
@@ -359,16 +316,7 @@ export default {
     margin-bottom: 16px;
   }
 
-  .tool-hero {
-    border-radius: 22px;
-  }
 
-  .tt-icon-wrap {
-    width: 58px;
-    height: 58px;
-    border-radius: 18px;
-    font-size: 1.35rem;
-  }
 
   .soon-card {
     flex-direction: column;
@@ -380,5 +328,53 @@ export default {
     padding: 16px;
     border-radius: 18px;
   }
+}
+
+/* ===== Tool header (same layout as TikTok) ===== */
+.tool-hero {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 18px);
+  margin-bottom: 18px;
+  padding: clamp(16px, 4vw, 24px);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+/* Icon color comes from the inline toolBg style */
+.tt-icon-wrap {
+  width: clamp(48px, 10vw, 60px);
+  height: clamp(48px, 10vw, 60px);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  color: #ffffff;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+}
+
+.tt-hero-text { min-width: 0; }
+
+.tt-title {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: clamp(1.2rem, 4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.tt-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+  .tool-hero { gap: 12px; padding: 14px; border-radius: 18px; }
 }
 </style>

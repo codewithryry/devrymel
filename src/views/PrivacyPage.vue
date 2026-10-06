@@ -1,12 +1,8 @@
 <template>
   <main class="info-page">
     <section class="info-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="info-hero">
+        <HeroArt name="privacy" />
         <span class="eyebrow">Privacy</span>
         <h1>Privacy and visitor data notice</h1>
         <p>
@@ -64,14 +60,23 @@
           Contact Me
         </a>
       </section>
+
+      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
+import HeroArt from "@/components/HeroArt.vue";
+import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
 export default {
-  name: "PrivacyPage"
+  name: "PrivacyPage",
+
+  components: {
+    ExploreLinks,
+    HeroArt
+  }
 };
 </script>

@@ -40,7 +40,7 @@ export default {
     return {
       pages: [
         {
-          path: "/now",
+          path: "/about",
           icon: "fas fa-bolt",
           title: "Now",
           description: "See what I’m currently focused on."

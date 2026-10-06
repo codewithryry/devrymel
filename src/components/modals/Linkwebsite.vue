@@ -5,54 +5,38 @@
 
 <template>
   <transition name="slide-up">
-    <div class="modal-overlay" @click="$emit('close')">
-      <div class="modal" @click.stop>
-
-        <!-- HEADER (same style as Dean's List) -->
-        <div class="modal-header">
-          <h3 class="modal-title">Project Links</h3>
-          <button class="modal-close" @click="$emit('close')">
+    <div class="mobile-modal-overlay" @click="$emit('close')">
+      <div class="mobile-modal" @click.stop>
+        <div class="mobile-modal-header">
+          <h3 class="mobile-modal-title">Project Links</h3>
+          <button class="mobile-modal-close" @click="$emit('close')">
             <i class="fas fa-times"></i>
           </button>
         </div>
 
-        <!-- CONTENT -->
-        <div class="modal-content">
-
-          <!-- DESCRIPTION -->
-          <div class="modal-description">
+        <div class="mobile-link-content">
+          <div class="mobile-link-description">
             <i class="fas fa-link"></i>
-<p>Production-ready systems I’ve designed, built, and deployed.</p>
-
+            <p>Production-ready systems I’ve designed, built, and deployed.</p>
           </div>
 
-          <!-- CARD LIST -->
-          <div class="modal-right">
-            <div class="modal-scroll">
-              <div class="modal-grid">
-                <div
-                  class="modal-card"
-                  v-for="site in links"
-                  :key="site.id"
-                  @click="openLink(site.link)"
-                >
-                  <div class="card-icon">
-                    <i class="fas fa-globe"></i>
-                  </div>
-
-                  <div class="card-info">
-                    <h4 class="card-title">{{ site.title }}</h4>
-                    <p class="card-desc">{{ site.description }}</p>
-                  </div>
-
-                  <i class="fas fa-chevron-right card-arrow"></i>
-                </div>
+          <div class="mobile-link-list">
+            <div
+              class="mobile-link-item"
+              v-for="site in links"
+              :key="site.id"
+              @click="openLink(site.link)"
+            >
+              <div class="mobile-link-icon">
+                <i class="fas fa-globe"></i>
               </div>
+              <div class="mobile-link-info">
+                <h4>{{ site.title }}</h4>
+              </div>
+              <i class="fas fa-chevron-right arrow-icon"></i>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   </transition>
@@ -78,8 +62,7 @@ export default {
 </script>
 
 <style scoped>
-/* ===== Overlay ===== */
-.modal-overlay {
+.mobile-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.75);
@@ -89,173 +72,142 @@ export default {
   z-index: 9999;
 }
 
-/* ===== Modal ===== */
-.modal {
-  background: white;
+.mobile-modal {
+  background: var(--surface);
   width: 100%;
-  max-width: 520px;
   max-height: 85vh;
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-bottom: none;
   animation: modalSlideUp 0.3s ease;
-  display: flex;
-  flex-direction: column;
 }
 
-/* ===== Header ===== */
-/* ===== Modal Header (Unified Style) ===== */
-.modal-header {
+.mobile-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
 }
 
-/* ===== Title ===== */
-.modal-title {
+.mobile-modal-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #2d3748;
-  line-height: 1;                 /* 🔥 vertical centering fix */
+  color: var(--text);
 }
 
-/* ===== Close Button ===== */
-.modal-close {
+.mobile-modal-close {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #64748b;
-  transition: all 0.2s ease;
+  color: var(--text-secondary);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.modal-close:active {
-  background: #667eea;
-  color: white;
-  transform: rotate(90deg);
+.mobile-modal-close:active {
+  background: var(--accent);
+  color: var(--bg);
 }
 
-/* ===== Content ===== */
-.modal-content {
+.mobile-link-content {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.5rem;
 }
 
-/* ===== Description ===== */
-.modal-description {
+.mobile-link-description {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(59, 130, 246, 0.08);
-  border-radius: 12px;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  text-align: left;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
-.modal-description i {
-  color: #3b82f6;
-  font-size: 1.4rem;
+.mobile-link-description i {
+  color: var(--text);
+  font-size: 1.5rem;
   margin-top: 0.2rem;
   flex-shrink: 0;
 }
 
-.modal-description p {
-  color: #2d3748;
+.mobile-link-description p {
+  color: var(--text);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
 }
 
-/* ===== Cards Area ===== */
-.modal-right {
+.mobile-link-list {
   display: flex;
-}
-
-/* ===== Scroll Area (4 cards only) ===== */
-.modal-scroll {
-  flex: 1;
-  max-height: calc(5* 74px);  /* 🔥 4 cards visible */
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 50vh;
   overflow-y: auto;
   padding-right: 0.5rem;
 }
 
-/* ===== Grid ===== */
-.modal-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-/* ===== Card ===== */
-.modal-card {
+.mobile-link-item {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
-.modal-card:active {
-  transform: scale(0.98);
-  background: white;
-  border-color: #667eea;
+.mobile-link-item:active {
+  border-color: var(--text);
 }
 
-/* ===== Icon ===== */
-.card-icon {
+.mobile-link-icon {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  border-radius: var(--radius-sm);
+  background: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.1rem;
+  color: var(--bg);
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 
-/* ===== Info ===== */
-.card-info {
+.mobile-link-info {
   flex: 1;
   text-align: left;
+  min-width: 0;
 }
 
-.card-title {
+.mobile-link-info h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 0.3rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.card-desc {
-  font-size: 0.85rem;
-  color: #64748b;
-}
-
-/* ===== Arrow ===== */
-.card-arrow {
-  color: #94a3b8;
+.arrow-icon {
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
-/* ===== Animations ===== */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .slide-up-enter-from,
@@ -265,21 +217,29 @@ export default {
 }
 
 @keyframes modalSlideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-</style>
-
-
-<style scoped>
-/* ===== GLOBAL STYLES ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
+/* Desktop: centered dialog instead of a full-width bottom sheet */
+@media (min-width: 768px) {
+  .mobile-modal-overlay {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+  }
 
+  .mobile-modal {
+    width: 95%;
+    max-width: 1000px;
+    max-height: 80vh;
+    border-radius: var(--radius-lg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+    animation: none;
+  }
+}
 </style>

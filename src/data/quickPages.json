@@ -1,9 +1,9 @@
 [
   {
-    "path": "/now",
-    "icon": "fas fa-bolt",
-    "title": "Now",
-    "description": "Current focus"
+    "path": "/about",
+    "icon": "fas fa-user",
+    "title": "About",
+    "description": "About me"
   },
   {
     "path": "/uses",

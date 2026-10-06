@@ -75,11 +75,13 @@ export default {
 }
 
 .mobile-modal {
-  background: white;
+  background: var(--surface);
   width: 100%;
   max-height: 85vh;
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-bottom: none;
   animation: modalSlideUp 0.3s ease;
 }
 
@@ -89,33 +91,32 @@ export default {
   justify-content: space-between;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
 }
 
 .mobile-modal-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #2d3748;
+  color: var(--text);
 }
 
 .mobile-modal-close {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #64748b;
-  transition: all 0.2s ease;
+  color: var(--text-secondary);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .mobile-modal-close:active {
-  background: #667eea;
-  color: white;
-  transform: rotate(90deg);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .mobile-deans-content {
@@ -129,20 +130,20 @@ export default {
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(246, 224, 94, 0.1);
-  border-radius: 12px;
-  border: 1px solid rgba(246, 224, 94, 0.3);
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .mobile-deans-description i {
-  color: #d69e2e;
+  color: var(--text);
   font-size: 1.5rem;
   margin-top: 0.2rem;
   flex-shrink: 0;
 }
 
 .mobile-deans-description p {
-  color: #2d3748;
+  color: var(--text);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
@@ -162,28 +163,26 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .mobile-deans-item:active {
-  transform: scale(0.98);
-  background: white;
-  border-color: #f6e05e;
+  border-color: var(--text);
 }
 
 .mobile-deans-icon {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #f6e05e, #d69e2e);
+  border-radius: var(--radius-sm);
+  background: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--bg);
   font-size: 1.2rem;
   flex-shrink: 0;
 }
@@ -196,7 +195,7 @@ export default {
 .mobile-deans-info h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text);
   margin-bottom: 0.5rem;
 }
 
@@ -211,46 +210,63 @@ export default {
   align-items: center;
   gap: 0.4rem;
   padding: 0.3rem 0.6rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 0.8rem;
   font-weight: 500;
 }
 
 .gwa-badge {
-  background: rgba(56, 161, 105, 0.1);
-  color: #38a169;
+  background: var(--surface-hover);
+  color: var(--success);
 }
 
 .gwa-badge i {
-  color: #38a169;
+  color: var(--success);
   font-size: 0.7rem;
 }
 
 .year-level {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: var(--surface-hover);
+  color: var(--accent);
 }
 
 .year-level i {
-  color: #667eea;
+  color: var(--accent);
   font-size: 0.7rem;
 }
 
 .arrow-icon {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 /* Animation */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .slide-up-enter-from,
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(100%);
+}
+
+@media (min-width: 768px) {
+  .mobile-modal-overlay {
+    align-items: center;
+    background: rgba(15, 23, 42, 0.75);
+  }
+
+  .mobile-modal {
+    width: 95%;
+    max-width: 1000px;
+    max-height: 85vh;
+    border-radius: var(--radius-lg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+    animation: none;
+  }
 }
 
 @keyframes modalSlideUp {
@@ -261,18 +277,4 @@ export default {
     transform: translateY(0);
   }
 }
-</style>
-
-
-<style scoped>
-/* ===== GLOBAL STYLES ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-
 </style>

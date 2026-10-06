@@ -2,17 +2,14 @@
   <div class="tool-page">
     <div class="tool-shell">
 
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="tool-hero">
         <div class="tt-icon-wrap">
           <i class="fab fa-youtube"></i>
         </div>
-        <h1 class="tt-title">YouTube Downloader</h1>
-        <p class="tt-subtitle">Download YouTube videos or extract audio — free, no signup.</p>
+        <div class="tt-hero-text">
+          <h1 class="tt-title">YouTube Downloader</h1>
+          <p class="tt-subtitle">Download YouTube videos or extract audio — free, no signup.</p>
+        </div>
       </div>
 
       <!-- Input -->
@@ -169,6 +166,7 @@ import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "YouTubeDownloader",
+
   components: { ToolSuggestions, AdSlot },
 
   data() {
@@ -193,20 +191,22 @@ export default {
   methods: {
     onPaste() {
       this.$nextTick(() => {
-        if (this.url.trim()) this.fetchVideo();
+        if (this.url.trim()) {
+          this.fetchVideo();
+        }
       });
     },
 
     extractVideoId(url) {
       const match = url.match(
-        /(?:v=|\/embed\/|\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+        /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/
       );
 
       return match ? match[1] : null;
     },
 
     isValidYouTubeUrl(url) {
-      return url.includes("youtube.com") || url.includes("youtu.be");
+      return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(url);
     },
 
     async fetchVideo() {
@@ -289,17 +289,17 @@ export default {
     getReadableError(errorCode) {
       const errors = {
         "error.api.auth.jwt.missing":
-          "Downloader API is missing authentication. Configure your backend Cobalt API key.",
+          "Downloader API authentication is missing. Check the backend proxy.",
         "error.api.auth.api-key.missing":
-          "Downloader API key is missing. Add your Cobalt API key in your backend environment variables.",
+          "Downloader API key is missing. Check your backend environment variables.",
         "error.api.auth.api-key.invalid":
-          "Downloader API key is invalid. Check your Cobalt API key.",
+          "Downloader API key is invalid.",
         "error.api.link.unsupported":
           "This YouTube link is not supported.",
         "error.api.link.invalid":
           "Invalid YouTube link. Please check the URL.",
         "error.api.fetch.fail":
-          "Failed to fetch download data. Try another video or quality.",
+          "Failed to fetch download data. Try another video or lower quality.",
         "error.api.content.too-long":
           "This video is too long to process.",
         "error.api.content.blocked":
@@ -405,7 +405,7 @@ export default {
 }
 
 .tool-shell {
-  width: min(640px, 100%);
+  width: min(var(--container-width), 100%);
   margin: 0 auto;
 }
 
@@ -433,47 +433,9 @@ export default {
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
 }
 
-.tool-hero {
-  margin-bottom: 22px;
-  padding: clamp(20px, 4vw, 36px);
-  border-radius: 26px;
-  background: color-mix(in srgb, var(--surface) 84%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
-  backdrop-filter: blur(16px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-}
 
-.tt-icon-wrap {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #ff0000, #cc0000);
-  color: #ffffff;
-  font-size: 1.6rem;
-  box-shadow: 0 12px 32px rgba(255, 0, 0, 0.28);
-}
 
-.tt-title {
-  margin: 0;
-  color: var(--text);
-  font-size: 1.7rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
 
-.tt-subtitle {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
 
 /* Input card */
 .tt-card {
@@ -784,5 +746,53 @@ export default {
 @media (max-width: 640px) {
   .yt-video-card { flex-direction: column; }
   .yt-thumb { width: 100%; height: 180px; }
+}
+
+/* ===== Tool header (same layout as TikTok) ===== */
+.tool-hero {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 18px);
+  margin-bottom: 18px;
+  padding: clamp(16px, 4vw, 24px);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.tt-icon-wrap {
+  width: clamp(48px, 10vw, 60px);
+  height: clamp(48px, 10vw, 60px);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  color: #ffffff;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+  box-shadow: 0 12px 32px rgba(255, 0, 0, 0.28);
+}
+
+.tt-hero-text { min-width: 0; }
+
+.tt-title {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: clamp(1.2rem, 4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.tt-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+  .tool-hero { gap: 12px; padding: 14px; border-radius: 18px; }
 }
 </style>

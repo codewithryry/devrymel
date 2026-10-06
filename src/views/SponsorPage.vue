@@ -1,11 +1,6 @@
 <template>
   <main class="sponsor-page">
     <section class="sponsor-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="sponsor-hero">
         <span class="eyebrow">Support</span>
         <h1>Sponsor the Devrymel Platform</h1>
@@ -221,186 +216,181 @@ export default {
 <style scoped>
 .sponsor-page {
   min-height: 100vh;
-  background: var(--bg, #f8fafc);
-  font-family: inherit;
+  background: var(--bg);
 }
 
 .sponsor-shell {
-  width: min(1100px, calc(100% - 32px));
+  width: min(var(--container-width), 100%);
   margin: 0 auto;
-  padding: 32px 0 72px;
+  padding: 2.5rem 0 4rem;
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 32px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border, #e2e8f0);
-  color: var(--text-secondary, #64748b);
+  margin-bottom: 1.5rem;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
   font-size: 0.84rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.18s ease;
+  transition: border-color 0.2s ease;
 }
 .back-link:hover {
-  color: var(--accent, #6366f1);
-  border-color: var(--accent, #6366f1);
-  transform: translateX(-2px);
+  border-color: var(--text-muted);
 }
 
 .sponsor-hero {
-  text-align: center;
-  margin-bottom: 48px;
+  text-align: left;
+  margin-bottom: 2rem;
 }
 .eyebrow {
   display: inline-block;
-  margin-bottom: 10px;
-  color: var(--accent, #6366f1);
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
   font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 .sponsor-hero h1 {
   margin: 0;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--text, #0f172a);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 /* ── Two-column layout ── */
 .sponsor-layout {
   display: grid;
-  grid-template-columns: 1fr 480px;
-  gap: 32px;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
   align-items: start;
-  margin-bottom: 48px;
+  margin-bottom: 2rem;
 }
 
 /* ── About column ── */
 .sponsor-about {
-  padding: 36px;
-  border-radius: 24px;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border, #e2e8f0);
-  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.07);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .sponsor-logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 1.25rem;
 }
 .logo-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  background: var(--accent);
   display: grid;
   place-items: center;
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  color: var(--bg);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 .logo-text {
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--text, #0f172a);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .sponsor-about h2 {
-  margin: 0 0 10px;
-  font-size: 1.35rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--text, #0f172a);
+  margin: 0 0 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
 .sponsor-tagline {
-  margin: 0 0 18px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-secondary, #64748b);
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-secondary);
   line-height: 1.55;
 }
 .sponsor-desc {
-  margin: 0 0 12px;
-  font-size: 0.88rem;
-  color: var(--text, #0f172a);
+  margin: 0 0 0.75rem;
+  font-size: 0.86rem;
+  color: var(--text);
   font-weight: 600;
 }
 
 .sponsor-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 22px;
+  margin: 0 0 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.6rem;
 }
 .sponsor-list li {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.9rem;
-  color: var(--text-secondary, #64748b);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
   line-height: 1.45;
 }
 .sponsor-list li i {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--accent, #6366f1);
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
   display: grid;
   place-items: center;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   flex-shrink: 0;
 }
 
 .sponsor-cta-text {
   margin: 0;
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--text, #0f172a);
-  font-style: italic;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 /* ── Form card ── */
 .sponsor-form-card {
-  padding: 32px;
-  border-radius: 24px;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border, #e2e8f0);
-  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.07);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .form-group {
-  margin-bottom: 22px;
+  margin-bottom: 1.4rem;
 }
 .form-label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 0.6rem;
   font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--text, #0f172a);
+  font-weight: 600;
+  color: var(--text);
 }
 .form-note {
-  margin: 7px 0 0;
+  margin: 0.45rem 0 0;
   font-size: 0.78rem;
-  color: var(--text-secondary, #64748b);
+  color: var(--text-secondary);
 }
 
 .method-group {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 .method-btn {
   flex: 1;
@@ -408,24 +398,24 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  padding: 11px 14px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border, #e2e8f0);
-  background: var(--card-bg, #fff);
-  color: var(--text-secondary, #64748b);
-  font-size: 0.88rem;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.16s ease;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
 }
 .method-btn.active {
-  background: var(--accent, #6366f1);
-  border-color: var(--accent, #6366f1);
-  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
 }
 .method-btn:hover:not(.active) {
-  border-color: var(--accent, #6366f1);
-  color: var(--accent, #6366f1);
+  border-color: var(--text-muted);
+  color: var(--text);
 }
 
 .freq-group {
@@ -434,24 +424,24 @@ export default {
 }
 .freq-btn {
   flex: 1;
-  padding: 10px 8px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border, #e2e8f0);
-  background: var(--card-bg, #fff);
-  color: var(--text-secondary, #64748b);
+  padding: 9px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.16s ease;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
 }
 .freq-btn.active {
-  background: var(--accent, #6366f1);
-  border-color: var(--accent, #6366f1);
-  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
 }
 .freq-btn:hover:not(.active) {
-  border-color: var(--accent, #6366f1);
-  color: var(--accent, #6366f1);
+  border-color: var(--text-muted);
+  color: var(--text);
 }
 
 .amount-grid {
@@ -461,48 +451,47 @@ export default {
   margin-bottom: 10px;
 }
 .amount-btn {
-  padding: 12px 8px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border, #e2e8f0);
-  background: var(--card-bg, #fff);
-  color: var(--text, #0f172a);
-  font-size: 0.9rem;
-  font-weight: 700;
+  padding: 10px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.16s ease;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
   text-align: center;
 }
 .amount-btn.active {
-  background: var(--accent, #6366f1);
-  border-color: var(--accent, #6366f1);
-  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
 }
 .amount-btn:hover:not(.active) {
-  border-color: var(--accent, #6366f1);
-  color: var(--accent, #6366f1);
+  border-color: var(--text-muted);
 }
 
 .custom-amount-wrap {
   display: flex;
   align-items: center;
   gap: 0;
-  border: 1.5px solid var(--border, #e2e8f0);
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
-  background: var(--card-bg, #fff);
+  background: var(--surface);
   transition: border-color 0.16s;
 }
 .custom-amount-wrap:focus-within {
-  border-color: var(--accent, #6366f1);
+  border-color: var(--text-muted);
 }
 .currency-symbol {
   padding: 0 12px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-secondary, #64748b);
-  background: var(--bg, #f8fafc);
-  border-right: 1.5px solid var(--border, #e2e8f0);
-  height: 44px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface-soft);
+  border-right: 1px solid var(--border);
+  height: 40px;
   display: flex;
   align-items: center;
 }
@@ -514,10 +503,10 @@ export default {
   background: transparent;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text, #0f172a);
+  color: var(--text);
 }
 .custom-amount-input::placeholder {
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted);
   font-weight: 400;
 }
 
@@ -532,12 +521,12 @@ export default {
   gap: 10px;
   cursor: pointer;
   font-size: 0.82rem;
-  color: var(--text-secondary, #64748b);
+  color: var(--text-secondary);
   line-height: 1.45;
 }
 .check-row input[type="checkbox"] {
   margin-top: 2px;
-  accent-color: var(--accent, #6366f1);
+  accent-color: var(--accent);
   width: 14px;
   height: 14px;
   flex-shrink: 0;
@@ -546,29 +535,24 @@ export default {
 
 .sponsor-btn {
   width: 100%;
-  padding: 15px;
-  border-radius: 14px;
-  border: none;
-  background: var(--accent, #6366f1);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.95rem;
+  font-weight: 600;
   letter-spacing: -0.01em;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.18s ease;
-  margin-bottom: 16px;
+  transition: opacity 0.18s ease;
+  margin-bottom: 1rem;
 }
 .sponsor-btn:hover {
-  background: var(--accent-hover, #4f46e5);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.32);
-}
-.sponsor-btn:active {
-  transform: translateY(0);
+  opacity: 0.85;
 }
 
 .sponsor-footer-links {
@@ -578,70 +562,67 @@ export default {
 }
 .footer-link {
   font-size: 0.8rem;
-  color: var(--text-secondary, #64748b);
+  color: var(--text-secondary);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color 0.16s;
 }
 .footer-link:hover {
-  color: var(--accent, #6366f1);
+  color: var(--text);
 }
 
 /* ── Banner ── */
 .sponsor-banner {
-  border-radius: 24px;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #818cf8 100%);
-  padding: 48px 40px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem 1.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  overflow: hidden;
-  position: relative;
-}
-.sponsor-banner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.08) 0%, transparent 60%);
-  pointer-events: none;
+  gap: 1.5rem;
 }
 .banner-content h2 {
-  margin: 0 0 8px;
-  font-size: 1.6rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #fff;
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
 .banner-content p {
   margin: 0;
-  color: rgba(255,255,255,0.8);
-  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
   line-height: 1.5;
-  max-width: 480px;
+  max-width: 440px;
 }
 .banner-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 24px;
-  border-radius: 12px;
-  background: #f59e0b;
-  color: #fff;
-  font-size: 0.92rem;
-  font-weight: 700;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.9rem;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: all 0.18s ease;
+  transition: opacity 0.18s ease;
 }
 .banner-btn:hover {
-  background: #d97706;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(245, 158, 11, 0.4);
+  opacity: 0.85;
 }
 
 /* ── Responsive ── */
+@media (max-width: 912px) {
+  .sponsor-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
 @media (max-width: 900px) {
   .sponsor-layout {
     grid-template-columns: 1fr;
@@ -650,15 +631,14 @@ export default {
 
 @media (max-width: 640px) {
   .sponsor-shell {
-    padding: 20px 0 48px;
-    width: calc(100% - 24px);
+    padding: 1.5rem 12px 3rem;
   }
   .sponsor-hero h1 {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
   .sponsor-about,
   .sponsor-form-card {
-    padding: 22px;
+    padding: 1.25rem;
   }
   .method-group {
     flex-direction: column;
@@ -668,7 +648,7 @@ export default {
   }
   .sponsor-banner {
     flex-direction: column;
-    padding: 32px 24px;
+    padding: 1.5rem;
     text-align: center;
   }
   .banner-content p {

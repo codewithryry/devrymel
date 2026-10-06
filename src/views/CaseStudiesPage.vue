@@ -1,12 +1,8 @@
 <template>
   <main class="info-page">
     <section class="info-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="info-hero">
+        <HeroArt name="case-studies" />
         <span class="eyebrow">Case Studies</span>
         <h1>Selected project breakdowns</h1>
         <p>
@@ -31,15 +27,24 @@
           <li><strong>Result:</strong> {{ study.result }}</li>
         </ul>
       </section>
+
+      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
+import HeroArt from "@/components/HeroArt.vue";
+import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
 export default {
   name: "CaseStudiesPage",
+
+  components: {
+    ExploreLinks,
+    HeroArt
+  },
 
   data() {
     return {

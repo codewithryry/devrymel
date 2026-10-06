@@ -1,49 +1,28 @@
 <template>
   <div class="tool-page">
     <div class="tool-shell">
-      <!-- Back -->
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        <span>Back to Portfolio</span>
-      </router-link>
-
       <!-- Main Chat Card -->
       <section class="chat-card">
         <!-- Header -->
         <div class="chat-top">
           <div class="chat-title-block">
-            <span class="chat-kicker">AI Assistant</span>
             <h1>{{ currentModel.label }}</h1>
             <p>{{ currentModel.desc }}</p>
           </div>
 
-          <div class="current-model-mark" :style="{ background: currentModel.gradient }">
-            <i :class="currentModel.icon"></i>
-          </div>
-        </div>
-
-        <!-- Model selector -->
-        <div class="model-selector-wrap">
-          <div class="model-bar" role="tablist" aria-label="AI mode selector">
+          <!-- Model selector -->
+          <div class="mode-switch" role="tablist" aria-label="AI mode selector">
             <button
               v-for="(model, key) in models"
               :key="key"
               type="button"
-              class="model-btn"
+              class="mode-btn"
               :class="{ active: activeModel === key }"
-              :style="activeModel === key ? { '--model-color': model.accentColor } : {}"
               :aria-selected="activeModel === key"
               role="tab"
               @click="selectModel(key)"
             >
-              <span class="model-icon" :style="{ background: model.gradient }">
-                <i :class="model.icon"></i>
-              </span>
-
-              <span class="model-info">
-                <strong>{{ model.label }}</strong>
-                <small>{{ model.desc }}</small>
-              </span>
+              {{ model.label }}
             </button>
           </div>
         </div>
@@ -52,10 +31,6 @@
         <div class="chat-window" ref="chatWindow">
           <!-- Empty state -->
           <div v-if="messages.length === 0" class="chat-empty">
-            <div class="empty-orb" :style="{ background: currentModel.gradient }">
-              <i :class="currentModel.icon"></i>
-            </div>
-
             <h2>{{ currentModel.label }}</h2>
             <p>{{ currentModel.emptyText }}</p>
           </div>
@@ -69,17 +44,8 @@
               :class="msg.role"
             >
               <div
-                v-if="msg.role === 'assistant'"
-                class="msg-avatar"
-                :style="{ background: currentModel.gradient }"
-              >
-                <i :class="currentModel.icon"></i>
-              </div>
-
-              <div
                 class="msg-bubble"
                 :class="{ error: msg.error }"
-                :style="msg.role === 'user' ? { background: currentModel.gradient } : {}"
               >
                 <div
                   v-if="msg.role === 'assistant'"
@@ -95,10 +61,6 @@
 
             <!-- Typing indicator -->
             <div v-if="loading" class="message assistant">
-              <div class="msg-avatar" :style="{ background: currentModel.gradient }">
-                <i :class="currentModel.icon"></i>
-              </div>
-
               <div class="msg-bubble typing">
                 <span></span>
                 <span></span>
@@ -112,7 +74,6 @@
         <div class="suggestion-tool">
           <div class="st-header">
             <span class="st-label">
-              <i class="fas fa-lightbulb"></i>
               Suggestions
             </span>
 
@@ -160,7 +121,7 @@
               type="button"
               class="send-btn"
               :disabled="!input.trim() || loading"
-              :style="{ background: input.trim() && !loading ? currentModel.gradient : '' }"
+              :class="{ ready: input.trim() && !loading }"
               aria-label="Send message"
               @click="sendMessage"
             >
@@ -181,7 +142,6 @@
       <!-- How to Use -->
       <section class="how-to-use">
         <p class="htu-label">
-          <i class="fas fa-circle-info"></i>
           How to use <strong>{{ currentModel.label }}</strong>
         </p>
 
@@ -191,10 +151,6 @@
             :key="i"
             class="htu-tip"
           >
-            <span class="htu-tip-icon" :style="{ background: currentModel.gradient }">
-              <i :class="tip.icon"></i>
-            </span>
-
             <span>{{ tip.text }}</span>
           </div>
         </div>
@@ -566,28 +522,56 @@ export default {
 </script>
 
 <style scoped>
+.mode-switch {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+.mode-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.mode-btn:hover {
+  color: var(--text);
+}
+
+.mode-btn.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+
+.send-btn.ready {
+  background: var(--accent);
+}
+
 /* Page */
 .tool-page {
   min-height: 100vh;
   padding: 22px 16px;
   padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
   color: var(--text);
-  background:
-    radial-gradient(
-      circle at top left,
-      color-mix(in srgb, #6366f1 18%, transparent),
-      transparent 34rem
-    ),
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, #06b6d4 12%, transparent),
-      transparent 28rem
-    ),
-    var(--bg);
+  background: var(--bg);
 }
 
 .tool-shell {
-  width: min(880px, 100%);
+  width: min(var(--container-width), 100%);
   margin: 0 auto;
 }
 
@@ -626,18 +610,10 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 26px;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface) 92%, transparent),
-      color-mix(in srgb, var(--surface) 70%, transparent)
-    );
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  box-shadow:
-    0 24px 70px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(18px);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 /* Top */
@@ -654,15 +630,6 @@ export default {
   min-width: 0;
 }
 
-.chat-kicker {
-  display: inline-flex;
-  margin-bottom: 4px;
-  color: var(--text-secondary);
-  font-size: 0.68rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
 
 .chat-title-block h1 {
   margin: 0;
@@ -695,112 +662,16 @@ export default {
 }
 
 /* Model Selector */
-.model-selector-wrap {
-  padding: 12px 14px 10px;
-  border-bottom: 1px solid color-mix(in srgb, var(--border) 44%, transparent);
-}
 
-.model-bar {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 9px;
-}
 
-.model-btn {
-  position: relative;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 12px;
-  border-radius: 17px;
-  border: 1px solid color-mix(in srgb, var(--border) 74%, transparent);
-  background: color-mix(in srgb, var(--surface) 68%, transparent);
-  color: var(--text-secondary);
-  cursor: pointer;
-  text-align: left;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    color 0.18s ease;
-}
 
-.model-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, var(--model-color, #6366f1) 12%, transparent);
-  opacity: 0;
-  transition: opacity 0.18s ease;
-}
 
-.model-btn:hover {
-  color: var(--text);
-  transform: translateY(-1px);
-  background: color-mix(in srgb, var(--surface-hover) 78%, transparent);
-}
 
-.model-btn.active {
-  color: var(--text);
-  border-color: color-mix(in srgb, var(--model-color, #6366f1) 58%, var(--border));
-  background: color-mix(in srgb, var(--model-color, #6366f1) 12%, var(--surface));
-  box-shadow:
-    0 12px 28px color-mix(in srgb, var(--model-color, #6366f1) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
 
-.model-btn.active::before {
-  opacity: 1;
-}
 
-.model-icon,
-.model-info {
-  position: relative;
-  z-index: 1;
-}
 
-.model-icon {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border-radius: 13px;
-  color: #fff;
-  font-size: 0.86rem;
-  box-shadow: 0 9px 18px rgba(0, 0, 0, 0.2);
-}
 
-.model-info {
-  min-width: 0;
-}
 
-.model-info strong {
-  display: block;
-  color: inherit;
-  font-size: 0.84rem;
-  font-weight: 950;
-  line-height: 1.15;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.model-info small {
-  display: block;
-  margin-top: 3px;
-  color: currentColor;
-  font-size: 0.68rem;
-  line-height: 1.25;
-  opacity: 0.68;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 /* Chat Window */
 .chat-window {
@@ -906,13 +777,13 @@ export default {
 }
 
 .message.user .msg-bubble {
-  color: #fff;
+  color: var(--bg);
+  background: var(--accent);
   border-bottom-right-radius: 6px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
 }
 
 .user-text {
-  color: #fff;
+  color: var(--bg);
 }
 
 .message.assistant .msg-bubble {
@@ -1223,10 +1094,9 @@ export default {
   border: none;
   border-radius: 14px;
   background: color-mix(in srgb, var(--border) 70%, transparent);
-  color: #fff;
+  color: var(--bg);
   cursor: pointer;
   font-size: 0.84rem;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
   -webkit-tap-highlight-color: transparent;
   transition:
     transform 0.18s ease,
@@ -1356,44 +1226,12 @@ export default {
     border-radius: 15px;
   }
 
-  .model-selector-wrap {
-    padding: 10px 12px;
-    overflow: hidden;
-  }
 
-  .model-bar {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-  }
 
-  .model-bar::-webkit-scrollbar {
-    display: none;
-  }
 
-  .model-btn {
-    flex: 0 0 172px;
-    scroll-snap-align: start;
-    padding: 10px;
-    border-radius: 16px;
-  }
 
-  .model-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
-  }
 
-  .model-info strong {
-    font-size: 0.8rem;
-  }
 
-  .model-info small {
-    font-size: 0.65rem;
-  }
 
   .chat-window {
     padding: 15px;
@@ -1440,9 +1278,6 @@ export default {
     font-size: 0.76rem;
   }
 
-  .chat-kicker {
-    font-size: 0.62rem;
-  }
 
   .current-model-mark {
     width: 39px;
@@ -1451,45 +1286,12 @@ export default {
     font-size: 0.88rem;
   }
 
-  .model-selector-wrap {
-    padding: 9px 10px;
-  }
 
-  .model-bar {
-    gap: 7px;
-  }
 
-  .model-btn {
-    flex: 0 0 auto;
-    min-width: 118px;
-    max-width: 145px;
-    justify-content: center;
-    gap: 7px;
-    padding: 9px 10px;
-    border-radius: 999px;
-  }
 
-  .model-btn.active {
-    box-shadow:
-      0 9px 22px color-mix(in srgb, var(--model-color, #6366f1) 20%, transparent),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
 
-  .model-icon {
-    width: 27px;
-    height: 27px;
-    border-radius: 50%;
-    font-size: 0.68rem;
-    box-shadow: none;
-  }
 
-  .model-info strong {
-    font-size: 0.74rem;
-  }
 
-  .model-info small {
-    display: none;
-  }
 
   .chat-window {
     padding: 13px 11px;
@@ -1633,19 +1435,8 @@ export default {
 
 /* Small Mobile */
 @media (max-width: 370px) {
-  .model-btn {
-    min-width: 105px;
-    padding: 8px 9px;
-  }
 
-  .model-icon {
-    width: 25px;
-    height: 25px;
-  }
 
-  .model-info strong {
-    font-size: 0.7rem;
-  }
 
   .st-chip {
     flex-basis: 165px;
@@ -1653,6 +1444,47 @@ export default {
 
   .msg-bubble {
     max-width: 90%;
+  }
+}
+
+/* ===== Phone layout (kept last so it wins over the base rules above) ===== */
+@media (max-width: 640px) {
+  /* Fit the card below the sticky navbar (~84px) so nothing scrolls under it */
+  .tool-page {
+    padding-top: 18px;
+  }
+
+  .chat-card {
+    height: calc(100dvh - 84px - 44px);
+    min-height: 460px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Title left-aligned, mode switch full width underneath */
+  .chat-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 14px 12px;
+    text-align: left;
+  }
+
+  .chat-title-block h1 {
+    font-size: 1.15rem;
+  }
+
+  .chat-title-block p {
+    max-width: none;
+    font-size: 0.78rem;
+  }
+
+  .mode-switch {
+    width: 100%;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: 7px 6px;
   }
 }
 </style>

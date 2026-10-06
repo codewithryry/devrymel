@@ -1,12 +1,8 @@
 <template>
   <main class="info-page">
     <section class="info-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <div class="info-hero">
+        <HeroArt name="roadmap" />
         <span class="eyebrow">Roadmap</span>
         <h1>Portfolio improvement roadmap</h1>
         <p>
@@ -29,15 +25,24 @@
           </ul>
         </article>
       </div>
+
+      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
+import HeroArt from "@/components/HeroArt.vue";
+import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
 export default {
   name: "RoadmapPage",
+
+  components: {
+    ExploreLinks,
+    HeroArt
+  },
 
   data() {
     return {
@@ -47,51 +52,45 @@ export default {
           icon: "fas fa-check-circle",
           items: [
             "Responsive portfolio layout",
-            "Theme selector with 4 themes",
-            "Floating action button system",
-            "Live GitHub & WakaTime stats panel",
-            "Firestore visitor logs (production fixed)",
-            "Private admin dashboard",
-            "Ad blocker detection",
-            "Mini tools panel in FAB",
-            "TikTok Downloader",
-            "YouTube Thumbnail Downloader",
-            "YouTube Downloader",
-            "QR Code Generator",
-            "Password Generator",
-            "IP Address Lookup",
-            "Base64 Encoder / Decoder",
-            "Theme-based profile image switching",
+            "3 themes: Classic Light, Midnight Pro, Emerald Focus",
+            "Unified theme colors across all pages",
+            "Dedicated Projects, Skills & Experience pages",
+            "Homepage as a summary with \"View all\" links",
+            "About page at /about",
+            "Explore links on every info page",
+            "Hero illustrations on info pages",
+            "Live GitHub & WakaTime stats",
+            "Private admin CMS with Firestore",
+            "Admin CMS mobile layout",
+            "Visitor analytics & ad blocker detection",
+            "AI Chat with Chat, Code Helper & Creative modes",
+            "14 free tools in Quick Links",
             "Deployment Gallery page",
-            "Feedback modal glassmorphic polish",
-            "FAB hint arrow",
-            "FAB responsive fix for small laptops",
-            "React & n8n added to tech stack"
+            "Monthly changelog",
+            "Downloadable resume & CV"
           ]
         },
         {
           title: "In Progress",
           icon: "fas fa-spinner",
           items: [
-            "AI Chat FAB panel (3 models)",
-            "Admin dashboard UI polish",
-            "Better analytics visualization",
-            "More case studies"
+            "More case studies",
+            "Mobile polish across all pages",
+            "Better analytics visualization"
           ]
         },
         {
           title: "Planned",
           icon: "fas fa-map",
           items: [
-            "AI Chatbot — Chat Mode",
-            "AI Chatbot — Code Helper",
-            "AI Chatbot — Creative Mode",
-            "URL Shortener tool",
-            "Color Palette Generator",
-            "Project CMS with Firestore",
+            "JSON Formatter tool",
+            "Text Counter tool",
+            "Case Converter tool",
+            "Meta Tag Generator tool",
+            "Tech notes / blog pages",
+            "Project filters by tech stack",
             "Feedback status management",
-            "Export admin data",
-            "Tech notes / blog section"
+            "Export admin data"
           ]
         }
       ]

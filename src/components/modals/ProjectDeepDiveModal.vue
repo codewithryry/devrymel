@@ -214,7 +214,7 @@ export default {
 <style scoped>
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 .modal-enter-from,
@@ -224,12 +224,12 @@ export default {
 
 .modal-enter-active .modal-container,
 .modal-leave-active .modal-container {
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .modal-enter-from .modal-container,
 .modal-leave-to .modal-container {
-  transform: translateY(-20px);
+  transform: translateY(-10px);
 }
 
 .modal-overlay {
@@ -247,20 +247,21 @@ export default {
 }
 
 .modal-container {
-  background: white;
-  border-radius: 24px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   max-width: 1000px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
-  animation: modalSlideUp 0.3s ease;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  animation: modalSlideUp 0.2s ease;
 }
 
 @keyframes modalSlideUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(10px);
     opacity: 0;
   }
   to {
@@ -276,21 +277,20 @@ export default {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
   font-size: 1.1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   z-index: 10;
 }
 
 .modal-close:hover {
-  background: #667eea;
-  color: white;
-  transform: rotate(90deg);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .modal-content {
@@ -301,7 +301,7 @@ export default {
   text-align: center;
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
 }
 
 .project-meta {
@@ -315,23 +315,23 @@ export default {
 
 .project-badge {
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: var(--radius);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .project-badge.live {
-  background: rgba(56, 161, 105, 0.1);
-  color: #38a169;
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
 }
 
 .project-badge.dev {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
 }
 
 .project-date {
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   display: flex;
   align-items: center;
@@ -346,13 +346,13 @@ export default {
 .project-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #2d3748;
+  color: var(--text);
   margin-bottom: 0.75rem;
   line-height: 1.2;
 }
 
 .project-subtitle {
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 1.2rem;
   line-height: 1.5;
   max-width: 600px;
@@ -367,22 +367,22 @@ export default {
   position: relative;
   width: 100%;
   height: 400px;
-  border-radius: 16px;
+  border-radius: var(--radius);
   overflow: hidden;
   margin-bottom: 1rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
 }
 
 .main-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease;
 }
 
 .main-image:hover img {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 .image-loader {
@@ -391,12 +391,12 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(248, 250, 252, 0.9);
+  background: color-mix(in srgb, var(--surface-soft) 90%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  color: #667eea;
+  color: var(--accent);
 }
 
 .gallery-thumbnails {
@@ -409,24 +409,22 @@ export default {
 .thumbnail {
   width: 80px;
   height: 80px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s ease;
   flex-shrink: 0;
-  background: #f8fafc;
+  background: var(--surface-soft);
   padding: 0;
 }
 
 .thumbnail:hover {
-  border-color: #cbd5e0;
-  transform: translateY(-2px);
+  border-color: var(--border);
 }
 
 .thumbnail.active {
-  border-color: #667eea;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  border-color: var(--accent);
 }
 
 .thumbnail img {
@@ -443,16 +441,16 @@ export default {
 }
 
 .detail-section {
-  background: #f8fafc;
-  border-radius: 16px;
+  background: var(--surface-soft);
+  border-radius: var(--radius);
   padding: 1.5rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .detail-section h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -460,7 +458,7 @@ export default {
 }
 
 .detail-section h3 i {
-  color: #667eea;
+  color: var(--accent);
 }
 
 .tech-stack {
@@ -474,15 +472,15 @@ export default {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   font-size: 0.9rem;
-  color: #4a5568;
+  color: var(--text-secondary);
 }
 
 .tech-item i {
-  color: #667eea;
+  color: var(--accent);
   font-size: 0.8rem;
 }
 
@@ -496,12 +494,12 @@ export default {
   align-items: flex-start;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
-  color: #4a5568;
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
 .features-list li i {
-  color: #38a169;
+  color: var(--success);
   margin-top: 0.2rem;
   flex-shrink: 0;
 }
@@ -517,20 +515,20 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .stat-icon {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--bg);
   font-size: 0.9rem;
 }
 
@@ -542,27 +540,27 @@ export default {
 
 .stat-value {
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text);
   font-size: 0.95rem;
 }
 
 .stat-label {
   font-size: 0.8rem;
-  color: #718096;
+  color: var(--text-secondary);
 }
 
 .description-section {
-  background: #f8fafc;
-  border-radius: 16px;
+  background: var(--surface-soft);
+  border-radius: var(--radius);
   padding: 1.5rem;
   margin-bottom: 2.5rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .description-section h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -570,11 +568,11 @@ export default {
 }
 
 .description-section h3 i {
-  color: #667eea;
+  color: var(--accent);
 }
 
 .description-content {
-  color: #4a5568;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -586,27 +584,27 @@ export default {
 .learnings {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border);
 }
 
 .challenges h4,
 .learnings h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text);
   margin-bottom: 1rem;
 }
 
 .challenge-item {
   margin-bottom: 1rem;
   padding: 1rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .challenge-item strong {
-  color: #2d3748;
+  color: var(--text);
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -620,12 +618,12 @@ export default {
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #4a5568;
+  color: var(--text-secondary);
 }
 
 .learnings li::before {
   content: '•';
-  color: #667eea;
+  color: var(--accent);
   font-weight: bold;
   position: absolute;
   left: 0;
@@ -644,65 +642,61 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   text-decoration: none;
   min-width: 160px;
   border: 2px solid transparent;
 }
 
 .action-button.primary {
-  background: #667eea;
-  color: white;
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .action-button.primary:hover {
-  background: #5a67d8;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  background: var(--accent-hover);
 }
 
 .action-button.secondary {
-  background: #24292e;
-  color: white;
+  background: var(--text);
+  color: var(--surface);
 }
 
 .action-button.secondary:hover {
-  background: #1a1e22;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(36, 41, 46, 0.3);
+  opacity: 0.85;
 }
 
 .action-button.outline {
-  background: white;
-  color: #4a5568;
-  border-color: #e2e8f0;
+  background: var(--surface);
+  color: var(--text-secondary);
+  border-color: var(--border);
 }
 
 .action-button.outline:hover {
-  border-color: #667eea;
-  color: #667eea;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .action-button.close {
-  background: #f1f5f9;
-  color: #4a5568;
-  border-color: #e2e8f0;
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+  border-color: var(--border);
 }
 
 .action-button.close:hover {
-  background: #e2e8f0;
-  color: #f56565;
+  background: var(--border);
+  color: var(--danger);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .modal-container {
     max-height: 95vh;
-    border-radius: 16px;
+    border-radius: var(--radius);
   }
   
   .modal-content {

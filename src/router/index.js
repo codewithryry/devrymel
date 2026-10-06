@@ -15,11 +15,39 @@ const routes = [
     }
   },
   {
-    path: "/now",
-    name: "now",
-    component: () => import("@/views/NowPage.vue"),
+    path: "/about",
+    name: "about",
+    component: () => import("@/views/AboutPage.vue"),
     meta: {
-      title: "Now | Reymel Mislang"
+      title: "About | Reymel Mislang"
+    }
+  },
+  {
+    path: "/now",
+    redirect: "/about"
+  },
+  {
+    path: "/projects",
+    name: "projects",
+    component: () => import("@/views/ProjectsPage.vue"),
+    meta: {
+      title: "Projects | Reymel Mislang"
+    }
+  },
+  {
+    path: "/skills",
+    name: "skills",
+    component: () => import("@/views/SkillsPage.vue"),
+    meta: {
+      title: "Skills | Reymel Mislang"
+    }
+  },
+  {
+    path: "/experience",
+    name: "experience",
+    component: () => import("@/views/ExperiencePage.vue"),
+    meta: {
+      title: "Experience | Reymel Mislang"
     }
   },
   {
@@ -231,7 +259,12 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    if (to.hash) return { el: to.hash };
+    return { top: 0 };
+  }
 });
 
 router.beforeEach((to, from, next) => {

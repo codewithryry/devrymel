@@ -1,7 +1,14 @@
 <template>
-  <section class="dev-stats-section">
-    <div class="section-header">
-      <h3 class="section-title">Highlights</h3>
+  <section id="skills" class="dev-stats-section">
+    <div class="section-header" :class="{ 'has-link': viewAllTo }">
+      <div>
+        <span class="section-kicker">Key Takeaways</span>
+        <h2 class="section-title">Highlights</h2>
+      </div>
+
+      <router-link v-if="viewAllTo" :to="viewAllTo" class="view-all-link">
+        {{ viewAllLabel }}
+      </router-link>
     </div>
 
     <div class="stats-container">
@@ -77,6 +84,14 @@ export default {
   name: "DevStats",
 
   props: {
+    viewAllTo: {
+      type: String,
+      default: ""
+    },
+    viewAllLabel: {
+      type: String,
+      default: "View all.."
+    },
     stats: {
       type: Array,
       required: true,
@@ -201,19 +216,49 @@ export default {
 </script>
 
 <style scoped>
+.section-header.has-link {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.view-all-link {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.view-all-link:hover {
+  color: var(--text);
+}
+
 .dev-stats-section {
-  margin: 3rem 0;
+  margin: 0;
 }
 
 .section-header {
   margin-bottom: 1.5rem;
 }
 
+.section-kicker {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .section-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #111827;
   margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
   text-align: left;
 }
 
@@ -227,20 +272,18 @@ export default {
 .stat-card {
   width: 100%;
   min-height: 220px;
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 18px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
   padding: 1.75rem;
   cursor: pointer;
   overflow: hidden;
   box-sizing: border-box;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .stat-card:hover {
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
-  transform: translateY(-1px);
+  border-color: var(--text-muted);
 }
 
 .stat-content {
@@ -260,17 +303,17 @@ export default {
   gap: 0.25rem;
   font-family: "SF Mono", monospace;
   font-size: 0.8rem;
-  color: #6b7280;
-  padding: 0.22rem 0.72rem;
-  background: #f9fafb;
+  color: var(--text-secondary);
+  padding: 0.2rem 0.65rem;
+  background: var(--surface-soft);
   border-radius: 999px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   flex-shrink: 0;
 }
 
 .current-index {
   font-weight: 700;
-  color: #111827;
+  color: var(--text);
 }
 
 .stat-label-wrap {
@@ -280,9 +323,9 @@ export default {
 }
 
 .stat-label {
-  font-size: 1.08rem;
-  font-weight: 750;
-  color: #111827;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
   margin: 0;
   line-height: 1.3;
   white-space: normal;
@@ -293,8 +336,8 @@ export default {
 
 .stat-description {
   margin: 0.35rem 0 0;
-  font-size: 0.9rem;
-  color: #6b7280;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -312,14 +355,15 @@ export default {
 }
 
 .stat-icon {
-  width: 3.15rem;
-  height: 3.15rem;
+  width: 3rem;
+  height: 3rem;
   display: grid;
   place-items: center;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   flex-shrink: 0;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
 }
 
 .value-container {
@@ -333,36 +377,33 @@ export default {
 }
 
 .value-number {
-  font-size: clamp(2.35rem, 4vw, 3.2rem);
-  font-weight: 850;
-  color: #111827;
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--text);
   line-height: 1;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.03em;
 }
 
 .value-unit {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .trend {
-  margin-top: 0.62rem;
+  margin-top: 0.6rem;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.3rem 0.75rem;
-  background: #f9fafb;
+  padding: 0.28rem 0.7rem;
+  background: var(--surface-soft);
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
   width: fit-content;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   white-space: nowrap;
-}
-
-.trend.up {
-  color: #059669;
+  color: var(--text-secondary);
 }
 
 .trend i {
@@ -370,7 +411,7 @@ export default {
 }
 
 .stat-navigation {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border);
   padding-top: 1.1rem;
   display: flex;
   justify-content: space-between;
@@ -381,28 +422,27 @@ export default {
 .nav-dots {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .nav-dot {
-  width: 0.52rem;
-  height: 0.52rem;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 999px;
-  background: #d1d5db;
+  background: var(--border);
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .nav-dot:hover {
-  background: #9ca3af;
+  background: var(--text-muted);
 }
 
 .nav-dot.active {
-  background: #4f46e5;
-  transform: scale(1.25);
+  background: var(--text);
 }
 
 .nav-hint {
@@ -412,7 +452,7 @@ export default {
 
 .hint-text {
   font-size: 0.78rem;
-  color: #6b7280;
+  color: var(--text-muted);
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -421,7 +461,7 @@ export default {
 
 .hint-text i {
   font-size: 0.78rem;
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .fade-slide-enter-active {
@@ -458,13 +498,13 @@ export default {
 
 .stat-card:focus-visible,
 .nav-dot:focus-visible {
-  outline: 2px solid #4f46e5;
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
   .dev-stats-section {
-    margin: 2rem 0;
+    margin: 0;
   }
 
   .section-header {
@@ -478,7 +518,7 @@ export default {
   .stat-card {
     min-height: auto;
     padding: 1.35rem;
-    border-radius: 16px;
+    border-radius: var(--radius);
   }
 
   .stat-top {

@@ -1,12 +1,10 @@
 <template>
   <main class="info-page">
     <section class="info-shell">
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
 
       <div class="info-hero">
+
+        <HeroArt name="contact" />
         <span class="eyebrow">Contact</span>
         <h1>Let’s build something useful</h1>
         <p>
@@ -27,7 +25,12 @@
         </article>
 
         <article class="info-card">
-          <h2>LinkedIn</h2>
+          <div class="card-head">
+            <h2>LinkedIn</h2>
+            <a href="https://www.linkedin.com/in/reymelreymislang/" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open LinkedIn profile">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+          </div>
           <p>Connect with me for professional updates and work opportunities.</p>
 
           <div class="pill-grid">
@@ -37,7 +40,12 @@
 
         <article class="info-card">
 
-          <h2>GitHub</h2>
+          <div class="card-head">
+            <h2>GitHub</h2>
+            <a href="https://github.com/codewithryry" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="Open GitHub profile">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+          </div>
           <p>View my code, experiments, and public development work.</p>
 
           <div class="pill-grid">
@@ -60,14 +68,43 @@
           Email Me
         </a>
       </section>
+
+      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
+import HeroArt from "@/components/HeroArt.vue";
+import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
 export default {
-  name: "ContactPage"
+  name: "ContactPage",
+
+  components: {
+    ExploreLinks,
+    HeroArt
+  }
 };
 </script>
+
+<style scoped>
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card-link {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.card-link:hover {
+  color: var(--text);
+}
+</style>

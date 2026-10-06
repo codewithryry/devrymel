@@ -92,7 +92,7 @@ export default {
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #1a1a1a);
 }
 
 .field textarea {

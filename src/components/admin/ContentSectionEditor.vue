@@ -79,7 +79,10 @@
           </div>
 
           <div class="entry-meta">
-            <h3>{{ item[schema.fields[0].key] || "Untitled" }}</h3>
+            <h3>
+              <i v-if="item.icon" :class="item.icon" class="entry-icon"></i>
+              {{ entryTitle(item) || "Untitled" }}
+            </h3>
             <p>{{ entrySubtext(item) }}</p>
           </div>
 
@@ -261,8 +264,17 @@ export default {
       }, 2500);
     },
 
+    textFields() {
+      return this.schema.fields.filter((field) => field.key !== "icon");
+    },
+
+    entryTitle(item) {
+      const firstField = this.textFields()[0];
+      return firstField ? item[firstField.key] : "";
+    },
+
     entrySubtext(item) {
-      const secondField = this.schema.fields[1];
+      const secondField = this.textFields()[1];
       if (!secondField) return "";
 
       const value = item[secondField.key];
@@ -490,14 +502,21 @@ export default {
 
 .primary-btn {
   padding: 11px 18px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--accent, #6366f1), #4f46e5);
+  color: var(--bg, #fafaf8);
+  background: var(--accent, #1a1a1a);
   font-size: 0.85rem;
-  box-shadow: 0 8px 18px color-mix(in srgb, var(--accent, #6366f1) 35%, transparent);
 }
 
 .primary-btn:hover {
-  transform: translateY(-1px);
+  opacity: 0.85;
+}
+
+.entry-icon {
+  width: 18px;
+  margin-right: 6px;
+  color: var(--text-muted, #8a9099);
+  font-size: 0.85em;
+  text-align: center;
 }
 
 .primary-btn:disabled {
@@ -689,6 +708,44 @@ export default {
 }
 
 @media (max-width: 560px) {
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar h1 {
+    font-size: 1.4rem;
+  }
+
+  .topbar .primary-btn {
+    width: 100%;
+  }
+
+  .modal-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .modal-box {
+    max-width: none;
+    max-height: none;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+    padding: 18px 16px;
+  }
+
+  .modal-actions {
+    position: sticky;
+    bottom: -18px;
+    padding: 12px 0 18px;
+    background: var(--surface, #ffffff);
+  }
+
+  .modal-actions button {
+    flex: 1;
+  }
+
   .entry-row {
     grid-template-columns: 20px minmax(0, 1fr);
   }

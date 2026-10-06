@@ -1,7 +1,10 @@
 <template>
-  <section class="tech-notes-section">
+  <section id="tech-notes" class="tech-notes-section">
     <div class="section-header">
-      <h2 class="section-title">Tech Notes</h2>
+      <div>
+        <span class="section-kicker">Insights</span>
+        <h2 class="section-title">Tech Notes</h2>
+      </div>
 
       <div class="swipe-hint">
         <span>Swipe for more..</span>
@@ -28,32 +31,27 @@
           >
             <div class="note-top">
               <span class="note-category">{{ note.category }}</span>
-              <span class="note-read-time">{{ note.readTime }}</span>
+              <span class="note-meta">
+                <span class="note-read-time">{{ note.readTime }}</span>
+                <a
+                  v-if="note.url"
+                  :href="note.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="note-link"
+                  title="Read guide"
+                  aria-label="Read guide"
+                  @click.stop
+                >
+                  <i class="fas fa-external-link-alt"></i>
+                </a>
+              </span>
             </div>
 
-            <div class="note-icon">
-              <i :class="getIcon(note.category)"></i>
-            </div>
 
             <h3 class="note-title">{{ note.title }}</h3>
             <p class="note-description">{{ note.description }}</p>
 
-            <div class="note-actions">
-              <a
-                :href="note.url || '#'"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="note-button"
-                :class="{
-                  'active-button': currentIndex === index,
-                  disabled: !note.url
-                }"
-                @click.stop
-              >
-                <span>{{ currentIndex === index ? 'Read Full Guide' : 'Read Guide' }}</span>
-                <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
           </article>
         </div>
       </div>
@@ -96,29 +94,27 @@
         >
           <div class="note-top">
             <span class="note-category">{{ notes[currentIndex].category }}</span>
-            <span class="note-read-time">{{ notes[currentIndex].readTime }}</span>
+            <span class="note-meta">
+              <span class="note-read-time">{{ notes[currentIndex].readTime }}</span>
+              <a
+                v-if="notes[currentIndex].url"
+                :href="notes[currentIndex].url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="note-link"
+                title="Read guide"
+                aria-label="Read guide"
+                @click.stop
+              >
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </span>
           </div>
 
-          <div class="note-icon">
-            <i :class="getIcon(notes[currentIndex].category)"></i>
-          </div>
 
           <h3 class="note-title">{{ notes[currentIndex].title }}</h3>
           <p class="note-description">{{ notes[currentIndex].description }}</p>
 
-          <div class="note-actions">
-            <a
-              :href="notes[currentIndex].url || '#'"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="note-button active-button"
-              :class="{ disabled: !notes[currentIndex].url }"
-              @click.stop
-            >
-              <span>Read Full Guide</span>
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
         </article>
       </transition>
     </div>
@@ -314,20 +310,40 @@ export default {
 
 <style scoped>
 .tech-notes-section {
-  margin-top: 3rem;
+  margin: 0;
 }
 
 .section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
   text-align: left;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .section-title {
-  font-size: clamp(1.85rem, 4vw, 2.35rem);
-  font-weight: 900;
-  color: #2d3748;
   margin: 0;
-  letter-spacing: -0.04em;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
   text-align: left;
 }
 
@@ -335,23 +351,11 @@ export default {
   display: none;
   align-items: center;
   gap: 0.5rem;
-  color: #718096;
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   margin-top: 0.9rem;
   padding: 0 0.5rem;
-  animation: pulseHint 2s infinite;
-}
-
-@keyframes pulseHint {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-
-  50% {
-    opacity: 1;
-  }
 }
 
 /* Desktop carousel */
@@ -359,7 +363,7 @@ export default {
   overflow: hidden;
   margin: 0 auto;
   max-width: 1400px;
-  padding: 1rem 0 3rem;
+  padding: 0;
   position: relative;
 }
 
@@ -367,52 +371,40 @@ export default {
   display: flex;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   gap: 1.5rem;
-  padding: 1rem;
+  padding: 0.25rem 1rem;
   align-items: center;
 }
 
 .note-card {
   flex: 0 0 calc(33.333% - 1rem);
-  background: white;
-  border-radius: 20px;
-  margin-top: -32px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-top: 0;
   padding: 1.75rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
+  transition: border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 280px;
-  opacity: 0.6;
-  transform: scale(0.85);
-  filter: blur(3px) brightness(0.95);
+  min-height: 230px;
+  opacity: 0.55;
+  transform: scale(0.94);
   overflow: hidden;
 }
 
-.note-card.left {
-  opacity: 0.7;
-  transform: translateX(-10%) scale(0.9);
-  filter: blur(2px) brightness(0.97);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
-}
-
+.note-card.left,
 .note-card.right {
   opacity: 0.7;
-  transform: translateX(10%) scale(0.9);
-  filter: blur(2px) brightness(0.97);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  transform: scale(0.97);
 }
 
 .note-card.active {
   opacity: 1;
   transform: scale(1);
-  filter: blur(0) brightness(1);
-  box-shadow: 0 20px 40px rgba(31, 174, 91, 0.15);
   z-index: 10;
-  border: 1px solid rgba(31, 174, 91, 0.32);
-  min-height: 320px;
+  border-color: var(--text);
+  min-height: 245px;
 }
 
 .note-top {
@@ -423,96 +415,99 @@ export default {
   margin-bottom: 1rem;
 }
 
+/* Keep the top row on one line: long categories shrink with "…" */
+.note-top .note-category {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-meta {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .note-category {
-  padding: 0.4rem 0.65rem;
+  padding: 0.35rem 0.6rem;
   border-radius: 999px;
-  background: rgba(31, 174, 91, 0.12);
-  color: #15803d;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .note-read-time {
-  color: #718096;
+  color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 500;
   white-space: nowrap;
 }
 
-.note-icon {
-  width: 42px;
-  height: 42px;
-  margin-bottom: 1rem;
-  border-radius: 14px;
-  background: rgba(31, 174, 91, 0.12);
-  color: #15984e;
-  display: flex;
+
+.note-meta {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
+  gap: 0.25rem;
 }
 
+.note-link {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.note-link:hover {
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+
 .note-title {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #2d3748;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
   margin: 0 0 0.85rem;
   text-align: left;
   line-height: 1.3;
+  /* Max 2 lines so every card is the same height */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .note-description {
-  color: #4a5568;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1.25rem;
   text-align: left;
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   min-height: 76px;
+  /* Max 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.note-actions {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  padding-top: 0.5rem;
-}
 
-.note-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #1fae5b, #0f6b3e);
-  color: white;
-  border-radius: 10px;
-  border: 0;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 280px;
-  font-size: 0.95rem;
-  cursor: pointer;
-}
 
 .active-button {
-  background: linear-gradient(135deg, #1fae5b, #0f6b3e);
-  box-shadow: 0 8px 20px rgba(31, 174, 91, 0.28);
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
 }
 
-.note-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(31, 174, 91, 0.26);
-}
 
-.note-button.disabled {
-  opacity: 0.55;
-  pointer-events: none;
-  cursor: not-allowed;
-  box-shadow: none;
-}
 
 .note-hint {
   display: flex;
@@ -520,11 +515,11 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   margin-top: 0.75rem;
-  color: #718096;
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   font-weight: 500;
   padding-top: 0.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border);
 }
 
 .carousel-controls {
@@ -532,7 +527,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   max-width: 800px;
-  margin: 1.5rem auto 0;
+  margin: 0.75rem auto 0;
   padding: 0 1rem;
 }
 
@@ -546,54 +541,51 @@ export default {
 }
 
 .current-note {
-  font-size: 1.5rem;
-  background: linear-gradient(135deg, #1fae5b, #0f6b3e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.3rem;
+  color: var(--text);
+  font-weight: 700;
   line-height: 1;
 }
 
 .note-separator {
-  color: #cbd5e0;
-  font-size: 1.2rem;
+  color: var(--border);
+  font-size: 1.1rem;
   line-height: 1;
 }
 
 .total-notes {
-  color: #a0aec0;
+  color: var(--text-muted);
   font-size: 1rem;
   line-height: 1;
 }
 
 .note-name {
-  color: #4a5568;
-  font-size: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
   margin-left: 1rem;
   font-weight: 500;
   line-height: 1;
 }
 
 .slider-btn {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: #1fae5b;
-  font-size: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s ease;
   flex-shrink: 0;
   z-index: 20;
 }
 
 .slider-btn:hover {
-  background: #1fae5b;
-  color: white;
-  border-color: #1fae5b;
+  border-color: var(--text);
 }
 
 /* Mobile single card */
@@ -608,11 +600,10 @@ export default {
 .mobile-note-card {
   width: 100%;
   min-height: 315px;
-  background: white;
-  border-radius: 20px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   padding: 1.25rem;
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   touch-action: pan-y;
@@ -620,10 +611,10 @@ export default {
 }
 
 .mobile-note-card .note-title {
-  font-size: 1.1rem;
-  font-weight: 900;
+  font-size: 1.05rem;
+  font-weight: 700;
   margin: 0 0 0.7rem;
-  color: #2d3748;
+  color: var(--text);
   text-align: left;
 }
 
@@ -632,13 +623,10 @@ export default {
   line-height: 1.62;
   min-height: auto;
   margin-bottom: 1rem;
-  color: #4a5568;
+  color: var(--text-secondary);
   text-align: left;
 }
 
-.mobile-note-card .note-button {
-  max-width: 100%;
-}
 
 .mobile-note-card .note-hint {
   font-size: 0.8rem;
@@ -685,7 +673,7 @@ export default {
 /* Responsive */
 @media (max-width: 768px) {
   .tech-notes-section {
-    margin-top: 3rem;
+    margin: 0;
     overflow: visible;
   }
 
@@ -695,11 +683,11 @@ export default {
   }
 
   .section-title {
-    font-size: 2rem;
-    line-height: 1.15;
-    font-weight: 900;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 700;
     margin-bottom: 0.85rem;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
   }
 
   .swipe-hint {
@@ -720,8 +708,8 @@ export default {
 
 @media (max-width: 480px) {
   .section-title {
-    font-size: 1.9rem;
-    line-height: 1.15;
+    font-size: 1.35rem;
+    line-height: 1.2;
     margin-bottom: 0.75rem;
   }
 
@@ -747,175 +735,4 @@ export default {
   }
 }
 
-/* Dark Mode */
-html[data-theme="dark"] .section-title,
-html[data-theme="dark"] .note-title {
-  color: #f8fafc;
-}
-
-html[data-theme="dark"] .note-description {
-  color: #cbd5e0;
-}
-
-html[data-theme="dark"] .note-card,
-html[data-theme="dark"] .mobile-note-card {
-  background: rgba(17, 17, 17, 0.94);
-  border-color: #242424;
-}
-
-html[data-theme="dark"] .mobile-note-card {
-  box-shadow: none;
-}
-
-html[data-theme="dark"] .note-hint {
-  color: #cbd5e0;
-  border-top-color: #242424;
-}
-
-html[data-theme="dark"] .swipe-hint {
-  color: #cbd5e0;
-}
-
-/* Dark Mode */
-html[data-theme="dark"] .section-title,
-html[data-theme="dark"] .note-title {
-  color: #f8fafc;
-}
-
-html[data-theme="dark"] .note-description {
-  color: #cbd5e0;
-}
-
-html[data-theme="dark"] .note-card,
-html[data-theme="dark"] .mobile-note-card {
-  background: rgba(17, 17, 17, 0.94);
-  border-color: #242424;
-}
-
-html[data-theme="dark"] .mobile-note-card {
-  box-shadow: none;
-}
-
-html[data-theme="dark"] .note-read-time,
-html[data-theme="dark"] .swipe-hint {
-  color: #cbd5e0;
-}
-
-/* Midnight Theme */
-html[data-theme="midnight"] .section-title,
-html[data-theme="midnight"] .note-title {
-  color: #e5f0ff;
-}
-
-html[data-theme="midnight"] .note-description {
-  color: #b8c7dc;
-}
-
-html[data-theme="midnight"] .note-card,
-html[data-theme="midnight"] .mobile-note-card {
-  background: rgba(10, 20, 38, 0.96);
-  border-color: rgba(96, 165, 250, 0.22);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
-}
-
-html[data-theme="midnight"] .note-card.active {
-  border-color: rgba(96, 165, 250, 0.42);
-  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.18);
-}
-
-html[data-theme="midnight"] .note-category {
-  background: rgba(96, 165, 250, 0.14);
-  color: #93c5fd;
-}
-
-html[data-theme="midnight"] .note-icon {
-  background: rgba(96, 165, 250, 0.14);
-  color: #93c5fd;
-}
-
-html[data-theme="midnight"] .note-read-time,
-html[data-theme="midnight"] .swipe-hint {
-  color: #9fb3ca;
-}
-
-html[data-theme="midnight"] .note-button,
-html[data-theme="midnight"] .active-button {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.26);
-}
-
-html[data-theme="midnight"] .slider-btn {
-  background: rgba(10, 20, 38, 0.96);
-  border-color: rgba(96, 165, 250, 0.22);
-  color: #93c5fd;
-}
-
-html[data-theme="midnight"] .slider-btn:hover {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
-}
-
-html[data-theme="midnight"] .note-name {
-  color: #b8c7dc;
-}
-
-/* Forest Theme */
-html[data-theme="forest"] .section-title,
-html[data-theme="forest"] .note-title {
-  color: #ecfdf5;
-}
-
-html[data-theme="forest"] .note-description {
-  color: #bbf7d0;
-}
-
-html[data-theme="forest"] .note-card,
-html[data-theme="forest"] .mobile-note-card {
-  background: rgba(8, 47, 32, 0.96);
-  border-color: rgba(34, 197, 94, 0.22);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
-}
-
-html[data-theme="forest"] .note-card.active {
-  border-color: rgba(34, 197, 94, 0.42);
-  box-shadow: 0 20px 40px rgba(34, 197, 94, 0.16);
-}
-
-html[data-theme="forest"] .note-category {
-  background: rgba(34, 197, 94, 0.16);
-  color: #86efac;
-}
-
-html[data-theme="forest"] .note-icon {
-  background: rgba(34, 197, 94, 0.16);
-  color: #86efac;
-}
-
-html[data-theme="forest"] .note-read-time,
-html[data-theme="forest"] .swipe-hint {
-  color: #a7f3d0;
-}
-
-html[data-theme="forest"] .note-button,
-html[data-theme="forest"] .active-button {
-  background: linear-gradient(135deg, #16a34a, #166534);
-  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.26);
-}
-
-html[data-theme="forest"] .slider-btn {
-  background: rgba(8, 47, 32, 0.96);
-  border-color: rgba(34, 197, 94, 0.22);
-  color: #86efac;
-}
-
-html[data-theme="forest"] .slider-btn:hover {
-  background: #16a34a;
-  color: #ffffff;
-  border-color: #16a34a;
-}
-
-html[data-theme="forest"] .note-name {
-  color: #bbf7d0;
-}
 </style>

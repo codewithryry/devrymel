@@ -2,12 +2,6 @@
   <div class="tool-page">
     <div class="tool-shell">
 
-      <!-- Back -->
-      <router-link to="/" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Portfolio
-      </router-link>
-
       <!-- Hero -->
       <div class="tool-hero">
         <div class="tt-icon-wrap">
@@ -184,6 +178,7 @@ import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "TikTokDownloader",
+
   components: { ToolSuggestions, AdSlot },
 
   data() {
@@ -290,7 +285,7 @@ export default {
 }
 
 .tool-shell {
-  width: min(700px, 100%);
+  width: min(var(--container-width), 100%);
   margin: 0 auto;
 }
 
@@ -320,47 +315,10 @@ export default {
 }
 
 /* ── Hero ──────────────────────────────────────── */
-.tool-hero {
-  display: flex;
-  align-items: center;
-  gap: clamp(12px, 3vw, 18px);
-  margin-bottom: 18px;
-  padding: clamp(16px, 4vw, 24px);
-  border-radius: 22px;
-  background: color-mix(in srgb, var(--surface) 84%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-  backdrop-filter: blur(14px);
-}
 
-.tt-icon-wrap {
-  width: clamp(48px, 10vw, 60px);
-  height: clamp(48px, 10vw, 60px);
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #010101, #2d2d2d);
-  color: #ffffff;
-  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-}
 
-.tt-hero-text { min-width: 0; }
 
-.tt-title {
-  margin: 0 0 4px;
-  font-size: clamp(1.2rem, 4vw, 1.65rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
 
-.tt-subtitle {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-  line-height: 1.45;
-}
 
 /* ── Input card ────────────────────────────────── */
 .tt-card {
@@ -774,11 +732,6 @@ export default {
 
   .back-link { margin-bottom: 14px; padding: 10px 14px; }
 
-  .tool-hero {
-    gap: 12px;
-    padding: 14px;
-    border-radius: 18px;
-  }
 
   .tt-card {
     padding: 12px;
@@ -822,5 +775,52 @@ export default {
 @media (max-width: 360px) {
   .tt-stats { display: none; }
   .tt-cover { height: 150px; }
+}
+
+/* ===== Tool header (restored) ===== */
+.tool-hero {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 18px);
+  margin-bottom: 18px;
+  padding: clamp(16px, 4vw, 24px);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.tt-icon-wrap {
+  width: clamp(48px, 10vw, 60px);
+  height: clamp(48px, 10vw, 60px);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #010101, #2d2d2d);
+  color: #ffffff;
+  font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.tt-hero-text { min-width: 0; }
+
+.tt-title {
+  margin: 0 0 4px;
+  font-size: clamp(1.2rem, 4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.tt-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+  .tool-hero { gap: 12px; padding: 14px; border-radius: 18px; }
 }
 </style>

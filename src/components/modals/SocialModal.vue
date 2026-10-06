@@ -122,19 +122,24 @@ export default {
   align-items: flex-end;
   justify-content: center;
   z-index: 9999;
+  margin-top: 0;
 }
 
 /* ===== Modal ===== */
 .modal {
-  background: white;
+  background: var(--surface);
   width: 100%;
-  max-width: 520px;
+  max-width: 1000px;
   max-height: 85vh;
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-bottom: none;
   animation: modalSlideUp 0.3s ease;
   display: flex;
   flex-direction: column;
+  margin-top: 0;
+  box-sizing: border-box;
 }
 
 /* ===== Header ===== */
@@ -144,13 +149,13 @@ export default {
   justify-content: space-between;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
 }
 
 .modal-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #2d3748;
+  color: var(--text);
   line-height: 1;
 }
 
@@ -158,20 +163,19 @@ export default {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #64748b;
-  transition: all 0.2s ease;
+  color: var(--text-secondary);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .modal-close:active {
-  background: #8b5cf6;
-  color: white;
-  transform: rotate(90deg);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 /* ===== Content ===== */
@@ -187,21 +191,21 @@ export default {
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(139, 92, 246, 0.08); /* Purple theme */
-  border-radius: 12px;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   text-align: left;
 }
 
 .modal-description i {
-  color: #8b5cf6; /* Purple */
+  color: var(--accent);
   font-size: 1.4rem;
   margin-top: 0.2rem;
   flex-shrink: 0;
 }
 
 .modal-description p {
-  color: #2d3748;
+  color: var(--text);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
@@ -226,17 +230,17 @@ export default {
 }
 
 .modal-scroll::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 10px;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
 }
 
 .modal-scroll::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
-  border-radius: 10px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .modal-scroll::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--text-muted);
 }
 
 /* ===== Grid ===== */
@@ -252,23 +256,23 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   cursor: default;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 /* ===== Icon ===== */
 .card-icon {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed); /* Purple gradient */
+  border-radius: var(--radius-sm);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--bg);
   font-size: 1.1rem;
   flex-shrink: 0;
 }
@@ -282,46 +286,45 @@ export default {
 .card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text);
   margin-bottom: 0.3rem;
 }
 
 .card-desc {
   font-size: 0.85rem;
-  color: #718096;
+  color: var(--text-secondary);
 }
 
 /* ===== Clock Icon (replaces arrow) ===== */
 .card-clock {
-  color: #cbd5e0;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 /* ===== Got it Button ===== */
 .modal-gotit-button {
-  background: #8b5cf6; /* Purple */
-  color: white;
+  background: var(--accent);
+  color: var(--bg);
   border: none;
   padding: 1rem;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   margin-top: 0.5rem;
   width: 100%;
   min-height: 48px;
 }
 
 .modal-gotit-button:active {
-  transform: scale(0.98);
-  background: #7c3aed; /* Darker purple */
+  background: var(--accent-hover);
 }
 
 /* ===== Animations ===== */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .slide-up-enter-from,
@@ -338,49 +341,40 @@ export default {
 /* ===== Responsive Adjustments ===== */
 @media (min-width: 768px) {
   .modal {
-    border-radius: 20px;
-    max-width: 500px; /* Fixed desktop width */
-    width: 90%;
+    width: min(95vw, 1000px);
+    max-width: 1000px;
+    border-radius: var(--radius-lg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+    padding: 2rem;
   }
-  
+
   .modal-overlay {
     align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 767px) {
   .modal {
-    max-width: 480px; /* Slightly smaller for desktop */
+    width: 100%;
   }
 }
 
 /* ===== Touch Device Optimizations ===== */
 @media (hover: hover) and (pointer: fine) {
-  /* Desktop hover effects */
   .modal-close:hover {
-    background: #8b5cf6;
-    color: white;
-    transform: rotate(90deg);
+    background: var(--accent);
+    color: var(--bg);
   }
-  
+
   .modal-gotit-button:hover {
-    background: #7c3aed;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    background: var(--accent-hover);
   }
-  
+
   .modal-card:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e0;
+    border-color: var(--accent);
   }
-}
-
-/* ===== Adjust margin-top ===== */
-.modal-overlay {
-  margin-top: 0;
-}
-
-.modal {
-  margin-top: 0;
 }
 </style>

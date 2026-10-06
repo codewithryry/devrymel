@@ -531,9 +531,9 @@ export default {
 }
 
 .tab-btn.active {
-  color: var(--accent, #6366f1);
-  background: color-mix(in srgb, var(--accent, #6366f1) 10%, transparent);
-  border-color: color-mix(in srgb, var(--accent, #6366f1) 30%, var(--border));
+  color: var(--text, #15181c);
+  background: var(--surface-hover, #f1f1ef);
+  border-color: var(--text-muted, #8a9099);
 }
 
 .stats-row {
@@ -565,8 +565,8 @@ export default {
 }
 
 .stat-icon.total {
-  color: var(--accent, #6366f1);
-  background: color-mix(in srgb, var(--accent, #6366f1) 12%, transparent);
+  color: var(--text, #15181c);
+  background: var(--surface-hover, #f1f1ef);
 }
 
 .stat-icon.published {
@@ -649,7 +649,7 @@ export default {
 }
 
 .bar-meta strong {
-  color: var(--accent, #6366f1);
+  color: var(--accent, #1a1a1a);
 }
 
 .bar-track {
@@ -662,7 +662,7 @@ export default {
 .bar-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent, #6366f1), #8b5cf6);
+  background: var(--accent, #1a1a1a);
 }
 
 .rate-number {
@@ -752,7 +752,7 @@ export default {
 }
 
 .search-wrap input:focus {
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #1a1a1a);
 }
 
 .error-text {
@@ -906,6 +906,14 @@ export default {
 
 @media (max-width: 560px) {
   .graphs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    gap: 10px;
+  }
+
+  .info-grid {
     grid-template-columns: 1fr;
   }
 }
