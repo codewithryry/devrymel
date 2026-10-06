@@ -943,15 +943,15 @@ html[data-theme="forest"] body {
   }
 
   body {
-    /* nav sits 38px up + 62px tall: keep ~24px clear space above it */
-    padding-bottom: calc(124px + env(safe-area-inset-bottom, 0px));
+    /* nav sits 68px up + 62px tall: keep ~24px clear space above it */
+    padding-bottom: calc(154px + env(safe-area-inset-bottom, 0px));
   }
 
   .bottom-nav {
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(38px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
     z-index: 300;
     display: flex;
     align-items: center;
@@ -1865,7 +1865,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(142px + env(safe-area-inset-bottom, 0px));
     z-index: 310;
     display: flex;
     align-items: center;
@@ -3044,5 +3044,13 @@ html[data-theme="dark"] .nav-links a::after {
 .toast-leave-to {
   opacity: 0;
   transform: translate(-50%, 10px);
+}
+
+/* Phones: show the toast just above the bottom nav (nav is 68px up + 62px tall) */
+@media (max-width: 860px) {
+  .toast {
+    bottom: calc(142px + env(safe-area-inset-bottom, 0px));
+    z-index: 320;
+  }
 }
 </style>

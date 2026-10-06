@@ -252,7 +252,7 @@
        white card continues to the bottom of the screen (behind the bottom nav) */
     box-shadow:
       0 0 0 0.75rem var(--surface),
-      0 160px 0 0.75rem var(--surface);
+      0 180px 0 0.75rem var(--surface);
   }
 }
 </style>
