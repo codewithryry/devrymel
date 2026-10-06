@@ -134,6 +134,9 @@
       </div>
     </transition>
 
+    <!-- Soft glow that follows the mouse across cards (desktop only) -->
+    <CursorTrail v-if="!isAdminRoute" />
+
     <!-- Toast -->
     <transition name="toast">
       <div v-if="toastVisible" class="toast">
@@ -149,10 +152,12 @@
       @count-change="feedbackCount = $event"
     />
 
-    <router-view
-      lang="en"
-      :translations="t"
-    />
+    <!-- Quick fade between pages -->
+    <router-view v-slot="{ Component }">
+      <transition name="page" mode="out-in" @after-enter="observeReveal">
+        <component :is="Component" lang="en" :translations="t" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
@@ -160,6 +165,7 @@
 import { trackVisit, getViews } from "./services/analyticsService";
 import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
+import CursorTrail from "@/components/CursorTrail.vue";
 import { getSpotifyNowPlaying } from "./services/spotifyService";
 
 import {
@@ -186,7 +192,8 @@ export default {
   name: "App",
 
   components: {
-    FeedbackBubble
+    FeedbackBubble,
+    CursorTrail
   },
 
   data() {
@@ -302,6 +309,7 @@ export default {
     }
 
     this.loadLiveStats();
+    this.$nextTick(this.observeReveal);
 
     getSpotifyNowPlaying().then((result) => {
       this.spotifyTrack = result;
@@ -344,6 +352,7 @@ export default {
     }
 
     if (this.quickPagesUnsubscribe) this.quickPagesUnsubscribe();
+    if (this.revealObserver) this.revealObserver.disconnect();
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
     if (this.spotifyAutoTimer) clearTimeout(this.spotifyAutoTimer);
   },
@@ -394,6 +403,42 @@ export default {
         this.openSubmenu = null;
         if (this.showMorePanel) this.loadLiveStats();
       }
+    },
+
+    /* ===== Reveal on scroll =====
+       Sections/cards fade up gently the first time they scroll into view. */
+    observeReveal() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (!("IntersectionObserver" in window)) return;
+
+      if (!this.revealObserver) {
+        this.revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("revealed");
+              this.revealObserver.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+        );
+      }
+
+      const targets = document.querySelectorAll(
+        ".main-content > section, .info-panel, .info-grid, .cta-card, .explore-panel, .header-footer"
+      );
+
+      targets.forEach((el) => {
+        if (el.dataset.reveal) return;
+        el.dataset.reveal = "1";
+
+        // Already on screen: show right away, no animation
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92) return;
+
+        el.classList.add("reveal");
+        this.revealObserver.observe(el);
+      });
     },
 
     toggleSubmenu(name) {
@@ -576,17 +621,18 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap");
 
 /* ===== ROOT THEME VARIABLES ===== */
+/* Classic Light: soft off-white (easier on the eyes than pure white) */
 :root {
-  --bg: #fafaf8;
-  --surface: #ffffff;
-  --surface-soft: #f6f6f4;
-  --surface-hover: #f1f1ef;
-  --text: #15181c;
-  --text-secondary: #5a6069;
-  --text-muted: #8a9099;
-  --border: #e5e5e0;
-  --accent: #1a1a1a;
-  --accent-hover: #000000;
+  --bg: #f3f2ee;
+  --surface: #fbfaf7;
+  --surface-soft: #efeee9;
+  --surface-hover: #e9e8e2;
+  --text: #24272c;
+  --text-secondary: #5c616a;
+  --text-muted: #878c94;
+  --border: #e0ded7;
+  --accent: #26292e;
+  --accent-hover: #15171a;
 
   --success: #22c55e;
   --danger: #ef4444;
@@ -655,6 +701,125 @@ html[data-theme="forest"] body {
 /* ===== GLOBAL RESET ===== */
 * {
   box-sizing: border-box;
+}
+
+/* ===== SMOOTH UX ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Page change: quick fade + tiny lift */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.page-leave-to {
+  opacity: 0;
+}
+
+/* Reveal on scroll (classes added by App.observeReveal) */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .page-enter-active,
+  .page-leave-active,
+  .reveal {
+    transition: none;
+  }
+}
+
+/* ===== LIQUID GLASS BUTTONS =====
+   One place for the glass look on buttons across the site (not the admin CMS).
+   "#app" outranks each component's own scoped button styles. */
+
+/* Solid buttons (Contact Me, Start a Project, Email Me, send): keep their color, add a glass shine */
+#app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .fb-send, .send-btn.ready):not(.admin-page *) {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.24) 0%,
+    rgba(255, 255, 255, 0.06) 48%,
+    rgba(255, 255, 255, 0) 52%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+  border-color: color-mix(in srgb, #ffffff 18%, var(--accent));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 4px 14px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* Light buttons (theme, ⋯, View Services, Download CV, Explore links): frosted glass */
+#app :is(.nav-icon-btn, .ghost-btn, .explore-link):not(.admin-page *) {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.08) 55%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    color-mix(in srgb, var(--text) 5%, color-mix(in srgb, var(--surface) 70%, transparent));
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 1px color-mix(in srgb, var(--text) 6%, transparent),
+    0 2px 8px color-mix(in srgb, var(--text) 8%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+}
+
+#app :is(.nav-icon-btn, .ghost-btn, .explore-link):not(.admin-page *):hover {
+  border-color: color-mix(in srgb, var(--text) 22%, transparent);
+}
+
+/* Dark themes: softer shine so the glass doesn't glow */
+html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"])
+  #app :is(.nav-icon-btn, .ghost-btn, .explore-link):not(.admin-page *) {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.02) 60%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    color-mix(in srgb, var(--surface) 70%, transparent);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"])
+  #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .fb-send, .send-btn.ready):not(.admin-page *) {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.08) 48%,
+    rgba(255, 255, 255, 0) 52%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 16px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 /* "clip" (not "hidden") so the sticky navbar keeps working */
@@ -732,41 +897,78 @@ h1, h2, h3, h4, h5, h6 {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 6px;
   flex: 1;
   justify-content: center;
 }
 
 .nav-links a {
   position: relative;
+  z-index: 0;
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.86rem;
   font-weight: 500;
-  padding: 4px 2px;
+  padding: 7px 13px;
+  border-radius: 999px;
   transition: color 0.18s ease;
 }
 
+/* Liquid-glass pill behind the link (hover + current page) */
 .nav-links a::after {
   content: "";
   position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: -2px;
-  height: 1px;
-  background: var(--text);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.2s ease;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  /* Light: faint tint + visible edge so it reads on the off-white navbar */
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #ffffff 55%, transparent) 0%,
+      color-mix(in srgb, #ffffff 0%, transparent) 60%
+    ),
+    color-mix(in srgb, var(--text) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 80%, transparent),
+    inset 0 -1px 2px color-mix(in srgb, var(--text) 8%, transparent),
+    0 2px 8px color-mix(in srgb, var(--text) 12%, transparent);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: blur(8px) saturate(160%);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--text);
 }
 
 .nav-links a:hover::after,
+.nav-links a.active::after,
 .nav-links a:focus-visible::after {
-  transform: scaleX(1);
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Dark themes: dimmer highlight so the glass doesn't glow */
+html[data-theme="midnight"] .nav-links a::after,
+html[data-theme="forest"] .nav-links a::after,
+html[data-theme="dark"] .nav-links a::after {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #ffffff 14%, transparent) 0%,
+      color-mix(in srgb, #ffffff 3%, transparent) 60%,
+      transparent 100%
+    ),
+    color-mix(in srgb, var(--surface) 60%, transparent);
+  border-color: color-mix(in srgb, #ffffff 16%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 22%, transparent),
+    0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .nav-mobile-extra {

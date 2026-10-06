@@ -24,6 +24,8 @@
               :src="item.image"
               :alt="item.title"
               class="deployment-image"
+              loading="lazy"
+              decoding="async"
             />
           </button>
         </div>

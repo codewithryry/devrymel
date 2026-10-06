@@ -261,9 +261,15 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) return savedPosition;
-    if (to.hash) return { el: to.hash };
-    return { top: 0 };
+    if (to.hash) return { el: to.hash, behavior: "smooth" };
+
+    // Wait for the page fade-out (0.18s) so the jump isn't visible,
+    // and jump instantly instead of smooth-scrolling across pages.
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(savedPosition ? { ...savedPosition, behavior: "instant" } : { top: 0, behavior: "instant" });
+      }, 180);
+    });
   }
 });
 

@@ -18,7 +18,7 @@
     <div class="projects-grid">
       <div class="project-card" v-for="project in projects" :key="project.id">
         <div class="project-image-container">
-          <img :src="resolveImage(project.image)" :alt="project.title" class="project-image" />
+          <img :src="resolveImage(project.image)" :alt="project.title" class="project-image" loading="lazy" decoding="async" />
           <div class="project-status" :class="{ 'available': project.demoUrl !== '#', 'unavailable': project.demoUrl === '#' }">
             {{ project.demoUrl !== '#' ? 'Live Demo Available' : 'Demo Coming Soon' }}
           </div>

@@ -35,22 +35,7 @@
         <AdSlot type="banner" />
       </section>
 
-      <!-- 4. Career & Education Timeline (+ ad on the same screen) -->
-      <section class="section-group">
-        <CareerTimeline
-          :timeline="timeline.slice(0, 3)"
-          view-all-to="/experience"
-          view-all-label="View full journey.."
-        />
-        <AdSlot type="banner" />
-      </section>
-
-      <!-- 5. Experience / Internship -->
-      <ExperienceSection
-        :experiences="experiences.slice(0, 2)"
-        view-all-to="/experience"
-        view-all-label="View full experience.."
-      />
+      <!-- Career & Education and Experience live on the /experience page -->
 
       <!-- 6. Services -->
       <ServicesSection :services="services" />
@@ -162,12 +147,10 @@ import QRModal from '../modals/QRModal.vue'
 import CertificatesModal from '../modals/CertificatesModal.vue'
 import ProjectModal from '../modals/ProjectModal.vue'
 import SocialModal from '../modals/SocialModal.vue'
-import CareerTimeline from './CareerTimeline.vue'
 import LiveDevStats from './LiveDevStats.vue'
 import ServicesSection from './ServicesSection.vue'
 import ProjectDeepDiveModal from '../modals/ProjectDeepDiveModal.vue'
 import Linkwebsite from '../modals/Linkwebsite.vue'
-import ExperienceSection from './ExperienceSection.vue'
 import HighlightsSection from './HighlightsSection.vue'
 import TechNotesSection from './TechNotesSection.vue'
 import FooterSection from './FooterSection.vue'
@@ -234,10 +217,8 @@ export default {
     CertificatesModal,
     ProjectModal,
     SocialModal,
-    CareerTimeline,
     LiveDevStats,
     ServicesSection,
-    ExperienceSection,
     HighlightsSection,
     TechNotesSection,
     AdSlot,
