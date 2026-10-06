@@ -64,17 +64,6 @@
       <div class="m-tiles">
         <div class="m-tiles-head">
           <p class="m-tiles-label">{{ text.getInTouch }}</p>
-          <!-- Anyone can rearrange tiles (no long-press needed) -->
-          <button
-            type="button"
-            class="m-tiles-edit"
-            :class="{ active: tileEditing }"
-            :title="tileEditing ? 'Done' : 'Edit tiles'"
-            :aria-label="tileEditing ? 'Done editing tiles' : 'Edit tiles'"
-            @click="$root.tileEditMode = !tileEditing"
-          >
-            <i class="fas" :class="tileEditing ? 'fa-check' : 'fa-pen'"></i>
-          </button>
         </div>
         <div
           class="m-tiles-grid rt-grid"
@@ -1821,7 +1810,7 @@ export default {
   }
 }
 
-/* Tile section header: label + admin "Edit" toggle */
+/* Tile section header label */
 @media (max-width: 768px) {
   .m-tiles-head {
     display: flex;
@@ -1833,32 +1822,6 @@ export default {
   .m-tiles-head .m-tiles-label {
     flex: 1;
     margin: 0 !important;
-  }
-
-  .m-tiles-edit {
-    display: inline-grid;
-    place-items: center;
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: var(--surface);
-    color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 0.72rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .m-tiles-edit i {
-    font-size: 0.62rem;
-  }
-
-  .m-tiles-edit.active {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--bg);
   }
 }
 </style>
