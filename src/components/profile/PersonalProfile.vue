@@ -22,6 +22,7 @@
 
       <!-- 2. Featured Projects -->
       <ProjectsSection
+        class="home-projects"
         :projects="projects.slice(0, 3)"
         view-all-to="/projects"
         view-all-label="View all projects.."
@@ -30,27 +31,29 @@
       />
 
       <!-- 3. Highlights / Quick Stats (+ ad on the same screen) -->
-      <section class="section-group">
-        <LiveDevStats :stats="devStats" view-all-to="/skills" view-all-label="View all skills.." />
+      <section class="section-group home-mobile-hide">
+        <LiveDevStats class="home-mobile-hide" :stats="devStats" view-all-to="/skills" view-all-label="View all skills.." />
         <AdSlot type="banner" />
       </section>
 
       <!-- Career & Education and Experience live on the /experience page -->
 
       <!-- 6. Services -->
-      <ServicesSection :services="services" />
+      <ServicesSection class="home-mobile-hide" :services="services" />
 
       <!-- 7. Why Hire Me -->
-      <HighlightsSection :highlights="highlights" />
+      <HighlightsSection class="home-mobile-hide" :highlights="highlights" />
 
       <!-- 8. Tech Notes / Guides (+ ad on the same screen) -->
-      <section class="section-group">
-        <TechNotesSection :notes="techNotes" />
-        <AdSlot type="banner" />
+      <section class="section-group home-mobile-hide">
+        <TechNotesSection class="home-mobile-hide" :notes="techNotes" />
+        <!-- Hidden on phones: it would sit right under the Highlights ad -->
+        <AdSlot class="home-mobile-hide" type="banner" />
       </section>
 
       <!-- 8. Quick Links (just before Let's Connect) -->
       <LinksSection
+        class="home-links"
         :certificates="certificates"
         @openQRModal="openQRModal"
         @openCertificatesListModal="openCertificatesListModal"
@@ -58,14 +61,15 @@
 
 
       <!-- 9. Let's Connect (+ ad on the same screen) -->
-      <section class="section-group">
+      <section class="section-group home-mobile-hide">
         <SocialSection
+          class="home-mobile-hide"
           :socialLinks="mergedSocialLinks"
           :availableSocialLinks="availableSocialLinks"
           :unavailableSocialLinks="unavailableSocialLinks"
           @openUnavailableSocialModal="openUnavailableSocialModal"
         />
-        <AdSlot type="banner" />
+        <AdSlot class="home-mobile-hide" type="banner" />
       </section>
 
       <Linkwebsite
@@ -618,6 +622,21 @@ export default {
 
 /* Desktop: every section fills at least one screen below the sticky navbar,
    so when you scroll to a section the next section's title isn't peeking in. */
+/* Phones: sections that have their own page are hidden on the homepage
+   (Featured Projects -> Projects tab, Highlights -> Skills, Services -> Services) */
+@media (max-width: 768px) {
+  /* ".main-content" prefix so this beats .section-group's display:flex */
+  .main-content .home-projects,
+  .main-content .home-mobile-hide {
+    display: none;
+  }
+
+  /* Quick Links continue right under the profile tiles (same 0.6rem gap) */
+  .home-links {
+    margin-top: calc(-3rem + 0.6rem);
+  }
+}
+
 .section-group {
   display: flex;
   flex-direction: column;
@@ -648,6 +667,48 @@ export default {
 @media (max-width: 768px) {
   .main-content {
     gap: 2.5rem;
+  }
+}
+
+/* Phones (all themes): the whole homepage (profile, tiles, Quick Links, CTA)
+   sits inside one big container card */
+@media (max-width: 768px) {
+  :root .main-content {
+    gap: 0.6rem;
+    margin: 0.75rem 12px 1rem;
+    padding: 0.75rem;
+    border-radius: 30px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text) 10%, var(--bg)) 0%,
+      color-mix(in srgb, var(--text) 4%, var(--bg)) 100%
+    );
+  }
+
+  /* Gap is now 0.6rem, so Quick Links no longer need the pull-up */
+  :root .main-content .home-links {
+    margin-top: 0;
+  }
+}
+
+/* ===== Phones: reference layout — grey page, white cards, no big container ===== */
+@media (max-width: 768px) {
+  .profile-container {
+    background: color-mix(in srgb, var(--text) 7%, var(--bg));
+  }
+
+  :root .main-content {
+    margin: 0;
+    padding: 1rem 12px 1.5rem;
+    border-radius: 0;
+    background: none;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Quick Links join the sheet directly under the profile tiles */
+  :root .main-content .home-links {
+    margin-top: -0.6rem; /* cancels the 0.6rem section gap */
   }
 }
 </style>

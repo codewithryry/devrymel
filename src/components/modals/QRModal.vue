@@ -27,7 +27,6 @@
 
           <div class="viewer-side">
             <div class="viewer-header">
-              <div class="viewer-badge">Support via QR Codes</div>
               <h3 class="viewer-title">{{ currentQR.bank }}</h3>
               <p class="viewer-description">{{ currentQR.description }}</p>
             </div>
@@ -143,18 +142,6 @@ export default {
   margin-bottom: 1.25rem;
 }
 
-.viewer-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--surface-hover);
-  color: var(--warning);
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-}
 
 .viewer-title {
   font-size: 1.5rem;
@@ -343,9 +330,11 @@ export default {
 
 /* Mobile: anchor to bottom, full width, stacked layout (unchanged from before) */
 @media (max-width: 640px) {
+  /* Bottom sheet, same as the Dean's List Awards list */
   .modal-overlay {
     align-items: flex-end;
-    background: rgba(15, 23, 42, 0.75);
+    padding: 0;
+    background: rgba(15, 23, 42, 0.6);
   }
 
   .image-viewer-modal {
@@ -353,9 +342,20 @@ export default {
     max-width: none;
     max-height: 90vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding: 1.5rem;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
     border-bottom: none;
     animation: modalSlideUp 0.3s ease;
+  }
+
+  /* Close button sits above the image, not on top of its buttons */
+  .modal-close {
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 3;
+    width: 32px;
+    height: 32px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
   }
 
   .viewer-layout {
@@ -364,35 +364,46 @@ export default {
 
   .viewer-image-container {
     flex: none;
-    padding: 1.5rem;
+    margin-top: 2.25rem;
+    padding: 0.75rem;
   }
 
   .viewer-image {
-    max-height: 300px;
+    max-height: 220px;
     width: auto;
   }
 
   .viewer-header {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
 
   .viewer-title {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 
   .viewer-details {
     flex-direction: row;
   }
 
+  /* Previous · 1/4 · Next on one row */
   .viewer-navigation {
-    margin-top: 0;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
   }
 
   .nav-btn {
-    flex: 1 1 100%;
+    flex: 1 1 0;
     justify-content: center;
+    padding: 0.65rem 0.5rem;
+  }
+
+  .nav-counter {
+    flex: none;
+    min-width: 44px;
+    text-align: center;
+    font-size: 0.85rem;
   }
 }
 

@@ -27,6 +27,22 @@ const routes = [
     redirect: "/about"
   },
   {
+    path: "/tech-notes",
+    name: "tech-notes",
+    component: () => import("@/views/TechNotesPage.vue"),
+    meta: {
+      title: "Tech Notes | Reymel Mislang"
+    }
+  },
+  {
+    path: "/why-me",
+    name: "why-me",
+    component: () => import("@/views/WhyMePage.vue"),
+    meta: {
+      title: "Why Work With Me | Reymel Mislang"
+    }
+  },
+  {
     path: "/projects",
     name: "projects",
     component: () => import("@/views/ProjectsPage.vue"),

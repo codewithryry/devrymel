@@ -1,80 +1,88 @@
 <template>
   <div>
     <!-- MOBILE LAYOUT -->
-    <div class="mobile-profile-content">
-      <!-- Profile Header -->
-      <div class="mobile-header">
-        <div class="mobile-profile-frame">
+    <div class="mobile-profile-content m-profile">
+      <!-- Centered header: photo, name, role, location -->
+      <div class="m-hero">
+        <div class="m-photo">
           <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
         </div>
 
-        <div class="mobile-identity">
-          <h2 class="mobile-name">
-            <span class="name-first">Reymel</span>
-            <span class="name-last">Mislang</span>
-          </h2>
+        <h2 class="m-name">Reymel Mislang</h2>
+        <p class="m-role">{{ text.desktopSubtitle }}</p>
 
-          <a href="mailto:reymelrey.mislang@gmail.com" class="mobile-contact-pill">
-            <i class="fas fa-envelope"></i>
-            {{ text.contactMe }}
-          </a>
+        <p class="m-meta">
+          <span><i class="fas fa-map-marker-alt"></i> {{ text.locationValue }}</span>
+          <span><i class="fas fa-birthday-cake"></i> {{ text.dobValue }}</span>
+        </p>
 
-          <!-- CENTERED BADGES SECTION -->
-          <div class="mobile-badges-section">
-            <div class="badge-instructions">
-              <span>{{ text.tapIcon }}</span>
-            </div>
+        <div class="m-badges">
+          <button type="button" class="inline-badge" @click="openMobileDeansList" :title="text.deanListerAward">
+            <i class="fas fa-trophy"></i>
+            <span class="badge-label">{{ text.awards }}</span>
+          </button>
+          <button type="button" class="inline-badge" @click="$emit('open-certificates')" :title="text.certificates">
+            <i class="fas fa-award"></i>
+            <span class="badge-label">{{ text.certs }}</span>
+          </button>
+          <button type="button" class="inline-badge" @click="$emit('openLinks')" :title="text.projectLinks">
+            <i class="fas fa-link"></i>
+            <span class="badge-label">{{ text.links }}</span>
+          </button>
+        </div>
 
-            <div class="center-badges">
-              <button
-                type="button"
-                class="inline-badge"
-                @click="openMobileDeansList"
-                :title="text.deanListerAward"
-              >
-                <i class="fas fa-trophy"></i>
-                <span class="badge-label">{{ text.awards }}</span>
-              </button>
 
-              <button
-                type="button"
-                class="inline-badge"
-                @click="$emit('open-certificates')"
-                :title="text.certificates"
-              >
-                <i class="fas fa-award"></i>
-                <span class="badge-label">{{ text.certs }}</span>
-              </button>
-
-              <button
-                type="button"
-                class="inline-badge"
-                @click="$emit('openLinks')"
-                :title="text.projectLinks"
-              >
-                <i class="fas fa-link"></i>
-                <span class="badge-label">{{ text.links }}</span>
-              </button>
-            </div>
-          </div>
+        <!-- Bio (inside the same card) — hidden for now; remove v-if to show again -->
+        <div v-if="false" class="m-bio">
+          <p class="statement-text">{{ text.aboutMobile1 }}</p>
+          <router-link to="/about" class="m-more">
+            More about me <i class="fas fa-arrow-right"></i>
+          </router-link>
         </div>
       </div>
 
-      <!-- About Section -->
-      <div class="mobile-card about-card">
-        <div class="card-content">
-          <p class="statement-text">
-            {{ text.aboutMobile1 }}
-          </p>
+      <!-- Link tiles (bento layout) -->
+      <div class="m-tiles">
+        <a href="mailto:reymelrey.mislang@gmail.com" class="m-tile m-tile--wide">
+          <i class="fas fa-envelope m-tile-icon"></i>
+          <span class="m-tile-label">{{ text.email }}</span>
+          <small>reymelrey.mislang@gmail.com</small>
+          <i class="fas fa-external-link-alt m-tile-corner"></i>
+        </a>
 
-          <p class="statement-text">
-            {{ text.aboutMobile2 }}
-          </p>
-        </div>
+        <a href="/Reymel_Mislang_CV.docx" download class="m-tile">
+          <i class="fas fa-id-card m-tile-icon"></i>
+          <span class="m-tile-label">CV</span>
+          <small>Download</small>
+          <i class="fas fa-download m-tile-corner"></i>
+        </a>
+
+        <a href="https://github.com/codewithryry" target="_blank" rel="noopener noreferrer" class="m-tile m-tile--full">
+          <span class="m-tile-top">
+            <i class="fab fa-github m-tile-icon"></i>
+            <span class="m-tile-pill">Follow</span>
+          </span>
+          <span class="m-tile-label">GitHub</span>
+          <small>@codewithryry</small>
+          <i class="fas fa-external-link-alt m-tile-corner"></i>
+        </a>
+
+        <a href="https://www.linkedin.com/in/reymelreymislang/" target="_blank" rel="noopener noreferrer" class="m-tile m-tile--wide">
+          <i class="fab fa-linkedin m-tile-icon"></i>
+          <span class="m-tile-label">LinkedIn</span>
+          <small>Reymel Mislang</small>
+          <i class="fas fa-external-link-alt m-tile-corner"></i>
+        </a>
+
+        <a href="https://www.facebook.com/100063507442180" target="_blank" rel="noopener noreferrer" class="m-tile">
+          <i class="fab fa-facebook m-tile-icon"></i>
+          <span class="m-tile-label">Facebook</span>
+          <small>Follow</small>
+          <i class="fas fa-external-link-alt m-tile-corner"></i>
+        </a>
       </div>
     </div>
 
-    <!-- DESKTOP LAYOUT -->
     <section class="profile-section desktop-profile-content">
       <div class="profile-brand-card">
         <!-- Left Column: Visual Identity -->
@@ -584,6 +592,56 @@ export default {
     padding: 1.25rem;
   }
 
+  /* One combined card: header (photo, name, buttons) + divider + bio */
+  .mobile-profile-content {
+    gap: 1rem;
+    padding: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  /* Compact header so it fits narrow phones */
+  /* Photo + gap stays 110px wide so the name/buttons column doesn't move;
+     the photo stretches to the full height of that column */
+  .mobile-profile-content .mobile-header {
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .mobile-profile-content .mobile-profile-frame {
+    width: 104px;
+    height: auto;
+    min-height: 104px;
+  }
+
+  .mobile-profile-content .mobile-profile-frame .profile-image {
+    height: 100%;
+    object-position: center top;
+  }
+
+  .mobile-profile-content .mobile-identity {
+    min-width: 0;
+  }
+
+  .mobile-profile-content .center-badges {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .mobile-profile-content .inline-badge {
+    gap: 4px;
+    padding: 5px 8px;
+    font-size: 0.68rem;
+  }
+
+  .mobile-profile-content .about-card {
+    padding: 1rem 0 0;
+    border: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+  }
+
   .about-card .statement-text {
     font-size: 0.92rem;
   }
@@ -902,6 +960,584 @@ export default {
 
   .desktop-contact-ad {
     margin-top: 1.5rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .mobile-profile-content .mobile-profile-frame {
+    width: 86px;
+    min-height: 86px;
+  }
+
+  .mobile-profile-content .inline-badge {
+    padding: 4px 7px;
+  }
+}
+
+/* ===== Mobile profile (centered, app-style) ===== */
+@media (max-width: 768px) {
+  .mobile-profile-content.m-profile {
+    gap: 1rem;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  .m-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    text-align: center;
+  }
+
+  .m-photo {
+    width: 128px;
+    height: 128px;
+    margin-bottom: 0.9rem;
+  }
+
+  .m-photo .profile-image {
+    border-radius: 24px;
+    object-position: center top;
+    box-shadow: var(--shadow);
+  }
+
+  .m-name {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .m-role {
+    margin: 0.2rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .m-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 1rem;
+    margin: 0.75rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .m-meta i {
+    margin-right: 3px;
+  }
+
+  .m-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .m-badges .inline-badge {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
+  .m-bio {
+    padding: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+  }
+
+  .m-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .m-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .m-tile > i:first-child {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .m-tile-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .m-tile small {
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .m-tile-corner {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+  }
+}
+
+/* ===== Mobile profile: grey panels like the reference ===== */
+@media (max-width: 768px) {
+  .m-profile {
+    --m-panel: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text) 9%, var(--surface)) 0%,
+      color-mix(in srgb, var(--text) 4%, var(--surface)) 100%
+    );
+  }
+
+  /* Photo overlaps the top of the grey header card */
+  .m-hero {
+    margin-top: 64px;
+    padding-top: 0;
+    border: none;
+    background: var(--m-panel);
+  }
+
+  .m-photo {
+    margin-top: -64px;
+    padding: 6px;
+    border-radius: 30px;
+    background: var(--bg);
+    width: 140px;
+    height: 140px;
+  }
+
+  .m-photo .profile-image {
+    border: none;
+    box-shadow: none;
+  }
+
+  .m-bio,
+  .m-tile {
+    border: none;
+    background: var(--m-panel);
+  }
+
+  /* Darker grey tiles for the links, like the reference */
+  .m-tile {
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--text) 14%, var(--surface)) 0%,
+      color-mix(in srgb, var(--text) 6%, var(--surface)) 100%
+    );
+  }
+
+  .m-badges .inline-badge {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+  }
+}
+
+/* ===== Mobile profile: bigger photo + "More about me" link ===== */
+@media (max-width: 768px) {
+  .m-hero {
+    margin-top: 31vw;
+  }
+
+  .m-photo {
+    width: 60vw;
+    max-width: 240px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin-top: calc(-31vw);
+    padding: 7px;
+    border-radius: 36px;
+  }
+
+  .m-photo .profile-image {
+    border-radius: 30px;
+  }
+
+  .m-name {
+    margin-top: 0.25rem;
+    font-size: 1.55rem;
+  }
+
+  .m-bio .statement-text {
+    margin: 0;
+  }
+
+  .m-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0.75rem;
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .m-more i {
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 768px) {
+  /* Cap the overlap once the photo hits its 240px max */
+  .m-hero {
+    margin-top: min(31vw, 124px);
+  }
+
+  .m-photo {
+    margin-top: calc(-1 * min(31vw, 124px));
+  }
+}
+
+/* ===== Mobile profile: one card, photo fully inside it ===== */
+@media (max-width: 768px) {
+  .m-hero,
+  .m-hero {
+    margin-top: 0;
+    padding: 1.25rem 1.1rem 1.25rem;
+  }
+
+  .m-photo,
+  .m-photo {
+    margin-top: 0;
+    padding: 0;
+    background: none;
+    border-radius: 28px;
+  }
+
+  .m-photo .profile-image {
+    border-radius: 28px;
+  }
+
+  /* Bio now sits inside the card, under a divider */
+  .m-hero .m-bio {
+    width: 100%;
+    margin-top: 1.1rem;
+    padding: 1rem 0 0;
+    border-radius: 0;
+    border-top: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+    background: none;
+    text-align: left;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 768px) {
+  .m-hero {
+    margin-top: 0;
+  }
+
+  .m-photo {
+    margin-top: 0;
+  }
+}
+
+/* ===== Mobile link tiles: bento grid ===== */
+@media (max-width: 768px) {
+  .m-tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .m-tile {
+    min-height: 104px;
+    justify-content: flex-end;
+    padding: 0.85rem;
+  }
+
+  .m-tile--wide {
+    grid-column: span 2;
+  }
+
+  .m-tile--full {
+    grid-column: 1 / -1;
+  }
+
+  .m-tile-icon {
+    margin-bottom: auto;
+    font-size: 1.6rem;
+  }
+
+  .m-tile > i.m-tile-icon:first-child {
+    margin-bottom: auto;
+    font-size: 1.6rem;
+  }
+
+  .m-tile-top {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: auto;
+  }
+
+  .m-tile-top .m-tile-icon {
+    margin: 0;
+  }
+
+  .m-tile-pill {
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 600;
+  }
+
+  .m-tile-label {
+    margin-top: 0.6rem;
+  }
+}
+
+/* ===== Mobile profile: one main container holding the card + tiles ===== */
+@media (max-width: 768px) {
+  .mobile-profile-content.m-profile {
+    gap: 0.6rem;
+    padding: 0.65rem;
+    border-radius: 30px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text) 13%, var(--bg)) 0%,
+      color-mix(in srgb, var(--text) 6%, var(--bg)) 100%
+    );
+  }
+
+  /* Inner cards: a lighter shade so they read as separate boxes inside */
+  .m-hero,
+  .m-tile {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text) 5%, var(--surface)) 0%,
+      color-mix(in srgb, var(--text) 2%, var(--surface)) 100%
+    );
+  }
+
+  .m-hero {
+    border-radius: 24px;
+  }
+
+  .m-tile {
+    border-radius: 20px;
+  }
+}
+
+/* ===== Mobile profile: inner cards blend into the container (like the reference) ===== */
+@media (max-width: 768px) {
+  .mobile-profile-content.m-profile {
+    padding: 0.75rem 0.75rem 0.9rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text) 10%, var(--bg)) 0%,
+      color-mix(in srgb, var(--text) 4%, var(--bg)) 100%
+    );
+  }
+
+  /* Profile part is the container itself: no separate box */
+  .m-hero {
+    background: none;
+    padding: 0.75rem 0.5rem 0.5rem;
+  }
+
+  /* Tiles: only a faint tint, no border, so they sit softly on the container */
+  .m-tile {
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+}
+
+@media (max-width: 768px) {
+  .m-badges {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 300px;
+    gap: 0;
+    margin: 1.1rem auto 0;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-soft);
+  }
+
+  .m-badges .inline-badge,
+  :root:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) .m-badges .inline-badge {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 4px;
+    border: none;
+    border-radius: 999px;
+    background: none;
+    box-shadow: none;
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+    font-weight: 600;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .m-badges .inline-badge i {
+    font-size: 0.75rem;
+  }
+
+  /* Thin dividers between the three parts */
+  .m-badges .inline-badge + .inline-badge::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 25%;
+    bottom: 25%;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .m-badges .inline-badge:active {
+    background: var(--surface);
+    color: var(--text);
+  }
+}
+
+@media (max-width: 768px) {
+  :root .mobile-profile-content.m-profile {
+    padding: 0;
+    background: none;
+    border-radius: 0;
+  }
+}
+
+/* ===== Phones: photo overlaps the top of a white profile card (reference style) ===== */
+@media (max-width: 768px) {
+  :root .m-hero {
+    margin-top: min(30vw, 120px);
+    padding: 0 1.1rem 1.25rem;
+    border-radius: 26px;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.06);
+  }
+
+  :root .m-photo {
+    margin-top: calc(-1 * min(30vw, 120px));
+  }
+
+  :root .m-tile {
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+  }
+}
+
+/* ===== Phones: one white sheet (profile + tiles), soft grey tiles inside ===== */
+@media (max-width: 768px) {
+  :root .mobile-profile-content.m-profile {
+    gap: 0;
+  }
+
+  :root .m-hero {
+    border-radius: 26px 26px 0 0;
+    box-shadow: none;
+  }
+
+  :root .m-tiles {
+    padding: 0.25rem 0.75rem 0.75rem;
+    background: var(--surface);
+  }
+
+  :root .m-tile {
+    background: var(--surface-soft);
+    box-shadow: none;
+  }
+}
+
+/* ===== Mobile profile: Spotify Now Playing row ===== */
+@media (max-width: 768px) {
+  .m-now-playing {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    margin-top: 0.9rem;
+    padding: 0.6rem;
+    border-radius: 18px;
+    background: var(--surface-soft);
+    color: var(--text);
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .m-np-art {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #1db954;
+    color: #fff;
+    font-size: 1.2rem;
+  }
+
+  .m-np-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .m-np-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.3;
+  }
+
+  .m-np-text small {
+    color: #1db954;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .m-np-text strong,
+  .m-np-text span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .m-np-text strong {
+    font-size: 0.85rem;
+  }
+
+  .m-np-text span {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .m-np-logo {
+    margin-left: auto;
+    color: #1db954;
+    font-size: 1.1rem;
   }
 }
 </style>

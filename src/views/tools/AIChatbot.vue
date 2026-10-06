@@ -1455,7 +1455,8 @@ export default {
   }
 
   .chat-card {
-    height: calc(100dvh - 84px - 44px);
+    /* no top bar on phones; leave room for the bottom nav (~86px) */
+    height: calc(100dvh - 86px - 40px);
     min-height: 460px;
     border-radius: var(--radius-lg);
   }

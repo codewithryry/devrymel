@@ -17,6 +17,8 @@
 
 <script>
 const EXPLORE_LINKS = [
+  { path: "/why-me", title: "Why Me" },
+  { path: "/tech-notes", title: "Tech Notes" },
   { path: "/uses", title: "Uses" },
   { path: "/deployment", title: "Deployment" },
   { path: "/case-studies", title: "Case Studies" },
@@ -88,6 +90,13 @@ export default {
   .explore-link {
     padding: 0.7rem 0.6rem;
     font-size: 0.85rem;
+  }
+}
+
+/* Phones: Explore is hidden — these links live in the bottom-nav Menu */
+@media (max-width: 768px) {
+  .explore-panel {
+    display: none;
   }
 }
 </style>

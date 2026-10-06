@@ -5,7 +5,7 @@
 
 <template>
   <section class="links-section">
-    <div class="section-header">
+    <div class="section-header links-header">
       <span class="section-kicker">Resources</span>
       <h2 class="section-title">Quick Links</h2>
     </div>
@@ -13,14 +13,25 @@
     <!-- Mobile View - Compact Horizontal Scroll -->
     <div class="mobile-links-container">
       <div class="swipe-hint">
-        <span>Swipe for more..</span>
+        <span>Tap to open</span>
       </div>
 
-      <div class="mobile-links-scroll">
-        <a href="mailto:reymelrey.mislang@gmail.com" class="mobile-link-card">
-          <div class="mobile-icon"><i class="fas fa-envelope"></i></div>
-          <span class="mobile-label">Email</span>
-          <small class="mobile-desc">Contact me</small>
+      <div class="mobile-links-scroll" :class="{ 'with-spotify': spotifyPlaying }">
+        <!-- Spotify Now Playing (only while a song is playing; data from App) -->
+        <a
+          v-if="spotifyPlaying"
+          :href="$root.spotifyTrack.url || '#'"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mobile-link-card spotify-tile"
+        >
+          <div class="spotify-tile-art">
+            <img v-if="$root.spotifyTrack.image" :src="$root.spotifyTrack.image" :alt="$root.spotifyTrack.title" />
+            <i v-else class="fab fa-spotify"></i>
+          </div>
+          <small class="spotify-tile-label">Now Playing</small>
+          <span class="mobile-label">{{ $root.spotifyTrack.title }}</span>
+          <small class="mobile-desc">{{ $root.spotifyTrack.artist }}</small>
         </a>
 
         <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card">
@@ -29,22 +40,18 @@
           <small class="mobile-desc">Support my work</small>
         </a>
 
-        <div class="mobile-link-card" @click="$emit('openQRModal')">
-          <div class="mobile-icon"><i class="fas fa-qrcode"></i></div>
-          <span class="mobile-label">Support QR</span>
-          <small class="mobile-desc">Multiple banks available</small>
-        </div>
+        <!-- Opens the feedback panel (App.openFeedback) -->
+        <button type="button" class="mobile-link-card" @click="$root.openFeedback()">
+          <div class="mobile-icon"><i class="fas fa-comment-dots"></i></div>
+          <span class="mobile-label">Feedback</span>
+          <small class="mobile-desc">Leave a message</small>
+        </button>
+
 
         <a href="https://t.me/+XpsVdhvIlVM4ZTA1" target="_blank" class="mobile-link-card">
           <div class="mobile-icon"><i class="fab fa-telegram"></i></div>
           <span class="mobile-label">Telegram</span>
           <small class="mobile-desc">Join community</small>
-        </a>
-
-        <a href="https://github.com/codewithryry?tab=repositories" target="_blank" class="mobile-link-card">
-          <div class="mobile-icon"><i class="fab fa-github"></i></div>
-          <span class="mobile-label">GitHub</span>
-          <small class="mobile-desc">All my projects</small>
         </a>
 
         <a href="https://dev.to/codewithryry" target="_blank" class="mobile-link-card">
@@ -59,15 +66,26 @@
           <small class="mobile-desc">View my work</small>
         </a>
 
-        <a
-          href="https://docs.google.com/document/d/1QzKrdfaPNfefuENiuya64RzHRCDPMTtvkVF1y8vzuA4/edit?usp=sharing"
-          target="_blank"
+        <div class="mobile-link-card" @click="$emit('openQRModal')">
+          <div class="mobile-icon"><i class="fas fa-qrcode"></i></div>
+          <span class="mobile-label">Support Me</span>
+          <small class="mobile-desc">Multiple banks available</small>
+        </div>
+      </div>
+
+      <!-- Free tools (mobile): hidden — tools are in the bottom-nav Menu -->
+      <h3 v-if="false" class="mobile-tools-title">Free Tools</h3>
+      <div v-if="false" class="mobile-links-scroll">
+        <router-link
+          v-for="tool in liveTools"
+          :key="tool.path"
+          :to="tool.path"
           class="mobile-link-card"
         >
-          <div class="mobile-icon"><i class="fas fa-book-open"></i></div>
-          <span class="mobile-label">Book</span>
-          <small class="mobile-desc">Crossed Eyes</small>
-        </a>
+          <div class="mobile-icon"><i :class="tool.icon"></i></div>
+          <span class="mobile-label">{{ tool.title }}</span>
+          <small class="mobile-desc">{{ tool.status === 'soon' ? 'Coming soon' : tool.desc }}</small>
+        </router-link>
       </div>
     </div>
 
@@ -162,25 +180,34 @@ export default {
   data() {
     return {
       tools: [
-        { path: '/tools/tiktok', title: 'TikTok Downloader', desc: 'Save videos watermark-free' },
-        { path: '/tools/youtube-downloader', title: 'YT Downloader', desc: 'Save YouTube videos' },
-        { path: '/tools/youtube-thumbnail', title: 'YT Thumbnail', desc: 'Grab video thumbnails' },
-        { path: '/tools/qr-generator', title: 'QR Generator', desc: 'Text or URL to QR' },
-        { path: '/tools/password', title: 'Password Generator', desc: 'Secure random passwords' },
-        { path: '/tools/color-palette', title: 'Color Palette', desc: 'Curated color schemes' },
-        { path: '/tools/ip-lookup', title: 'IP Lookup', desc: 'Your IP & location' },
-        { path: '/tools/speedtest', title: 'Speed Test', desc: 'Check your connection' },
-        { path: '/tools/url-shortener', title: 'URL Shortener', desc: 'Shorten long links' },
-        { path: '/tools/base64', title: 'Base64 Tool', desc: 'Encode & decode text' },
-        { path: '/tools/json-formatter', title: 'JSON Formatter', desc: 'Format & validate JSON', status: 'soon' },
-        { path: '/tools/text-counter', title: 'Text Counter', desc: 'Count words & characters', status: 'soon' },
-        { path: '/tools/case-converter', title: 'Case Converter', desc: 'Change text case', status: 'soon' },
-        { path: '/tools/meta-tag-generator', title: 'Meta Tag Generator', desc: 'Generate SEO meta tags', status: 'soon' }
+        { path: '/tools/tiktok', icon: 'fab fa-tiktok', title: 'TikTok Downloader', desc: 'Save videos watermark-free' },
+        { path: '/tools/youtube-downloader', icon: 'fab fa-youtube', title: 'YT Downloader', desc: 'Save YouTube videos' },
+        { path: '/tools/youtube-thumbnail', icon: 'fas fa-image', title: 'YT Thumbnail', desc: 'Grab video thumbnails' },
+        { path: '/tools/qr-generator', icon: 'fas fa-qrcode', title: 'QR Generator', desc: 'Text or URL to QR' },
+        { path: '/tools/password', icon: 'fas fa-key', title: 'Password Generator', desc: 'Secure random passwords' },
+        { path: '/tools/color-palette', icon: 'fas fa-palette', title: 'Color Palette', desc: 'Curated color schemes' },
+        { path: '/tools/ip-lookup', icon: 'fas fa-map-marker-alt', title: 'IP Lookup', desc: 'Your IP & location' },
+        { path: '/tools/speedtest', icon: 'fas fa-tachometer-alt', title: 'Speed Test', desc: 'Check your connection' },
+        { path: '/tools/url-shortener', icon: 'fas fa-link', title: 'URL Shortener', desc: 'Shorten long links' },
+        { path: '/tools/base64', icon: 'fas fa-code', title: 'Base64 Tool', desc: 'Encode & decode text' },
+        { path: '/tools/json-formatter', icon: 'fas fa-file-code', title: 'JSON Formatter', desc: 'Format & validate JSON', status: 'soon' },
+        { path: '/tools/text-counter', icon: 'fas fa-font', title: 'Text Counter', desc: 'Count words & characters', status: 'soon' },
+        { path: '/tools/case-converter', icon: 'fas fa-text-height', title: 'Case Converter', desc: 'Change text case', status: 'soon' },
+        { path: '/tools/meta-tag-generator', icon: 'fas fa-tags', title: 'Meta Tag Generator', desc: 'Generate SEO meta tags', status: 'soon' }
       ],
       showAllTools: false
     }
   },
   computed: {
+    spotifyPlaying() {
+      return !!(this.$root.spotifyTrack && this.$root.spotifyTrack.isPlaying)
+    },
+
+    // Mobile shows only finished tools (no "Coming soon")
+    liveTools() {
+      return this.tools.filter((tool) => tool.status !== 'soon')
+    },
+
     visibleTools() {
       return this.showAllTools ? this.tools : this.tools.slice(0, 3)
     }
@@ -417,5 +444,339 @@ export default {
   font-weight: 600;
   color: var(--text-muted);
   letter-spacing: 0.02em;
+}
+
+.mobile-tools-title {
+  margin: 1.25rem 0 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ===== Mobile Quick Links: bento tiles (same style as the profile tiles) ===== */
+@media (max-width: 768px) {
+  .mobile-links-scroll {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    overflow: visible;
+    padding: 0.25rem 0 0.5rem;
+  }
+
+  .mobile-link-card {
+    position: relative;
+    width: auto;
+    height: auto;
+    min-height: 104px;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0.85rem;
+    border-radius: 20px;
+    text-align: left;
+  }
+
+  /* Repeating pattern of sizes: wide, narrow, full, narrow, wide */
+  .mobile-link-card:nth-child(5n + 1),
+  .mobile-link-card:nth-child(5n + 5) {
+    grid-column: span 2;
+  }
+
+  .mobile-link-card:nth-child(5n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  /* Big icon top-left, no box */
+  .mobile-icon {
+    width: auto;
+    height: auto;
+    margin-bottom: auto;
+    background: none;
+    font-size: 1.5rem;
+  }
+
+  .mobile-label,
+  .mobile-desc {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .mobile-label {
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .mobile-desc {
+    overflow: hidden;
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Small "open" arrow in the corner */
+  .mobile-link-card::after {
+    content: "\f35d";
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    color: var(--text-muted);
+    font-family: "Font Awesome 6 Free";
+    font-size: 0.7rem;
+    font-weight: 900;
+  }
+}
+
+/* Phones: no "Resources / Quick Links" heading; tiles follow the profile tiles */
+@media (max-width: 768px) {
+  .links-header,
+  .swipe-hint {
+    display: none;
+  }
+
+  .mobile-links-scroll {
+    padding-top: 0;
+  }
+}
+
+/* ===== Mobile Quick Links: mosaic (2 big tall tiles + 4 compact tiles) =====
+   [ Coffee  ][ Support QR ]
+   [  (big)  ][ Telegram   ]
+   [ Dev.to  ][   Book     ]
+   [Portfolio][   (big)    ] */
+@media (max-width: 768px) {
+  .mobile-links-scroll {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 68px;
+    grid-auto-flow: dense;
+  }
+
+  /* Reset the old repeating wide/narrow pattern */
+  .mobile-link-card:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  /* Compact tile: small icon on the left, label + description beside it */
+  .mobile-link-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    column-gap: 0.65rem;
+    min-height: 0;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .mobile-link-card .mobile-icon {
+    grid-row: 1 / 3;
+    align-self: center;
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  .mobile-link-card .mobile-label {
+    margin: 0;
+    font-size: 0.82rem;
+  }
+
+  .mobile-link-card::after {
+    top: 0.6rem;
+    right: 0.6rem;
+  }
+
+  /* Big tall tiles: first (Coffee) and last (Book) */
+  .mobile-link-card:first-child,
+  .mobile-link-card:last-child {
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0.9rem;
+  }
+
+  .mobile-link-card:first-child .mobile-icon,
+  .mobile-link-card:last-child .mobile-icon {
+    margin-bottom: auto;
+    font-size: 1.7rem;
+  }
+
+  .mobile-link-card:first-child .mobile-label,
+  .mobile-link-card:last-child .mobile-label {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Explicit spots for the bottom half: Dev.to + Portfolio left, Book tall on the right */
+  .mobile-links-scroll .mobile-link-card:nth-child(4) {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .mobile-links-scroll .mobile-link-card:nth-child(5) {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .mobile-links-scroll .mobile-link-card:nth-child(6) {
+    grid-column: 2;
+    grid-row: 3 / span 2;
+  }
+}
+
+/* ===== Phones: Quick Links finish the white sheet ===== */
+@media (max-width: 768px) {
+  .mobile-links-container {
+    padding: 0 0.75rem 0.75rem;
+    border-radius: 0 0 26px 26px;
+    background: var(--surface);
+  }
+}
+
+/* The Feedback tile is a <button>: match the link tiles */
+button.mobile-link-card {
+  font: inherit;
+  text-align: left;
+}
+
+/* Phones: the two big tiles (Coffee, Support Me) are identical in size and layout */
+@media (max-width: 768px) {
+  .mobile-links-scroll .mobile-link-card:first-child,
+  .mobile-links-scroll .mobile-link-card:last-child {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .mobile-links-scroll .mobile-link-card:first-child .mobile-icon,
+  .mobile-links-scroll .mobile-link-card:last-child .mobile-icon {
+    width: auto;
+    justify-content: flex-start;
+    align-self: flex-start;
+    font-size: 1.7rem;
+  }
+}
+
+/* ===== Phones: Spotify big tile + layout while a song is playing =====
+   [ Spotify ][ Coffee     ]
+   [ Feedback][ Support Me ]
+   [ Telegram][            ]
+   [ Dev.to  ][ Portfolio  ] */
+@media (max-width: 768px) {
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  /* 1 Spotify, 2 Coffee: both big, side by side */
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0.9rem;
+  }
+
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(2) .mobile-icon {
+    margin-bottom: auto;
+    font-size: 1.7rem;
+  }
+
+  /* 3 Feedback, 4 Telegram: compact, left */
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(3) {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(4) {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  /* 5 Dev.to, 6 Portfolio: compact, bottom row */
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(5) {
+    grid-column: 1;
+    grid-row: 5;
+  }
+
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(6) {
+    grid-column: 2;
+    grid-row: 5;
+  }
+
+  /* 7 Support Me: big, right */
+  .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(7) {
+    grid-column: 2;
+    grid-row: 3 / span 2;
+  }
+
+  /* Spotify tile look */
+  .spotify-tile {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0.9rem;
+  }
+
+  .spotify-tile-art {
+    width: 44px;
+    height: 44px;
+    margin-bottom: auto;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #1db954;
+    color: #fff;
+    font-size: 1.3rem;
+  }
+
+  .spotify-tile-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spotify-tile-label {
+    margin-top: 0.5rem;
+    color: #1db954;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .spotify-tile .mobile-label {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .spotify-tile::after {
+    content: "\f1bc";
+    font-family: "Font Awesome 6 Brands";
+    font-weight: 400;
+    color: #1db954;
+    font-size: 0.9rem;
+  }
+}
+
+/* Phones: the sheet continues into the CTA below, so no rounded bottom here */
+@media (max-width: 768px) {
+  .mobile-links-container {
+    border-radius: 0;
+  }
 }
 </style>

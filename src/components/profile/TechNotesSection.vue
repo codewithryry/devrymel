@@ -599,7 +599,7 @@ export default {
 
 .mobile-note-card {
   width: 100%;
-  min-height: 315px;
+  min-height: 200px;
   background: var(--surface);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
@@ -714,8 +714,8 @@ export default {
   }
 
   .mobile-note-card {
-    min-height: 305px;
-    padding: 1.15rem;
+    min-height: 195px;
+    padding: 1.1rem;
   }
 
   .mobile-note-card .note-title {

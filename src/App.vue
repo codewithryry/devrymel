@@ -4,8 +4,9 @@
     <header v-if="!isAdminRoute" class="site-nav" :class="{ scrolled: navScrolled }">
       <div class="site-nav-inner">
         <a href="/" class="nav-brand" @click.prevent="goHomeTop">
+          <span class="brand-short" aria-hidden="true">RM</span>
           <span class="brand-full">Reymel Mislang</span>
-          <span class="brand-short">RM</span>
+          <span class="brand-mobile-label">Portfolio</span>
         </a>
 
         <nav class="nav-links" :class="{ open: mobileNavOpen }">
@@ -15,13 +16,24 @@
           <router-link to="/experience" @click="handleQuickPageClick" :class="{ active: $route.path === '/experience' }">Experience</router-link>
           <router-link to="/services" @click="handleQuickPageClick" :class="{ active: $route.path === '/services' }">Services</router-link>
 
+          <!-- Phones: theme, More and Contact Me live inside the menu -->
           <div class="nav-mobile-extra">
-            <button class="nav-text-btn" @click.stop="togglePanel('more')">More</button>
+            <button class="nav-text-btn nav-text-row" @click.stop="cycleTheme">
+              <span>Theme</span>
+              <small>{{ currentThemeName }}</small>
+            </button>
+            <button class="nav-text-btn nav-text-row" @click.stop="togglePanel('more')">
+              <span>More</span>
+              <i class="fas fa-chevron-right"></i>
+            </button>
+            <router-link to="/contact" class="mobile-contact-btn cta-btn" @click="handleQuickPageClick">
+              Contact Me
+            </router-link>
           </div>
         </nav>
 
         <div class="nav-actions">
-          <div class="nav-menu-wrap">
+          <div class="nav-menu-wrap theme-wrap">
             <button class="nav-icon-btn" @click="cycleTheme" :title="'Theme: ' + currentThemeName" :aria-label="'Switch theme, current: ' + currentThemeName">
               <svg v-if="currentTheme === 'midnight'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -101,7 +113,7 @@
 
           <router-link class="nav-contact-btn" to="/contact" @click="handleQuickPageClick" :class="{ active: $route.path === '/contact' }">Contact Me</router-link>
 
-          <button class="nav-hamburger" @click.stop="mobileNavOpen = !mobileNavOpen; showMorePanel = false" :aria-expanded="mobileNavOpen" aria-label="Menu">
+          <button class="nav-hamburger" :class="{ open: mobileNavOpen }" @click.stop="mobileNavOpen = !mobileNavOpen; showMorePanel = false" :aria-expanded="mobileNavOpen" aria-label="Menu">
             <span></span>
             <span></span>
             <span></span>
@@ -110,12 +122,98 @@
       </div>
     </header>
 
+    <!-- ===== MOBILE BOTTOM NAVIGATION (phones only) ===== -->
+    <nav v-if="!isAdminRoute" class="bottom-nav" aria-label="Main">
+      <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' }" @click="mobileSheetOpen = false">
+        <span class="bottom-brand">RM</span>
+        <span>Home</span>
+      </router-link>
+      <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' }" @click="mobileSheetOpen = false">
+        <i class="fas fa-user"></i>
+        <span>About</span>
+      </router-link>
+      <router-link to="/projects" class="bottom-tab" :class="{ active: $route.path === '/projects' }" @click="mobileSheetOpen = false">
+        <i class="fas fa-folder-open"></i>
+        <span>Projects</span>
+      </router-link>
+      <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' }" @click="mobileSheetOpen = false">
+        <i class="fas fa-envelope"></i>
+        <span>Contact</span>
+      </router-link>
+      <button type="button" class="bottom-tab" :class="{ active: mobileSheetOpen }" @click="mobileSheetOpen = !mobileSheetOpen">
+        <i class="fas" :class="mobileSheetOpen ? 'fa-times' : 'fa-bars'"></i>
+        <span>Menu</span>
+      </button>
+    </nav>
+
+    <!-- Bottom sheet opened by "Menu" -->
+    <transition name="sheet">
+      <div v-if="mobileSheetOpen && !isAdminRoute" class="bottom-sheet-overlay" @click.self="mobileSheetOpen = false">
+        <div class="bottom-sheet" role="dialog" aria-label="Menu">
+          <span class="sheet-handle" aria-hidden="true"></span>
+
+          <span class="sheet-label">Other Pages</span>
+          <router-link
+            v-for="page in (showAllSheetPages ? mobilePages : mobilePages.slice(0, 3))"
+            :key="page.path"
+            :to="page.path"
+            class="sheet-row"
+            @click="mobileSheetOpen = false"
+          >
+            <i :class="page.icon"></i><span>{{ page.title }}</span>
+          </router-link>
+          <button type="button" class="sheet-row sheet-more" @click="showAllSheetPages = !showAllSheetPages">
+            <i class="fas" :class="showAllSheetPages ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            <span>{{ showAllSheetPages ? 'See less' : `See more (${mobilePages.length - 3})` }}</span>
+          </button>
+
+          <span class="sheet-label">Tools</span>
+          <router-link
+            v-for="tool in (showAllSheetTools ? mobileTools : mobileTools.slice(0, 2))"
+            :key="tool.path"
+            :to="tool.path"
+            class="sheet-row"
+            @click="mobileSheetOpen = false"
+          >
+            <i :class="tool.icon"></i><span>{{ tool.title }}</span>
+          </router-link>
+          <button type="button" class="sheet-row sheet-more" @click="showAllSheetTools = !showAllSheetTools">
+            <i class="fas" :class="showAllSheetTools ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            <span>{{ showAllSheetTools ? 'See less' : `See more (${mobileTools.length - 2})` }}</span>
+          </button>
+
+          <span class="sheet-label">Documents</span>
+          <a href="/Reymel_Mislang_Resume.docx" download class="sheet-row">
+            <i class="fas fa-file-alt"></i><span>Resume</span><i class="fas fa-download sheet-end"></i>
+          </a>
+          <a href="/Reymel_Mislang_CV.docx" download class="sheet-row">
+            <i class="fas fa-id-card"></i><span>CV</span><i class="fas fa-download sheet-end"></i>
+          </a>
+
+          <span class="sheet-label">Other</span>
+          <router-link to="/tools/ai-chat" class="sheet-row" @click="mobileSheetOpen = false">
+            <i class="fas fa-robot"></i><span>Assistant</span><span class="beta-badge">Beta</span>
+          </router-link>
+          <router-link to="/changelog" class="sheet-row" @click="mobileSheetOpen = false">
+            <i class="fas fa-history"></i><span>Changelog</span>
+          </router-link>
+          <router-link to="/privacy" class="sheet-row" @click="mobileSheetOpen = false">
+            <i class="fas fa-shield-alt"></i><span>Privacy</span>
+          </router-link>
+          <button type="button" class="sheet-row" @click="cycleTheme">
+            <i class="fas fa-adjust"></i><span>Theme</span>
+            <small class="sheet-end">{{ currentThemeName }}</small>
+          </button>
+        </div>
+      </div>
+    </transition>
+
     <!-- ===== SPOTIFY SIDEBAR BUBBLE ===== -->
     <transition name="spotify-float-fade">
       <div
         v-if="spotifyTrack.isPlaying && !isAiToolsRoute && !isAdminRoute"
         class="spotify-sidebar"
-        :class="{ 'spotify-sidebar--open': spotifySidebarOpen }"
+        :class="{ 'spotify-sidebar--open': spotifySidebarOpen, 'on-home': $route.path === '/' }"
         @mouseenter="!isMobile && (spotifySidebarOpen = true)"
         @mouseleave="!isMobile && (spotifySidebarOpen = false)"
         @click="isMobile && (spotifySidebarOpen = !spotifySidebarOpen)"
@@ -200,6 +298,36 @@ export default {
     return {
       navScrolled: false,
       mobileNavOpen: false,
+      mobileSheetOpen: false,
+      showAllSheetTools: false,
+      showAllSheetPages: false,
+
+      // Mobile Menu "Other Pages", most important first (first 3 shown)
+      mobilePages: [
+        { path: "/skills", title: "Skills", icon: "fas fa-bolt" },
+        { path: "/experience", title: "Experience", icon: "fas fa-briefcase" },
+        { path: "/services", title: "Services", icon: "fas fa-layer-group" },
+        { path: "/case-studies", title: "Case Studies", icon: "fas fa-search" },
+        { path: "/why-me", title: "Why Work With Me", icon: "fas fa-thumbs-up" },
+        { path: "/tech-notes", title: "Tech Notes", icon: "fas fa-book-open" },
+        { path: "/deployment", title: "Deployment", icon: "fas fa-rocket" },
+        { path: "/uses", title: "Uses", icon: "fas fa-laptop" },
+        { path: "/roadmap", title: "Roadmap", icon: "fas fa-map" }
+      ],
+
+      // Finished tools listed in the mobile Menu sheet
+      mobileTools: [
+        { path: "/tools/tiktok", title: "TikTok Downloader", icon: "fab fa-tiktok" },
+        { path: "/tools/youtube-downloader", title: "YT Downloader", icon: "fab fa-youtube" },
+        { path: "/tools/youtube-thumbnail", title: "YT Thumbnail", icon: "fas fa-image" },
+        { path: "/tools/qr-generator", title: "QR Generator", icon: "fas fa-qrcode" },
+        { path: "/tools/password", title: "Password Generator", icon: "fas fa-key" },
+        { path: "/tools/color-palette", title: "Color Palette", icon: "fas fa-palette" },
+        { path: "/tools/ip-lookup", title: "IP Lookup", icon: "fas fa-map-marker-alt" },
+        { path: "/tools/speedtest", title: "Speed Test", icon: "fas fa-tachometer-alt" },
+        { path: "/tools/url-shortener", title: "URL Shortener", icon: "fas fa-link" },
+        { path: "/tools/base64", title: "Base64 Tool", icon: "fas fa-code" }
+      ],
 
       showMorePanel: false,
       openSubmenu: null,
@@ -280,6 +408,7 @@ export default {
 
   watch: {
     $route() {
+      this.mobileSheetOpen = false;
       this.closeAllPanels();
       this.mobileNavOpen = false;
     }
@@ -703,6 +832,246 @@ html[data-theme="forest"] body {
   box-sizing: border-box;
 }
 
+/* ===== MOBILE BOTTOM NAV + SHEET ===== */
+.bottom-nav,
+.bottom-sheet-overlay {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  /* Top bar is replaced by the bottom nav on phones */
+  .site-nav {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .bottom-nav {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    z-index: 300;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+    height: 62px;
+    padding: 0 6px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .bottom-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 50px;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.64rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+
+  .bottom-tab i {
+    font-size: 1rem;
+  }
+
+  .bottom-tab.active {
+    color: var(--text);
+    background: var(--surface-hover);
+  }
+
+  .bottom-brand {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background: var(--text-muted);
+    color: var(--bg);
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .bottom-tab.active .bottom-brand {
+    background: var(--accent);
+  }
+
+  .bottom-sheet-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 290;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .bottom-sheet {
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 10px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+    border-radius: 22px 22px 0 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .sheet-handle {
+    display: block;
+    width: 38px;
+    height: 4px;
+    margin: 0 auto 10px;
+    border-radius: 99px;
+    background: var(--border);
+  }
+
+  .sheet-label {
+    display: block;
+    margin: 12px 4px 4px;
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .sheet-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 10px;
+    border: none;
+    border-radius: var(--radius-lg);
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.92rem;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .sheet-row:active,
+  .sheet-row:hover {
+    background: var(--surface-hover);
+  }
+
+  .sheet-row > i:first-child {
+    width: 18px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .sheet-more {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .sheet-end {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .sheet-contact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px;
+    border-radius: var(--radius-lg);
+    background-color: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .sheet-enter-active,
+  .sheet-leave-active {
+    transition: opacity 0.2s ease;
+  }
+
+  .sheet-enter-active .bottom-sheet,
+  .sheet-leave-active .bottom-sheet {
+    transition: transform 0.25s ease;
+  }
+
+  .sheet-enter-from,
+  .sheet-leave-to {
+    opacity: 0;
+  }
+
+  .sheet-enter-from .bottom-sheet,
+  .sheet-leave-to .bottom-sheet {
+    transform: translateY(40px);
+  }
+}
+
+/* ===== MOBILE PANELS =====
+   On phones every card across the site uses the same flat, rounded card. "#app" outranks scoped styles. */
+@media (max-width: 768px) {
+  #app :is(
+    .project-card,
+    .stat-card,
+    .service-card,
+    .mobile-service-card,
+    .highlight-card,
+    .mobile-note-card,
+    .mobile-link-card,
+    .social-card,
+    .info-card,
+    .info-panel,
+    .cta-card,
+    .timeline-card,
+    .experience-card,
+    .tt-card,
+    .tt-input-card,
+    .how-to-use
+  ):not(.admin-page *) {
+    /* White card on the grey page, like the mobile homepage sheet */
+    border: 1px solid transparent;
+    border-radius: 22px;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 6px 18px rgb(15 23 42 / 0.05);
+  }
+
+  /* Same grey page background as the mobile homepage */
+  #app :is(.info-page, .tool-page):not(.admin-page *) {
+    background: color-mix(in srgb, var(--text) 7%, var(--bg));
+  }
+
+  body {
+    background: color-mix(in srgb, var(--text) 7%, var(--bg));
+  }
+}
+
+/* Quick Links tiles match the profile tiles inside the one homepage card (faint tint, no border) */
+@media (max-width: 768px) {
+  html #app .mobile-links-scroll .mobile-link-card {
+    border-color: transparent;
+    background: var(--surface-soft);
+    box-shadow: none;
+  }
+}
+
 /* ===== SMOOTH UX ===== */
 html {
   scroll-behavior: smooth;
@@ -890,7 +1259,8 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
 }
 
-.brand-short {
+.brand-short,
+.brand-mobile-label {
   display: none;
 }
 
@@ -1274,11 +1644,26 @@ html[data-theme="dark"] .nav-links a::after {
 }
 
 .nav-hamburger span {
-  width: 16px;
-  height: 2px;
+  width: 14px;
+  height: 1.5px;
   margin: 0 auto;
+  border-radius: 2px;
   background: var(--text);
   display: block;
+  transition: transform 0.22s ease, opacity 0.18s ease;
+}
+
+/* Menu open: the three lines turn into an X */
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
 }
 
 .nav-text-btn {
@@ -1300,18 +1685,66 @@ html[data-theme="dark"] .nav-links a::after {
     padding: 0 12px;
   }
 
+  /* Modern mobile bar: logo badge + name on the left, round menu button on the right */
   .site-nav-inner {
-    height: 56px;
-    padding: 0 10px 0 18px;
+    height: 54px;
+    padding: 0 8px 0 10px;
+    border-radius: 18px;
     justify-content: space-between;
   }
 
+  .nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+  }
+
+  .brand-short {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  /* Name already shows in the profile card below, so the bar says "Portfolio" */
   .brand-full {
     display: none;
   }
 
-  .brand-short {
+  .brand-mobile-label {
     display: inline;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .nav-hamburger {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+  }
+
+  #app .nav-hamburger {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  #app .nav-hamburger:hover,
+  #app .nav-hamburger.open {
+    background: var(--surface-hover);
+  }
+
+  .nav-hamburger span {
+    width: 16px;
   }
 
   .nav-links {
@@ -1387,15 +1820,38 @@ html[data-theme="dark"] .nav-links a::after {
     min-width: 0;
   }
 
-  /* Mobile order: theme, menu, then Contact Me */
+  /* Phones: just "RM" + the menu button; theme & Contact Me are inside the menu */
+  .theme-wrap,
   .nav-contact-btn {
-    order: 2;
-    padding: 0 12px;
-    font-size: 0.8rem;
+    display: none;
   }
 
-  .nav-hamburger {
-    order: 1;
+  .nav-text-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-text-row small,
+  .nav-text-row i {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .nav-links a.mobile-contact-btn,
+  .nav-links a.mobile-contact-btn:hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: var(--radius);
+    background-color: var(--accent);
+    color: var(--bg);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
   }
 
   .nav-hamburger {
@@ -1407,6 +1863,7 @@ html[data-theme="dark"] .nav-links a::after {
    (#app beats each tool's scoped .tool-page padding) */
 @media (max-width: 640px) {
   #app .tool-page {
+    padding-top: 18px;
     padding-left: 26px;
     padding-right: 26px;
   }
@@ -1516,7 +1973,7 @@ html[data-theme="dark"] .nav-links a::after {
 @media (max-width: 860px) {
   .spotify-sidebar {
     top: auto;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
     height: auto;
     width: 200px;
     transform: translateX(calc(-100% + 46px));
@@ -1538,6 +1995,13 @@ html[data-theme="dark"] .nav-links a::after {
 
   .spotify-sidebar-artist {
     font-size: 0.65rem;
+  }
+}
+
+/* Mobile homepage shows Now Playing inside the profile card instead */
+@media (max-width: 768px) {
+  .spotify-sidebar.on-home {
+    display: none;
   }
 }
 

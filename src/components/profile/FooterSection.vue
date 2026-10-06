@@ -198,8 +198,10 @@
   /* Flush to the screen edges and bottom (cancels .main-content padding) */
   .header-footer {
     width: auto;
-    margin: 0 -12px -3rem;
-    padding: 3rem 1.5rem calc(3rem + env(safe-area-inset-bottom, 0px));
+    /* Runs to the very bottom of the screen, under the floating bottom nav
+       (cancels .main-content's 3rem + body's ~86px bottom padding) */
+    margin: 0 -12px calc(-3rem - 86px - env(safe-area-inset-bottom, 0px));
+    padding: 3rem 1.5rem calc(3rem + 96px + env(safe-area-inset-bottom, 0px));
     border-top: none;
     border-radius: 20px 20px 0 0;
     background: var(--accent);
@@ -229,6 +231,24 @@
     background: var(--bg);
     color: var(--text);
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root .header-footer {
+    margin: 0;
+    padding: 2.25rem 1.25rem;
+    border-radius: 20px;
+  }
+}
+
+/* Phones: CTA is the last item inside the main white card.
+   The spread shadow (sheet color) fills the card around the dark box,
+   and its rounded outer edge closes the card at the bottom. */
+@media (max-width: 768px) {
+  :root .header-footer {
+    margin: -0.6rem 0.75rem 0.75rem;
+    box-shadow: 0 0 0 0.75rem var(--surface);
   }
 }
 </style>
