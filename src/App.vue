@@ -130,19 +130,19 @@
       <div class="bottom-pill">
       <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <span class="bottom-brand">RM</span>
-        <span>Home</span>
+        <span class="bottom-label">Home</span>
       </router-link>
       <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-user"></i>
-        <span>About</span>
+        <span class="bottom-label">About</span>
       </router-link>
       <router-link to="/projects" class="bottom-tab" :class="{ active: $route.path === '/projects' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-folder-open"></i>
-        <span>Projects</span>
+        <span class="bottom-label">Projects</span>
       </router-link>
       <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-envelope"></i>
-        <span>Contact</span>
+        <span class="bottom-label">Contact</span>
       </router-link>
       </div>
 
@@ -943,15 +943,15 @@ html[data-theme="forest"] body {
   }
 
   body {
-    /* nav sits 68px up + 62px tall: keep ~24px clear space above it */
-    padding-bottom: calc(154px + env(safe-area-inset-bottom, 0px));
+    /* nav sits 36px up + 62px tall: keep ~24px clear space above it */
+    padding-bottom: calc(122px + env(safe-area-inset-bottom, 0px));
   }
 
   .bottom-nav {
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(36px + env(safe-area-inset-bottom, 0px));
     z-index: 300;
     display: flex;
     align-items: center;
@@ -1865,7 +1865,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(142px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(110px + env(safe-area-inset-bottom, 0px));
     z-index: 310;
     display: flex;
     align-items: center;
@@ -2073,6 +2073,39 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) :is(.bottom-tab.active, .bottom-circle.active) {
     background: rgb(255 255 255 / 0.12);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+  }
+
+  /* Icons only; the active tab expands into icon + label */
+  .bottom-pill {
+    display: flex;
+    gap: 2px;
+  }
+
+  .bottom-tab {
+    flex: 1 1 0;
+    flex-direction: row;
+    gap: 7px;
+    min-width: 0;
+    padding: 0 12px;
+    font-size: 0.74rem;
+    transition: flex-grow 0.25s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .bottom-tab i {
+    font-size: 1.05rem;
+  }
+
+  .bottom-tab .bottom-label {
+    display: none;
+    white-space: nowrap;
+  }
+
+  .bottom-tab.active {
+    flex-grow: 2;
+  }
+
+  .bottom-tab.active .bottom-label {
+    display: inline;
   }
 }
 
@@ -3046,10 +3079,10 @@ html[data-theme="dark"] .nav-links a::after {
   transform: translate(-50%, 10px);
 }
 
-/* Phones: show the toast just above the bottom nav (nav is 68px up + 62px tall) */
+/* Phones: show the toast just above the bottom nav (nav is 36px up + 62px tall) */
 @media (max-width: 860px) {
   .toast {
-    bottom: calc(142px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(110px + env(safe-area-inset-bottom, 0px));
     z-index: 320;
   }
 }

@@ -1473,7 +1473,7 @@ export default {
   .chat-card {
     /* no top bar on phones; leave room for the bottom nav (~86px) */
     /* screen minus the top padding (18px) and the space kept for the bottom nav (106px) */
-    height: calc(100dvh - 18px - 158px - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - 18px - 126px - env(safe-area-inset-bottom, 0px));
     min-height: 460px;
     border-radius: var(--radius-lg);
   }
