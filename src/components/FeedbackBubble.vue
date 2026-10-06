@@ -745,7 +745,7 @@ export default {
 
   .feedback-box {
     width: 100%;
-    height: min(78vh, 600px);
+    height: var(--profile-modal-mobile-height, min(68vh, 520px));
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     border-bottom: none;
   }

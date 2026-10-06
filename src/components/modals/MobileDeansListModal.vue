@@ -6,7 +6,7 @@
 <template>
   <transition name="slide-up">
     <div class="mobile-modal-overlay" @click="$emit('close')">
-      <div class="mobile-modal" @click.stop>
+      <div class="mobile-modal profile-modal deans-modal" @click.stop>
         <div class="mobile-modal-header">
           <h3 class="mobile-modal-title">Dean's List Awards</h3>
           <button class="mobile-modal-close" @click="$emit('close')">
@@ -15,10 +15,7 @@
         </div>
         
         <div class="mobile-deans-content">
-          <div class="mobile-deans-description">
-            <i class="fas fa-award"></i>
-<p>Consistent academic excellence across multiple semesters.</p>
-          </div>
+          <p class="mobile-modal-desc">Academic excellence across semesters.</p>
           
           <div class="mobile-deans-list">
             <div class="mobile-deans-item" 
@@ -45,14 +42,22 @@
             </div>
           </div>
         </div>
+
+        <!-- Sponsored footer: pinned to the bottom of the popup -->
+        <AdSlot class="profile-modal-footer" type="banner" />
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import AdSlot from '@/components/AdSlot.vue'
+
 export default {
   name: 'MobileDeansListModal',
+  components: {
+    AdSlot
+  },
   props: {
     deansList: {
       type: Array,
@@ -277,4 +282,14 @@ export default {
     transform: translateY(0);
   }
 }
+
+/* Short plain description under the title (like the Certifications popup) */
+.mobile-modal-desc {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+
 </style>

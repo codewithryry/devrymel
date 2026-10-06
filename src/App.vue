@@ -127,34 +127,75 @@
 
     <!-- ===== MOBILE BOTTOM NAVIGATION (phones only) ===== -->
     <nav v-if="!isAdminRoute" class="bottom-nav" aria-label="Main">
-      <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' }" @click="mobileSheetOpen = false">
+      <div class="bottom-pill">
+      <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <span class="bottom-brand">RM</span>
         <span>Home</span>
       </router-link>
-      <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' }" @click="mobileSheetOpen = false">
+      <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-user"></i>
         <span>About</span>
       </router-link>
-      <router-link to="/projects" class="bottom-tab" :class="{ active: $route.path === '/projects' }" @click="mobileSheetOpen = false">
+      <router-link to="/projects" class="bottom-tab" :class="{ active: $route.path === '/projects' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-folder-open"></i>
         <span>Projects</span>
       </router-link>
-      <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' }" @click="mobileSheetOpen = false">
+      <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-envelope"></i>
         <span>Contact</span>
       </router-link>
-      <button type="button" class="bottom-tab" :class="{ active: mobileSheetOpen }" @click="mobileSheetOpen = !mobileSheetOpen">
+      </div>
+
+      <!-- Menu: its own round glass button (like the iOS 26 search button) -->
+      <button
+        type="button"
+        class="bottom-circle"
+        :class="{ active: mobileSheetOpen }"
+        :aria-label="mobileSheetOpen ? 'Close menu' : 'Open menu'"
+        :aria-expanded="mobileSheetOpen"
+        @click="mobileSheetOpen = !mobileSheetOpen"
+      >
         <i class="fas" :class="mobileSheetOpen ? 'fa-times' : 'fa-bars'"></i>
-        <span>Menu</span>
       </button>
     </nav>
 
     <!-- Tile edit mode bar (mobile homepage): resize tiles, then Done -->
     <transition name="sheet">
       <div v-if="tileEditMode" class="tile-edit-bar" role="toolbar" aria-label="Edit tiles">
-        <span class="tile-edit-hint"><i class="fas fa-expand-alt"></i> Resize with the handle · tap two tiles to swap</span>
+        <span class="tile-edit-hint"><i class="fas fa-expand-alt"></i> Resize with the handle · tap two to swap</span>
         <button type="button" class="tile-edit-btn" @click="resetTiles">Reset</button>
         <button type="button" class="tile-edit-btn primary" @click="tileEditMode = false">Done</button>
+      </div>
+    </transition>
+
+    <!-- Follow-to-save popup (visitors, first time they save a tile layout) -->
+    <transition name="sheet">
+      <div v-if="followGateOpen" class="follow-gate-overlay" @click.self="closeFollowGate(false)">
+        <div class="follow-gate" role="dialog" aria-label="Follow to save your layout">
+          <h3>Save your layout</h3>
+          <p>Follow me on TikTok or Instagram to save your tile layout on this device.</p>
+
+          <a
+            href="https://www.tiktok.com/@devrymel"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="follow-btn"
+            @click="closeFollowGate(true)"
+          >
+            <i class="fab fa-tiktok"></i> Follow @devrymel on TikTok
+          </a>
+          <a
+            href="https://www.instagram.com/iamrymel/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="follow-btn"
+            @click="closeFollowGate(true)"
+          >
+            <i class="fab fa-instagram"></i> Follow on Instagram
+          </a>
+
+          <button type="button" class="follow-skip" @click="closeFollowGate(false)">Not now</button>
+        </div>
       </div>
     </transition>
 
@@ -212,10 +253,6 @@
           <router-link to="/privacy" class="sheet-row" @click="mobileSheetOpen = false">
             <i class="fas fa-shield-alt"></i><span>Privacy</span>
           </router-link>
-          <button type="button" class="sheet-row" @click="cycleTheme">
-            <i class="fas fa-adjust"></i><span>Theme</span>
-            <small class="sheet-end">{{ currentThemeName }}</small>
-          </button>
         </div>
       </div>
     </transition>
@@ -317,6 +354,7 @@ export default {
       mobileNavOpen: false,
       mobileSheetOpen: false,
       tileEditMode: false,
+      followGateOpen: false,
       isSiteAdmin: false,
       showAllSheetTools: false,
       showAllSheetPages: false,
@@ -596,6 +634,12 @@ export default {
         el.classList.add("reveal");
         this.revealObserver.observe(el);
       });
+    },
+
+    // Follow popup answered: tile grids save (followed) or discard their changes
+    closeFollowGate(followed) {
+      this.followGateOpen = false;
+      window.dispatchEvent(new CustomEvent("tiles-follow-result", { detail: followed ? "followed" : "skipped" }));
     },
 
     // Reset every resizable tile grid to its default sizes
@@ -899,26 +943,49 @@ html[data-theme="forest"] body {
   }
 
   body {
-    padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    /* nav sits 38px up + 62px tall: keep ~24px clear space above it */
+    padding-bottom: calc(124px + env(safe-area-inset-bottom, 0px));
   }
 
   .bottom-nav {
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(38px + env(safe-area-inset-bottom, 0px));
     z-index: 300;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
     align-items: center;
+    gap: 10px;
     height: 62px;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
+
+  /* Tabs pill */
+  .bottom-pill {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    height: 100%;
     padding: 0 6px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: color-mix(in srgb, var(--surface) 88%, transparent);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    backdrop-filter: blur(14px) saturate(160%);
-    box-shadow: var(--shadow-lg);
+    border-radius: 999px;
+  }
+
+  /* Menu circle */
+  .bottom-circle {
+    flex: 0 0 62px;
+    display: grid;
+    place-items: center;
+    width: 62px;
+    height: 62px;
+    padding: 0;
+    border-radius: 50%;
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
   }
 
   .bottom-tab {
@@ -1107,13 +1174,14 @@ html[data-theme="forest"] body {
     box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 6px 18px rgb(15 23 42 / 0.05);
   }
 
-  /* Same grey page background as the mobile homepage */
+  /* One plain page color everywhere (white in Light), so the end of every page
+     — including the strip behind the bottom nav — is the same color */
   #app :is(.info-page, .tool-page):not(.admin-page *) {
-    background: color-mix(in srgb, var(--text) 7%, var(--bg));
+    background: var(--surface);
   }
 
   body {
-    background: color-mix(in srgb, var(--text) 7%, var(--bg));
+    background: var(--surface);
   }
 }
 
@@ -1141,8 +1209,8 @@ html[data-theme="forest"] body {
     width: 100%;
     min-width: 0;
     max-width: none;
-    /* Same fixed size as the feedback panel */
-    height: min(78vh, 600px);
+    /* One size for every popup (same as Certifications / Dean's List / Project Links) */
+    height: var(--profile-modal-mobile-height, min(68vh, 520px));
     max-height: none;
     margin: 0;
     border: 1px solid var(--border);
@@ -1176,6 +1244,164 @@ html[data-theme="forest"] body {
 
   #app :is(.mobile-link-item, .mobile-deans-item, .cert-item) .arrow-icon {
     font-size: 0.7rem;
+  }
+
+  /* ONE header layout for Certifications, Dean's List and Project Links popups:
+     same padding, title row + divider, short description, close button */
+  #app :is(.mobile-modal, .cert-viewer-modal) {
+    padding: 1.25rem 1.1rem 1.1rem;
+  }
+
+  #app :is(.mobile-modal-header, .cert-viewer-modal .viewer-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 34px;
+    margin: 0 0 0.85rem;
+    padding: 0 0 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #app .cert-viewer-modal .viewer-header {
+    padding-right: 2.75rem; /* room for the absolutely positioned close button */
+  }
+
+  #app :is(.mobile-modal-title, .cert-viewer-modal .viewer-title) {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  #app :is(.mobile-modal-desc, .cert-viewer-modal .viewer-description) {
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  #app :is(.mobile-modal-close, .cert-viewer-modal .modal-close) {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  #app .cert-viewer-modal .modal-close {
+    top: 1.25rem;
+    right: 1.1rem;
+  }
+
+  /* Certificate rows use the exact Project Links row size: icon + one line + chevron */
+  #app :is(.mobile-link-item, .mobile-deans-item, .cert-item) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 54px;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-soft);
+  }
+
+  #app :is(.mobile-link-list, .mobile-deans-list, .cert-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    max-height: none; /* the popup scrolls, not the list (a capped list squeezed the rows) */
+    overflow: visible;
+  }
+
+  /* Rows never shrink to fit; keep the full row size */
+  #app :is(.mobile-link-item, .mobile-deans-item, .cert-item) {
+    flex-shrink: 0;
+  }
+
+  #app .cert-item .cert-category {
+    display: none;
+  }
+
+  #app .cert-item .cert-info h4 {
+    margin: 0;
+    overflow: hidden;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #app .cert-item .cert-info {
+    min-width: 0;
+    flex: 1;
+  }
+
+  /* Dean's List cards: one line (semester + GWA), same size as the other popups' cards */
+  #app .mobile-deans-item .mobile-deans-info {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  #app .mobile-deans-item .mobile-deans-info h4 {
+    margin: 0;
+    overflow: hidden;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #app .mobile-deans-item .deans-details {
+    display: flex;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  #app .mobile-deans-item .year-level {
+    display: none;
+  }
+
+  #app .mobile-deans-item .gwa-badge {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  #app .mobile-deans-item .gwa-badge i {
+    display: none;
+  }
+
+  /* Project Links names: same as certificate names (no default heading margins,
+     which made these cards taller than the other popups' cards) */
+  #app .mobile-link-item .mobile-link-info h4 {
+    margin: 0;
+    overflow: hidden;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* No visible scrollbar inside popups (still scrolls by swiping) */
+  #app :is(.modal, .modal-container, .mobile-modal, .cert-list, .mobile-link-list, .mobile-deans-list, .feedback-box .fb-messages) {
+    scrollbar-width: none;
+  }
+
+  #app :is(.modal, .modal-container, .mobile-modal, .cert-list, .mobile-link-list, .mobile-deans-list, .fb-messages)::-webkit-scrollbar {
+    display: none;
+  }
+
+  #app :is(.cert-list, .mobile-link-list, .mobile-deans-list) {
+    padding-right: 0;
   }
 
   /* Let the list use the popup's height instead of a separate 50vh cap */
@@ -1296,7 +1522,7 @@ html[data-theme="froth"] :is(.brand-short, .bottom-tab.active .bottom-brand) {
 }
 
 /* Bottom nav: active tab in indigo */
-html[data-theme="froth"] .bottom-tab.active {
+html[data-theme="froth"] :is(.bottom-tab.active, .bottom-circle.active) {
   color: var(--accent);
   background: rgb(79 70 229 / 0.1);
 }
@@ -1415,7 +1641,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   #app .rt-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-auto-rows: 72px;
     grid-auto-flow: row dense;
     gap: 0.6rem;
@@ -1425,7 +1651,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   /* Reset every older placement rule; size comes only from the rt-* class */
   #app .rt-grid > .rt-tile.rt-tile {
     position: relative;
-    grid-column: span 1;
+    grid-column: span 2;
     grid-row: span 1;
     width: auto;
     height: auto;
@@ -1437,9 +1663,50 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     -webkit-touch-callout: none;
   }
 
-  #app .rt-grid > .rt-tile.rt-wide { grid-column: span 2; }
-  #app .rt-grid > .rt-tile.rt-tall { grid-row: span 2; }
-  #app .rt-grid > .rt-tile.rt-lg   { grid-column: span 2; grid-row: span 2; }
+  #app .rt-grid > .rt-tile.rt-icon { grid-column: span 1; }
+  #app .rt-grid > .rt-tile.rt-wide { grid-column: span 4; }
+  #app .rt-grid > .rt-tile.rt-tall { grid-column: span 2; grid-row: span 2; }
+  #app .rt-grid > .rt-tile.rt-lg   { grid-column: span 4; grid-row: span 2; }
+
+  /* Icon-only tile: a normal tile (same shape/style as the rest), icon centered */
+  #app .rt-grid > .rt-tile.rt-icon {
+    display: grid;
+    place-items: center;
+    place-content: center; /* override the tile's old justify-content: flex-end */
+    justify-self: stretch;
+    align-self: stretch;
+    width: auto;
+    max-width: none;
+    height: auto;
+    aspect-ratio: auto;
+    padding: 0;
+  }
+
+  #app .rt-grid > .rt-tile.rt-icon > .m-tile-icon {
+    grid-area: 1 / 1;
+    width: auto;
+    height: auto;
+    margin: 0;
+    line-height: 1;
+    text-align: center;
+  }
+
+  #app .rt-grid > .rt-tile.rt-icon > :not(.m-tile-icon):not(.rt-handle) {
+    display: none;
+  }
+
+  #app .rt-grid > .rt-tile.rt-icon > .m-tile-icon {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+
+  #app .rt-grid > .rt-tile.rt-icon .rt-handle {
+    right: 2px;
+    bottom: 2px;
+    width: 24px;
+    height: 24px;
+  }
 
   /* --- 1-row tiles (sm, wide): icon left, label + description stacked right --- */
   #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) {
@@ -1598,7 +1865,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
     z-index: 310;
     display: flex;
     align-items: center;
@@ -1644,6 +1911,168 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 @media (prefers-reduced-motion: reduce) {
   #app .rt-grid > .rt-tile.rt-editing {
     transform: none;
+  }
+}
+
+/* ===== Follow-to-save popup ===== */
+.follow-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 10px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.follow-gate {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.4rem 1.2rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+}
+
+.follow-gate h3 {
+  margin: 0 0 0.35rem;
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.follow-gate p {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.follow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.follow-skip {
+  width: 100%;
+  margin-top: 0.15rem;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* ===== PROFILE POPUPS (Certifications + Dean's List + Project Links), phones =====
+   Same fixed size for all three. Content flows top to bottom:
+     header (stays visible) → description → list → Sponsored (right after the list).
+   The ad is NOT pinned; it scrolls with the list. */
+@media (max-width: 768px) {
+  :root {
+    --profile-modal-mobile-height: min(68vh, 520px);
+  }
+
+  #app .profile-modal.profile-modal {
+    display: block;
+    height: var(--profile-modal-mobile-height);
+    max-height: var(--profile-modal-mobile-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Title row stays visible while scrolling */
+  #app .profile-modal :is(.mobile-modal-header, .viewer-header) {
+    position: sticky;
+    top: -1.25rem; /* cancels the popup's top padding so it sits flush */
+    z-index: 2;
+    padding-top: 1.25rem;
+    margin-top: -1.25rem;
+    background: var(--surface);
+  }
+
+  /* Certifications: close button sits in the title row (like the other two) */
+  #app .cert-viewer-modal .viewer-header {
+    padding-right: 0;
+  }
+
+  #app .cert-viewer-modal .viewer-header .modal-close {
+    position: static;
+  }
+
+  /* Lists keep their natural height (the popup scrolls, not the list) */
+  #app .profile-modal :is(.cert-list, .mobile-deans-list, .mobile-link-list) {
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Sponsored: right after the last item */
+  #app .profile-modal .profile-modal-footer {
+    margin: 1rem 0 0;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* ===== Phones: iOS 26-style liquid glass nav (tabs pill + separate Menu circle) =====
+   Clear glass (almost no tint). Readability comes from adjusting what shows
+   THROUGH the glass: light themes brighten the backdrop, dark themes darken it. */
+@media (max-width: 860px) {
+  /* Light themes: clean white-tinted glass (matches the white cards) */
+  .bottom-pill,
+  .bottom-circle {
+    /* thin outline so the glass shape is always visible */
+    border: 1px solid rgb(15 23 42 / 0.12);
+    background: rgb(255 255 255 / 0.55);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 1px 2px rgb(15 23 42 / 0.06),
+      0 8px 24px rgb(15 23 42 / 0.1);
+  }
+
+  .bottom-tab {
+    height: 50px;
+    border-radius: 999px;
+    color: var(--text-secondary);
+  }
+
+  /* Active tab / open menu: a soft glass bubble */
+  .bottom-tab.active,
+  .bottom-circle.active {
+    color: var(--text);
+    background: rgb(255 255 255 / 0.85);
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.1);
+  }
+
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) :is(.bottom-pill, .bottom-circle) {
+    border-color: rgb(255 255 255 / 0.14);
+    background: rgb(0 0 0 / 0.06);
+    -webkit-backdrop-filter: blur(18px) saturate(160%) brightness(0.5) contrast(0.85);
+    backdrop-filter: blur(18px) saturate(160%) brightness(0.5) contrast(0.85);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 10px 28px rgb(0 0 0 / 0.35);
+  }
+
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) :is(.bottom-tab.active, .bottom-circle.active) {
+    background: rgb(255 255 255 / 0.12);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
   }
 }
 
@@ -2441,6 +2870,12 @@ html[data-theme="dark"] .nav-links a::after {
     padding-top: 18px;
     padding-left: 26px;
     padding-right: 26px;
+  }
+
+  /* Assistant (AI chat): use almost the full width */
+  #app .tool-page.ai-tool-page {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 

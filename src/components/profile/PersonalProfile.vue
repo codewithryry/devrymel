@@ -695,7 +695,7 @@ export default {
 /* ===== Phones: reference layout — grey page, white cards, no big container ===== */
 @media (max-width: 768px) {
   .profile-container {
-    background: color-mix(in srgb, var(--text) 7%, var(--bg));
+    background: var(--surface);
   }
 
   :root .main-content {

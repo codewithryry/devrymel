@@ -1,32 +1,14 @@
 <template>
   <transition name="fade">
     <div class="modal-overlay" @click="$emit('close')">
-      <div class="modal cert-viewer-modal" @click.stop>
-        <button class="modal-close" @click="$emit('close')">
-          <i class="fas fa-times"></i>
-        </button>
-
+      <div class="modal cert-viewer-modal profile-modal" @click.stop>
         <div class="viewer-header">
           <h3 class="viewer-title">My Certifications</h3>
-          <p class="viewer-description">Credentials that represent my learning journey and technical progress.</p>
+          <button class="modal-close" @click="$emit('close')">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-
-        <div class="viewer-details">
-          <div class="detail-col">
-            <i class="fas fa-award"></i>
-            <div>
-              <span class="detail-label">Total</span>
-              <span class="detail-value">{{ certificates.length }} certs</span>
-            </div>
-          </div>
-          <div class="detail-col">
-            <i class="fas fa-layer-group"></i>
-            <div>
-              <span class="detail-label">Categories</span>
-              <span class="detail-value">{{ categoryCount }} fields</span>
-            </div>
-          </div>
-        </div>
+        <p class="viewer-description">Credentials from my learning journey.</p>
 
         <div class="cert-list">
           <div
@@ -45,14 +27,28 @@
             <i class="fas fa-chevron-right arrow-icon"></i>
           </div>
         </div>
+
+        <!-- Sponsored footer (mobile only): pinned to the bottom of the popup -->
+        <AdSlot v-if="isMobile" class="profile-modal-footer" type="banner" />
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import AdSlot from '@/components/AdSlot.vue'
+
 export default {
   name: 'CertificatesModal',
+  components: {
+    AdSlot
+  },
+  data() {
+    return {
+      // Sponsored footer is a mobile-only part of this popup
+      isMobile: window.matchMedia("(max-width: 768px)").matches
+    };
+  },
   props: {
     certificates: {
       type: Array,
@@ -60,11 +56,6 @@ export default {
     }
   },
   emits: ['close'],
-  computed: {
-    categoryCount() {
-      return new Set(this.certificates.map(c => c.category).filter(Boolean)).size || 0
-    }
-  },
   methods: {
     getCertificatePath(filename) {
       if (filename && filename.startsWith('http')) return filename;
@@ -325,6 +316,42 @@ export default {
   }
   to {
     transform: translateY(0);
+  }
+}
+
+/* Phones: same header as the Dean's List / Project Links popups
+   (title row + divider, then one short line, then the list) */
+@media (max-width: 768px) {
+  .viewer-header {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    margin: 0 0 0.75rem;
+    padding: 0 2.5rem 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .viewer-title {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .viewer-description {
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .cert-viewer-modal {
+    padding: 1rem 1rem 1.1rem;
+  }
+
+  .modal-close {
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 32px;
+    height: 32px;
   }
 }
 </style>

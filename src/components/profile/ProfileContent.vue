@@ -62,7 +62,20 @@
       <!-- All mobile tiles in ONE grid (profile links + quick links).
            Hold to edit: tap a handle to resize, tap two tiles to swap them. -->
       <div class="m-tiles">
-        <p class="m-tiles-label">{{ text.getInTouch }}</p>
+        <div class="m-tiles-head">
+          <p class="m-tiles-label">{{ text.getInTouch }}</p>
+          <!-- Anyone can rearrange tiles (no long-press needed) -->
+          <button
+            type="button"
+            class="m-tiles-edit"
+            :class="{ active: tileEditing }"
+            :title="tileEditing ? 'Done' : 'Edit tiles'"
+            :aria-label="tileEditing ? 'Done editing tiles' : 'Edit tiles'"
+            @click="$root.tileEditMode = !tileEditing"
+          >
+            <i class="fas" :class="tileEditing ? 'fa-check' : 'fa-pen'"></i>
+          </button>
+        </div>
         <div
           class="m-tiles-grid rt-grid"
           @pointerdown="startTileHold"
@@ -460,7 +473,10 @@ export default {
         { id: "cv", size: "sm", chip: "chip-4", icon: "fas fa-id-card", label: "CV", desc: "Download", href: "/Reymel_Mislang_CV.docx", download: true, corner: "fas fa-download" },
         { id: "github", size: "sm", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "@codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
         { id: "linkedin", size: "sm", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Reymel Mislang", href: "https://www.linkedin.com/in/reymelreymislang/", external: true, corner: open },
+        { id: "tiktok", size: "icon", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@devrymel", href: "https://www.tiktok.com/@devrymel", external: true, corner: open },
+        { id: "instagram", size: "icon", chip: "chip-4", icon: "fab fa-instagram", label: "Instagram", desc: "Follow", href: "https://www.instagram.com/iamrymel/", external: true, corner: open },
         { id: "facebook", size: "sm", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
+        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
         {
           id: "spotify", size: "tall", chip: "chip-3", idle: !playing,
           icon: "fab fa-spotify", image: playing ? track.image : "",
@@ -470,11 +486,10 @@ export default {
           href: playing && track.url ? track.url : "https://open.spotify.com", external: true, corner: "fab fa-spotify"
         },
         { id: "coffee", size: "tall", chip: "chip-4", icon: "fas fa-coffee", label: "Coffee", desc: "Support my work", href: "https://buymeacoffee.com/reymelreym7", external: true, corner: open },
-        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
         { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
         { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
         { id: "portfolio", size: "sm", chip: "chip-3", icon: "fas fa-briefcase", label: "Portfolio", desc: "View my work", href: "https://reymelreymislang.vercel.app/", external: true, corner: open },
-        { id: "support", size: "wide", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
+        { id: "support", size: "sm", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
       ];
     },
 
@@ -568,7 +583,6 @@ export default {
       const j = order.indexOf(b);
       [order[i], order[j]] = [order[j], order[i]];
       this.tileOrder = order;
-      this.saveTileLayout();
     },
 
     // Make sure the banner video is muted before playing so mobile browsers allow autoplay
@@ -1804,6 +1818,47 @@ export default {
     flex: 1;
     height: 1px;
     background: var(--border);
+  }
+}
+
+/* Tile section header: label + admin "Edit" toggle */
+@media (max-width: 768px) {
+  .m-tiles-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .m-tiles-head .m-tiles-label {
+    flex: 1;
+    margin: 0 !important;
+  }
+
+  .m-tiles-edit {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .m-tiles-edit i {
+    font-size: 0.62rem;
+  }
+
+  .m-tiles-edit.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
   }
 }
 </style>

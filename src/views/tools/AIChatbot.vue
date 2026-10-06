@@ -1,10 +1,10 @@
 <template>
-  <div class="tool-page">
+  <div class="tool-page ai-tool-page">
     <div class="tool-shell">
       <!-- Main Chat Card -->
       <section class="chat-card">
         <!-- Header -->
-        <div class="chat-top">
+        <div class="chat-top" :class="{ 'has-messages': messages.length > 0 }">
           <div class="chat-title-block">
             <h1>{{ currentModel.label }}</h1>
             <p>{{ currentModel.desc }}</p>
@@ -32,7 +32,23 @@
           <!-- Empty state -->
           <div v-if="messages.length === 0" class="chat-empty">
             <h2>{{ currentModel.label }}</h2>
-            <p>{{ currentModel.emptyText }}</p>
+            <p class="chat-empty-text">{{ currentModel.emptyText }}</p>
+
+            <!-- Phones: the mode island sits here (under the title) until the chat starts -->
+            <div class="mode-switch mode-switch--empty" role="tablist" aria-label="AI mode selector">
+              <button
+                v-for="(model, key) in models"
+                :key="'empty-' + key"
+                type="button"
+                class="mode-btn"
+                :class="{ active: activeModel === key }"
+                :aria-selected="activeModel === key"
+                role="tab"
+                @click="selectModel(key)"
+              >
+                {{ model.label }}
+              </button>
+            </div>
           </div>
 
           <!-- Messages -->
@@ -1456,7 +1472,8 @@ export default {
 
   .chat-card {
     /* no top bar on phones; leave room for the bottom nav (~86px) */
-    height: calc(100dvh - 86px - 40px);
+    /* screen minus the top padding (18px) and the space kept for the bottom nav (106px) */
+    height: calc(100dvh - 18px - 128px - env(safe-area-inset-bottom, 0px));
     min-height: 460px;
     border-radius: var(--radius-lg);
   }
@@ -1486,6 +1503,156 @@ export default {
   .mode-btn {
     flex: 1;
     padding: 7px 6px;
+  }
+}
+
+/* ===== Phones: no title block; mode buttons as a Dynamic Island pill ===== */
+@media (max-width: 640px) {
+  .chat-title-block {
+    display: none;
+  }
+
+  .chat-top {
+    justify-content: center;
+    align-items: center;
+    padding: 12px 12px 10px;
+    border-bottom: none;
+  }
+
+  #app .ai-tool-page .mode-switch {
+    width: auto;
+    margin: 0 auto;
+    padding: 4px;
+    gap: 2px;
+    border: none;
+    border-radius: 999px;
+    background: #0b0b0c;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.22);
+  }
+
+  #app .ai-tool-page .mode-btn {
+    flex: 0 0 auto;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: transparent;
+    color: rgb(255 255 255 / 0.6);
+    font-size: 0.78rem;
+    box-shadow: none;
+  }
+
+  #app .ai-tool-page .mode-btn:hover {
+    color: #ffffff;
+  }
+
+  #app .ai-tool-page .mode-btn.active {
+    background: rgb(255 255 255 / 0.16);
+    color: #ffffff;
+    box-shadow: none;
+  }
+}
+
+/* Light themes: island matches the bottom nav (white glass + thin outline) */
+@media (max-width: 640px) {
+  :root:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) #app .ai-tool-page .mode-switch {
+    border: 1px solid rgb(15 23 42 / 0.12);
+    background: rgb(255 255 255 / 0.55);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 1px 2px rgb(15 23 42 / 0.06),
+      0 8px 24px rgb(15 23 42 / 0.1);
+  }
+
+  :root:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) #app .ai-tool-page .mode-btn {
+    color: var(--text-secondary);
+  }
+
+  :root:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) #app .ai-tool-page .mode-btn:hover {
+    color: var(--text);
+  }
+
+  :root:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) #app .ai-tool-page .mode-btn.active {
+    background: rgb(255 255 255 / 0.95);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.12);
+  }
+}
+
+/* Island placement: desktop never shows the empty-state copy */
+.mode-switch--empty {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  /* Before the first message: island under the title, top bar hidden */
+  .chat-top:not(.has-messages) {
+    display: none;
+  }
+
+  /* Order under the title: island first, then the mode's description */
+  .chat-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chat-empty .mode-switch--empty {
+    order: 1;
+  }
+
+  .chat-empty .chat-empty-text {
+    order: 2;
+    margin-top: 0.75rem;
+  }
+
+  #app .ai-tool-page .mode-switch.mode-switch--empty {
+    display: inline-flex;
+    margin-top: 0.9rem;
+  }
+}
+
+/* Phones, during a chat: small centered mode title above the island */
+@media (max-width: 640px) {
+  /* One row: mode name left, compact island right */
+  .chat-top.has-messages {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .chat-top.has-messages .chat-title-block {
+    display: block;
+    flex: 0 1 auto;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .chat-top.has-messages .chat-title-block h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #app .ai-tool-page .chat-top.has-messages .mode-switch {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  #app .ai-tool-page .chat-top.has-messages .mode-btn {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+
+  .chat-top.has-messages .chat-title-block h1 {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .chat-top.has-messages .chat-title-block p {
+    display: none;
   }
 }
 </style>

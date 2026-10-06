@@ -10,7 +10,13 @@
         <div class="modal-icon">
           <i class="fas fa-code"></i>
         </div>
-        <h3 class="modal-title">Coming Soon</h3>
+        <!-- Title row (+ close on phones, like the other popups) -->
+        <div class="modal-head">
+          <h3 class="modal-title">Coming Soon</h3>
+          <button type="button" class="modal-x" aria-label="Close" @click="$emit('close')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
         <p class="modal-text">{{ message }}</p>
         <button @click="$emit('close')" class="modal-close-button">Got it</button>
       </div>
@@ -139,5 +145,67 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.modal-x {
+  display: none;
+}
+
+/* Phones: same layout as the Certifications / Dean's List / Project Links popups */
+@media (max-width: 768px) {
+  .modal {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.1rem 1.1rem;
+    text-align: left;
+  }
+
+  .modal-icon {
+    display: none;
+  }
+
+  .modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 34px;
+    margin: 0 0 0.85rem;
+    padding: 0 0 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-title {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .modal-x {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface-soft);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .modal-text {
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .modal-close-button {
+    width: 100%;
+    margin-top: auto;
+  }
 }
 </style>

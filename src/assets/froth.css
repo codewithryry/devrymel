@@ -347,14 +347,6 @@ html[data-theme="froth"] #app :is(.dropdown-row, .sheet-row):hover {
   color: var(--f-accent);
 }
 
-html[data-theme="froth"] #app .bottom-nav {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 8px 28px rgb(26 33 51 / 0.12);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
 /* Section "view all" links */
 html[data-theme="froth"] #app :is(.view-all-link, .card-link, .note-link, .timeline-link) {
   color: var(--f-accent);

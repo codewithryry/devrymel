@@ -6,7 +6,7 @@
 <template>
   <transition name="slide-up">
     <div class="mobile-modal-overlay" @click="$emit('close')">
-      <div class="mobile-modal" @click.stop>
+      <div class="mobile-modal profile-modal links-modal" @click.stop>
         <div class="mobile-modal-header">
           <h3 class="mobile-modal-title">Project Links</h3>
           <button class="mobile-modal-close" @click="$emit('close')">
@@ -15,10 +15,7 @@
         </div>
 
         <div class="mobile-link-content">
-          <div class="mobile-link-description">
-            <i class="fas fa-link"></i>
-            <p>Production-ready systems I’ve designed, built, and deployed.</p>
-          </div>
+          <p class="mobile-modal-desc">Systems I've built and deployed.</p>
 
           <div class="mobile-link-list">
             <div
@@ -37,14 +34,22 @@
             </div>
           </div>
         </div>
+
+        <!-- Sponsored footer: pinned to the bottom of the popup -->
+        <AdSlot class="profile-modal-footer" type="banner" />
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import AdSlot from '@/components/AdSlot.vue'
+
 export default {
   name: 'LinkWebsiteModal',
+  components: {
+    AdSlot
+  },
   props: {
     links: {
       type: Array,
@@ -241,5 +246,13 @@ export default {
     box-shadow: var(--shadow-xl);
     animation: none;
   }
+}
+
+/* Short plain description under the title (like the Certifications popup) */
+.mobile-modal-desc {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 </style>
