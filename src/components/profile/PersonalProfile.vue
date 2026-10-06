@@ -17,6 +17,7 @@
           @openMobileDeansList="openMobileDeansListModal"
           @open-certificates="openCertificatesListModal"
           @openLinks="showLinksModal = true"
+          @openQRModal="openQRModal"
         />
       </section>
 
@@ -53,7 +54,7 @@
 
       <!-- 8. Quick Links (just before Let's Connect) -->
       <LinksSection
-        class="home-links"
+        class="home-links home-mobile-hide"
         :certificates="certificates"
         @openQRModal="openQRModal"
         @openCertificatesListModal="openCertificatesListModal"
@@ -709,6 +710,13 @@ export default {
   /* Quick Links join the sheet directly under the profile tiles */
   :root .main-content .home-links {
     margin-top: -0.6rem; /* cancels the 0.6rem section gap */
+  }
+}
+
+/* Phones: homepage content spans the full screen width (no side gaps) */
+@media (max-width: 768px) {
+  :root .main-content {
+    padding: 0 0 1.5rem;
   }
 }
 </style>

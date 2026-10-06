@@ -35,7 +35,10 @@
         <div class="nav-actions">
           <div class="nav-menu-wrap theme-wrap">
             <button class="nav-icon-btn" @click="cycleTheme" :title="'Theme: ' + currentThemeName" :aria-label="'Switch theme, current: ' + currentThemeName">
-              <svg v-if="currentTheme === 'midnight'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg v-if="currentTheme === 'froth'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2.7c3.6 4.1 6 7.4 6 10.3a6 6 0 0 1-12 0c0-2.9 2.4-6.2 6-10.3z" />
+              </svg>
+              <svg v-else-if="currentTheme === 'midnight'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
               </svg>
               <svg v-else-if="currentTheme === 'forest'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -145,6 +148,15 @@
         <span>Menu</span>
       </button>
     </nav>
+
+    <!-- Tile edit mode bar (mobile homepage): resize tiles, then Done -->
+    <transition name="sheet">
+      <div v-if="tileEditMode" class="tile-edit-bar" role="toolbar" aria-label="Edit tiles">
+        <span class="tile-edit-hint"><i class="fas fa-expand-alt"></i> Resize with the handle · tap two tiles to swap</span>
+        <button type="button" class="tile-edit-btn" @click="resetTiles">Reset</button>
+        <button type="button" class="tile-edit-btn primary" @click="tileEditMode = false">Done</button>
+      </div>
+    </transition>
 
     <!-- Bottom sheet opened by "Menu" -->
     <transition name="sheet">
@@ -265,6 +277,11 @@ import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsServic
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
 import CursorTrail from "@/components/CursorTrail.vue";
 import { getSpotifyNowPlaying } from "./services/spotifyService";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./services/firebase";
+
+// Same admin account the admin panel and Firestore rules use
+const ADMIN_UID = "pAwCyoApURZu9aVk4k8tKRHzk7K2";
 
 import {
   getVisitorInfo,
@@ -299,6 +316,8 @@ export default {
       navScrolled: false,
       mobileNavOpen: false,
       mobileSheetOpen: false,
+      tileEditMode: false,
+      isSiteAdmin: false,
       showAllSheetTools: false,
       showAllSheetPages: false,
 
@@ -357,7 +376,8 @@ export default {
       themes: [
         { id: "light", name: "Classic Light", preview: "#f8fafc" },
         { id: "midnight", name: "Midnight Pro", preview: "#1e3a5f" },
-        { id: "forest", name: "Emerald Focus", preview: "#065f46" }
+        { id: "forest", name: "Emerald Focus", preview: "#065f46" },
+        { id: "froth", name: "Froth Modern", preview: "#4f46e5" }
       ],
 
       quickPages: fallbackQuickPages,
@@ -408,6 +428,7 @@ export default {
 
   watch: {
     $route() {
+      this.tileEditMode = false;
       this.mobileSheetOpen = false;
       this.closeAllPanels();
       this.mobileNavOpen = false;
@@ -438,6 +459,12 @@ export default {
     }
 
     this.loadLiveStats();
+
+    // Only the signed-in admin can rearrange the shared homepage tiles
+    this.authUnsubscribe = onAuthStateChanged(auth, (user) => {
+      this.isSiteAdmin = !!user && user.uid === ADMIN_UID;
+      if (!this.isSiteAdmin) this.tileEditMode = false;
+    });
     this.$nextTick(this.observeReveal);
 
     getSpotifyNowPlaying().then((result) => {
@@ -482,6 +509,7 @@ export default {
 
     if (this.quickPagesUnsubscribe) this.quickPagesUnsubscribe();
     if (this.revealObserver) this.revealObserver.disconnect();
+    if (this.authUnsubscribe) this.authUnsubscribe();
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
     if (this.spotifyAutoTimer) clearTimeout(this.spotifyAutoTimer);
   },
@@ -568,6 +596,11 @@ export default {
         el.classList.add("reveal");
         this.revealObserver.observe(el);
       });
+    },
+
+    // Reset every resizable tile grid to its default sizes
+    resetTiles() {
+      window.dispatchEvent(new Event("tiles-reset"));
     },
 
     toggleSubmenu(name) {
@@ -783,6 +816,27 @@ export default {
 
   --font-heading: "Manrope", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: "Plus Jakarta Sans", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Froth Modern: clean light theme — cool off-white, white cards, slate text, indigo accent.
+   Solid colors only (no gradients). */
+html[data-theme="froth"],
+html[data-theme="froth"] body {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --surface-soft: #f0f2f8;
+  --surface-hover: #e9ecf5;
+  --text: #1a2133;
+  --text-secondary: #4a5468;
+  --text-muted: #8590a6;
+  --border: #e2e6ef;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+
+  --shadow-sm: 0 1px 2px rgb(26 33 51 / 0.05);
+  --shadow: 0 2px 8px rgb(26 33 51 / 0.06);
+  --shadow-lg: 0 6px 18px rgb(26 33 51 / 0.08);
+  --shadow-xl: 0 12px 32px rgb(26 33 51 / 0.12);
 }
 
 html[data-theme="dark"],
@@ -1069,6 +1123,527 @@ html[data-theme="forest"] body {
     border-color: transparent;
     background: var(--surface-soft);
     box-shadow: none;
+  }
+}
+
+/* ===== MOBILE POPUPS: one fixed size for every modal =====
+   Bottom-anchored, full width minus a 10px margin each side, all corners rounded.
+   Never wider than the screen, never narrower than this. */
+@media (max-width: 768px) {
+  #app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay):not(.admin-page *) {
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 10px calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+
+  #app :is(.modal, .modal-container, .mobile-modal, .feedback-box):not(.admin-page *) {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    /* Same fixed size as the feedback panel */
+    height: min(78vh, 600px);
+    max-height: none;
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    overflow-y: auto;
+  }
+
+  #app .feedback-box:not(.admin-page *) {
+    overflow: hidden;
+  }
+
+  /* Compact list rows in Project Links, Dean's List and Certifications */
+  #app :is(.mobile-link-list, .mobile-deans-list, .cert-list) {
+    gap: 0.45rem;
+  }
+
+  #app :is(.mobile-link-item, .mobile-deans-item, .cert-item) {
+    gap: 0.7rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 14px;
+    font-size: 0.85rem;
+  }
+
+  #app :is(.mobile-link-icon, .mobile-deans-icon, .cert-icon) {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    font-size: 0.9rem;
+  }
+
+  #app :is(.mobile-link-item, .mobile-deans-item, .cert-item) .arrow-icon {
+    font-size: 0.7rem;
+  }
+
+  /* Let the list use the popup's height instead of a separate 50vh cap */
+  #app :is(.mobile-link-list, .mobile-deans-list) {
+    max-height: none;
+  }
+}
+
+/* Classic Light: tiles on the white mobile homepage card are white with a
+   thin outline (grey fills looked muddy on white) */
+@media (max-width: 768px) {
+  html:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"])
+    #app :is(.m-tile, .mobile-links-scroll .mobile-link-card) {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.03);
+  }
+}
+
+/* Phones: small corner detail on every homepage tile — identical spot and size
+   on all tiles so they line up (open / download / switch / Spotify) */
+@media (max-width: 768px) {
+  #app .m-tile-corner,
+  #app .mobile-links-scroll .mobile-link-card::after {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    text-align: center;
+    opacity: 0.8;
+  }
+
+  /* Coffee (2nd tile when Spotify is shown): icon top-left, not centered */
+  #app .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(2) .mobile-icon {
+    align-self: flex-start;
+    margin: 0 0 auto;
+  }
+}
+
+/* ===== FROTH MODERN: solid, modern accents (no gradients, no glass) ===== */
+
+/* Solid buttons: flat indigo, white text, no glass shine */
+html[data-theme="froth"] #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .fb-send, .send-btn.ready, .mobile-contact-btn, .primary-btn, .google-btn) {
+  background-image: none;
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgb(79 70 229 / 0.22);
+}
+
+html[data-theme="froth"] #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .primary-btn):hover {
+  background-color: var(--accent-hover);
+  opacity: 1;
+}
+
+/* Light buttons: solid white with a clean border, indigo on hover */
+html[data-theme="froth"] #app :is(.nav-icon-btn, .ghost-btn, .explore-link) {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-theme="froth"] #app :is(.nav-icon-btn, .ghost-btn, .explore-link):hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Nav links: solid indigo-tint pill instead of glass */
+html[data-theme="froth"] .nav-links a::after {
+  background: rgb(79 70 229 / 0.1);
+  border: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-theme="froth"] .nav-links a:hover,
+html[data-theme="froth"] .nav-links a.active {
+  color: var(--accent);
+}
+
+/* Section labels and kickers pick up the accent */
+html[data-theme="froth"] :is(.eyebrow, .section-kicker, .m-tiles-label, .sheet-label, .dropdown-label) {
+  color: var(--accent);
+}
+
+/* Brand badge + footer CTA panel in indigo */
+html[data-theme="froth"] :is(.brand-short, .bottom-tab.active .bottom-brand) {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Phones: the CTA card is indigo, so its title/subtitle are white and
+   "Hire Me" flips to a white button with indigo text */
+@media (max-width: 768px) {
+  html[data-theme="froth"] .header-footer .footer-name {
+    color: #ffffff;
+  }
+
+  html[data-theme="froth"] .header-footer .footer-subtitle {
+    color: rgb(255 255 255 / 0.82);
+  }
+
+  html[data-theme="froth"] #app .header-footer .footer-contact-btn {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: var(--accent);
+    box-shadow: none;
+  }
+}
+
+/* Bottom nav: active tab in indigo */
+html[data-theme="froth"] .bottom-tab.active {
+  color: var(--accent);
+  background: rgb(79 70 229 / 0.1);
+}
+
+/* Tool header icons: one solid accent instead of per-tool gradients */
+html[data-theme="froth"] #app :is(.tt-icon-wrap, .st-icon-wrap) {
+  background: var(--accent) !important;
+  box-shadow: none;
+}
+
+/* Inputs: indigo focus ring */
+html[data-theme="froth"] #app :is(input, textarea, select):focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Links in body copy */
+html[data-theme="froth"] #app :is(.info-panel, .info-card, .timeline-item) a:not([class]) {
+  color: var(--accent);
+}
+
+/* ===== FROTH MODERN: colorful icon chips (solid tints, no gradients) ===== */
+html[data-theme="froth"] {
+  --chip-1-bg: #eef0ff; --chip-1: #4f46e5;  /* indigo  */
+  --chip-2-bg: #e7f4fc; --chip-2: #0284c7;  /* sky     */
+  --chip-3-bg: #e6f6ef; --chip-3: #059669;  /* emerald */
+  --chip-4-bg: #fdf3e2; --chip-4: #d97706;  /* amber   */
+  --chip-5-bg: #fdecef; --chip-5: #e11d48;  /* rose    */
+}
+
+/* Shared chip shape */
+html[data-theme="froth"] #app :is(
+  .m-tile .m-tile-icon,
+  .mobile-links-scroll .mobile-link-card .mobile-icon,
+  .spotify-tile.idle .spotify-tile-art,
+  .contact-icon,
+  .icon-box
+) {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  background: var(--chip-1-bg);
+  color: var(--chip-1);
+}
+
+/* Homepage tiles: each tile carries its own chip color (chip-1 … chip-5) */
+html[data-theme="froth"] #app .m-tile.chip-1 .m-tile-icon { background: var(--chip-1-bg); color: var(--chip-1); }
+html[data-theme="froth"] #app .m-tile.chip-2 .m-tile-icon { background: var(--chip-2-bg); color: var(--chip-2); }
+html[data-theme="froth"] #app .m-tile.chip-3 .m-tile-icon { background: var(--chip-3-bg); color: var(--chip-3); }
+html[data-theme="froth"] #app .m-tile.chip-4 .m-tile-icon { background: var(--chip-4-bg); color: var(--chip-4); }
+html[data-theme="froth"] #app .m-tile.chip-5 .m-tile-icon { background: var(--chip-5-bg); color: var(--chip-5); }
+
+/* Small icons pick up the accent */
+html[data-theme="froth"] #app :is(.m-meta i, .m-badges .inline-badge i, .sheet-row > i:first-child, .contact-arrow, .view-all-icon) {
+  color: var(--accent);
+}
+
+html[data-theme="froth"] #app .m-badges .inline-badge {
+  color: var(--text);
+}
+
+/* Bottom nav: inactive icons slate, active indigo */
+html[data-theme="froth"] #app .bottom-tab {
+  color: var(--text-muted);
+}
+
+/* Profile photo: soft indigo ring */
+html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profile-image) {
+  box-shadow: 0 0 0 4px #eef0ff, var(--shadow);
+}
+
+/* Phones: Awards / Certs / Links bar matches the tiles below it */
+@media (max-width: 768px) {
+  #app .m-badges {
+    border-radius: 16px;
+  }
+
+  #app .m-badges .inline-badge {
+    border-radius: 12px;
+  }
+
+  /* Light themes (Classic Light, Froth): white with a thin outline, like the tiles */
+  html:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) #app .m-badges {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.03);
+  }
+
+  /* Dark themes: faint tint, no border, like the tiles */
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app .m-badges {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+}
+
+/* ===== RESIZABLE TILES (mobile homepage, iOS / One UI style) =====
+   2-column grid; each tile is sm (1x1), wide (2x1), tall (1x2) or lg (2x2).
+   1-row tiles: icon on the left, text beside it.
+   2-row tiles: icon at the top, text at the bottom. */
+.tile-edit-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Profile tiles: label on top, grid underneath */
+  #app .m-tiles {
+    display: block;
+  }
+
+  #app .m-tiles .m-tiles-label {
+    margin-bottom: 0.6rem;
+  }
+
+  #app .rt-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 72px;
+    grid-auto-flow: row dense;
+    gap: 0.6rem;
+    padding: 0;
+  }
+
+  /* Reset every older placement rule; size comes only from the rt-* class */
+  #app .rt-grid > .rt-tile.rt-tile {
+    position: relative;
+    grid-column: span 1;
+    grid-row: span 1;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  #app .rt-grid > .rt-tile.rt-wide { grid-column: span 2; }
+  #app .rt-grid > .rt-tile.rt-tall { grid-row: span 2; }
+  #app .rt-grid > .rt-tile.rt-lg   { grid-column: span 2; grid-row: span 2; }
+
+  /* --- 1-row tiles (sm, wide): icon left, label + description stacked right --- */
+  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-auto-rows: auto;
+    align-content: center;
+    align-items: center;
+    column-gap: 0.7rem;
+    row-gap: 1px;
+    padding: 0.65rem 0.8rem;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > :is(.m-tile-icon, .m-tile-top, .mobile-icon, .spotify-tile-art) {
+    grid-row: 1 / span 3;
+    grid-column: 1;
+    align-self: center;
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > :not(.m-tile-icon):not(.m-tile-top):not(.mobile-icon):not(.spotify-tile-art):not(.rt-handle):not(.m-tile-corner) {
+    grid-column: 2;
+    margin: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Compact Spotify: hide the small "Now Playing" line to fit */
+  #app .rt-grid > .spotify-tile:is(.rt-sm, .rt-wide) .spotify-tile-label {
+    display: none;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) .m-tile-top .m-tile-pill {
+    display: none;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) :is(.spotify-tile-art) {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* --- 2-row tiles (tall, lg): icon top-left, text at the bottom --- */
+  #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0.9rem;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) > :is(.m-tile-icon, .m-tile-top, .mobile-icon, .spotify-tile-art) {
+    align-self: flex-start;
+    margin: 0 0 auto;
+    font-size: 1.6rem;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) :is(.m-tile-label, .mobile-label) {
+    margin-top: 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  #app .rt-grid > .rt-tile.rt-lg :is(.m-tile-label, .mobile-label) {
+    font-size: 1.05rem;
+  }
+
+  #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) > :is(small, .m-tile-label, .mobile-label, .mobile-desc) {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Picked-up tile (tap another tile to swap with it) */
+  #app .rt-grid > .rt-tile.rt-selected {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    transform: scale(1);
+  }
+
+  /* Spotify tile: green "Now Playing" label, grey "Offline" when idle */
+  #app .m-tile .spotify-tile-label {
+    margin-top: 0.5rem;
+    color: #1db954;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  #app .m-tile.idle .spotify-tile-label {
+    color: var(--text-muted);
+  }
+
+  /* Spotify album art fills its icon box */
+  #app .m-tile-art {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  #app .m-tile-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Tiles render as <button> in edit mode / for actions: reset button styling */
+  #app button.m-tile {
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  /* --- Edit mode --- */
+  #app .rt-grid > .rt-tile.rt-editing {
+    outline: 2px dashed color-mix(in srgb, var(--text-muted) 55%, transparent);
+    outline-offset: -2px;
+    transform: scale(0.97);
+    transition: transform 0.2s ease;
+  }
+
+  #app .rt-grid > .rt-tile.rt-editing :is(.m-tile-corner),
+  #app .rt-grid > .rt-tile.rt-editing::after {
+    display: none;
+  }
+
+  .rt-handle {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.7rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+  }
+
+  /* Floating "Done" bar above the bottom nav */
+  .tile-edit-bar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    z-index: 310;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 8px 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .tile-edit-hint {
+    flex: 1;
+    min-width: 0;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+  }
+
+  .tile-edit-hint i {
+    margin-right: 4px;
+    font-size: 0.7rem;
+  }
+
+  .tile-edit-btn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .tile-edit-btn.primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app .rt-grid > .rt-tile.rt-editing {
+    transform: none;
   }
 }
 
@@ -1998,9 +2573,10 @@ html[data-theme="dark"] .nav-links a::after {
   }
 }
 
-/* Mobile homepage shows Now Playing inside the profile card instead */
+/* Phones: no floating Now Playing anywhere — it only lives as the
+   Spotify tile on the homepage (Quick Links) */
 @media (max-width: 768px) {
-  .spotify-sidebar.on-home {
+  .spotify-sidebar {
     display: none;
   }
 }

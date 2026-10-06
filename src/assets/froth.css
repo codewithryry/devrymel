@@ -1,0 +1,558 @@
+/*
+ * Froth Modern — premium SaaS design system
+ * ------------------------------------------------------------------
+ * Applies ONLY when <html data-theme="froth">. Classic Light, Midnight Pro
+ * and Emerald Focus are untouched. Visual layer only: no layout, route,
+ * content or behavior changes.
+ *
+ * Rules: solid colors, subtle depth, clear hierarchy, consistent radius,
+ * gentle hover/focus/active states. No gradients, no glass, no emojis.
+ *
+ * "html[data-theme="froth"] #app" prefix = outranks components' scoped styles.
+ */
+
+html[data-theme="froth"] {
+  --f-accent: #4f46e5;
+  --f-accent-hover: #4338ca;
+  --f-accent-soft: #eef0ff;
+  --f-accent-ring: rgb(79 70 229 / 0.18);
+  --f-success: #059669;
+  --f-success-soft: #e6f6ef;
+  --f-warning: #d97706;
+  --f-warning-soft: #fdf3e2;
+  --f-danger: #e11d48;
+  --f-danger-soft: #fdecef;
+  --f-info: #0284c7;
+  --f-info-soft: #e7f4fc;
+
+  --f-radius-card: 16px;
+  --f-radius-ctrl: 10px;
+  --f-shadow-card: 0 1px 2px rgb(26 33 51 / 0.04), 0 1px 3px rgb(26 33 51 / 0.03);
+  --f-shadow-hover: 0 4px 10px rgb(26 33 51 / 0.06), 0 12px 28px rgb(26 33 51 / 0.08);
+  --f-shadow-pop: 0 16px 40px rgb(26 33 51 / 0.14), 0 4px 12px rgb(26 33 51 / 0.06);
+  --f-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html[data-theme="froth"] ::selection {
+  background: var(--f-accent-soft);
+  color: var(--f-accent-hover);
+}
+
+/* ===== Typography: tighter, bolder hierarchy ===== */
+html[data-theme="froth"] #app :is(
+  .section-title, .info-hero h1, .tt-title, .st-title, .footer-name,
+  .m-name, .topbar h1, .chat-title-block h1, .about-hero-text h1
+) {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+html[data-theme="froth"] #app :is(
+  .info-panel h2, .info-card h2, .cta-card h2, .project-title, .note-title,
+  .service-name, .timeline-title, .graph-head, .card-title, .modal-head h2, .modal-head h3
+) {
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+html[data-theme="froth"] #app :is(
+  .info-hero p, .about-lead, .statement-text, .project-description, .note-description,
+  .service-description, .timeline-description, .experience-description, .tt-subtitle, .st-subtitle
+) {
+  color: var(--text-secondary);
+}
+
+/* Kickers / eyebrows become small accent badges */
+html[data-theme="froth"] #app :is(.section-kicker, .eyebrow, .htu-label, .tt-howto-label, .highlights-label, .yt-section-label) {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* ===== Cards & surfaces ===== */
+html[data-theme="froth"] #app :is(
+  .info-card, .info-panel, .cta-card, .project-card, .service-card, .note-card,
+  .link-card, .social-card, .stat-card, .highlight-card, .timeline-card,
+  .experience-card, .contact-item, .achievement-chip, .page-nav-card,
+  .tool-hero, .tt-card, .tt-input-card, .tt-result, .tt-results, .tt-panel,
+  .tt-password-card, .tt-options-card, .tt-qr-card, .tt-howto, .yt-video-card,
+  .st-card, .st-result, .st-howto, .shortener-card, .result-card, .howto-card,
+  .tip-card, .color-controls, .palette-card, .how-to-use, .chat-card,
+  .suggestion-tool, .soon-card, .expect-card, .ts-tile, .graph-card, .data-card,
+  .project-row, .entry-row, .auth-card, .sponsor-form-card, .deployment-card,
+  .gallery-panel, .step-item, .user-card, .tt-dl-btn
+):not(.admin-page .sidebar *) {
+  border: 1px solid var(--border);
+  border-radius: var(--f-radius-card);
+  background: var(--surface);
+  box-shadow: var(--f-shadow-card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition:
+    transform 0.2s var(--f-ease),
+    box-shadow 0.2s var(--f-ease),
+    border-color 0.2s var(--f-ease);
+}
+
+/* Interactive cards lift on hover (carousel cards only change shadow/border) */
+html[data-theme="froth"] #app :is(
+  .project-card, .link-card, .social-card, .contact-item, .page-nav-card,
+  .ts-tile, .deployment-card, .achievement-chip, .project-row, .entry-row,
+  .tip-card, .info-card
+):hover {
+  transform: translateY(-2px);
+  border-color: rgb(79 70 229 / 0.28);
+  box-shadow: var(--f-shadow-hover);
+}
+
+html[data-theme="froth"] #app :is(.note-card, .service-card):hover {
+  border-color: rgb(79 70 229 / 0.28);
+  box-shadow: var(--f-shadow-hover);
+}
+
+html[data-theme="froth"] #app :is(.note-card.active, .service-card.active) {
+  border-color: var(--f-accent);
+  box-shadow: 0 0 0 3px var(--f-accent-ring), var(--f-shadow-hover);
+}
+
+html[data-theme="froth"] #app :is(.project-image-container, .yt-thumb, .tt-cover-wrap, .tt-card-img-wrap) {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ===== Buttons: primary ===== */
+html[data-theme="froth"] #app :is(
+  .nav-contact-btn, .cta-btn, .primary-btn, .google-btn, .tt-btn, .tt-gen-btn,
+  .st-btn, .shorten-btn, .main-btn, .yt-dl-btn, .sponsor-btn, .banner-btn,
+  .fb-send, .send-btn.ready, .service-button.active-button
+) {
+  border: 1px solid var(--f-accent);
+  border-radius: var(--f-radius-ctrl);
+  background: var(--f-accent);
+  background-image: none;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgb(26 33 51 / 0.08), 0 4px 12px rgb(79 70 229 / 0.22);
+  transition:
+    background-color 0.18s var(--f-ease),
+    transform 0.18s var(--f-ease),
+    box-shadow 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app :is(
+  .nav-contact-btn, .cta-btn, .primary-btn, .google-btn, .tt-btn, .tt-gen-btn,
+  .st-btn, .shorten-btn, .main-btn, .yt-dl-btn, .sponsor-btn, .banner-btn,
+  .service-button.active-button
+):hover:not(:disabled) {
+  background: var(--f-accent-hover);
+  border-color: var(--f-accent-hover);
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgb(26 33 51 / 0.08), 0 8px 18px rgb(79 70 229 / 0.28);
+}
+
+/* ===== Buttons: secondary / outline ===== */
+html[data-theme="froth"] #app :is(
+  .ghost-btn, .secondary-btn, .tt-reset-btn, .st-reset-btn, .reset-btn,
+  .tt-refresh-btn, .copy-btn, .tt-copy-btn, .tt-action-btn, .copy-all-btn,
+  .copy-seed-btn, .tt-size-btn, .yt-mode-btn, .yt-quality-btn, .freq-btn,
+  .amount-btn, .method-btn, .slider-btn, .icon-btn, .logout-btn, .see-more-btn,
+  .timeline-toggle, .service-button, .tt-open-video, .tt-retry, .more-toggle,
+  .st-refresh, .company-tab, .role-tab, .tab-btn, .explore-link, .nav-icon-btn,
+  .mobile-nav-toggle, .tt-panel-action
+) {
+  border: 1px solid var(--border);
+  border-radius: var(--f-radius-ctrl);
+  background: var(--surface);
+  background-image: none;
+  color: var(--text);
+  box-shadow: 0 1px 2px rgb(26 33 51 / 0.04);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition:
+    background-color 0.18s var(--f-ease),
+    border-color 0.18s var(--f-ease),
+    color 0.18s var(--f-ease),
+    transform 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app :is(
+  .ghost-btn, .secondary-btn, .tt-reset-btn, .st-reset-btn, .reset-btn,
+  .tt-refresh-btn, .copy-btn, .tt-copy-btn, .tt-action-btn, .copy-all-btn,
+  .copy-seed-btn, .tt-size-btn, .yt-mode-btn, .yt-quality-btn, .freq-btn,
+  .amount-btn, .method-btn, .slider-btn, .icon-btn, .logout-btn, .see-more-btn,
+  .timeline-toggle, .service-button, .tt-open-video, .tt-retry, .more-toggle,
+  .st-refresh, .company-tab, .role-tab, .tab-btn, .explore-link, .nav-icon-btn,
+  .mobile-nav-toggle, .tt-panel-action
+):hover:not(:disabled) {
+  border-color: rgb(79 70 229 / 0.4);
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+}
+
+/* Selected toggles (tabs, sizes, modes, amounts…) */
+html[data-theme="froth"] #app :is(
+  .tt-size-btn, .yt-mode-btn, .yt-quality-btn, .freq-btn, .amount-btn,
+  .method-btn, .company-tab, .role-tab, .tab-btn, .mode-btn
+):is(.active, [aria-selected="true"]) {
+  border-color: var(--f-accent);
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+  font-weight: 600;
+}
+
+/* Danger */
+html[data-theme="froth"] #app :is(.icon-btn.danger, .logout-btn):hover {
+  border-color: rgb(225 29 72 / 0.35);
+  background: var(--f-danger-soft);
+  color: var(--f-danger);
+}
+
+/* Press + keyboard focus for every button-like control */
+html[data-theme="froth"] #app :is(button, a, [role="button"]):active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+html[data-theme="froth"] #app :is(button, a, [role="button"], input, textarea, select):focus-visible {
+  outline: 3px solid var(--f-accent-ring);
+  outline-offset: 2px;
+}
+
+html[data-theme="froth"] #app button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ===== Inputs & forms ===== */
+/* Wrapped inputs: style the wrapper, keep the inner input borderless */
+html[data-theme="froth"] #app :is(
+  .tt-input-wrap, .url-input-wrap, .chat-input-wrap, .fb-input-shell,
+  .search-wrap, .color-input-wrap, .custom-amount-wrap
+) {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: inset 0 1px 2px rgb(26 33 51 / 0.03);
+  transition: border-color 0.18s var(--f-ease), box-shadow 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app :is(
+  .tt-input-wrap, .url-input-wrap, .chat-input-wrap, .fb-input-shell,
+  .search-wrap, .color-input-wrap, .custom-amount-wrap
+):is(:focus-within, .focused) {
+  border-color: var(--f-accent);
+  box-shadow: 0 0 0 4px var(--f-accent-ring);
+}
+
+html[data-theme="froth"] #app :is(.tt-input-wrap, .url-input-wrap).error {
+  border-color: var(--f-danger);
+  box-shadow: 0 0 0 4px rgb(225 29 72 / 0.14);
+}
+
+/* Standalone fields (admin forms, sponsor form, text areas) */
+html[data-theme="froth"] #app :is(
+  .field, .project-form, .entry-form, .singleton-form, .form-group, .search-row
+) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), textarea, select),
+html[data-theme="froth"] #app :is(.tt-textarea, .hex-input) {
+  border: 1px solid var(--border);
+  border-radius: var(--f-radius-ctrl);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.18s var(--f-ease), box-shadow 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app :is(
+  .field, .project-form, .entry-form, .singleton-form, .form-group, .search-row
+) :is(input, textarea, select):focus,
+html[data-theme="froth"] #app :is(.tt-textarea, .hex-input):focus {
+  border-color: var(--f-accent);
+  box-shadow: 0 0 0 4px var(--f-accent-ring);
+  outline: none;
+}
+
+html[data-theme="froth"] #app :is(input, textarea)::placeholder {
+  color: var(--text-muted);
+}
+
+html[data-theme="froth"] #app :is(input[type="checkbox"], input[type="radio"], input[type="range"]) {
+  accent-color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app :is(.error-text, .error-message, .tt-error, .st-error) {
+  color: var(--f-danger);
+}
+
+/* ===== Badges, tags, chips ===== */
+html[data-theme="froth"] #app :is(
+  .tech-tag, .tech-chip, .pill-grid span, .note-category, .live-badge,
+  .soon-badge, .beta-badge, .project-status, .m-tile-pill, .feature-item,
+  .badge, .tt-video-id, .step-num, .expect-num, .current-index
+) {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+  font-weight: 600;
+}
+
+html[data-theme="froth"] #app .badge.published { background: var(--f-success-soft); color: var(--f-success); }
+html[data-theme="froth"] #app .badge.draft     { background: var(--f-warning-soft); color: var(--f-warning); }
+html[data-theme="froth"] #app .badge.featured  { background: var(--f-accent-soft);  color: var(--f-accent); }
+html[data-theme="froth"] #app .badge.danger    { background: var(--f-danger-soft);  color: var(--f-danger); }
+
+/* Icon holders become tinted chips */
+html[data-theme="froth"] #app :is(
+  .stat-icon, .highlight-icon, .page-nav-icon, .social-icon, .tt-card-icon,
+  .st-stat-icon, .tip-icon, .ts-icon, .soon-card-icon, .tt-dl-icon, .auth-icon,
+  .entry-icon, .brand-icon, .htu-tip-icon
+) {
+  border-radius: 12px;
+  background: var(--f-accent-soft);
+  background-image: none;
+  color: var(--f-accent);
+  box-shadow: none;
+}
+
+/* ===== Navigation ===== */
+html[data-theme="froth"] #app .site-nav-inner {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(26 33 51 / 0.04), 0 6px 20px rgb(26 33 51 / 0.05);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-theme="froth"] #app .nav-brand {
+  color: var(--text);
+}
+
+html[data-theme="froth"] #app :is(.nav-dropdown, .bottom-sheet) {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--f-shadow-pop);
+}
+
+html[data-theme="froth"] #app :is(.dropdown-row, .sheet-row):hover {
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .bottom-nav {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 8px 28px rgb(26 33 51 / 0.12);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Section "view all" links */
+html[data-theme="froth"] #app :is(.view-all-link, .card-link, .note-link, .timeline-link) {
+  color: var(--f-accent);
+  font-weight: 600;
+}
+
+/* ===== Modals & popups ===== */
+html[data-theme="froth"] #app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .bottom-sheet-overlay, .preview-overlay) {
+  background: rgb(26 33 51 / 0.45);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-theme="froth"] #app :is(.modal, .modal-box, .modal-container, .mobile-modal, .feedback-box, .preview-modal) {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--f-shadow-pop);
+}
+
+html[data-theme="froth"] #app :is(.modal-close, .mobile-modal-close, .fb-close, .preview-close, .modal-close-button) {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  transition: background-color 0.18s var(--f-ease), color 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app :is(.modal-close, .mobile-modal-close, .fb-close, .preview-close, .modal-close-button):hover {
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+}
+
+/* List rows inside popups (links, Dean's List, certificates) */
+html[data-theme="froth"] #app :is(.mobile-link-item, .mobile-deans-item, .cert-item) {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color 0.18s var(--f-ease), background-color 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app :is(.mobile-link-item, .mobile-deans-item, .cert-item):hover {
+  border-color: rgb(79 70 229 / 0.3);
+  background: var(--f-accent-soft);
+}
+
+html[data-theme="froth"] #app :is(.mobile-link-icon, .mobile-deans-icon, .cert-icon) {
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+}
+
+/* Feedback panel */
+html[data-theme="froth"] #app .fb-bubble {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-soft);
+}
+
+html[data-theme="froth"] #app .feedback-button {
+  background: var(--surface);
+  color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .feedback-count {
+  background: var(--f-accent);
+  color: #ffffff;
+}
+
+/* ===== Tool pages ===== */
+html[data-theme="froth"] #app .tool-hero {
+  border-radius: 20px;
+}
+
+html[data-theme="froth"] #app :is(.tt-step, .st-step, .howto-step, .htu-tip, .expect-item) {
+  border-radius: 12px;
+}
+
+html[data-theme="froth"] #app :is(.tt-strength-bar, .bar-track) {
+  border-radius: 999px;
+  background: var(--surface-hover);
+}
+
+html[data-theme="froth"] #app .bar-fill {
+  border-radius: 999px;
+  background: var(--f-accent);
+}
+
+/* AI chat */
+html[data-theme="froth"] #app .message.user .msg-bubble {
+  background: var(--f-accent);
+  color: #ffffff;
+}
+
+html[data-theme="froth"] #app .message.user .msg-bubble .user-text {
+  color: #ffffff;
+}
+
+html[data-theme="froth"] #app .message.assistant .msg-bubble {
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  box-shadow: none;
+}
+
+html[data-theme="froth"] #app .mode-switch {
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+}
+
+html[data-theme="froth"] #app .mode-btn.active {
+  background: var(--surface);
+  color: var(--f-accent);
+  box-shadow: 0 1px 3px rgb(26 33 51 / 0.1);
+}
+
+html[data-theme="froth"] #app .st-chip {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+html[data-theme="froth"] #app .st-chip:hover:not(:disabled) {
+  border-color: rgb(79 70 229 / 0.35);
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+}
+
+/* ===== Admin CMS ===== */
+html[data-theme="froth"] #app .admin-page {
+  background: var(--bg);
+}
+
+html[data-theme="froth"] #app .admin-page .sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+}
+
+html[data-theme="froth"] #app .admin-page .side-link {
+  border-radius: var(--f-radius-ctrl);
+  color: var(--text-secondary);
+  transition: background-color 0.18s var(--f-ease), color 0.18s var(--f-ease);
+}
+
+html[data-theme="froth"] #app .admin-page .side-link:hover {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+html[data-theme="froth"] #app .admin-page .side-link.active {
+  background: var(--f-accent-soft);
+  color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .admin-page .side-link.active :is(i, small) {
+  color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .admin-page .nav-group-label {
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+html[data-theme="froth"] #app .admin-page .stat-card strong {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
+
+/* ===== Homepage desktop details ===== */
+html[data-theme="froth"] #app .profile-frame .profile-image {
+  border: none;
+}
+
+html[data-theme="froth"] #app :is(.cv-title, .achievement-title, .stack-title, .contact-title, .category-title) {
+  color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .timeline-line,
+html[data-theme="froth"] #app .timeline-dot {
+  background: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .marker-dot {
+  border-color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app :is(.nav-dot.active, .slider-btn:hover) {
+  border-color: var(--f-accent);
+}
+
+html[data-theme="froth"] #app .nav-dot.active {
+  background: var(--f-accent);
+}
+
+/* Respect reduced motion: keep colors, drop the movement */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="froth"] #app * {
+    transition-duration: 0.01ms !important;
+  }
+
+  html[data-theme="froth"] #app :is(.project-card, .link-card, .social-card, .contact-item, .info-card):hover {
+    transform: none;
+  }
+}

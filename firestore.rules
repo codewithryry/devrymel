@@ -142,5 +142,12 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // Homepage tile layout (order + sizes). Everyone reads it; only the admin
+    // can rearrange it from the site.
+    match /layout/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }

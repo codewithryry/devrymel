@@ -26,7 +26,7 @@
           href="mailto:reymelrey.mislang@gmail.com?subject=Project%20Collaboration%20Inquiry"
           class="footer-contact-btn"
         >
-          Start a Project
+          Hire Me
         </a>
       </div>
     </div>
@@ -248,7 +248,11 @@
 @media (max-width: 768px) {
   :root .header-footer {
     margin: -0.6rem 0.75rem 0.75rem;
-    box-shadow: 0 0 0 0.75rem var(--surface);
+    /* 1st: card padding around the CTA. 2nd: same color shifted down so the
+       white card continues to the bottom of the screen (behind the bottom nav) */
+    box-shadow:
+      0 0 0 0.75rem var(--surface),
+      0 160px 0 0.75rem var(--surface);
   }
 }
 </style>

@@ -2,6 +2,24 @@
   <div>
     <!-- MOBILE LAYOUT -->
     <div class="mobile-profile-content m-profile">
+      <!-- Cover banner (phones): photo overlaps its bottom edge -->
+      <div class="m-banner" aria-hidden="true">
+        <!-- Background video: drop a free HD clip at public/banner.mp4.
+             If it's missing or fails, the gradient + grid shows instead. -->
+        <video
+          v-if="bannerVideoOk"
+          class="m-banner-video"
+          src="/banner.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          @loadeddata="playBannerVideo"
+          @error="bannerVideoOk = false"
+        ></video>
+      </div>
+
       <!-- Centered header: photo, name, role, location -->
       <div class="m-hero">
         <div class="m-photo">
@@ -41,45 +59,50 @@
         </div>
       </div>
 
-      <!-- Link tiles (bento layout) -->
+      <!-- All mobile tiles in ONE grid (profile links + quick links).
+           Hold to edit: tap a handle to resize, tap two tiles to swap them. -->
       <div class="m-tiles">
-        <a href="mailto:reymelrey.mislang@gmail.com" class="m-tile m-tile--wide">
-          <i class="fas fa-envelope m-tile-icon"></i>
-          <span class="m-tile-label">{{ text.email }}</span>
-          <small>reymelrey.mislang@gmail.com</small>
-          <i class="fas fa-external-link-alt m-tile-corner"></i>
-        </a>
+        <p class="m-tiles-label">{{ text.getInTouch }}</p>
+        <div
+          class="m-tiles-grid rt-grid"
+          @pointerdown="startTileHold"
+          @pointerup="cancelTileHold"
+          @pointerleave="cancelTileHold"
+          @pointercancel="cancelTileHold"
+          @contextmenu="tileEditing && $event.preventDefault()"
+        >
+          <component
+            :is="tile.href && !tileEditing ? 'a' : 'button'"
+            v-for="tile in orderedTiles"
+            :key="tile.id"
+            v-bind="tileLinkAttrs(tile)"
+            class="m-tile"
+            :class="[
+              tileClass(tile.id, tile.size),
+              tile.chip,
+              { 'rt-selected': selectedTileId === tile.id, 'spotify-tile': tile.id === 'spotify', idle: tile.idle }
+            ]"
+            @click="onTileClick($event, tile)"
+          >
+            <span v-if="tile.image" class="m-tile-icon m-tile-art">
+              <img :src="tile.image" :alt="tile.label" />
+            </span>
+            <i v-else :class="[tile.icon, 'm-tile-icon']"></i>
 
-        <a href="/Reymel_Mislang_CV.docx" download class="m-tile">
-          <i class="fas fa-id-card m-tile-icon"></i>
-          <span class="m-tile-label">CV</span>
-          <small>Download</small>
-          <i class="fas fa-download m-tile-corner"></i>
-        </a>
+            <small v-if="tile.kicker" class="spotify-tile-label">{{ tile.kicker }}</small>
+            <span class="m-tile-label">{{ tile.label }}</span>
+            <small>{{ tile.desc }}</small>
+            <i :class="[tile.corner, 'm-tile-corner']"></i>
 
-        <a href="https://github.com/codewithryry" target="_blank" rel="noopener noreferrer" class="m-tile m-tile--full">
-          <span class="m-tile-top">
-            <i class="fab fa-github m-tile-icon"></i>
-            <span class="m-tile-pill">Follow</span>
-          </span>
-          <span class="m-tile-label">GitHub</span>
-          <small>@codewithryry</small>
-          <i class="fas fa-external-link-alt m-tile-corner"></i>
-        </a>
-
-        <a href="https://www.linkedin.com/in/reymelreymislang/" target="_blank" rel="noopener noreferrer" class="m-tile m-tile--wide">
-          <i class="fab fa-linkedin m-tile-icon"></i>
-          <span class="m-tile-label">LinkedIn</span>
-          <small>Reymel Mislang</small>
-          <i class="fas fa-external-link-alt m-tile-corner"></i>
-        </a>
-
-        <a href="https://www.facebook.com/100063507442180" target="_blank" rel="noopener noreferrer" class="m-tile">
-          <i class="fab fa-facebook m-tile-icon"></i>
-          <span class="m-tile-label">Facebook</span>
-          <small>Follow</small>
-          <i class="fas fa-external-link-alt m-tile-corner"></i>
-        </a>
+            <span
+              v-if="tileEditing"
+              class="rt-handle"
+              role="button"
+              aria-label="Resize tile"
+              @click.stop.prevent="cycleTileSize(tile.id, tile.size)"
+            ><i class="fas fa-expand-alt"></i></span>
+          </component>
+        </div>
       </div>
     </div>
 
@@ -227,6 +250,7 @@
 
 <script>
 import AdSlot from "@/components/AdSlot.vue";
+import resizableTiles from "@/mixins/resizableTiles";
 
 const PROFILE_TRANSLATIONS = {
   en: {
@@ -368,6 +392,8 @@ const PROFILE_TRANSLATIONS = {
 export default {
   name: "ProfileContent",
 
+  mixins: [resizableTiles],
+
   components: {
     AdSlot
   },
@@ -395,6 +421,7 @@ export default {
   },
 
   emits: [
+    "openQRModal",
     "openDeansList",
     "openMobileDeansList",
     "openCertificatesListModal",
@@ -404,11 +431,61 @@ export default {
 
   data() {
     return {
-      currentTheme: document.documentElement.getAttribute("data-theme") || "light"
+      tileLayoutDocId: "home",
+      tileOrder: [],
+      selectedTileId: null,
+      currentTheme: document.documentElement.getAttribute("data-theme") || "light",
+      bannerVideoOk: true
     };
   },
 
+  watch: {
+    tileEditing(on) {
+      if (!on) this.selectedTileId = null;
+    }
+  },
+
   computed: {
+    // Every mobile homepage tile (profile links + quick links). Order/size are user-editable.
+    homeTiles() {
+      const track = this.$root.spotifyTrack || {};
+      const playing = !!track.isPlaying;
+      const theme = this.$root.currentTheme;
+      const themeIcon =
+        theme === "froth" ? "fas fa-tint" : theme === "midnight" ? "fas fa-moon" : theme === "forest" ? "fas fa-leaf" : "fas fa-sun";
+      const open = "fas fa-external-link-alt";
+
+      return [
+        { id: "email", size: "wide", chip: "chip-1", icon: "fas fa-envelope", label: this.text.email, desc: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com", corner: open },
+        { id: "cv", size: "sm", chip: "chip-4", icon: "fas fa-id-card", label: "CV", desc: "Download", href: "/Reymel_Mislang_CV.docx", download: true, corner: "fas fa-download" },
+        { id: "github", size: "sm", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "@codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
+        { id: "linkedin", size: "sm", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Reymel Mislang", href: "https://www.linkedin.com/in/reymelreymislang/", external: true, corner: open },
+        { id: "facebook", size: "sm", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
+        {
+          id: "spotify", size: "tall", chip: "chip-3", idle: !playing,
+          icon: "fab fa-spotify", image: playing ? track.image : "",
+          kicker: playing ? "Now Playing" : "Offline",
+          label: playing ? track.title : "Spotify",
+          desc: playing ? track.artist : "Not playing right now",
+          href: playing && track.url ? track.url : "https://open.spotify.com", external: true, corner: "fab fa-spotify"
+        },
+        { id: "coffee", size: "tall", chip: "chip-4", icon: "fas fa-coffee", label: "Coffee", desc: "Support my work", href: "https://buymeacoffee.com/reymelreym7", external: true, corner: open },
+        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
+        { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
+        { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
+        { id: "portfolio", size: "sm", chip: "chip-3", icon: "fas fa-briefcase", label: "Portfolio", desc: "View my work", href: "https://reymelreymislang.vercel.app/", external: true, corner: open },
+        { id: "support", size: "wide", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
+      ];
+    },
+
+    // Saved order first, then any tiles not in the saved order (e.g. newly added ones)
+    orderedTiles() {
+      const byId = Object.fromEntries(this.homeTiles.map((t) => [t.id, t]));
+      const saved = this.tileOrder.filter((id) => byId[id]);
+      const rest = this.homeTiles.map((t) => t.id).filter((id) => !saved.includes(id));
+      return [...saved, ...rest].map((id) => byId[id]);
+    },
+
     text() {
       return PROFILE_TRANSLATIONS[this.lang] || PROFILE_TRANSLATIONS.en;
     },
@@ -426,6 +503,7 @@ export default {
       const map = {
         light:    "profilelight.jpg",
         midnight: "prfo.lo.png",
+        froth:    "profilelight.jpg",
         forest:   "profile3.jpg"
       };
       return map[this.currentTheme] || map.light;
@@ -447,6 +525,60 @@ export default {
   },
 
   methods: {
+    // Attributes for a tile's <a> (links) or <button> (actions / edit mode)
+    tileLinkAttrs(tile) {
+      if (!tile.href || this.tileEditing) return { type: "button" };
+      const attrs = { href: tile.href };
+      if (tile.download) attrs.download = "";
+      if (tile.external) {
+        attrs.target = "_blank";
+        attrs.rel = "noopener noreferrer";
+      }
+      return attrs;
+    },
+
+    onTileClick(e, tile) {
+      // Ignore the click that ends the long press that opened edit mode
+      if (this.justEnteredEdit) {
+        this.justEnteredEdit = false;
+        e.preventDefault();
+        return;
+      }
+
+      // Edit mode: tap one tile, then another, to swap their places
+      if (this.tileEditing) {
+        e.preventDefault();
+        if (!this.selectedTileId || this.selectedTileId === tile.id) {
+          this.selectedTileId = this.selectedTileId === tile.id ? null : tile.id;
+          return;
+        }
+        this.swapTiles(this.selectedTileId, tile.id);
+        this.selectedTileId = null;
+        return;
+      }
+
+      if (tile.action === "feedback") this.$root.openFeedback();
+      else if (tile.action === "theme") this.$root.cycleTheme();
+      else if (tile.action === "qr") this.$emit("openQRModal");
+    },
+
+    swapTiles(a, b) {
+      const order = this.orderedTiles.map((t) => t.id);
+      const i = order.indexOf(a);
+      const j = order.indexOf(b);
+      [order[i], order[j]] = [order[j], order[i]];
+      this.tileOrder = order;
+      this.saveTileLayout();
+    },
+
+    // Make sure the banner video is muted before playing so mobile browsers allow autoplay
+    playBannerVideo(e) {
+      const video = e.target;
+      video.muted = true;
+      const playing = video.play();
+      if (playing && playing.catch) playing.catch(() => {});
+    },
+
 
     openMobileDeansList() {
       this.$emit("openMobileDeansList");
@@ -1538,6 +1670,140 @@ export default {
     margin-left: auto;
     color: #1db954;
     font-size: 1.1rem;
+  }
+}
+
+/* ===== Mobile homepage cover banner ===== */
+.m-banner {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .m-banner {
+    position: relative;
+    display: block;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 26px;
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 92%, transparent) 0%,
+        color-mix(in srgb, var(--accent) 60%, var(--text-muted)) 100%
+      );
+  }
+
+  /* Faint grid over the gradient */
+  .m-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--bg) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--bg) 12%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .m-banner-code {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    color: color-mix(in srgb, var(--bg) 70%, transparent);
+    font-family: "SF Mono", "Fira Code", Consolas, monospace;
+    font-size: 0.8rem;
+  }
+
+  /* Pull the card up so the photo starts 40px into the banner */
+  :root .m-banner + .m-hero {
+    margin-top: calc(min(30vw, 120px) - 110px);
+  }
+
+  /* Photo sits above the banner */
+  .m-photo {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* Phones: edge-to-edge banner from the top of the screen */
+@media (max-width: 768px) {
+  .m-banner {
+    border-radius: 0 0 26px 26px;
+  }
+}
+
+/* Phones: banner runs underneath the card (no grey gap between them) */
+@media (max-width: 768px) {
+  .m-banner {
+    height: 180px;
+    border-radius: 0;
+  }
+
+  /* Card overlaps the bottom 30px of the banner and sits on top of it */
+  :root .m-banner + .m-hero {
+    position: relative;
+    z-index: 1;
+    margin-top: -30px;
+  }
+}
+
+/* Banner video sits under the grid/tint; slightly darkened so the photo stands out */
+@media (max-width: 768px) {
+  .m-banner-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) saturate(0.9);
+  }
+
+  .m-banner::before,
+  .m-banner-code {
+    z-index: 1;
+  }
+}
+
+/* Phones: photo ~49% of the screen width (max 210px), still half over the banner */
+@media (max-width: 768px) {
+  :root .m-photo {
+    width: 49vw;
+    max-width: 210px;
+    margin-top: calc(-1 * min(24.5vw, 105px));
+  }
+}
+
+/* Banner: no grid pattern, just the video (or the plain gradient fallback) */
+@media (max-width: 768px) {
+  .m-banner::before {
+    display: none;
+  }
+}
+
+/* Small section label + divider so the tiles flow on from the profile part */
+@media (max-width: 768px) {
+  :root .m-tiles {
+    padding-top: 0.5rem;
+  }
+
+  .m-tiles-label {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.25rem 0.25rem 0.1rem;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .m-tiles-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
   }
 }
 </style>

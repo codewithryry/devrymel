@@ -16,57 +16,75 @@
         <span>Tap to open</span>
       </div>
 
-      <div class="mobile-links-scroll" :class="{ 'with-spotify': spotifyPlaying }">
-        <!-- Spotify Now Playing (only while a song is playing; data from App) -->
+      <div
+          class="mobile-links-scroll rt-grid"
+          @pointerdown="startTileHold"
+          @pointerup="cancelTileHold"
+          @pointerleave="cancelTileHold"
+          @pointercancel="cancelTileHold"
+          @click.capture="guardTileClick"
+          @contextmenu="tileEditing && $event.preventDefault()"
+        >
+        <!-- Spotify tile: always shown; "Now Playing" while a song plays, idle otherwise (data from App) -->
         <a
-          v-if="spotifyPlaying"
-          :href="$root.spotifyTrack.url || '#'"
+          :href="spotifyPlaying ? ($root.spotifyTrack.url || 'https://open.spotify.com') : 'https://open.spotify.com'"
           target="_blank"
           rel="noopener noreferrer"
           class="mobile-link-card spotify-tile"
+          :class="[{ idle: !spotifyPlaying }, tileClass('spotify', 'tall')]"
         >
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('spotify', 'tall')"><i class="fas fa-expand-alt"></i></button>
           <div class="spotify-tile-art">
-            <img v-if="$root.spotifyTrack.image" :src="$root.spotifyTrack.image" :alt="$root.spotifyTrack.title" />
+            <img v-if="spotifyPlaying && $root.spotifyTrack.image" :src="$root.spotifyTrack.image" :alt="$root.spotifyTrack.title" />
             <i v-else class="fab fa-spotify"></i>
           </div>
-          <small class="spotify-tile-label">Now Playing</small>
-          <span class="mobile-label">{{ $root.spotifyTrack.title }}</span>
-          <small class="mobile-desc">{{ $root.spotifyTrack.artist }}</small>
+          <small class="spotify-tile-label">{{ spotifyPlaying ? 'Now Playing' : 'Offline' }}</small>
+          <span class="mobile-label">{{ spotifyPlaying ? $root.spotifyTrack.title : 'Spotify' }}</span>
+          <small class="mobile-desc">{{ spotifyPlaying ? $root.spotifyTrack.artist : 'Not playing right now' }}</small>
         </a>
 
-        <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card">
+        <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card" :class="tileClass('coffee', 'tall')">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('coffee', 'tall')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fas fa-coffee"></i></div>
           <span class="mobile-label">Coffee</span>
           <small class="mobile-desc">Support my work</small>
         </a>
 
         <!-- Opens the feedback panel (App.openFeedback) -->
-        <button type="button" class="mobile-link-card" @click="$root.openFeedback()">
+        <button type="button" class="mobile-link-card" :class="tileClass('feedback', 'sm')" @click="$root.openFeedback()">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('feedback', 'sm')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fas fa-comment-dots"></i></div>
           <span class="mobile-label">Feedback</span>
           <small class="mobile-desc">Leave a message</small>
         </button>
 
 
-        <a href="https://t.me/+XpsVdhvIlVM4ZTA1" target="_blank" class="mobile-link-card">
-          <div class="mobile-icon"><i class="fab fa-telegram"></i></div>
-          <span class="mobile-label">Telegram</span>
-          <small class="mobile-desc">Join community</small>
-        </a>
+        <!-- Theme toggle (cycles Classic Light → Midnight → Emerald) -->
+        <button type="button" class="mobile-link-card theme-tile" :class="tileClass('theme', 'sm')" @click="$root.cycleTheme()">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('theme', 'sm')"><i class="fas fa-expand-alt"></i></button>
+          <div class="mobile-icon">
+            <i class="fas" :class="$root.currentTheme === 'froth' ? 'fa-tint' : $root.currentTheme === 'midnight' ? 'fa-moon' : $root.currentTheme === 'forest' ? 'fa-leaf' : 'fa-sun'"></i>
+          </div>
+          <span class="mobile-label">Theme</span>
+          <small class="mobile-desc">{{ $root.currentThemeName }}</small>
+        </button>
 
-        <a href="https://dev.to/codewithryry" target="_blank" class="mobile-link-card">
+        <a href="https://dev.to/codewithryry" target="_blank" class="mobile-link-card" :class="tileClass('devto', 'sm')">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('devto', 'sm')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fab fa-dev"></i></div>
           <span class="mobile-label">Dev.to</span>
           <small class="mobile-desc">Technical writing</small>
         </a>
 
-        <a href="https://reymelreymislang.vercel.app/" target="_blank" class="mobile-link-card">
+        <a href="https://reymelreymislang.vercel.app/" target="_blank" class="mobile-link-card" :class="tileClass('portfolio', 'sm')">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('portfolio', 'sm')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fas fa-briefcase"></i></div>
           <span class="mobile-label">Portfolio</span>
           <small class="mobile-desc">View my work</small>
         </a>
 
-        <div class="mobile-link-card" @click="$emit('openQRModal')">
+        <div class="mobile-link-card" :class="tileClass('support', 'wide')" @click="$emit('openQRModal')">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('support', 'wide')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fas fa-qrcode"></i></div>
           <span class="mobile-label">Support Me</span>
           <small class="mobile-desc">Multiple banks available</small>
@@ -168,8 +186,11 @@
 </template>
 
 <script>
+import resizableTiles from "@/mixins/resizableTiles";
+
 export default {
   name: 'LinksSection',
+  mixins: [resizableTiles],
   props: {
     certificates: {
       type: Array,
@@ -179,6 +200,7 @@ export default {
   emits: ['openQRModal', 'openCertificatesListModal'],
   data() {
     return {
+      tileStorageKey: 'tileSizes:links',
       tools: [
         { path: '/tools/tiktok', icon: 'fab fa-tiktok', title: 'TikTok Downloader', desc: 'Save videos watermark-free' },
         { path: '/tools/youtube-downloader', icon: 'fab fa-youtube', title: 'YT Downloader', desc: 'Save YouTube videos' },
@@ -777,6 +799,34 @@ button.mobile-link-card {
 @media (max-width: 768px) {
   .mobile-links-container {
     border-radius: 0;
+  }
+}
+
+/* Spotify tile when nothing is playing */
+@media (max-width: 768px) {
+  .spotify-tile.idle .spotify-tile-label {
+    color: var(--text-muted);
+  }
+
+  .spotify-tile.idle::after {
+    color: var(--text-muted);
+  }
+
+  /* Idle: plain black/white Spotify icon, like the other tiles' icons */
+  .spotify-tile.idle .spotify-tile-art {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    color: var(--text);
+    font-size: 1.7rem;
+  }
+}
+
+/* Theme tile: a toggle, so show a switch arrow instead of the "open" icon */
+@media (max-width: 768px) {
+  .theme-tile::after {
+    content: "\f0ec";
   }
 }
 </style>
