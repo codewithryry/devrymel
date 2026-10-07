@@ -186,6 +186,7 @@ import techNotes from '@/data/techNotes.json'
 import { PINNED_EXPERIENCE } from '@/data/pinnedExperience'
 
 const experiences = [PINNED_EXPERIENCE, ...experiencesFromJson]
+const FALLBACK_PROJECT_LINK_ADDITIONS = projectLinks.filter((item) => Number(item.id) >= 12)
 
 const GITHUB_SOCIAL_LINK = {
   id: 'github',
@@ -369,7 +370,19 @@ export default {
         key,
         (items) => {
           if (items.length) {
-            this[key] = items
+            if (key === 'projectLinks') {
+              const liveTitles = new Set(
+                items.map((item) => item.title?.trim().toLowerCase()).filter(Boolean)
+              )
+              this.projectLinks = [
+                ...FALLBACK_PROJECT_LINK_ADDITIONS.filter(
+                  (item) => !liveTitles.has(item.title.trim().toLowerCase())
+                ),
+                ...items
+              ]
+            } else {
+              this[key] = items
+            }
           }
         },
         (error) => {

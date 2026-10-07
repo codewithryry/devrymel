@@ -1,71 +1,147 @@
 [
   {
+    "id": 17,
+    "title": "Storylens",
+    "description": "Simple online tool for viewing Instagram stories, posts, and highlights anonymously without an Instagram account.",
+    "link": "",
+    "image": "Project/Storylens.png",
+    "githubUrl": "https://github.com/codewithryry/StoryLens"
+  },
+  {
+    "id": 18,
+    "title": "Nexus",
+    "description": "Networking and career development platform for students to connect, grow, and explore opportunities.",
+    "link": "https://nexusconnects.vercel.app",
+    "githubUrl": "https://github.com/codewithryry/Nexus",
+    "image": "Project/Nexus.png"
+  },
+  {
+    "id": 19,
+    "title": "Jama",
+    "description": "Manual-first personal finance tracker for logging income and expenses, with no bank linking or SMS access required.",
+    "link": "",
+    "githubUrl": "https://github.com/codewithryry/Jama",
+    "image": "Project/Jama.png"
+  },
+  {
     "id": 11,
     "title": "eGov-RMS (Capstone Project)",
-    "description": "E-Government platform for Calapan City. My Role as a second coder for this project is to create a AI & NLP developerbudget prediction, AI chat messenger, and UI/UX support.",
-    "link": "https://egovcalapancity.onrender.com/"
+    "description": "E-Government platform for Calapan City. As second coder, I built the AI/NLP budget prediction, the AI chat messenger, and supported the UI/UX.",
+    "link": "https://egovcalapancity.onrender.com/",
+    "image": "Project/EgovRms.png",
+    "githubUrl": "https://github.com/codewithryry/eGOV-RMS"
   },
   {
     "id": 5,
     "title": "Barangay Information System",
     "description": "Digital platform modernizing barangay operations, services, and community engagement.",
-    "link": "https://barangay-information-system.vercel.app/"
+    "link": "https://barangay-information-system.vercel.app/",
+    "image": "Project/Baranngay.png",
+    "githubUrl": "https://github.com/codewithryry/barangay-information-system"
   },
   {
     "id": 9,
     "title": "OJTSync",
     "description": "Web-based system for managing and monitoring student OJT/Internship records, progress, and evaluations.",
-    "link": "https://ojtsync.vercel.app/"
+    "link": "https://ojtsync.vercel.app/",
+    "image": "Project/Ojtsyc.png",
+    "githubUrl": "https://github.com/codewithryry/OJTSync"
   },
-
-    {
+  {
     "id": 3,
     "title": "BoardMate",
     "description": "Collaborative task, chores, and water bill management app for shared living spaces.",
-    "link": "https://boardmate.vercel.app/"
+    "link": "https://boardmate.vercel.app/",
+    "image": "Project/Boardmate.png"
   },
   {
     "id": 4,
     "title": "LiftUp Connect",
     "description": "AI-powered mental health support platform for community discussion and emotional well-being.",
-    "link": "https://liftupconnect.vercel.app/"
+    "link": "https://liftupconnect.vercel.app/",
+    "image": "Project/Liftup.png"
   },
-
-
-    {
+  {
     "id": 7,
     "title": "SIBOL Smart Farming System",
     "description": "Cross-platform IoT-integrated smart farming system using hybrid rice varieties and digital technologies to improve climate resilience and agricultural productivity.",
-    "link": "https://sibol-theta.vercel.app/"
+    "link": "https://sibol-theta.vercel.app/",
+    "image": "Project/Sibol.png"
   },
   {
     "id": 10,
     "title": "Sari-POS",
     "description": "Point-of-sale (POS) system designed for sari-sari stores to manage sales, inventory, and daily transactions.",
-    "link": "https://sari-pos.vercel.app/"
+    "link": "https://sari-pos.vercel.app/",
+    "image": "Project/Saripios.png",
+    "githubUrl": "https://github.com/codewithryry/SariPOS"
   },
   {
     "id": 1,
     "title": "OwePal",
     "description": "Finance tracking app for budgeting, debt tracking, reminders, and financial clarity.",
-    "link": "https://owepal.vercel.app/owePal"
+    "link": "https://owepal.vercel.app/owePal",
+    "image": "Project/owepal.png"
   },
   {
     "id": 6,
     "title": "PrintNConnect",
-    "description": "Online printing and connectivity service platform for document handling and services.",
-    "link": "https://printnconnect.vercel.app/"
+    "description": "Business website for a local tech shop in Naujan offering internet access, printing, and computer repair services.",
+    "link": "https://printnconnect.vercel.app/",
+    "image": "Project/printnconnect.png"
   },
   {
     "id": 2,
     "title": "Linktree",
     "description": "Linktree-style personal landing page for centralized social and project links.",
-    "link": "https://betsylinktree.vercel.app/"
+    "link": "https://betsylinktree.vercel.app/",
+    "image": "Project/Linktree.png"
   },
   {
     "id": 8,
-    "title": "BoyLoveY Series Hub",
+    "title": "BoyLoveYSeries",
     "description": "Online platform showcasing and celebrating Thai Boys' Love (BL) series with updates, reviews, and show information.",
-    "link": "https://boyloveyserieshub.vercel.app/"
+    "link": "https://boyloveyserieshub.vercel.app/",
+    "image": "Project/YseriesHub.png"
+  },
+  {
+    "id": 12,
+    "title": "Bhaye-Mindoro",
+    "description": "Fare guide for commuters in Mindoro with route search, a tricycle fare calculator, terminal info, and fare concern reporting.",
+    "link": "https://github.com/codewithryry/Bhaye-Mindoro",
+    "image": "Project/BhayeMindoro.png",
+    "githubUrl": "https://github.com/codewithryry/Bhaye-Mindoro"
+  },
+  {
+    "id": 13,
+    "title": "Upmark",
+    "description": "Creator campaign management platform that helps brands and agencies manage creator relationships, campaign delivery, and performance reporting.",
+    "link": "https://beta-upmark.vercel.app/",
+    "image": "Project/Upmark.png",
+    "githubUrl": "https://github.com/codewithryry/Upmark"
+  },
+  {
+    "id": 14,
+    "title": "SK Solutions",
+    "description": "Software development agency website showcasing services, projects, and the team, with consultation booking.",
+    "link": "https://sk-solutions-ph.vercel.app/",
+    "image": "Project/SkSolutions.png",
+    "githubUrl": "https://github.com/codewithryry/SKSolution"
+  },
+  {
+    "id": 15,
+    "title": "Ugnay",
+    "description": "AI chat assistant where users can ask anything and get instant, conversational answers.",
+    "link": "https://ugnayai.vercel.app/",
+    "image": "Project/Ugnay.png",
+    "githubUrl": "https://github.com/codewithryry/Ugnay"
+  },
+  {
+    "id": 16,
+    "title": "ToolTrack",
+    "description": "Automotive laboratory tool monitoring system with QR scanning, inventory, borrowing requests, maintenance logs, and reports.",
+    "link": "https://autotracking.vercel.app/login",
+    "image": "Project/ToolTrack.png",
+    "githubUrl": "https://github.com/codewithryry/AutoTrack"
   }
 ]

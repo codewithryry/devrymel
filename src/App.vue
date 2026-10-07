@@ -222,7 +222,7 @@
 
           <span class="sheet-label">Tools</span>
           <router-link
-            v-for="tool in (showAllSheetTools ? mobileTools : mobileTools.slice(0, 2))"
+            v-for="tool in (showAllSheetTools ? mobileTools : mobileTools.slice(0, 1))"
             :key="tool.path"
             :to="tool.path"
             class="sheet-row"
@@ -232,7 +232,7 @@
           </router-link>
           <button type="button" class="sheet-row sheet-more" @click="showAllSheetTools = !showAllSheetTools">
             <i class="fas" :class="showAllSheetTools ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-            <span>{{ showAllSheetTools ? 'See less' : `See more (${mobileTools.length - 2})` }}</span>
+            <span>{{ showAllSheetTools ? 'See less' : `See more (${mobileTools.length - 1})` }}</span>
           </button>
 
           <span class="sheet-label">Documents</span>
@@ -243,7 +243,7 @@
             <i class="fas fa-id-card"></i><span>CV</span><i class="fas fa-download sheet-end"></i>
           </a>
 
-          <span class="sheet-label">Other</span>
+          <span class="sheet-label">More</span>
           <router-link to="/tools/ai-chat" class="sheet-row" @click="mobileSheetOpen = false">
             <i class="fas fa-robot"></i><span>Assistant</span><span class="beta-badge">Beta</span>
           </router-link>
@@ -415,7 +415,7 @@ export default {
         { id: "light", name: "Classic Light", preview: "#f8fafc" },
         { id: "midnight", name: "Midnight Pro", preview: "#1e3a5f" },
         { id: "forest", name: "Emerald Focus", preview: "#065f46" },
-        { id: "froth", name: "Froth Modern", preview: "#4f46e5" }
+        { id: "froth", name: "Froth Modern", preview: "#111111" }
       ],
 
       quickPages: fallbackQuickPages,
@@ -862,25 +862,25 @@ export default {
   --font-body: "Plus Jakarta Sans", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Froth Modern: clean light theme — cool off-white, white cards, slate text, indigo accent.
+/* Froth Modern: plain black & white — off-white page, white cards, black accent (icons keep their real colors).
    Solid colors only (no gradients). */
 html[data-theme="froth"],
 html[data-theme="froth"] body {
-  --bg: #f5f6fa;
+  --bg: #f6f6f6;
   --surface: #ffffff;
-  --surface-soft: #f0f2f8;
-  --surface-hover: #e9ecf5;
-  --text: #1a2133;
-  --text-secondary: #4a5468;
-  --text-muted: #8590a6;
-  --border: #e2e6ef;
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
+  --surface-soft: #f1f1f1;
+  --surface-hover: #eaeaea;
+  --text: #111111;
+  --text-secondary: #4b4b4b;
+  --text-muted: #8a8a8a;
+  --border: #e4e4e4;
+  --accent: #111111;
+  --accent-hover: #000000;
 
-  --shadow-sm: 0 1px 2px rgb(26 33 51 / 0.05);
-  --shadow: 0 2px 8px rgb(26 33 51 / 0.06);
-  --shadow-lg: 0 6px 18px rgb(26 33 51 / 0.08);
-  --shadow-xl: 0 12px 32px rgb(26 33 51 / 0.12);
+  --shadow-sm: 0 1px 2px rgb(17 17 17 / 0.05);
+  --shadow: 0 2px 8px rgb(17 17 17 / 0.06);
+  --shadow-lg: 0 6px 18px rgb(17 17 17 / 0.08);
+  --shadow-xl: 0 12px 32px rgb(17 17 17 / 0.12);
 }
 
 html[data-theme="dark"],
@@ -1281,6 +1281,10 @@ html[data-theme="forest"] body {
     line-height: 1.5;
   }
 
+  #app :is(.mobile-deans-content, .mobile-link-content) {
+    gap: 0;
+  }
+
   #app :is(.mobile-modal-close, .cert-viewer-modal .modal-close) {
     width: 34px;
     height: 34px;
@@ -1455,7 +1459,7 @@ html[data-theme="froth"] #app :is(.nav-contact-btn, .cta-btn, .footer-contact-bt
   background-color: var(--accent);
   border-color: var(--accent);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgb(79 70 229 / 0.22);
+  box-shadow: 0 2px 8px rgb(17 17 17 / 0.22);
 }
 
 html[data-theme="froth"] #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .primary-btn):hover {
@@ -1479,7 +1483,7 @@ html[data-theme="froth"] #app :is(.nav-icon-btn, .ghost-btn, .explore-link):hove
 
 /* Nav links: solid indigo-tint pill instead of glass */
 html[data-theme="froth"] .nav-links a::after {
-  background: rgb(79 70 229 / 0.1);
+  background: rgb(17 17 17 / 0.1);
   border: none;
   box-shadow: none;
   -webkit-backdrop-filter: none;
@@ -1505,11 +1509,11 @@ html[data-theme="froth"] :is(.brand-short, .bottom-tab.active .bottom-brand) {
 /* Phones: the CTA card is indigo, so its title/subtitle are white and
    "Hire Me" flips to a white button with indigo text */
 @media (max-width: 768px) {
-  html[data-theme="froth"] .header-footer .footer-name {
+  html[data-theme="froth"] #app .header-footer .footer-name {
     color: #ffffff;
   }
 
-  html[data-theme="froth"] .header-footer .footer-subtitle {
+  html[data-theme="froth"] #app .header-footer .footer-subtitle {
     color: rgb(255 255 255 / 0.82);
   }
 
@@ -1524,7 +1528,7 @@ html[data-theme="froth"] :is(.brand-short, .bottom-tab.active .bottom-brand) {
 /* Bottom nav: active tab in indigo */
 html[data-theme="froth"] :is(.bottom-tab.active, .bottom-circle.active) {
   color: var(--accent);
-  background: rgb(79 70 229 / 0.1);
+  background: rgb(17 17 17 / 0.1);
 }
 
 /* Tool header icons: one solid accent instead of per-tool gradients */
@@ -1546,7 +1550,7 @@ html[data-theme="froth"] #app :is(.info-panel, .info-card, .timeline-item) a:not
 
 /* ===== FROTH MODERN: colorful icon chips (solid tints, no gradients) ===== */
 html[data-theme="froth"] {
-  --chip-1-bg: #eef0ff; --chip-1: #4f46e5;  /* indigo  */
+  --chip-1-bg: #f1f1f1; --chip-1: #111111;  /* neutral */
   --chip-2-bg: #e7f4fc; --chip-2: #0284c7;  /* sky     */
   --chip-3-bg: #e6f6ef; --chip-3: #059669;  /* emerald */
   --chip-4-bg: #fdf3e2; --chip-4: #d97706;  /* amber   */
@@ -1578,6 +1582,65 @@ html[data-theme="froth"] #app .m-tile.chip-3 .m-tile-icon { background: var(--ch
 html[data-theme="froth"] #app .m-tile.chip-4 .m-tile-icon { background: var(--chip-4-bg); color: var(--chip-4); }
 html[data-theme="froth"] #app .m-tile.chip-5 .m-tile-icon { background: var(--chip-5-bg); color: var(--chip-5); }
 
+/* Brand/tech icons keep their real colors */
+html[data-theme="froth"] #app i.fa-react { color: #149eca !important; }
+html[data-theme="froth"] #app i.fa-vuejs { color: #42b883 !important; }
+html[data-theme="froth"] #app :is(i.fa-node-js, i.fa-node) { color: #539e43 !important; }
+html[data-theme="froth"] #app :is(i.fa-js, i.fa-js-square) { color: #e0b800 !important; }
+html[data-theme="froth"] #app i.fa-python { color: #3776ab !important; }
+html[data-theme="froth"] #app i.fa-html5 { color: #e34f26 !important; }
+html[data-theme="froth"] #app :is(i.fa-css3, i.fa-css3-alt) { color: #1572b6 !important; }
+html[data-theme="froth"] #app :is(i.fa-git-alt, i.fa-git) { color: #f05032 !important; }
+html[data-theme="froth"] #app i.fa-github { color: #181717 !important; }
+html[data-theme="froth"] #app :is(i.fa-facebook, i.fa-facebook-f, i.fa-facebook-square, i.fa-facebook-messenger) { color: #1877f2 !important; }
+html[data-theme="froth"] #app i.fa-instagram { color: #e4405f !important; }
+html[data-theme="froth"] #app :is(i.fa-linkedin, i.fa-linkedin-in) { color: #0a66c2 !important; }
+html[data-theme="froth"] #app i.fa-youtube { color: #ff0000 !important; }
+html[data-theme="froth"] #app i.fa-spotify { color: #1db954 !important; }
+html[data-theme="froth"] #app i.fa-discord { color: #5865f2 !important; }
+html[data-theme="froth"] #app :is(i.fa-telegram, i.fa-telegram-plane) { color: #26a5e4 !important; }
+html[data-theme="froth"] #app i.fa-whatsapp { color: #25d366 !important; }
+html[data-theme="froth"] #app i.fa-google { color: #4285f4 !important; }
+html[data-theme="froth"] #app i.fa-figma { color: #f24e1e !important; }
+html[data-theme="froth"] #app i.fa-docker { color: #2496ed !important; }
+html[data-theme="froth"] #app i.fa-php { color: #777bb4 !important; }
+html[data-theme="froth"] #app i.fa-laravel { color: #ff2d20 !important; }
+html[data-theme="froth"] #app i.fa-angular { color: #dd0031 !important; }
+html[data-theme="froth"] #app i.fa-bootstrap { color: #7952b3 !important; }
+html[data-theme="froth"] #app i.fa-java { color: #e76f00 !important; }
+html[data-theme="froth"] #app i.fa-android { color: #3ddc84 !important; }
+html[data-theme="froth"] #app i.fa-npm { color: #cb3837 !important; }
+html[data-theme="froth"] #app i.fa-wordpress { color: #21759b !important; }
+html[data-theme="froth"] #app i.fa-paypal { color: #003087 !important; }
+html[data-theme="froth"] #app i.fa-sass { color: #cc6699 !important; }
+html[data-theme="froth"] #app i.fa-tiktok { color: #000000 !important; }
+html[data-theme="froth"] #app i.fa-x-twitter { color: #000000 !important; }
+html[data-theme="froth"] #app i.fa-twitter { color: #1d9bf0 !important; }
+html[data-theme="froth"] #app i.fa-dev { color: #0a0a0a !important; }
+
+/* Phones: big plain icons on the tiles (no chip box), tile size unchanged */
+@media (max-width: 768px) {
+  html[data-theme="froth"] #app .m-tile i.m-tile-icon {
+    width: auto !important;
+    height: auto !important;
+    background: none !important;
+    border-radius: 0;
+    line-height: 1;
+  }
+
+  html[data-theme="froth"] #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) > i.m-tile-icon {
+    font-size: 2.2rem;
+  }
+
+  html[data-theme="froth"] #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > i.m-tile-icon {
+    font-size: 1.9rem;
+  }
+
+  html[data-theme="froth"] #app .rt-grid > .rt-tile.rt-icon > i.m-tile-icon {
+    font-size: 2rem;
+  }
+}
+
 /* Small icons pick up the accent */
 html[data-theme="froth"] #app :is(.m-meta i, .m-badges .inline-badge i, .sheet-row > i:first-child, .contact-arrow, .view-all-icon) {
   color: var(--accent);
@@ -1594,7 +1657,130 @@ html[data-theme="froth"] #app .bottom-tab {
 
 /* Profile photo: soft indigo ring */
 html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profile-image) {
-  box-shadow: 0 0 0 4px #eef0ff, var(--shadow);
+  box-shadow: 0 0 0 4px #ececec, var(--shadow);
+}
+
+/* Phones (Froth): profile header matches the colorful tiles */
+@media (max-width: 768px) {
+  /* Photo: colorful gradient ring */
+  html[data-theme="froth"] #app .m-hero .m-photo {
+    padding: 4px;
+    border-radius: 32px;
+    background: conic-gradient(from 210deg, #f59e0b, #d62976, #8b5cf6, #0a66c2, #10b981, #f59e0b);
+    box-shadow: 0 10px 28px rgb(17 17 17 / 0.14);
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-photo .profile-image {
+    border-radius: 28px;
+    box-shadow: 0 0 0 3px #ffffff;
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-name {
+    margin-top: 0.9rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-role {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* Location / birthday: soft pills with colored icons */
+  html[data-theme="froth"] #app .m-hero .m-meta {
+    gap: 0.4rem;
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-meta span:first-child i { color: #ef4444; }
+  html[data-theme="froth"] #app .m-hero .m-meta span:last-child i { color: #ec4899; }
+
+  /* Awards / Certs / Links: three colorful pills */
+  html[data-theme="froth"] #app .m-hero .m-badges {
+    gap: 0.5rem;
+    max-width: 320px;
+    padding: 0;
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge {
+    padding: 9px 4px;
+    border-radius: 999px;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgb(17 17 17 / 0.12);
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge:nth-child(1) { background: linear-gradient(145deg, #f59e0b, #d97706); }
+  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge:nth-child(2) { background: linear-gradient(145deg, #8b5cf6, #5b21b6); }
+  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge:nth-child(3) { background: linear-gradient(145deg, #0ea5e9, #0369a1); }
+
+  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge i {
+    color: #ffffff;
+  }
+
+  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge::before {
+    display: none;
+  }
+}
+
+/* Phones (Froth): each tile gets its brand color, white icon + text (like the sample) */
+@media (max-width: 768px) {
+  html[data-theme="froth"] #app .m-tile[class*="tile-"] {
+    --tile-bg: linear-gradient(145deg, #2b2b2b, #111111);
+    background: var(--tile-bg) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgb(17 17 17 / 0.14);
+  }
+
+  html[data-theme="froth"] #app .m-tile.tile-email     { --tile-bg: linear-gradient(145deg, #1e3a8a, #0f172a); }
+  html[data-theme="froth"] #app .m-tile.tile-cv        { --tile-bg: linear-gradient(145deg, #f59e0b, #d97706); }
+  html[data-theme="froth"] #app .m-tile.tile-github    { --tile-bg: linear-gradient(145deg, #2d333b, #0d1117); }
+  html[data-theme="froth"] #app .m-tile.tile-linkedin  { --tile-bg: linear-gradient(145deg, #0a66c2, #004182); }
+  html[data-theme="froth"] #app .m-tile.tile-tiktok    { --tile-bg: linear-gradient(145deg, #25f4ee -40%, #111111 45%, #111111 60%, #fe2c55 150%); }
+  html[data-theme="froth"] #app .m-tile.tile-instagram { --tile-bg: linear-gradient(45deg, #feda75, #fa7e1e 25%, #d62976 55%, #962fbf 80%, #4f5bd5); }
+  html[data-theme="froth"] #app .m-tile.tile-facebook  { --tile-bg: linear-gradient(145deg, #3b8bff, #1877f2 50%, #0c5bd6); }
+  html[data-theme="froth"] #app .m-tile.tile-feedback  { --tile-bg: linear-gradient(145deg, #8b5cf6, #5b21b6); }
+  html[data-theme="froth"] #app .m-tile.tile-spotify   { --tile-bg: linear-gradient(145deg, #1ed760, #128c3f); }
+  html[data-theme="froth"] #app .m-tile.tile-coffee    { --tile-bg: linear-gradient(145deg, #8b5e3c, #4a3224); }
+  html[data-theme="froth"] #app .m-tile.tile-theme     { --tile-bg: linear-gradient(145deg, #3a3a3a, #111111); }
+  html[data-theme="froth"] #app .m-tile.tile-devto     { --tile-bg: linear-gradient(145deg, #3a3a3a, #0a0a0a); }
+  html[data-theme="froth"] #app .m-tile.tile-portfolio { --tile-bg: linear-gradient(145deg, #0ea5e9, #0369a1); }
+  html[data-theme="froth"] #app .m-tile.tile-support   { --tile-bg: linear-gradient(145deg, #10b981, #047857); }
+
+  /* Content: white icon, bold label, softer description, white corner arrow */
+  html[data-theme="froth"] #app .m-tile[class*="tile-"] :is(i, i.m-tile-icon, .m-tile-label, .spotify-tile-label, .m-tile-corner) {
+    color: #ffffff !important;
+  }
+
+  html[data-theme="froth"] #app .m-tile[class*="tile-"] .m-tile-label {
+    font-weight: 700;
+  }
+
+  html[data-theme="froth"] #app .m-tile[class*="tile-"] > small {
+    color: rgb(255 255 255 / 0.78) !important;
+  }
+
+  html[data-theme="froth"] #app .m-tile[class*="tile-"] .m-tile-corner {
+    opacity: 0.9;
+  }
+
+  html[data-theme="froth"] #app .m-tile[class*="tile-"] i.m-tile-icon {
+    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.2));
+  }
 }
 
 /* Phones: Awards / Certs / Links bar matches the tiles below it */
@@ -1697,7 +1883,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   #app .rt-grid > .rt-tile.rt-icon > .m-tile-icon {
     margin: 0;
-    font-size: 1.35rem;
+    font-size: 1.7rem;
   }
 
 
@@ -1725,7 +1911,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     grid-column: 1;
     align-self: center;
     margin: 0;
-    font-size: 1.15rem;
+    font-size: 1.45rem;
   }
 
   #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > :not(.m-tile-icon):not(.m-tile-top):not(.mobile-icon):not(.spotify-tile-art):not(.rt-handle):not(.m-tile-corner) {
@@ -1764,7 +1950,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) > :is(.m-tile-icon, .m-tile-top, .mobile-icon, .spotify-tile-art) {
     align-self: flex-start;
     margin: 0 0 auto;
-    font-size: 1.6rem;
+    font-size: 1.9rem;
   }
 
   #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) :is(.m-tile-label, .mobile-label) {
@@ -2284,6 +2470,38 @@ h1, h2, h3, h4, h5, h6 {
 .site-nav.scrolled .site-nav-inner {
   background: var(--surface);
   box-shadow: var(--shadow-lg);
+}
+
+/* Desktop: same liquid glass as the mobile bottom nav */
+@media (min-width: 861px) {
+  .site-nav-inner,
+  .site-nav.scrolled .site-nav-inner {
+    border: 1px solid rgb(15 23 42 / 0.12);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.55);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 1px 2px rgb(15 23 42 / 0.06),
+      0 8px 24px rgb(15 23 42 / 0.1);
+  }
+
+  .site-nav-inner .nav-icon-btn,
+  .site-nav-inner .nav-contact-btn,
+  #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .fb-send, .send-btn, .primary-btn, .nav-icon-btn, .ghost-btn, .explore-link, .service-button):not(.admin-page *) {
+    border-radius: 999px;
+  }
+
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) :is(.site-nav-inner, .site-nav.scrolled .site-nav-inner) {
+    border-color: rgb(255 255 255 / 0.14);
+    background: rgb(0 0 0 / 0.06);
+    -webkit-backdrop-filter: blur(18px) saturate(160%) brightness(0.5) contrast(0.85);
+    backdrop-filter: blur(18px) saturate(160%) brightness(0.5) contrast(0.85);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 10px 28px rgb(0 0 0 / 0.35);
+  }
 }
 
 .nav-brand {

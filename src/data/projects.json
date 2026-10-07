@@ -4,7 +4,7 @@
     "title": "Cognexa",
     "description": "A hybrid, AI-powered platform combining a RAG knowledge base with AI-driven SDLC — runs fully self-hosted with a local LLM or in the cloud with your own AI provider key.",
     "detailedDescription": "Cognexa is a hybrid, AI-powered platform — hybrid because it runs either fully self-hosted with a local LLM (Ollama), or deployed to the cloud with a bring-your-own-key external AI provider, with every feature working the same either way. It combines a Retrieval-Augmented Generation (RAG) knowledge base with AI-driven SDLC.",
-    "image": "Cognexa-Platform.png",
+    "image": "Project/Cognexa.png",
     "demoUrl": "https://cognexarag.onrender.com/",
     "githubUrl": "https://github.com/codewithryry/Cognexa.git",
     "technologies": [
@@ -31,7 +31,7 @@
     "title": "SafePath",
     "description": "Bullying reporting system with AI support and sentiment analysis",
     "detailedDescription": "SafePath is an AI-powered platform designed to combat bullying through anonymous reporting and sentiment analysis. The system uses natural language processing to detect harmful content and provides real-time support through an AI chatbot. It features secure reporting, data analytics for schools, and a comprehensive dashboard for administrators.",
-    "image": "safepath.png",
+    "image": "Project/Safepath.png",
     "demoUrl": "https://safepath-4pzk.onrender.com",
     "githubUrl": "https://github.com/codewithryry/SafePath",
     "technologies": [
@@ -57,7 +57,7 @@
     "title": "LiftUp",
     "description": "Mental health platform with AI assistance and community support",
     "detailedDescription": "LiftUp is a mental wellness platform that combines AI technology with community support. The platform offers personalized mental health resources, AI-guided meditation sessions, anonymous community forums, and mood tracking. It provides a safe space for users to share experiences and access professional mental health resources.",
-    "image": "liftup.png",
+    "image": "Project/Liftup.png",
     "demoUrl": "https://liftupconnect.vercel.app/",
     "githubUrl": "https://github.com/codewithryry/LiftUp",
     "technologies": [
@@ -75,6 +75,75 @@
     ],
     "startDate": "2023",
     "status": "Active Development",
+    "role": "Full-Stack Developer"
+  },
+  {
+    "id": 7,
+    "title": "Barangay Information System",
+    "description": "Digital platform modernizing barangay operations, resident services, and community engagement.",
+    "detailedDescription": "A barangay information system that digitizes resident records, document requests, and announcements so local offices can serve their community faster.",
+    "image": "Project/Baranngay.png",
+    "demoUrl": "https://barangay-information-system.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/barangay-information-system",
+    "technologies": [
+      "Web App",
+      "Resident Records",
+      "Document Requests",
+      "Announcements"
+    ],
+    "features": [
+      "Resident records management",
+      "Online document requests",
+      "Community announcements"
+    ],
+    "startDate": "2025",
+    "status": "Live & Active",
+    "role": "Full-Stack Developer"
+  },
+  {
+    "id": 8,
+    "title": "Ugnay",
+    "description": "AI chat assistant where users can ask anything and get instant, conversational answers.",
+    "detailedDescription": "Ugnay is an AI chat assistant with a clean, focused interface for asking questions and getting instant, conversational answers.",
+    "image": "Project/Ugnay.png",
+    "demoUrl": "https://ugnayai.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/Ugnay",
+    "technologies": [
+      "AI Chat",
+      "LLM",
+      "Web App"
+    ],
+    "features": [
+      "Conversational AI chat",
+      "User accounts",
+      "Clean, focused chat interface"
+    ],
+    "startDate": "2026",
+    "status": "Live & Active",
+    "role": "Full-Stack Developer"
+  },
+  {
+    "id": 9,
+    "title": "SK Solutions",
+    "description": "Software development agency website showcasing services, projects, and the team, with consultation booking.",
+    "detailedDescription": "Website for SK Solutions, a software development agency, showcasing its services, projects, team, and blog with an easy way to book a consultation.",
+    "image": "Project/SkSolutions.png",
+    "demoUrl": "https://sk-solutions-ph.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/SKSolution",
+    "technologies": [
+      "Agency Website",
+      "Responsive UI",
+      "Dark Mode",
+      "Consultation Booking"
+    ],
+    "features": [
+      "Services and projects showcase",
+      "Team and blog pages",
+      "Consultation booking",
+      "Light and dark themes"
+    ],
+    "startDate": "2026",
+    "status": "Live & Active",
     "role": "Full-Stack Developer"
   }
 ]

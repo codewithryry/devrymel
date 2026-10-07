@@ -444,7 +444,7 @@ export default {
 /* Slim vertical tab stuck to the right edge */
 .feedback-button {
   position: fixed;
-  top: 140px;
+  bottom: 32px;
   right: 0;
   z-index: 9998;
   display: flex;

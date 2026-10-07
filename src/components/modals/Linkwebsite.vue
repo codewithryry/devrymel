@@ -20,6 +20,7 @@
           <div class="mobile-link-list">
             <div
               class="mobile-link-item"
+              :class="{ 'mobile-link-item-soon': !hasLink(site.link) }"
               v-for="site in links"
               :key="site.id"
               @click="openLink(site.link)"
@@ -29,8 +30,13 @@
               </div>
               <div class="mobile-link-info">
                 <h4>{{ site.title }}</h4>
+                <span
+                  v-if="!hasLink(site.link) && site.title.trim().toLowerCase() !== 'coming soon'"
+                  class="mobile-link-status"
+                >Coming Soon</span>
               </div>
-              <i class="fas fa-chevron-right arrow-icon"></i>
+              <i v-if="hasLink(site.link)" class="fas fa-chevron-right arrow-icon"></i>
+              <span v-else class="mobile-link-status-icon" aria-hidden="true">...</span>
             </div>
           </div>
         </div>
@@ -58,9 +64,12 @@ export default {
   },
   emits: ['close'],
   methods: {
+    hasLink(link) {
+      return typeof link === 'string' && link.trim().length > 0
+    },
     openLink(link) {
-      if (!link) return
-      window.open(link, '_blank')
+      if (!this.hasLink(link)) return
+      window.open(link.trim(), '_blank')
     }
   }
 }
@@ -203,6 +212,22 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.mobile-link-status {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.mobile-link-item-soon {
+  cursor: default;
+}
+
+.mobile-link-status-icon {
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
 .arrow-icon {

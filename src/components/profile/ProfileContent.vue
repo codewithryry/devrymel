@@ -82,6 +82,7 @@
             :class="[
               tileClass(tile.id, tile.size),
               tile.chip,
+              'tile-' + tile.id,
               { 'rt-selected': selectedTileId === tile.id, 'spotify-tile': tile.id === 'spotify', idle: tile.idle }
             ]"
             @click="onTileClick($event, tile)"

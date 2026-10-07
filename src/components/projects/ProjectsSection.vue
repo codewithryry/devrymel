@@ -6,7 +6,7 @@
   <section id="projects" class="projects-showcase">
     <div class="section-header" :class="{ 'has-link': viewAllTo }">
       <div>
-        <span class="section-kicker">Projects</span>
+        <span v-if="showKicker" class="section-kicker">Projects</span>
         <h2 class="section-title">Featured Projects</h2>
       </div>
 
@@ -36,7 +36,7 @@
                 aria-label="Open live demo"
                 @click="handleProjectClick(project.demoUrl, project.title, $event)"
               >
-                <i class="fas fa-external-link-alt"></i>
+                <i class="fas fa-external-link-alt"></i><span>Demo</span>
               </a>
               <a
                 :href="project.githubUrl"
@@ -45,7 +45,7 @@
                 title="View Code"
                 aria-label="View source code on GitHub"
               >
-                <i class="fab fa-github"></i>
+                <i class="fab fa-github"></i><span>Code</span>
               </a>
             </div>
           </div>
@@ -69,6 +69,10 @@
 export default {
   name: 'ProjectsSection',
   props: {
+    showKicker: {
+      type: Boolean,
+      default: true
+    },
     viewAllTo: {
       type: String,
       default: ""
@@ -201,7 +205,7 @@ export default {
   top: 0.6rem;
   right: 0.6rem;
   padding: 0.22rem 0.55rem;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   font-size: 0.64rem;
   font-weight: 600;
   background: var(--surface);
@@ -218,7 +222,7 @@ export default {
 
 .project-title-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   margin-bottom: 0.35rem;
@@ -257,7 +261,7 @@ export default {
   background: var(--surface-soft);
   color: var(--text-secondary);
   padding: 0.22rem 0.55rem;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   font-size: 0.7rem;
   font-weight: 500;
   border: 1px solid var(--border);
@@ -275,17 +279,19 @@ export default {
 }
 
 .project-action-btn {
-  width: 28px;
-  height: 28px;
+  height: 22px;
+  padding: 0 9px;
+  gap: 5px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  font-size: 0.74rem;
+  font-size: 0.7rem;
+  line-height: 1;
   text-decoration: none;
   transition: border-color 0.2s ease, color 0.2s ease;
 }

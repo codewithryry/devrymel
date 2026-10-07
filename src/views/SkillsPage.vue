@@ -141,4 +141,9 @@ export default {
   height: 44px;
   filter: grayscale(1) contrast(1.1);
 }
+
+/* Froth Modern: show the real logo colors */
+html[data-theme="froth"] .stack-icons img {
+  filter: none;
+}
 </style>
