@@ -1,0 +1,464 @@
+[
+  {
+    "id": "cognexa",
+    "title": "Cognexa",
+    "categories": [
+      "apps",
+      "ai"
+    ],
+    "description": "AI platform combining a RAG knowledge base with AI-driven SDLC, running self-hosted with a local LLM or in the cloud.",
+    "image": "Project/Cognexa.png",
+    "demoUrl": "https://cognexarag.onrender.com/",
+    "githubUrl": "https://github.com/codewithryry/Cognexa",
+    "skills": [
+      "AI Integration",
+      "RAG",
+      "API Development",
+      "Database Management"
+    ],
+    "tools": [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "ChromaDB",
+      "Ollama"
+    ]
+  },
+  {
+    "id": "barangay",
+    "title": "Barangay Information System",
+    "categories": [
+      "systems",
+      "community"
+    ],
+    "description": "Digitizes resident records, document requests, and announcements so barangay offices can serve residents faster.",
+    "image": "Project/Baranngay.png",
+    "demoUrl": "https://barangay-information-system.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/barangay-information-system",
+    "skills": [
+      "Web Development",
+      "Database Management",
+      "Authentication",
+      "QR Code Integration",
+      "Data Visualization"
+    ],
+    "tools": [
+      "Vue",
+      "Firebase",
+      "Tailwind CSS",
+      "Chart.js"
+    ]
+  },
+  {
+    "id": "ugnay",
+    "title": "Ugnay",
+    "categories": [
+      "apps",
+      "ai",
+      "mobile"
+    ],
+    "description": "AI chat assistant for asking anything and getting instant, conversational answers, on the web and Android.",
+    "image": "Project/Ugnay.png",
+    "demoUrl": "https://ugnayai.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/Ugnay",
+    "skills": [
+      "AI Integration",
+      "Authentication",
+      "Responsive Design",
+      "Mobile App"
+    ],
+    "tools": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Supabase",
+      "Tailwind CSS",
+      "Capacitor"
+    ]
+  },
+  {
+    "id": "safepath",
+    "title": "SafePath",
+    "categories": [
+      "systems",
+      "ai",
+      "education"
+    ],
+    "description": "Anonymous bullying reporting system with AI chatbot support, sentiment analysis, and an admin dashboard.",
+    "image": "Project/Safepath.png",
+    "demoUrl": "https://safepath-4pzk.onrender.com",
+    "githubUrl": "",
+    "skills": [
+      "AI Integration",
+      "Sentiment Analysis",
+      "Backend Development"
+    ],
+    "tools": [
+      "Node.js",
+      "MySQL",
+      "Wit.ai",
+      "TensorFlow"
+    ]
+  },
+  {
+    "id": "liftup",
+    "title": "LiftUp",
+    "categories": [
+      "apps",
+      "ai",
+      "community"
+    ],
+    "description": "Mental wellness platform with an AI assistant, anonymous community forums, and mood tracking.",
+    "image": "Project/Liftup.png",
+    "demoUrl": "https://liftupconnect.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/LiftUp",
+    "skills": [
+      "Web Development",
+      "AI Integration",
+      "Authentication"
+    ],
+    "tools": [
+      "Vue",
+      "Vuex",
+      "Firebase",
+      "Hugging Face"
+    ]
+  },
+  {
+    "id": "sk-solutions",
+    "title": "SK Solutions",
+    "categories": [
+      "websites",
+      "business"
+    ],
+    "description": "Software development agency website showcasing services, projects, and the team, with consultation booking.",
+    "image": "Project/SkSolutions.png",
+    "demoUrl": "https://sk-solutions-ph.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/SKSolution",
+    "skills": [
+      "Web Development",
+      "UI/UX",
+      "Responsive Design"
+    ],
+    "tools": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "GSAP"
+    ]
+  },
+  {
+    "id": "tooltrack",
+    "title": "ToolTrack",
+    "categories": [
+      "systems",
+      "mobile",
+      "education"
+    ],
+    "description": "QR-based automotive laboratory tool monitoring system with inventory, borrowing requests, maintenance logs, and reports.",
+    "image": "Project/ToolTrack.png",
+    "demoUrl": "https://autotracking.vercel.app/login",
+    "githubUrl": "https://github.com/codewithryry/AutoTrack",
+    "skills": [
+      "Web Development",
+      "UI/UX",
+      "Database Management",
+      "Authentication",
+      "QR Code Integration",
+      "Progressive Web Apps"
+    ],
+    "tools": [
+      "React",
+      "Vite",
+      "Supabase",
+      "PostgreSQL",
+      "Tailwind CSS",
+      "Capacitor"
+    ]
+  },
+  {
+    "id": "egov-rms",
+    "title": "eGov-RMS",
+    "categories": [
+      "systems",
+      "ai",
+      "community"
+    ],
+    "description": "E-Government platform for Calapan City (capstone). As second coder, I built the AI/NLP budget prediction and AI chat messenger.",
+    "image": "Project/EgovRms.png",
+    "demoUrl": "https://egovcalapancity.onrender.com/",
+    "githubUrl": "",
+    "skills": [
+      "AI Integration",
+      "NLP",
+      "UI/UX"
+    ],
+    "tools": []
+  },
+  {
+    "id": "upmark",
+    "title": "Upmark",
+    "categories": [
+      "apps",
+      "business"
+    ],
+    "description": "Creator campaign management platform for brands and agencies to manage creators, campaign delivery, and performance reporting.",
+    "image": "Project/Upmark.png",
+    "demoUrl": "https://beta-upmark.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": [
+      "Next.js",
+      "React"
+    ]
+  },
+  {
+    "id": "ojtsync",
+    "title": "OJTSync",
+    "categories": [
+      "systems",
+      "education"
+    ],
+    "description": "Web-based system for managing and monitoring student OJT/internship records, progress, and evaluations.",
+    "image": "Project/Ojtsyc.png",
+    "demoUrl": "https://ojtsync.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development",
+      "Records Management"
+    ],
+    "tools": []
+  },
+  {
+    "id": "ang-pamatok",
+    "title": "Ang Pamatok",
+    "categories": [
+      "websites",
+      "education"
+    ],
+    "description": "Student publication website for posting and reading news, opinion pieces, features, and other articles.",
+    "image": "Project/Pamatok.png",
+    "demoUrl": "https://angpamatok.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/Ang-Pamatok",
+    "skills": [
+      "Web Development",
+      "Database Management",
+      "Authentication"
+    ],
+    "tools": [
+      "React",
+      "Vite",
+      "Supabase"
+    ]
+  },
+  {
+    "id": "sari-pos",
+    "title": "Sari-POS",
+    "categories": [
+      "systems",
+      "business"
+    ],
+    "description": "Point-of-sale system for sari-sari stores to manage sales, inventory, and daily transactions.",
+    "image": "Project/Saripios.png",
+    "demoUrl": "https://sari-pos.vercel.app/",
+    "githubUrl": "https://github.com/codewithryry/SariPOS",
+    "skills": [
+      "Web Development",
+      "Database Management",
+      "Barcode Scanning"
+    ],
+    "tools": [
+      "Vue",
+      "Pinia",
+      "Firebase",
+      "Bootstrap"
+    ]
+  },
+  {
+    "id": "nexus",
+    "title": "Nexus",
+    "categories": [
+      "apps",
+      "education"
+    ],
+    "description": "Networking and career development platform for students to connect, grow, and explore opportunities.",
+    "image": "Project/Nexus.png",
+    "demoUrl": "https://nexusconnects.vercel.app",
+    "githubUrl": "https://github.com/codewithryry/Nexus",
+    "skills": [
+      "Web Development",
+      "Responsive Design"
+    ],
+    "tools": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Firebase",
+      "Tailwind CSS"
+    ]
+  },
+  {
+    "id": "jama",
+    "title": "Jama",
+    "categories": [
+      "apps",
+      "mobile",
+      "business"
+    ],
+    "description": "Manual-first personal finance tracker for logging income and expenses, with no bank linking or SMS access required.",
+    "image": "Project/Jama.png",
+    "demoUrl": "",
+    "githubUrl": "https://github.com/codewithryry/Jama",
+    "skills": [
+      "Web Development",
+      "Database Management",
+      "Progressive Web Apps"
+    ],
+    "tools": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Supabase"
+    ]
+  },
+  {
+    "id": "bhaye-mindoro",
+    "title": "Bhaye-Mindoro",
+    "categories": [
+      "apps",
+      "mobile",
+      "community"
+    ],
+    "description": "Fare guide for Mindoro commuters with route search, a tricycle fare calculator, terminal info, and fare concern reporting.",
+    "image": "Project/BhayeMindoro.png",
+    "demoUrl": "",
+    "githubUrl": "https://github.com/codewithryry/Bhaye-Mindoro",
+    "skills": [
+      "Web Development",
+      "Mobile App",
+      "Progressive Web Apps"
+    ],
+    "tools": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Supabase",
+      "Capacitor"
+    ]
+  },
+  {
+    "id": "sibol",
+    "title": "SIBOL Smart Farming System",
+    "categories": [
+      "systems",
+      "community"
+    ],
+    "description": "Cross-platform IoT-integrated smart farming system supporting hybrid rice farming, climate resilience, and productivity.",
+    "image": "Project/Sibol.png",
+    "demoUrl": "https://sibol-theta.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development",
+      "IoT Integration"
+    ],
+    "tools": []
+  },
+  {
+    "id": "boardmate",
+    "title": "BoardMate",
+    "categories": [
+      "apps"
+    ],
+    "description": "Collaborative task, chores, and water bill management app for shared living spaces.",
+    "image": "Project/Boardmate.png",
+    "demoUrl": "https://boardmate.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": []
+  },
+  {
+    "id": "owepal",
+    "title": "OwePal",
+    "categories": [
+      "apps",
+      "business"
+    ],
+    "description": "Finance tracking app for budgeting, debt tracking, reminders, and financial clarity.",
+    "image": "Project/owepal.png",
+    "demoUrl": "https://owepal.vercel.app/owePal",
+    "githubUrl": "",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": []
+  },
+  {
+    "id": "printnconnect",
+    "title": "PrintNConnect",
+    "categories": [
+      "websites",
+      "business"
+    ],
+    "description": "Business website for a local tech shop in Naujan offering internet access, printing, and computer repair.",
+    "image": "Project/printnconnect.png",
+    "demoUrl": "https://printnconnect.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": []
+  },
+  {
+    "id": "storylens",
+    "title": "Storylens",
+    "categories": [
+      "apps"
+    ],
+    "description": "Online tool for viewing Instagram stories, posts, and highlights anonymously without an Instagram account.",
+    "image": "Project/Storylens.png",
+    "demoUrl": "",
+    "githubUrl": "https://github.com/codewithryry/StoryLens",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": []
+  },
+  {
+    "id": "linktree",
+    "title": "Linktree",
+    "categories": [
+      "websites"
+    ],
+    "description": "Linktree-style personal landing page for centralized social and project links.",
+    "image": "Project/Linktree.png",
+    "demoUrl": "https://betsylinktree.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": []
+  },
+  {
+    "id": "boyloveyseries",
+    "title": "BoyLoveYSeries",
+    "categories": [
+      "websites"
+    ],
+    "description": "Platform showcasing Thai Boys' Love (BL) series with updates, reviews, and show information.",
+    "image": "Project/YseriesHub.png",
+    "demoUrl": "https://boyloveyserieshub.vercel.app/",
+    "githubUrl": "",
+    "skills": [
+      "Web Development"
+    ],
+    "tools": []
+  }
+]
