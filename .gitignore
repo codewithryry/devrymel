@@ -11,6 +11,7 @@ build/
 .env.production
 .env.development
 .env.*.local
+.env.production
 
 # macOS system file
 .DS_Store
