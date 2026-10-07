@@ -942,9 +942,12 @@ html[data-theme="forest"] body {
     display: none !important;
   }
 
-  body {
-    /* nav sits 36px up + 62px tall: keep ~24px clear space above it */
-    padding-bottom: calc(122px + env(safe-area-inset-bottom, 0px));
+  /* nav sits 36px up + 62px tall: keep ~24px clear space above it.
+     The space lives inside the page so it keeps the page's own background (no strip at the end). */
+  #app > div > :last-child:not(.admin-page)::after {
+    content: "";
+    display: block;
+    height: calc(122px + env(safe-area-inset-bottom, 0px));
   }
 
   .bottom-nav {
