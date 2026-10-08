@@ -247,7 +247,7 @@
    and its rounded outer edge closes the card at the bottom. */
 @media (max-width: 768px) {
   :root .header-footer {
-    margin: -0.6rem 0.75rem 0.75rem;
+    margin: -0.6rem 0.75rem 0;
     /* 1st: card padding around the CTA. 2nd: same color shifted down so the
        white card continues to the bottom of the screen (behind the bottom nav) */
     box-shadow:

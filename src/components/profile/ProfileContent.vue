@@ -526,7 +526,7 @@ export default {
       showStats: false,
       contactInfo: [
         { icon: "fab fa-linkedin", label: "LinkedIn", value: "linkedin.com/in/reymelreymislang", href: "https://www.linkedin.com/in/reymelreymislang", external: true },
-        { icon: "fas fa-link", label: "Website", value: "devrymel.vercel.app", note: "Portfolio", href: "https://devrymel.vercel.app", external: true },
+        { icon: "fab fa-github", label: "GitHub", value: "github.com/codewithryry", href: "https://github.com/codewithryry", external: true },
         { icon: "fas fa-envelope", label: "Email", value: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com" }
       ]
     };

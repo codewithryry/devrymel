@@ -11,8 +11,29 @@
           <i class="fas fa-times"></i>
         </button>
 
+        <!-- Phones: title row with the close button, then bank tabs -->
+        <div class="qr-mobile-head">
+          <div>
+            <span class="qr-kicker">Support Me</span>
+            <h3>{{ currentQR.bank }}</h3>
+          </div>
+          <!-- Switch banks here (or swipe the QR) -->
+          <div class="qr-switch">
+            <button type="button" aria-label="Previous bank" :disabled="currentIndex === 0" @click="$emit('prev')">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span>{{ currentIndex + 1 }}/{{ qrList.length }}</span>
+            <button type="button" aria-label="Next bank" :disabled="currentIndex === qrList.length - 1" @click="$emit('next')">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <button type="button" class="qr-mobile-close" aria-label="Close" @click="$emit('close')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
         <div class="viewer-layout">
-          <div class="viewer-image-container">
+          <div class="viewer-image-container" @touchstart.passive="onTouchStart" @touchend="onTouchEnd">
             <img :src="currentQR.image" :alt="currentQR.bank" class="viewer-image" />
 
             <div class="image-actions">
@@ -61,14 +82,20 @@
             </div>
           </div>
         </div>
+
+        <!-- Phones: ad under the QR -->
+        <AdSlot class="qr-ad" type="mobile-banner" />
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import AdSlot from '@/components/AdSlot.vue'
+
 export default {
   name: 'QRModal',
+  components: { AdSlot },
   props: {
     qrList: {
       type: Array,
@@ -80,6 +107,26 @@ export default {
     }
   },
   emits: ['close', 'prev', 'next', 'goTo'],
+  data() {
+    return {
+      touchX: null
+    }
+  },
+  methods: {
+    onTouchStart(e) {
+      this.touchX = e.changedTouches[0].clientX
+    },
+
+    // Swipe left = next bank, swipe right = previous bank
+    onTouchEnd(e) {
+      if (this.touchX === null) return
+      const dx = e.changedTouches[0].clientX - this.touchX
+      this.touchX = null
+      if (Math.abs(dx) < 40) return
+      if (dx < 0 && this.currentIndex < this.qrList.length - 1) this.$emit('next')
+      if (dx > 0 && this.currentIndex > 0) this.$emit('prev')
+    }
+  },
   computed: {
     currentQR() {
       return this.qrList[this.currentIndex] || {};
@@ -329,6 +376,134 @@ export default {
 }
 
 /* Mobile: anchor to bottom, full width, stacked layout (unchanged from before) */
+/* Phones-only header, bank tabs and ad */
+.qr-mobile-head,
+.qr-ad {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .qr-mobile-head {
+    position: sticky;
+    top: -1rem;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: -1rem -1rem 0.75rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .qr-kicker {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: var(--text-muted);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .qr-mobile-head h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .qr-mobile-close {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  /* Bank switcher in the header: ‹ 1/6 › */
+  .qr-mobile-head > div:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .qr-switch {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+
+  .qr-switch button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: var(--text);
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .qr-switch button:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .qr-switch span {
+    min-width: 30px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* Compact: no floating close, no side title / details / Previous-Next */
+  .modal-close,
+  .viewer-header,
+  .viewer-details,
+  .viewer-navigation {
+    display: none !important;
+  }
+
+  #app .image-viewer-modal .viewer-image-container {
+    margin-top: 0;
+    padding: 0.5rem;
+    background: #fff;
+  }
+
+  #app .image-viewer-modal .viewer-image {
+    max-height: 300px;
+  }
+
+  /* Small ad right under the QR, no "Ad not showing?" strip */
+  .qr-ad {
+    display: block;
+    margin: 0.6rem 0 0;
+  }
+
+  .qr-ad :deep(.ad-label-wrapper) {
+    margin-bottom: 4px;
+  }
+
+  .qr-ad :deep(.ad-fallback-strip) {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   /* Bottom sheet, same as the Dean's List Awards list */
   .modal-overlay {

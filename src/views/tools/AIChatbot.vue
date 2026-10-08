@@ -2,7 +2,9 @@
   <div class="tool-page ai-tool-page">
     <div class="tool-shell">
       <!-- Main Chat Card -->
-      <section class="chat-card">
+      <!-- Phones: while the keyboard is open the card is pinned to the visible area
+           (header on top, input right above the keyboard), like the Feedback panel -->
+      <section class="chat-card" :class="{ 'kb-open': keyboardOpen }" :style="keyboardStyle">
         <!-- "How to use" for the current mode, as a small "i" in the corner -->
         <ToolHowTo
           class="chat-howto"
@@ -346,11 +348,22 @@ export default {
       input: "",
       inputFocused: false,
       loading: false,
-      greeting: ""
+      greeting: "",
+      keyboardOpen: false,
+      viewport: { top: 0, height: 0 }
     };
   },
 
   computed: {
+    // Fits the card exactly inside the part of the screen above the keyboard
+    keyboardStyle() {
+      if (!this.keyboardOpen) return null;
+      return {
+        top: `${this.viewport.top + 8}px`,
+        height: `${this.viewport.height - 16}px`
+      };
+    },
+
     messages() {
       return this.modelMessages[this.activeModel] || [];
     },
@@ -393,9 +406,31 @@ export default {
     }
 
     this.pickGreeting();
+
+    // Track the on-screen keyboard (visual viewport shrinks when it opens)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", this.onViewportChange);
+      window.visualViewport.addEventListener("scroll", this.onViewportChange);
+    }
+  },
+
+  beforeUnmount() {
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener("resize", this.onViewportChange);
+      window.visualViewport.removeEventListener("scroll", this.onViewportChange);
+    }
   },
 
   methods: {
+    onViewportChange() {
+      const vv = window.visualViewport;
+      const wasOpen = this.keyboardOpen;
+      // Phones only; keyboard counts as open when it takes a big part of the screen
+      this.keyboardOpen = window.innerWidth <= 640 && vv.height < window.innerHeight * 0.8;
+      this.viewport = { top: vv.offsetTop, height: vv.height };
+      if (this.keyboardOpen && !wasOpen) this.$nextTick(() => this.scrollToBottom());
+    },
+
     // Random welcome line for the current mode (never the same twice in a row)
     pickGreeting() {
       const hour = new Date().getHours();
@@ -1536,6 +1571,22 @@ export default {
 
   .msg-bubble {
     max-width: 90%;
+  }
+}
+
+/* Keyboard open (phones): card pinned to the visible area above the keyboard */
+@media (max-width: 640px) {
+  .chat-card.kb-open {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    z-index: 400;
+    min-height: 0 !important;
+  }
+
+  /* Small hint line isn't needed while typing */
+  .chat-card.kb-open .input-hint {
+    display: none;
   }
 }
 

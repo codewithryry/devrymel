@@ -11,7 +11,7 @@ const routes = [
     name: "home",
     component: Home,
     meta: {
-      title: "Devrymel | Reymel Mislang"
+      title: "Reymel Mislang"
     }
   },
   {
@@ -19,7 +19,7 @@ const routes = [
     name: "about",
     component: () => import("@/views/AboutPage.vue"),
     meta: {
-      title: "About | Reymel Mislang"
+      title: "About"
     }
   },
   {
@@ -31,7 +31,7 @@ const routes = [
     name: "tech-notes",
     component: () => import("@/views/TechNotesPage.vue"),
     meta: {
-      title: "Tech Notes | Reymel Mislang"
+      title: "Tech Notes"
     }
   },
   {
@@ -39,7 +39,7 @@ const routes = [
     name: "why-me",
     component: () => import("@/views/WhyMePage.vue"),
     meta: {
-      title: "Why Work With Me | Reymel Mislang"
+      title: "Why Work With Me"
     }
   },
   {
@@ -47,7 +47,7 @@ const routes = [
     name: "projects",
     component: () => import("@/views/ProjectsPage.vue"),
     meta: {
-      title: "Projects | Reymel Mislang"
+      title: "Projects"
     }
   },
   {
@@ -55,7 +55,7 @@ const routes = [
     name: "skills",
     component: () => import("@/views/SkillsPage.vue"),
     meta: {
-      title: "Tech Stack | Reymel Mislang"
+      title: "Tech Stack"
     }
   },
   {
@@ -63,7 +63,7 @@ const routes = [
     name: "experience",
     component: () => import("@/views/ExperiencePage.vue"),
     meta: {
-      title: "Experience | Reymel Mislang"
+      title: "Experience"
     }
   },
   {
@@ -71,7 +71,7 @@ const routes = [
     name: "process",
     component: () => import("@/views/ProcessPage.vue"),
     meta: {
-      title: "Process | Reymel Mislang"
+      title: "Process"
     }
   },
   {
@@ -84,7 +84,7 @@ const routes = [
     name: "services",
     component: () => import("@/views/ServicesPage.vue"),
     meta: {
-      title: "Services | Reymel Mislang"
+      title: "Services"
     }
   },
   {
@@ -92,7 +92,7 @@ const routes = [
     name: "case-studies",
     component: () => import("@/views/CaseStudiesPage.vue"),
     meta: {
-      title: "Case Studies | Reymel Mislang"
+      title: "Case Studies"
     }
   },
 
@@ -101,7 +101,7 @@ const routes = [
   name: "deployment",
   component: () => import("@/views/DeploymentPage.vue"),
   meta: {
-    title: "Deployment Journey | Reymel Mislang"
+    title: "Deployment"
   }
 },
 
@@ -110,7 +110,7 @@ const routes = [
     name: "privacy",
     component: () => import("@/views/PrivacyPage.vue"),
     meta: {
-      title: "Privacy | Devrymel"
+      title: "Privacy"
     }
   },
   {
@@ -118,7 +118,7 @@ const routes = [
     name: "roadmap",
     component: () => import("@/views/RoadmapPage.vue"),
     meta: {
-      title: "Roadmap | Devrymel"
+      title: "Roadmap"
     }
   },
   {
@@ -126,7 +126,7 @@ const routes = [
     name: "changelog",
     component: () => import("@/views/ChangelogPage.vue"),
     meta: {
-      title: "Changelog | Devrymel"
+      title: "Changelog"
     }
   },
   {
@@ -134,7 +134,7 @@ const routes = [
     name: "contact",
     component: () => import("@/views/ContactPage.vue"),
     meta: {
-      title: "Contact | Reymel Mislang"
+      title: "Contact"
     }
   },
   {
@@ -142,7 +142,7 @@ const routes = [
     name: "sponsor",
     component: () => import("@/views/SponsorPage.vue"),
     meta: {
-      title: "Sponsor | Devrymel"
+      title: "Support My Work"
     }
   },
   {
@@ -150,7 +150,7 @@ const routes = [
     name: "ProjectsAdminPanel",
     component: () => import("@/views/ProjectsAdminPanel.vue"),
     meta: {
-      title: "Projects Admin | Devrymel"
+      title: "Projects Admin"
     }
   },
 
@@ -159,7 +159,7 @@ const routes = [
     name: "tiktok-downloader",
     component: () => import("@/views/tools/TikTokDownloader.vue"),
     meta: {
-      title: "TikTok Downloader | Devrymel Tools"
+      title: "TikTok Downloader"
     }
   },
 
@@ -167,63 +167,63 @@ const routes = [
     path: "/tools/youtube-downloader",
     name: "youtube-downloader",
     component: () => import("@/views/tools/YouTubeDownloader.vue"),
-    meta: { title: "YouTube Downloader | Devrymel Tools" }
+    meta: { title: "YouTube Downloader" }
   },
   {
     path: "/tools/youtube-thumbnail",
     name: "youtube-thumbnail",
     component: () => import("@/views/tools/YouTubeThumbnail.vue"),
-    meta: { title: "YouTube Thumbnail Downloader | Devrymel Tools" }
+    meta: { title: "YouTube Thumbnail Downloader" }
   },
   {
     path: "/tools/qr-generator",
     name: "qr-generator",
     component: () => import("@/views/tools/QRGenerator.vue"),
-    meta: { title: "QR Code Generator | Devrymel Tools" }
+    meta: { title: "QR Code Generator" }
   },
   {
     path: "/tools/password",
     name: "password-generator",
     component: () => import("@/views/tools/PasswordGenerator.vue"),
-    meta: { title: "Password Generator | Devrymel Tools" }
+    meta: { title: "Password Generator" }
   },
   {
     path: "/tools/ip-lookup",
     name: "ip-lookup",
     component: () => import("@/views/tools/IPLookup.vue"),
-    meta: { title: "IP Address Lookup | Devrymel Tools" }
+    meta: { title: "IP Lookup" }
   },
   {
     path: "/tools/base64",
     name: "base64",
     component: () => import("@/views/tools/Base64Tool.vue"),
-    meta: { title: "Base64 Encoder/Decoder | Devrymel Tools" }
+    meta: { title: "Base64 Encoder / Decoder" }
   },
 
   {
     path: "/tools/url-shortener",
     name: "url-shortener",
     component: () => import("@/views/tools/URLShortener.vue"),
-    meta: { title: "URL Shortener | Devrymel Tools" }
+    meta: { title: "URL Shortener" }
   },
   {
     path: "/tools/color-palette",
     name: "color-palette",
     component: () => import("@/views/tools/ColorPalette.vue"),
-    meta: { title: "Color Palette Generator | Coming Soon · Devrymel Tools" }
+    meta: { title: "Color Palette" }
   },
   {
     path: "/tools/ai-chat",
     name: "ai-chat",
     component: () => import("@/views/tools/AIChatbot.vue"),
-    meta: { title: "AI Chatbot | Coming Soon · Devrymel Tools" }
+    meta: { title: "AI Chat" }
   },
 
   {
   path: "/tools/speedtest",
   name: "speedtest",
   component: () => import("@/views/tools/SpeedTest.vue"),
-  meta: { title: "Speed Test | Devrymel Tools" }
+  meta: { title: "Speed Test" }
 },
 
 {
@@ -231,7 +231,7 @@ const routes = [
   name: "json-formatter",
   component: () => import("@/views/tools/ToolComingSoon.vue"),
   meta: {
-    title: "JSON Formatter | Devrymel"
+    title: "JSON Formatter"
   }
 },
 {
@@ -239,7 +239,7 @@ const routes = [
   name: "text-counter",
   component: () => import("@/views/tools/ToolComingSoon.vue"),
   meta: {
-    title: "Text Counter | Devrymel"
+    title: "Text Counter"
   }
 },
 {
@@ -247,7 +247,7 @@ const routes = [
   name: "case-converter",
   component: () => import("@/views/tools/ToolComingSoon.vue"),
   meta: {
-    title: "Case Converter | Devrymel"
+    title: "Case Converter"
   }
 },
 {
@@ -255,7 +255,7 @@ const routes = [
   name: "meta-tag-generator",
   component: () => import("@/views/tools/ToolComingSoon.vue"),
   meta: {
-    title: "Meta Tag Generator | Devrymel"
+    title: "Meta Tag Generator"
   }
 },
   {
@@ -273,7 +273,7 @@ const routes = [
     name: "not-found",
     component: NotFound,
     meta: {
-      title: "404 - Page Not Found"
+      title: "404 — Page Not Found"
     }
   }
 ];

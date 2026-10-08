@@ -686,6 +686,8 @@ export default {
   .main-content {
     padding-left: 12px;
     padding-right: 12px;
+    /* Bottom gap above the nav comes from the shared spacer (same as other pages) */
+    padding-bottom: 0;
   }
 }
 

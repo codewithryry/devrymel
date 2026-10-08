@@ -16,46 +16,44 @@
       </router-link>
     </div>
 
-    <div class="timeline-container">
-      <div class="timeline-line" aria-hidden="true"></div>
-
-      <div
+    <!-- Center line with milestones; cards alternate left / right on desktop,
+         year sits on the other side of the line. Phones: one column, line on the left. -->
+    <ol class="tl">
+      <li
         v-for="(item, index) in visibleTimeline"
         :key="`${item.title}-${item.date}-${index}`"
-        class="timeline-item"
-        :class="{ right: index % 2 === 0 }"
+        class="tl-item"
+        :class="[index % 2 === 0 ? 'side-right' : 'side-left', { latest: index === visibleTimeline.length - 1 }]"
       >
-        <div class="timeline-marker" aria-hidden="true">
-          <span class="marker-dot"></span>
-        </div>
+        <span class="tl-dot" aria-hidden="true"></span>
+        <time class="tl-year">{{ formatDate(item.date) }}</time>
 
-        <article class="timeline-card">
-          <time class="timeline-date">{{ formatDate(item.date) }}</time>
-          <h3 class="timeline-title">{{ item.title }}</h3>
-          <p class="timeline-description">{{ item.description }}</p>
+        <article class="tl-card">
+          <time class="tl-card-year">{{ formatDate(item.date) }}</time>
+          <h3 class="tl-title">{{ item.title }}</h3>
+          <p class="tl-desc">{{ item.description }}</p>
 
           <a
             v-if="item.link"
             :href="item.link"
             target="_blank"
             rel="noopener"
-            class="timeline-link"
+            class="tl-link"
           >
             View details <i class="fas fa-arrow-right"></i>
           </a>
         </article>
-      </div>
-    </div>
+      </li>
+    </ol>
 
-    <div v-if="timeline.length > initialLimit" class="timeline-toggle-wrapper">
+    <div v-if="timeline.length > initialLimit" class="tl-more">
       <button
         type="button"
-        class="timeline-toggle"
-        :class="{ expanded: showAll }"
+        class="tl-toggle"
         :aria-expanded="showAll"
         @click="showAll = !showAll"
       >
-        <span>{{ showAll ? "See Less" : "See More" }}</span>
+        <span>{{ showAll ? "Show less" : `Show full journey (+${timeline.length - initialLimit})` }}</span>
         <i :class="showAll ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
       </button>
     </div>
@@ -179,181 +177,214 @@ export default {
   letter-spacing: -0.025em;
 }
 
-.timeline-container {
+/* ===== Timeline =====
+   --gap: space between a card and the center line */
+.tl {
+  --gap: 2rem;
+  --dot: 12px;
+  --row: 1.1rem; /* vertical position of dot / notch / year, from the card top */
+
   position: relative;
-  max-width: 780px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 0.1rem 0;
+  padding: 0.25rem 0;
+  list-style: none;
 }
 
-.timeline-line {
+/* Center line */
+.tl::before {
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 1px;
+  width: 2px;
+  border-radius: 2px;
   background: var(--border);
   transform: translateX(-50%);
 }
 
-.timeline-item {
+.tl-item {
   position: relative;
   display: flex;
-  width: 100%;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.9rem;
 }
 
-.timeline-item:last-child {
+.tl-item:last-child {
   margin-bottom: 0;
 }
 
-.timeline-item.right {
+.tl-item.side-right {
   justify-content: flex-end;
 }
 
-.timeline-marker {
+/* Milestone dot on the line (ring; the newest shown milestone is filled) */
+.tl-dot {
   position: absolute;
-  top: 1.05rem;
+  top: calc(var(--row) - var(--dot) / 2 + 4px);
   left: 50%;
   z-index: 2;
+  width: var(--dot);
+  height: var(--dot);
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 0 0 4px var(--surface);
   transform: translateX(-50%);
 }
 
-.marker-dot {
-  display: block;
-  width: 9px;
-  height: 9px;
-  border: 2px solid var(--bg);
-  border-radius: 50%;
+/* The most recent milestone shown gets a filled dot ("you are here") */
+.tl-item.latest .tl-dot {
   background: var(--text);
-  box-shadow: 0 0 0 1px var(--text);
 }
 
-.timeline-card {
-  position: relative;
-  width: calc(50% - 2rem);
-  padding: 0.8rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.timeline-card:hover {
-  transform: translateY(-1px);
-  border-color: var(--text-muted);
-}
-
-.timeline-card::before {
-  content: "";
+/* Year on the empty side of the line, level with the dot */
+.tl-year {
   position: absolute;
-  top: 1.05rem;
-  width: 9px;
-  height: 9px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  transform: rotate(45deg);
-}
-
-.timeline-item:not(.right) .timeline-card::before {
-  right: -5px;
-}
-
-.timeline-item.right .timeline-card::before {
-  left: -5px;
-  transform: rotate(225deg);
-}
-
-.timeline-date {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 0.4rem;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-soft);
-  color: var(--text-secondary);
-  font-size: 0.66rem;
+  top: calc(var(--row) - 0.45rem + 4px);
+  color: var(--text-muted);
+  font-size: 0.78rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
   line-height: 1;
   white-space: nowrap;
 }
 
-.timeline-title {
-  margin: 0 0 0.3rem;
-  color: var(--text);
-  font-size: 0.94rem;
-  line-height: 1.25;
+.tl-item.side-right .tl-year {
+  right: calc(50% + var(--gap));
 }
 
-.timeline-description {
+.tl-item.side-left .tl-year {
+  left: calc(50% + var(--gap));
+}
+
+/* Card + notch pointing at the dot, with a short connector line */
+.tl-card {
+  position: relative;
+  width: calc(50% - var(--gap));
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.2s ease;
+}
+
+.tl-card:hover {
+  border-color: var(--text-muted);
+}
+
+.tl-card::before {
+  content: "";
+  position: absolute;
+  top: var(--row);
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color 0.2s ease;
+}
+
+.tl-card:hover::before {
+  border-color: var(--text-muted);
+}
+
+.tl-card::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--row) + 5px);
+  width: calc(var(--gap) - var(--dot) / 2 - 6px);
+  height: 1px;
+  background: var(--border);
+}
+
+.tl-item.side-right .tl-card::before {
+  left: -6px;
+  transform: rotate(225deg);
+}
+
+.tl-item.side-right .tl-card::after {
+  right: calc(100% + 6px);
+}
+
+.tl-item.side-left .tl-card::before {
+  right: -6px;
+  transform: rotate(45deg);
+}
+
+.tl-item.side-left .tl-card::after {
+  left: calc(100% + 6px);
+}
+
+/* Year inside the card: phones only */
+.tl-card-year {
+  display: none;
+}
+
+.tl-title {
+  margin: 0 0 0.3rem;
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.tl-desc {
   display: -webkit-box;
   overflow: hidden;
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.78rem;
-  line-height: 1.45;
+  font-size: 0.82rem;
+  line-height: 1.5;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
-.timeline-link {
+.tl-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   margin-top: 0.55rem;
   color: var(--text);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.timeline-toggle-wrapper {
+/* Show full journey: quiet text button centered on the line */
+.tl-more {
   display: flex;
   justify-content: center;
-  margin-top: 0.85rem;
+  margin-top: 1rem;
 }
 
-.timeline-toggle {
+.tl-toggle {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  width: fit-content;
-  margin: 0;
-  padding: 0.55rem 0.9rem;
+  gap: 0.45rem;
+  padding: 0.5rem 0.95rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 999px;
   background: var(--surface);
-  color: var(--text);
-  font: inherit;
-  font-size: 0.76rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.timeline-toggle:hover {
-  border-color: var(--text-muted);
-}
-
-.timeline-toggle.expanded {
-  width: auto;
-  min-width: 110px;
-  margin-top: 0.55rem;
-  padding: 0.35rem 0.55rem;
-  border-color: transparent;
-  background: transparent;
   color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.timeline-toggle.expanded:hover {
+.tl-toggle:hover {
+  border-color: var(--text-muted);
   color: var(--text);
-  border-color: transparent;
-  background: var(--surface-soft);
 }
 
+.tl-toggle i {
+  font-size: 0.65rem;
+}
+
+/* ===== Phones: one column, line close to the cards ===== */
 @media (max-width: 760px) {
   .timeline-section {
     margin: 0;
@@ -367,73 +398,68 @@ export default {
     font-size: 1.45rem;
   }
 
-  .timeline-toggle {
-    width: auto;
-    max-width: 100%;
+  .tl {
+    --gap: 1.6rem;
+    --row: 1rem;
+    padding-left: 0;
   }
 
-  .timeline-container {
-    max-width: 100%;
-    padding-left: 1.6rem;
+  .tl::before {
+    left: 6px;
+    transform: none;
   }
 
-  .timeline-line {
-    left: 0.75rem;
+  .tl-item,
+  .tl-item.side-right {
+    justify-content: flex-end;
+    margin-bottom: 0.65rem;
   }
 
-  .timeline-item,
-  .timeline-item.right {
-    justify-content: flex-start;
+  .tl-dot {
+    left: 7px;
   }
 
-  .timeline-marker {
-    left: 0.75rem;
-    top: 1.05rem;
-    transform: translateX(-50%);
+  /* Year moves into the card */
+  .tl-year {
+    display: none;
   }
 
-  .timeline-card,
-  .timeline-item.right .timeline-card,
-  .timeline-item:not(.right) .timeline-card {
-    width: 100%;
+  .tl-card-year {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
   }
 
-  .timeline-card::before,
-  .timeline-item.right .timeline-card::before,
-  .timeline-item:not(.right) .timeline-card::before {
-    left: -5px;
+  .tl-card,
+  .tl-item.side-left .tl-card,
+  .tl-item.side-right .tl-card {
+    width: calc(100% - var(--gap));
+    padding: 0.8rem 0.9rem;
+  }
+
+  .tl-item.side-left .tl-card::before,
+  .tl-item.side-right .tl-card::before {
+    left: -6px;
     right: auto;
     transform: rotate(225deg);
   }
 
-  .timeline-item {
-    margin-bottom: 0.6rem;
+  .tl-item.side-left .tl-card::after,
+  .tl-item.side-right .tl-card::after {
+    left: auto;
+    right: calc(100% + 6px);
+    width: calc(var(--gap) - 7px - var(--dot) / 2 - 6px);
   }
 
-  .timeline-card {
-    padding: 0.75rem 0.8rem;
+  .tl-title {
+    font-size: 0.94rem;
   }
 
-  .timeline-description {
-    -webkit-line-clamp: 2;
-  }
-}
-
-@media (max-width: 420px) {
-  .timeline-container {
-    padding-left: 1.45rem;
-  }
-
-  .timeline-line {
-    left: 0.7rem;
-  }
-
-  .timeline-marker {
-    left: 0.7rem;
-  }
-
-  .timeline-card {
-    padding: 0.7rem 0.75rem;
+  .tl-desc {
+    font-size: 0.8rem;
   }
 }
 </style>

@@ -1259,6 +1259,10 @@ html[data-theme="forest"] body {
     align-items: flex-end;
     justify-content: center;
     padding: 0 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    /* Light dim only, no blur, so the page behind stays clear */
+    background: rgb(15 15 15 / 0.3) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 
   #app :is(.modal, .modal-container, .mobile-modal, .feedback-box):not(.admin-page *) {
@@ -1883,6 +1887,11 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     object-fit: cover;
   }
 
+  /* Education block in the empty space to the right of the photo */
+  html #app .m-profile .m-hero {
+    position: relative;
+  }
+
   html #app .m-profile .m-hero .m-name {
     display: block;
     margin: 0.75rem 0 0.15rem;
@@ -1924,7 +1933,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     padding: 0;
     border: none;
     background: none;
-    color: #0a66c2;
+    color: var(--text);
     font-family: inherit;
     font-size: 0.78rem;
     font-weight: 700;
@@ -1978,7 +1987,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   html #app .m-profile .m-open-more {
     margin-top: 2px;
-    color: #0a66c2;
+    color: var(--text);
     font-size: 0.8rem;
     font-weight: 700;
   }

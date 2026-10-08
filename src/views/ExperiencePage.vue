@@ -68,3 +68,23 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Hero: text on the left, briefcase art vertically centered on the right */
+@media (min-width: 861px) {
+  .info-hero {
+    min-height: 150px;
+    padding-right: 220px;
+  }
+
+  .info-hero .hero-art {
+    top: 50%;
+    width: 190px;
+    transform: translateY(-50%);
+  }
+
+  .info-hero p {
+    max-width: 520px;
+  }
+}
+</style>

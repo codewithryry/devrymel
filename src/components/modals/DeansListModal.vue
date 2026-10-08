@@ -11,6 +11,17 @@
           <i class="fas fa-times"></i>
         </button>
 
+        <!-- Phones: title row like the other popups (title left, close right) -->
+        <div class="viewer-mobile-head">
+          <div>
+            <span class="viewer-kicker">Dean's Lister</span>
+            <h3>{{ currentItem.title }}</h3>
+          </div>
+          <button type="button" class="viewer-mobile-close" aria-label="Close" @click="$emit('close')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
         <div class="viewer-layout">
           <div class="viewer-image-container">
             <img :src="currentItem.image"
@@ -38,7 +49,6 @@
               <h3 class="viewer-title">
                 {{ currentItem.title }}
               </h3>
-              <p v-if="!anchor" class="viewer-description">{{ currentItem.description }}</p>
             </div>
 
             <div class="viewer-details">
@@ -60,6 +70,9 @@
 
             <!-- Popover: a 320×50 ad fits the free space under the details -->
             <AdSlot v-if="anchor" class="viewer-ad" type="mobile-banner" />
+
+            <!-- Phones: ad under the details (Previous / Next is hidden there) -->
+            <AdSlot v-else class="viewer-ad viewer-ad-mobile" type="mobile-banner" />
 
             <div class="viewer-navigation">
               <button @click="$emit('prev')" class="nav-btn" :disabled="currentIndex === 0">
@@ -486,6 +499,90 @@ export default {
 }
 
 /* Mobile: anchor to bottom, full width, stacked layout (unchanged from before) */
+/* Phones-only title row and ad */
+.viewer-mobile-head,
+.viewer-ad-mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .viewer-mobile-head {
+    position: sticky;
+    top: -1rem;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: -1rem -1rem 0.9rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .viewer-kicker {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: var(--text-muted);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .viewer-mobile-head h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .viewer-mobile-close {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  /* The title row replaces the floating close button and the side title */
+  .modal-close,
+  .viewer-header {
+    display: none;
+  }
+
+  /* Image: rounded, centered, a bit smaller */
+  #app .viewer-image-container {
+    margin-top: 0;
+  }
+
+  /* Tight stack: image, details, ad with small even gaps */
+  #app .image-viewer-modal .viewer-layout {
+    gap: 0.6rem;
+  }
+
+  #app .image-viewer-modal .viewer-details {
+    margin: 0 0 0.6rem;
+  }
+
+  /* No Previous / Next on phones; the ad takes that spot */
+  #app .image-viewer-modal .viewer-navigation {
+    display: none;
+  }
+
+  .viewer-ad-mobile {
+    display: block;
+    margin-top: 0;
+  }
+}
+
 @media (max-width: 640px) {
   /* Bottom sheet, same as the Dean's List Awards list */
   .modal-overlay {
