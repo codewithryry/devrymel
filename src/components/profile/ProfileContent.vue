@@ -139,7 +139,7 @@
           @contextmenu="tileEditing && $event.preventDefault()"
         >
           <component
-            :is="tile.href && !tileEditing ? 'a' : 'button'"
+            :is="tile.href && !tileEditing ? 'a' : tile.id === 'spotify' && !tileEditing ? 'div' : 'button'"
             v-for="tile in orderedTiles"
             :key="tile.id"
             v-bind="tileLinkAttrs(tile)"
@@ -839,6 +839,16 @@ export default {
 /* Spotify tile only shows what's playing, it doesn't link out */
 .m-tile.tile-spotify {
   cursor: default;
+}
+
+/* Keep tile focus and the non-actionable Spotify display out of normal interaction. */
+.m-tile:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.m-tile.tile-spotify:not(.rt-editing) {
+  pointer-events: none;
 }
 
 .contact-grid {
@@ -1574,6 +1584,8 @@ export default {
     background: var(--surface);
     color: var(--text);
     text-decoration: none;
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    will-change: transform;
   }
 
   .m-tile > i:first-child {
