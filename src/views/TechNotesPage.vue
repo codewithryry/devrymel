@@ -10,7 +10,7 @@
         </p>
       </div>
 
-      <TechNotesSection :notes="techNotes" />
+      <TechNotesSection :notes="techNotes" :show-title="false" stacked />
 
       <ExploreLinks />
     </section>

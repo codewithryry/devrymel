@@ -13,6 +13,7 @@
             Paste any YouTube URL or video ID to view and download thumbnails in multiple quality sizes.
           </p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Input -->
@@ -165,40 +166,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- How to -->
-      <div v-if="!videoId" class="tt-howto">
-        <h3>How to use</h3>
-
-        <div class="tt-steps">
-          <div class="tt-step">
-            <span class="step-num">1</span>
-            <span>
-              Copy any YouTube video URL or video ID.
-              Example: <code>dQw4w9WgXcQ</code>
-            </span>
-          </div>
-
-          <div class="tt-step">
-            <span class="step-num">2</span>
-            <span>
-              Paste it in the box above and click <strong>Get Thumbnails</strong>.
-            </span>
-          </div>
-
-          <div class="tt-step">
-            <span class="step-num">3</span>
-            <span>
-              View, copy, or download any thumbnail quality.
-            </span>
-          </div>
-        </div>
-
-        <p class="tt-note">
-          <i class="fas fa-shield-alt"></i>
-          Thumbnails are loaded directly from YouTube's CDN. No data stored.
-        </p>
-      </div>
-
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-thumbnail" />
     </div>
@@ -207,15 +174,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "YouTubeThumbnail",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Copy any YouTube video URL or video ID (e.g. dQw4w9WgXcQ).",
+        "Paste it and click Get Thumbnails.",
+        "View, copy, or download any thumbnail quality."
+      ],
+      howToNote: "Thumbnails load directly from YouTube's CDN. No data stored.",
       inputVal: "",
       videoId: "",
       inputFocused: false,

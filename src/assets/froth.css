@@ -336,7 +336,8 @@ html[data-theme="froth"] #app .nav-brand {
   color: var(--text);
 }
 
-html[data-theme="froth"] #app :is(.nav-dropdown, .bottom-sheet) {
+/* Mobile menu (.bottom-sheet) keeps its see-through glass look */
+html[data-theme="froth"] #app .nav-dropdown {
   border: 1px solid var(--border);
   background: var(--surface);
   box-shadow: var(--f-shadow-pop);

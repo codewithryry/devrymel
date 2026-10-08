@@ -1,22 +1,20 @@
 <template>
-  <main class="sponsor-page">
-    <section class="sponsor-shell">
-      <div class="sponsor-hero">
+  <!-- Same page shell + hero as the other info pages -->
+  <main class="info-page">
+    <section class="info-shell">
+      <div class="info-hero">
         <span class="eyebrow">Support</span>
-        <h1>Sponsor the Devrymel Platform</h1>
+        <h1>Sponsor Reymel</h1>
+        <p>
+          Help keep the free tools, projects, and resources on this site
+          running and improving.
+        </p>
       </div>
 
       <div class="sponsor-layout">
         <!-- Left: About -->
         <div class="sponsor-about">
-          <div class="sponsor-logo">
-            <div class="logo-badge">
-              <span>D</span>
-            </div>
-            <span class="logo-text">devrymel</span>
-          </div>
-
-          <h2>Become a Supporter of Devrymel</h2>
+          <h2>Become a Supporter</h2>
           <p class="sponsor-tagline">
             All tools, projects, and resources on this platform are free and open for everyone.
           </p>
@@ -42,7 +40,7 @@
           </ul>
 
           <p class="sponsor-cta-text">
-            Help keep Devrymel free, fast, and always improving.
+            Help keep Reymel's work free, fast, and always improving.
           </p>
         </div>
 
@@ -62,6 +60,20 @@
                 <i :class="method.icon"></i>
                 {{ method.label }}
               </button>
+            </div>
+
+            <!-- GoTyme: bank transfer details + QR -->
+            <div v-if="selectedMethod === 'gotyme'" class="bank-details">
+              <img :src="gotymeQr" alt="GoTyme QR code" class="bank-qr" />
+              <div class="bank-info">
+                <span class="bank-label">GoTyme Bank</span>
+                <strong>{{ gotyme.name }}</strong>
+                <button type="button" class="bank-number" @click="copyAccount">
+                  {{ gotyme.number }}
+                  <i class="fas" :class="copied ? 'fa-check' : 'fa-copy'"></i>
+                </button>
+                <small>Scan the QR or send via InstaPay to this account.</small>
+              </div>
             </div>
           </div>
 
@@ -115,7 +127,7 @@
           <div class="form-group checkboxes">
             <label class="check-row">
               <input type="checkbox" v-model="linkAccount" />
-              <span>Link this sponsorship to my Devrymel account to access supporter benefits.</span>
+              <span>List my name as a supporter.</span>
             </label>
             <label class="check-row">
               <input type="checkbox" v-model="marketingEmails" />
@@ -153,12 +165,21 @@
 </template>
 
 <script>
+import "@/assets/info-pages.css";
+
+import gotymeQr from "@/assets/Gotyme.png";
+
+const PAYPAL_URL = "https://paypal.me/reymelreymislang";
+
 export default {
   name: "SponsorPage",
 
   data() {
     return {
-      selectedMethod: "gcash",
+      selectedMethod: "gotyme",
+      gotymeQr,
+      gotyme: { name: "Reymel Mislang", number: "019851727975" },
+      copied: false,
       selectedFreq: "one-time",
       selectedAmount: 250,
       customAmount: "",
@@ -166,7 +187,7 @@ export default {
       marketingEmails: false,
 
       paymentMethods: [
-        { id: "gcash", label: "GCash", icon: "fas fa-mobile-alt" },
+        { id: "gotyme", label: "GoTyme", icon: "fas fa-building-columns" },
         { id: "paypal", label: "PayPal", icon: "fab fa-paypal" },
       ],
 
@@ -204,27 +225,29 @@ export default {
         alert("Please select or enter a valid amount.");
         return;
       }
-      const method = this.selectedMethod === "paypal"
-        ? "https://www.paypal.com/paypalme/devrymel"
-        : "https://gcash.com";
-      window.open(method, "_blank");
+      if (this.selectedMethod === "paypal") {
+        // paypal.me accepts the amount + currency at the end of the link
+        window.open(`${PAYPAL_URL}/${this.finalAmount}PHP`, "_blank");
+        return;
+      }
+      // GoTyme: no checkout link, so copy the account number for the transfer
+      this.copyAccount();
+    },
+
+    async copyAccount() {
+      try {
+        await navigator.clipboard.writeText(this.gotyme.number);
+        this.copied = true;
+        setTimeout(() => (this.copied = false), 2000);
+      } catch (error) {
+        this.copied = false;
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-.sponsor-page {
-  min-height: 100vh;
-  background: var(--bg);
-}
-
-.sponsor-shell {
-  width: min(var(--container-width), 100%);
-  margin: 0 auto;
-  padding: 2.5rem 0 4rem;
-}
-
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -244,27 +267,6 @@ export default {
   border-color: var(--text-muted);
 }
 
-.sponsor-hero {
-  text-align: left;
-  margin-bottom: 2rem;
-}
-.eyebrow {
-  display: inline-block;
-  margin-bottom: 0.5rem;
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.sponsor-hero h1 {
-  margin: 0;
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-
 /* ── Two-column layout ── */
 .sponsor-layout {
   display: grid;
@@ -280,31 +282,6 @@ export default {
   border-radius: var(--radius-lg);
   background: var(--surface);
   border: 1px solid var(--border);
-}
-
-.sponsor-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 1.25rem;
-}
-.logo-badge {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius);
-  background: var(--accent);
-  display: grid;
-  place-items: center;
-  color: var(--bg);
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-.logo-text {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
 }
 
 .sponsor-about h2 {
@@ -386,6 +363,74 @@ export default {
   margin: 0.45rem 0 0;
   font-size: 0.78rem;
   color: var(--text-secondary);
+}
+
+/* GoTyme transfer details */
+.bank-details {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+.bank-qr {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  object-fit: cover;
+}
+
+.bank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.bank-label {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bank-info strong {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.bank-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.bank-number i {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.bank-info small {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  line-height: 1.4;
 }
 
 .method-group {
@@ -616,26 +661,20 @@ export default {
 }
 
 /* ── Responsive ── */
-@media (max-width: 912px) {
-  .sponsor-shell {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
 @media (max-width: 900px) {
   .sponsor-layout {
     grid-template-columns: 1fr;
   }
 }
 
+/* Phones: no "Support Open Source Work" banner */
+@media (max-width: 768px) {
+  .sponsor-banner {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
-  .sponsor-shell {
-    padding: 1.5rem 12px 3rem;
-  }
-  .sponsor-hero h1 {
-    font-size: 1.6rem;
-  }
   .sponsor-about,
   .sponsor-form-card {
     padding: 1.25rem;

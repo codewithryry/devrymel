@@ -33,7 +33,7 @@
 
       <!-- 3. Highlights / Quick Stats (+ ad on the same screen) -->
       <section class="section-group home-mobile-hide">
-        <LiveDevStats class="home-mobile-hide" :stats="devStats" view-all-to="/skills" view-all-label="View all skills.." />
+        <LiveDevStats class="home-mobile-hide" :stats="devStats" view-all-to="/skills" view-all-label="View tech stack.." />
         <AdSlot type="banner" />
       </section>
 
@@ -56,6 +56,7 @@
       <LinksSection
         class="home-links home-mobile-hide"
         :certificates="certificates"
+        :qr-list="achievements.qr"
         @openQRModal="openQRModal"
         @openCertificatesListModal="openCertificatesListModal"
       />
@@ -89,6 +90,7 @@
       :currentItem="currentDeansListItem"
       :currentIndex="currentDeansListIndex"
       :totalItems="achievements.deansList.length"
+      :anchor="deansListAnchor"
       @close="closeDeansListModal"
       @prev="prevDeansList"
       @next="nextDeansList"
@@ -184,6 +186,7 @@ import timeline from '@/data/timeline.json'
 import techNotes from '@/data/techNotes.json'
 
 import { PINNED_EXPERIENCE } from '@/data/pinnedExperience'
+import { PINNED_CERTIFICATE } from '@/data/pinnedCertificate'
 
 const experiences = [PINNED_EXPERIENCE, ...experiencesFromJson]
 const FALLBACK_PROJECT_LINK_ADDITIONS = projectLinks.filter((item) => Number(item.id) >= 12)
@@ -239,7 +242,7 @@ export default {
       techStack,
       devStats,
       services,
-      certificates,
+      certificates: [PINNED_CERTIFICATE, ...certificates],
       socialLinks,
       projectLinks,
       experiences,
@@ -303,7 +306,7 @@ export default {
           {
             id: 1,
             bank: "GoTyme Bank",
-            image: require("@/assets/Gotyme.jpg"),
+            image: require("@/assets/Gotyme.png"),
             description: "Support my work via GoTyme Bank"
           },
           {
@@ -354,6 +357,7 @@ export default {
       showDeepDive: false,
 
       currentDeansListIndex: 0,
+      deansListAnchor: null,
       currentQRIndex: 0,
 
       projectModalMessage: "",
@@ -379,6 +383,12 @@ export default {
                   (item) => !liveTitles.has(item.title.trim().toLowerCase())
                 ),
                 ...items
+              ]
+            } else if (key === 'certificates') {
+              // Hardcoded DOLE cert stays first, on top of the admin uploads
+              this.certificates = [
+                PINNED_CERTIFICATE,
+                ...items.filter((item) => item.title !== PINNED_CERTIFICATE.title)
               ]
             } else {
               this[key] = items
@@ -454,8 +464,9 @@ export default {
     },
 
     /* ===== DEANS LIST ===== */
-    openDeansListModal(index) {
+    openDeansListModal(index, anchor = null) {
       this.currentDeansListIndex = index
+      this.deansListAnchor = anchor
       this.showDeansListModal = true
       this.showMobileDeansListModal = false
     },

@@ -11,6 +11,7 @@
           <h1 class="tt-title">TikTok Downloader</h1>
           <p class="tt-subtitle">Download any public TikTok video — no watermark, free.</p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Input card -->
@@ -54,6 +55,48 @@
           <span>{{ error }}</span>
         </div>
       </transition>
+
+      <!-- Placeholder (phones): blank preview of what you'll get, until a video is fetched -->
+      <div v-if="!result" class="tt-result tt-placeholder" aria-hidden="true">
+        <div class="tt-cover-wrap tt-ph-cover">
+          <i :class="loading ? 'fas fa-spinner fa-spin' : 'fab fa-tiktok'"></i>
+          <span>{{ loading ? "Fetching video…" : "Your video preview shows here" }}</span>
+        </div>
+
+        <div class="tt-meta-row">
+          <div class="tt-author">
+            <span class="tt-ph-avatar"></span>
+            <span class="tt-ph-line" style="width: 90px"></span>
+          </div>
+          <div class="tt-stats">
+            <span><i class="fas fa-heart"></i> –</span>
+            <span><i class="fas fa-comment"></i> –</span>
+            <span><i class="fas fa-share"></i> –</span>
+          </div>
+        </div>
+
+        <span class="tt-ph-line" style="width: 85%"></span>
+        <span class="tt-ph-line" style="width: 60%"></span>
+
+        <div class="tt-downloads">
+          <div class="tt-dl-btn primary tt-ph-btn">
+            <span class="tt-dl-icon"><i class="fas fa-video"></i></span>
+            <span class="tt-dl-info">
+              <strong>Download Video</strong>
+              <small>No watermark · MP4</small>
+            </span>
+            <i class="fas fa-arrow-down tt-dl-arrow"></i>
+          </div>
+          <div class="tt-dl-btn secondary tt-ph-btn">
+            <span class="tt-dl-icon"><i class="fas fa-music"></i></span>
+            <span class="tt-dl-info">
+              <strong>Download Audio</strong>
+              <small>MP3</small>
+            </span>
+            <i class="fas fa-arrow-down tt-dl-arrow"></i>
+          </div>
+        </div>
+      </div>
 
       <!-- Result -->
       <transition name="fade-slide">
@@ -139,32 +182,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- How to use -->
-      <div v-if="!result" class="tt-howto">
-        <p class="tt-howto-label">
-          <i class="fas fa-circle-info"></i>
-          How to use
-        </p>
-        <div class="tt-steps">
-          <div class="tt-step">
-            <span class="step-num">1</span>
-            <span>Open TikTok and tap <strong>Share → Copy link</strong> on any video</span>
-          </div>
-          <div class="tt-step">
-            <span class="step-num">2</span>
-            <span>Paste the link in the field above — it fetches instantly</span>
-          </div>
-          <div class="tt-step">
-            <span class="step-num">3</span>
-            <span>Hit <strong>Download Video</strong> to save the file to your device</span>
-          </div>
-        </div>
-        <p class="tt-note">
-          <i class="fas fa-shield-alt"></i>
-          No data stored. Works on any public TikTok video.
-        </p>
-      </div>
-
       <!-- Other tools -->
       <tool-suggestions current="/tools/tiktok" />
 
@@ -174,15 +191,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "TikTokDownloader",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Open TikTok and tap Share → Copy link on any video.",
+        "Paste the link in the field — it fetches instantly.",
+        "Hit Download Video to save the file to your device."
+      ],
+      howToNote: "No data stored. Works on any public TikTok video.",
       url: "",
       loading: false,
       error: "",
@@ -822,5 +846,57 @@ export default {
 
 @media (max-width: 480px) {
   .tool-hero { gap: 12px; padding: 14px; border-radius: 18px; }
+}
+
+/* ── Placeholder preview (phones only) ── */
+.tt-placeholder {
+  pointer-events: none;
+}
+
+.tt-ph-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 16 / 10;
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.tt-ph-cover i {
+  font-size: 1.6rem;
+  opacity: 0.6;
+}
+
+.tt-ph-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface-soft);
+}
+
+.tt-ph-line {
+  display: block;
+  height: 10px;
+  margin: 6px 0;
+  border-radius: 999px;
+  background: var(--surface-soft);
+}
+
+.tt-placeholder .tt-stats {
+  opacity: 0.5;
+}
+
+/* Download rows look disabled until there's a real video */
+.tt-ph-btn {
+  opacity: 0.45;
+}
+
+@media (min-width: 769px) {
+  .tt-placeholder {
+    display: none;
+  }
 }
 </style>

@@ -3,11 +3,23 @@
     <div class="tool-shell">
       <!-- Main Chat Card -->
       <section class="chat-card">
+        <!-- "How to use" for the current mode, as a small "i" in the corner -->
+        <ToolHowTo
+          class="chat-howto"
+          :steps="currentModel.tips.map((tip) => tip.text)"
+          :title="`How to use ${currentModel.label}`"
+        />
+
+        <!-- Phones, before the first message: small app header -->
+        <div v-if="messages.length === 0" class="chat-mobile-head">
+          <h1 class="cmh-title">{{ currentModel.label }}</h1>
+          <span class="cmh-beta">Beta</span>
+        </div>
+
         <!-- Header -->
         <div class="chat-top" :class="{ 'has-messages': messages.length > 0 }">
           <div class="chat-title-block">
-            <h1>{{ currentModel.label }}</h1>
-            <p>{{ currentModel.desc }}</p>
+            <h1>{{ currentModel.label }} <span class="cmh-beta">Beta</span></h1>
           </div>
 
           <!-- Model selector -->
@@ -31,7 +43,8 @@
         <div class="chat-window" ref="chatWindow">
           <!-- Empty state -->
           <div v-if="messages.length === 0" class="chat-empty">
-            <h2>{{ currentModel.label }}</h2>
+            <!-- Friendly greeting (changes every visit / mode switch); the mode name is in the header -->
+            <p class="chat-greeting">{{ greeting }}</p>
             <p class="chat-empty-text">{{ currentModel.emptyText }}</p>
 
             <!-- Phones: the mode island sits here (under the title) until the chat starts -->
@@ -141,7 +154,10 @@
               aria-label="Send message"
               @click="sendMessage"
             >
-              <i v-if="!loading" class="fas fa-paper-plane"></i>
+              <!-- Arrow-up send icon (centered, crisp at any size) -->
+              <svg v-if="!loading" class="send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" />
+              </svg>
               <span v-else class="send-spinner"></span>
             </button>
           </div>
@@ -154,32 +170,41 @@
 
       <!-- Sponsored Ad -->
       <AdSlot type="banner" />
-
-      <!-- How to Use -->
-      <section class="how-to-use">
-        <p class="htu-label">
-          How to use <strong>{{ currentModel.label }}</strong>
-        </p>
-
-        <div class="htu-tips">
-          <div
-            v-for="(tip, i) in currentModel.tips"
-            :key="i"
-            class="htu-tip"
-          >
-            <span>{{ tip.text }}</span>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
 </template>
 
 <script>
 import AdSlot from "@/components/AdSlot.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 
 const COHERE_API_KEY = process.env.VUE_APP_COHERE_API_KEY || "";
 const COHERE_MODEL = "command-a-03-2025";
+
+// Welcome lines for the empty chat; {time} becomes morning / afternoon / evening
+const GREETINGS = {
+  chat: [
+    "Good {time}! What's on your mind?",
+    "Hey there! Ask me anything.",
+    "Hi! How can I help you today?",
+    "Welcome back! What do you want to know?",
+    "Hello! Curious about something?"
+  ],
+  code: [
+    "Good {time}! What are we building?",
+    "Hey! Got a bug to squash?",
+    "Hi! Paste your code and let's fix it.",
+    "Ready to code? Ask me anything.",
+    "Hello, developer! What's the problem?"
+  ],
+  creative: [
+    "Good {time}! Let's make something.",
+    "Hey! Need a fresh idea?",
+    "Hi! What should we create today?",
+    "Feeling creative? Let's brainstorm.",
+    "Hello! Names, captions, stories — just ask."
+  ]
+};
 
 const MODELS = {
   chat: {
@@ -300,7 +325,8 @@ export default {
   name: "AIChatbot",
 
   components: {
-    AdSlot
+    AdSlot,
+    ToolHowTo
   },
 
   data() {
@@ -319,7 +345,8 @@ export default {
       },
       input: "",
       inputFocused: false,
-      loading: false
+      loading: false,
+      greeting: ""
     };
   },
 
@@ -343,6 +370,10 @@ export default {
   },
 
   watch: {
+    activeModel() {
+      this.pickGreeting();
+    },
+
     $route(to) {
       const model = to.query?.model;
 
@@ -360,9 +391,20 @@ export default {
     if (model && MODELS[model]) {
       this.activeModel = model;
     }
+
+    this.pickGreeting();
   },
 
   methods: {
+    // Random welcome line for the current mode (never the same twice in a row)
+    pickGreeting() {
+      const hour = new Date().getHours();
+      const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
+      const options = (GREETINGS[this.activeModel] || GREETINGS.chat).map((line) => line.replace("{time}", time));
+      const others = options.filter((line) => line !== this.greeting);
+      this.greeting = others[Math.floor(Math.random() * others.length)];
+    },
+
     selectModel(key) {
       if (this.loading || !MODELS[key]) return;
 
@@ -575,6 +617,7 @@ export default {
 
 .send-btn.ready {
   background: var(--accent);
+  color: var(--bg);
 }
 
 /* Page */
@@ -621,6 +664,7 @@ export default {
 
 /* Chat Card */
 .chat-card {
+  position: relative;
   height: calc(100dvh - 118px);
   min-height: 580px;
   display: flex;
@@ -633,12 +677,32 @@ export default {
 }
 
 /* Top */
+/* "i" (how to use) pinned to the card's top-right corner */
+.chat-howto {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  z-index: 5;
+}
+
+/* Desktop: line the "i" up with the mode switch (same row, vertically centered) */
+@media (min-width: 641px) {
+  .chat-top {
+    min-height: 82px;
+  }
+
+  .chat-howto {
+    top: 41px;
+    transform: translateY(-50%);
+  }
+}
+
 .chat-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 18px 18px 14px;
+  padding: 14px 54px 14px 18px;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 48%, transparent);
 }
 
@@ -1101,16 +1165,19 @@ export default {
   cursor: not-allowed;
 }
 
+/* Round send button: muted until there's text, then solid accent */
 .send-btn {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   flex: 0 0 auto;
+  align-self: flex-end;
   display: grid;
   place-items: center;
+  padding: 0;
   border: none;
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--border) 70%, transparent);
-  color: var(--bg);
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 0.84rem;
   -webkit-tap-highlight-color: transparent;
@@ -1126,9 +1193,14 @@ export default {
 }
 
 .send-btn:disabled {
-  opacity: 0.38;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+.send-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
 }
 
 .send-spinner {
@@ -1421,10 +1493,14 @@ export default {
   }
 
   .send-btn {
-    width: 37px;
-    height: 37px;
-    border-radius: 13px;
-    font-size: 0.78rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+
+  .send-icon {
+    width: 17px;
+    height: 17px;
   }
 
   .input-hint {
@@ -1579,6 +1655,68 @@ export default {
   }
 }
 
+/* Greeting in the empty chat (desktop + phones) */
+.chat-empty .chat-greeting {
+  max-width: 22ch;
+  margin: 0 auto 0.4rem;
+  color: var(--text);
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+/* Small "Beta" tag next to the mode name */
+.cmh-beta {
+  display: inline-block;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* Phones-only header shown before the first message */
+.chat-mobile-head {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .chat-mobile-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 50px 12px 14px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  }
+
+  .cmh-title {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .chat-empty .chat-greeting {
+    display: block;
+    order: 0;
+    max-width: 18ch;
+    margin: 0 auto 0.3rem;
+    color: var(--text);
+    font-size: 1.55rem;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+}
+
 /* Island placement: desktop never shows the empty-state copy */
 .mode-switch--empty {
   display: none;
@@ -1620,7 +1758,13 @@ export default {
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    padding: 10px 12px;
+    padding: 10px 48px 10px 12px;
+  }
+
+  /* Phones: "i" on the right of the header row (Ask Rymel header / chat bar) */
+  .chat-howto {
+    top: 15px;
+    right: 12px;
   }
 
   .chat-top.has-messages .chat-title-block {

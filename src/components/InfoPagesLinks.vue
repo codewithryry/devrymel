@@ -46,10 +46,10 @@ export default {
           description: "See what I’m currently focused on."
         },
         {
-          path: "/uses",
-          icon: "fas fa-tools",
-          title: "Uses",
-          description: "Tools, stack, and setup I use."
+          path: "/process",
+          icon: "fas fa-route",
+          title: "Process",
+          description: "How I work on a project, step by step."
         },
         {
           path: "/services",

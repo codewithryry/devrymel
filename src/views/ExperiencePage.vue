@@ -11,17 +11,14 @@
         </p>
       </div>
 
-      <ExperienceSection :experiences="experiences" />
+      <ExperienceSection :experiences="experiences" :show-title="false" />
       <CareerTimeline :timeline="timeline" />
-
-      <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
 import HeroArt from "@/components/HeroArt.vue";
-import ExploreLinks from "@/components/ExploreLinks.vue";
 import ExperienceSection from "@/components/profile/ExperienceSection.vue";
 import CareerTimeline from "@/components/profile/CareerTimeline.vue";
 import { subscribeToCollection } from "@/services/contentService";
@@ -34,7 +31,6 @@ export default {
   name: "ExperiencePage",
 
   components: {
-    ExploreLinks,
     HeroArt,
     ExperienceSection,
     CareerTimeline

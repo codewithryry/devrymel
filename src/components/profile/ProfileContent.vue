@@ -2,28 +2,31 @@
   <div>
     <!-- MOBILE LAYOUT -->
     <div class="mobile-profile-content m-profile">
-      <!-- Cover banner (phones): photo overlaps its bottom edge -->
-      <div class="m-banner" aria-hidden="true">
-        <!-- Background video: drop a free HD clip at public/banner.mp4.
-             If it's missing or fails, the gradient + grid shows instead. -->
-        <video
-          v-if="bannerVideoOk"
-          class="m-banner-video"
-          src="/banner.mp4"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="auto"
-          @loadeddata="playBannerVideo"
-          @error="bannerVideoOk = false"
-        ></video>
+      <!-- Banner corner: pencil turns tile edit mode on / off -->
+      <div v-if="canEditTiles" class="m-stats-wrap">
+        <button
+          type="button"
+          class="m-stats-btn"
+          :class="{ active: tileEditing }"
+          :aria-pressed="tileEditing"
+          :aria-label="tileEditing ? 'Stop editing layout' : 'Edit layout'"
+          @click="$root.tileEditMode = !$root.tileEditMode"
+        >
+          <i class="fas fa-pen"></i>
+        </button>
       </div>
+
+      <!-- Cover banner (phones): grid of boxes, colors follow the theme -->
+      <div class="m-banner" aria-hidden="true"></div>
 
       <!-- Centered header: photo, name, role, location -->
       <div class="m-hero">
         <div class="m-photo">
           <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
+          <!-- Availability chip on the bottom edge of the photo -->
+          <span class="m-open" title="Available for projects">
+            <i class="fas fa-circle"></i>Open to work
+          </span>
         </div>
 
         <h2 class="m-name">Reymel Mislang</h2>
@@ -48,7 +51,6 @@
             <span class="badge-label">{{ text.links }}</span>
           </button>
         </div>
-
 
         <!-- Bio (inside the same card) — hidden for now; remove v-if to show again -->
         <div v-if="false" class="m-bio">
@@ -146,7 +148,7 @@
                 class="view-all-icon"
                 :title="`${text.viewAllAwards} (${achievements.deansList.length})`"
                 :aria-label="`${text.viewAllAwards} (${achievements.deansList.length})`"
-                @click="$emit('openDeansList', 0)"
+                @click="openDeansPopover"
               >
                 <i class="fas fa-chevron-right"></i>
               </button>
@@ -155,7 +157,7 @@
             <div
               v-if="latestAchievement"
               class="achievement-chip"
-              @click="$emit('openDeansList', 0)"
+              @click="openDeansPopover"
             >
               <div class="chip-icon">
                 <i class="fas fa-award"></i>
@@ -177,6 +179,25 @@
             <h4 class="cv-title">{{ text.referencesTitle }}</h4>
             <p class="cv-note">{{ text.referencesNote }}</p>
           </div>
+
+          <!-- Spotify Now Playing (data from App): only shown while a song plays -->
+          <div v-if="spotifyPlaying" class="cv-block">
+            <h4 class="cv-title">Now Playing</h4>
+            <div class="spotify-card" :class="{ idle: !spotifyPlaying }">
+              <div class="spotify-card-art">
+                <img v-if="spotifyPlaying && $root.spotifyTrack.image" :src="$root.spotifyTrack.image" :alt="$root.spotifyTrack.title" />
+                <i v-else class="fab fa-spotify"></i>
+              </div>
+              <div class="spotify-card-info">
+                <span class="spotify-card-title">
+                  <span class="spotify-card-name">{{ spotifyPlaying ? $root.spotifyTrack.title : "Not playing" }}</span>
+                  <span v-if="spotifyPlaying" class="spotify-card-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+                </span>
+                <span class="spotify-card-artist">{{ spotifyPlaying ? $root.spotifyTrack.artist : "Offline right now" }}</span>
+                <span v-if="spotifyPlaying && $root.spotifyTrack.album" class="spotify-card-album">{{ $root.spotifyTrack.album }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Right Column: Brand Narrative -->
@@ -197,7 +218,7 @@
             <h4 class="stack-title">{{ text.coreTechnologies }}</h4>
 
             <div class="stack-chips">
-              <div class="tech-chip" v-for="tech in techStack" :key="tech.name">
+              <div class="tech-chip" v-for="tech in techChips" :key="tech.name">
                 <i :class="tech.icon"></i>
                 <span>{{ tech.name }}</span>
               </div>
@@ -205,7 +226,7 @@
           </div>
 
           <!-- Contact Information -->
-          <div id="contact" class="brand-contact">
+          <div id="contact" ref="brandContact" class="brand-contact">
             <h4 class="contact-title">{{ text.getInTouch }}</h4>
 
             <div class="contact-grid">
@@ -226,7 +247,7 @@
                 <i class="fas fa-external-link-alt contact-arrow"></i>
               </a>
 
-              <a href="/Reymel_Mislang_CV.docx" download class="contact-item">
+              <a href="/Reymel_Mislang_CV.pdf" target="_blank" rel="noopener" class="contact-item">
                 <div class="contact-icon">
                   <i class="fas fa-id-card"></i>
                 </div>
@@ -236,7 +257,7 @@
                   <span class="contact-value">{{ text.downloadCV }}</span>
                 </div>
 
-                <i class="fas fa-download contact-arrow"></i>
+                <i class="fas fa-external-link-alt contact-arrow"></i>
               </a>
             </div>
           </div>
@@ -275,7 +296,7 @@ const PROFILE_TRANSLATIONS = {
     email: "Email",
     sendEmail: "Send an Email",
     cv: "Curriculum Vitae",
-    downloadCV: "Download CV",
+    downloadCV: "View CV",
 
     detailsTitle: "Details",
     dob: "Date of Birth",
@@ -320,7 +341,7 @@ const PROFILE_TRANSLATIONS = {
     email: "Email",
     sendEmail: "Mag-send ng Email",
     cv: "Curriculum Vitae",
-    downloadCV: "I-download ang CV",
+    downloadCV: "Tingnan ang CV",
 
     detailsTitle: "Detalye",
     dob: "Kaarawan",
@@ -365,7 +386,7 @@ const PROFILE_TRANSLATIONS = {
     email: "電子郵件",
     sendEmail: "發送電子郵件",
     cv: "Curriculum Vitae",
-    downloadCV: "下載 CV",
+    downloadCV: "查看 CV",
 
     detailsTitle: "個人資料",
     dob: "出生日期",
@@ -437,8 +458,7 @@ export default {
       tileLayoutDocId: "home",
       tileOrder: [],
       selectedTileId: null,
-      currentTheme: document.documentElement.getAttribute("data-theme") || "light",
-      bannerVideoOk: true
+      currentTheme: document.documentElement.getAttribute("data-theme") || "light"
     };
   },
 
@@ -449,6 +469,16 @@ export default {
   },
 
   computed: {
+    // Claude Code is always listed (hardcoded, even when the stack comes from admin)
+    techChips() {
+      const hasClaude = this.techStack.some((tech) => tech.name === "Claude Code");
+      return hasClaude ? this.techStack : [...this.techStack, { name: "Claude Code", icon: "fas fa-asterisk" }];
+    },
+
+    spotifyPlaying() {
+      return !!(this.$root.spotifyTrack && this.$root.spotifyTrack.isPlaying);
+    },
+
     // Every mobile homepage tile (profile links + quick links). Order/size are user-editable.
     homeTiles() {
       const track = this.$root.spotifyTrack || {};
@@ -460,7 +490,7 @@ export default {
 
       return [
         { id: "email", size: "wide", chip: "chip-1", icon: "fas fa-envelope", label: this.text.email, desc: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com", corner: open },
-        { id: "cv", size: "sm", chip: "chip-4", icon: "fas fa-id-card", label: "CV", desc: "Download", href: "/Reymel_Mislang_CV.docx", download: true, corner: "fas fa-download" },
+        { id: "cv", size: "sm", chip: "chip-4", icon: "fas fa-id-card", label: "CV", desc: "View PDF", href: "/Reymel_Mislang_CV.pdf", external: true, corner: "fas fa-arrow-up-right-from-square" },
         { id: "github", size: "sm", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "@codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
         { id: "linkedin", size: "sm", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Reymel Mislang", href: "https://www.linkedin.com/in/reymelreymislang/", external: true, corner: open },
         { id: "tiktok", size: "icon", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@devrymel", href: "https://www.tiktok.com/@devrymel", external: true, corner: open },
@@ -473,7 +503,7 @@ export default {
           kicker: playing ? "Now Playing" : "Offline",
           label: playing ? track.title : "Spotify",
           desc: playing ? track.artist : "Not playing right now",
-          href: playing && track.url ? track.url : "https://open.spotify.com", external: true, corner: "fab fa-spotify"
+          corner: "fab fa-spotify"
         },
         { id: "coffee", size: "tall", chip: "chip-4", icon: "fas fa-coffee", label: "Coffee", desc: "Support my work", href: "https://buymeacoffee.com/reymelreym7", external: true, corner: open },
         { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
@@ -542,6 +572,13 @@ export default {
       return attrs;
     },
 
+    // Desktop: show the Dean's List viewer as a compact popover over the Get in Touch area
+    openDeansPopover() {
+      const el = this.$refs.brandContact;
+      const rect = el ? el.getBoundingClientRect() : null;
+      this.$emit("openDeansList", 0, rect ? { top: rect.top, left: rect.left, width: rect.width } : null);
+    },
+
     onTileClick(e, tile) {
       // Ignore the click that ends the long press that opened edit mode
       if (this.justEnteredEdit) {
@@ -575,15 +612,6 @@ export default {
       this.tileOrder = order;
     },
 
-    // Make sure the banner video is muted before playing so mobile browsers allow autoplay
-    playBannerVideo(e) {
-      const video = e.target;
-      video.muted = true;
-      const playing = video.play();
-      if (playing && playing.catch) playing.catch(() => {});
-    },
-
-
     openMobileDeansList() {
       this.$emit("openMobileDeansList");
     },
@@ -596,6 +624,11 @@ export default {
 </script>
 
 <style scoped>
+/* Spotify tile only shows what's playing, it doesn't link out */
+.m-tile.tile-spotify {
+  cursor: default;
+}
+
 .contact-grid {
   display: flex;
   flex-direction: column;
@@ -616,6 +649,12 @@ export default {
   color: var(--text-secondary);
   line-height: 1.65;
   margin: 0 0 1rem;
+}
+
+/* Desktop bio: justified so both edges line up */
+.brand-statement .statement-text {
+  text-align: justify;
+  hyphens: none;
 }
 
 .statement-text:last-child {
@@ -907,14 +946,18 @@ export default {
   .stack-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
+  /* Chips stretch to fill the row so there's no empty gap at the end */
   .tech-chip {
     display: flex;
+    flex: 1 1 auto;
+    justify-content: center;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.4rem 0.7rem;
+    padding: 0.4rem 0.6rem;
+    white-space: nowrap;
     border-radius: 999px;
     border: 1px solid var(--border);
     background: var(--surface);
@@ -1011,6 +1054,115 @@ export default {
 
   .chip-semester {
     white-space: nowrap;
+  }
+
+  /* Spotify Now Playing card (left column): compact, cover on the left */
+  .spotify-card {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .spotify-card-art {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--surface-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+  }
+
+  .spotify-card-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spotify-card-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .spotify-card-title,
+  .spotify-card-artist,
+  .spotify-card-album {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .spotify-card-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .spotify-card-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .spotify-card-artist {
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+  }
+
+  .spotify-card-album {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+  }
+
+  /* Small equalizer while a song plays */
+  .spotify-card-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+
+  .spotify-card-bars i {
+    width: 2px;
+    height: 100%;
+    border-radius: 1px;
+    background: #1db954;
+    transform-origin: bottom;
+    animation: spotify-bar 0.9s ease-in-out infinite;
+  }
+
+  .spotify-card-bars i:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+
+  .spotify-card-bars i:nth-child(3) {
+    animation-delay: -0.6s;
+  }
+
+  @keyframes spotify-bar {
+    0%, 100% { transform: scaleY(0.35); }
+    50% { transform: scaleY(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spotify-card-bars i {
+      animation: none;
+    }
   }
 
 
@@ -1689,23 +1841,107 @@ export default {
     height: 150px;
     overflow: hidden;
     border-radius: 26px;
-    background:
-      linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--accent) 92%, transparent) 0%,
-        color-mix(in srgb, var(--accent) 60%, var(--text-muted)) 100%
-      );
+    /* Solid theme color + box grid (lines and boxes use theme tokens) */
+    background-color: var(--surface-soft);
   }
 
-  /* Faint grid over the gradient */
+  /* Box grid lines */
   .m-banner::before {
     content: "";
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(color-mix(in srgb, var(--bg) 12%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--bg) 12%, transparent) 1px, transparent 1px);
-    background-size: 22px 22px;
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 30px 30px;
+    background-position: -1px -1px;
+  }
+
+  /* "⋯" stats button (top-right of the banner) + its tooltip */
+  .m-profile {
+    position: relative;
+  }
+
+  .m-stats-wrap {
+    position: absolute;
+    top: 14px;
+    right: 10px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  /* Plain icon buttons (no card), still a comfortable tap size */
+  .m-stats-btn {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .m-stats-btn .fa-pen {
+    font-size: 0.8rem;
+  }
+
+  .m-stats-btn.active {
+    color: var(--text);
+  }
+
+  /* Pencil while editing: accent color so you know edit mode is on */
+  .m-stats-btn.active .fa-pen {
+    color: #22c55e;
+  }
+
+
+  /* "Open to work" chip centered on the photo's bottom edge */
+  .m-open {
+    position: absolute;
+    left: 50%;
+    bottom: -11px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+    transform: translateX(-50%);
+  }
+
+  .m-open i {
+    color: #22c55e;
+    font-size: 0.45rem;
+  }
+
+  /* A few filled boxes sitting on the grid */
+  .m-banner::after {
+    content: "";
+    position: absolute;
+    top: 29px;
+    left: 29px;
+    width: 30px;
+    height: 30px;
+    background: color-mix(in srgb, var(--text) 7%, transparent);
+    box-shadow:
+      60px 30px 0 color-mix(in srgb, var(--text) 5%, transparent),
+      180px 0 0 color-mix(in srgb, var(--text) 9%, transparent),
+      240px 60px 0 color-mix(in srgb, var(--text) 6%, transparent),
+      300px 30px 0 color-mix(in srgb, var(--text) 8%, transparent),
+      30px 90px 0 color-mix(in srgb, var(--text) 4%, transparent);
   }
 
   .m-banner-code {
@@ -1751,36 +1987,12 @@ export default {
   }
 }
 
-/* Banner video sits under the grid/tint; slightly darkened so the photo stands out */
-@media (max-width: 768px) {
-  .m-banner-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.7) saturate(0.9);
-  }
-
-  .m-banner::before,
-  .m-banner-code {
-    z-index: 1;
-  }
-}
-
 /* Phones: photo ~49% of the screen width (max 210px), still half over the banner */
 @media (max-width: 768px) {
   :root .m-photo {
     width: 49vw;
     max-width: 210px;
     margin-top: calc(-1 * min(24.5vw, 105px));
-  }
-}
-
-/* Banner: no grid pattern, just the video (or the plain gradient fallback) */
-@media (max-width: 768px) {
-  .m-banner::before {
-    display: none;
   }
 }
 

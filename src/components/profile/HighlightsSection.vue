@@ -1,7 +1,7 @@
 <template>
   <section class="highlights-section">
-    <div class="section-header reveal-up">
-      <div>
+    <div class="section-header reveal-up" :class="{ 'no-title': !showTitle }">
+      <div v-if="showTitle">
         <span class="section-kicker">Benefits</span>
         <h2 class="section-title">Why Work With Me</h2>
       </div>
@@ -43,6 +43,10 @@ export default {
     highlights: {
       type: Array,
       default: () => []
+    },
+    showTitle: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -244,6 +248,13 @@ export default {
   transform: translate(0, 0);
 }
 
+/* Desktop: hide the swipe-only header when there's no title */
+@media (min-width: 769px) {
+  .section-header.no-title {
+    display: none;
+  }
+}
+
 /* Tablet */
 @media (max-width: 1024px) {
   .highlights-grid {
@@ -277,6 +288,7 @@ export default {
 
   .swipe-hint {
     display: flex;
+    margin-left: auto;
   }
 
   .highlights-grid {

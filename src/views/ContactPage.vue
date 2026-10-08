@@ -64,8 +64,8 @@
           </p>
         </div>
 
-        <a href="mailto:reymelrey.mislang@gmail.com" class="cta-btn">
-          Email Me
+        <a href="mailto:reymelrey.mislang@gmail.com?subject=Book%20a%20Call" class="cta-btn">
+          Book a Call
         </a>
       </section>
 

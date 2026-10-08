@@ -10,6 +10,7 @@
           <h1 class="tt-title">IP Address Lookup</h1>
           <p class="tt-subtitle">View your current IP address, location, ISP, and more — instantly.</p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Error -->
@@ -68,15 +69,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "IPLookup",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Open the tool — your public IP loads automatically.",
+        "Check your approximate location and network provider.",
+        "Copy any value you need."
+      ],
+      howToNote: "Location is approximate and based on your IP address.",
       loading: false,
       error: "",
       info: null,

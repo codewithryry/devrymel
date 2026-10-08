@@ -55,7 +55,7 @@ const routes = [
     name: "skills",
     component: () => import("@/views/SkillsPage.vue"),
     meta: {
-      title: "Skills | Reymel Mislang"
+      title: "Tech Stack | Reymel Mislang"
     }
   },
   {
@@ -67,12 +67,17 @@ const routes = [
     }
   },
   {
-    path: "/uses",
-    name: "uses",
-    component: () => import("@/views/UsesPage.vue"),
+    path: "/process",
+    name: "process",
+    component: () => import("@/views/ProcessPage.vue"),
     meta: {
-      title: "Uses | Reymel Mislang"
+      title: "Process | Reymel Mislang"
     }
+  },
+  {
+    // Old "Uses" page became "Process"
+    path: "/uses",
+    redirect: "/process"
   },
   {
     path: "/services",

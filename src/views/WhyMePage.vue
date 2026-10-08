@@ -10,7 +10,7 @@
         </p>
       </div>
 
-      <HighlightsSection :highlights="highlights" />
+      <HighlightsSection :highlights="highlights" :show-title="false" />
 
       <ExploreLinks />
     </section>
@@ -54,3 +54,26 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Phones: list every benefit as a stacked card (no sideways swipe, no empty space) */
+@media (max-width: 768px) {
+  .info-page :deep(.highlights-section .section-header) {
+    display: none;
+  }
+
+  .info-page :deep(.highlights-grid) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .info-page :deep(.highlight-card) {
+    min-width: 0;
+    max-width: none;
+    min-height: 0;
+  }
+}
+</style>

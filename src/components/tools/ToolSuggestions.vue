@@ -7,7 +7,9 @@
         :key="tool.path"
         :to="tool.path"
         class="ts-tile"
+        :class="{ 'is-soon': tool.soon }"
       >
+        <span v-if="tool.soon" class="ts-soon">Soon</span>
         <span class="ts-icon" :style="{ background: tool.color }">
           <i :class="tool.icon"></i>
         </span>
@@ -26,6 +28,13 @@ const ALL_TOOLS = [
   { path: "/tools/password",           icon: "fas fa-key",            color: "linear-gradient(135deg,#7c3aed,#6d28d9)", title: "Password"     },
   { path: "/tools/ip-lookup",          icon: "fas fa-map-marker-alt", color: "linear-gradient(135deg,#0ea5e9,#0284c7)", title: "IP Lookup"    },
   { path: "/tools/base64",             icon: "fas fa-code",           color: "linear-gradient(135deg,#059669,#047857)", title: "Base64"       },
+  { path: "/tools/color-palette",      icon: "fas fa-palette",        color: "linear-gradient(135deg,#ec4899,#be185d)", title: "Colors"       },
+  { path: "/tools/url-shortener",      icon: "fas fa-link",           color: "linear-gradient(135deg,#f59e0b,#d97706)", title: "Short URL"    },
+  // Coming soon (open their "coming soon" page)
+  { path: "/tools/json-formatter",     icon: "fas fa-file-code",      color: "linear-gradient(135deg,#64748b,#475569)", title: "JSON",        soon: true },
+  { path: "/tools/text-counter",       icon: "fas fa-font",           color: "linear-gradient(135deg,#64748b,#475569)", title: "Text Count",  soon: true },
+  { path: "/tools/case-converter",     icon: "fas fa-text-height",    color: "linear-gradient(135deg,#64748b,#475569)", title: "Case",        soon: true },
+  { path: "/tools/meta-tag-generator", icon: "fas fa-tags",           color: "linear-gradient(135deg,#64748b,#475569)", title: "Meta Tags",   soon: true },
 ];
 
 export default {
@@ -64,6 +73,7 @@ export default {
 }
 
 .ts-tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,5 +120,24 @@ export default {
   .ts-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* Coming-soon tools: faded, with a small "Soon" tag */
+.ts-tile.is-soon {
+  opacity: 0.6;
+}
+
+.ts-soon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 </style>

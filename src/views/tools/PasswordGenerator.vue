@@ -10,6 +10,7 @@
           <h1 class="tt-title">Password Generator</h1>
           <p class="tt-subtitle">Generate strong, secure passwords instantly. Fully client-side — nothing is sent to any server.</p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Password Display -->
@@ -122,15 +123,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "PasswordGenerator",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Set the length and pick which characters to include.",
+        "Generate a new password.",
+        "Copy it and store it in a password manager."
+      ],
+      howToNote: "Passwords are generated in your browser and never stored.",
       password: "",
       length: 16,
       justCopied: false,

@@ -18,6 +18,7 @@
             Check your estimated internet speed, latency, and connection quality.
           </p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Test Card -->
@@ -129,29 +130,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- How to use -->
-      <div v-if="!result" class="st-howto">
-        <h3>How to use</h3>
-        <div class="st-steps">
-          <div class="st-step">
-            <span class="step-num">1</span>
-            <span>Close other downloads or streaming apps first for a cleaner result</span>
-          </div>
-          <div class="st-step">
-            <span class="step-num">2</span>
-            <span>Tap <strong>Start Speed Test</strong> and wait until the test finishes</span>
-          </div>
-          <div class="st-step">
-            <span class="step-num">3</span>
-            <span>Review your estimated download, upload, and latency results</span>
-          </div>
-        </div>
-        <p class="st-note">
-          <i class="fas fa-shield-alt"></i>
-          No personal data is stored. The test runs only inside your browser.
-        </p>
-      </div>
-
       <!-- Suggestions -->
       <tool-suggestions current="/tools/speedtest" />
 
@@ -161,15 +139,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "SpeedTest",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Close other downloads or streaming apps first.",
+        "Tap Start Speed Test and wait until it finishes.",
+        "Review your download, upload, and latency results."
+      ],
+      howToNote: "No personal data is stored. The test runs in your browser.",
       testing: false,
       error: "",
       progressSpeed: 0,

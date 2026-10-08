@@ -4,7 +4,7 @@
  -->
 
 <template>
-  <section class="links-section">
+  <section id="quick-links" class="links-section">
     <div class="section-header links-header">
       <span class="section-kicker">Resources</span>
       <h2 class="section-title">Quick Links</h2>
@@ -26,10 +26,7 @@
           @contextmenu="tileEditing && $event.preventDefault()"
         >
         <!-- Spotify tile: always shown; "Now Playing" while a song plays, idle otherwise (data from App) -->
-        <a
-          :href="spotifyPlaying ? ($root.spotifyTrack.url || 'https://open.spotify.com') : 'https://open.spotify.com'"
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
           class="mobile-link-card spotify-tile"
           :class="[{ idle: !spotifyPlaying }, tileClass('spotify', 'tall')]"
         >
@@ -41,7 +38,7 @@
           <small class="spotify-tile-label">{{ spotifyPlaying ? 'Now Playing' : 'Offline' }}</small>
           <span class="mobile-label">{{ spotifyPlaying ? $root.spotifyTrack.title : 'Spotify' }}</span>
           <small class="mobile-desc">{{ spotifyPlaying ? $root.spotifyTrack.artist : 'Not playing right now' }}</small>
-        </a>
+        </div>
 
         <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card" :class="tileClass('coffee', 'tall')">
           <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('coffee', 'tall')"><i class="fas fa-expand-alt"></i></button>
@@ -113,17 +110,74 @@
         <h3 class="category-title">Portfolio & Certificates</h3>
         <div class="category-links">
           <a href="https://reymelreymislang.vercel.app/" target="_blank" class="link-card">
-            <span class="link-label">Portfolio Website</span>
-            <small class="link-desc">View my work</small>
+            <span class="link-label">Previous Portfolio</span>
+            <small class="link-desc">My earlier version</small>
           </a>
-          <a href="#" class="link-card" @click.prevent="$emit('openCertificatesListModal')">
+          <a href="/Reymel_Mislang_Resume.pdf" target="_blank" rel="noopener" class="link-card">
+            <span class="link-label">Resume</span>
+            <small class="link-desc">View PDF</small>
+          </a>
+          <a href="#" class="link-card" :aria-expanded="showCerts" @click.prevent="showCerts = !showCerts">
             <span class="link-label">Certificates</span>
-            <small class="link-desc">{{ certificates.length }} certifications</small>
+            <small class="link-desc">{{ showCerts ? 'Hide list' : `${certificates.length} certifications` }}</small>
           </a>
         </div>
       </div>
 
-      <div class="link-category">
+      <!-- Desktop: certificates take over the other three columns (phones use the modal) -->
+      <transition name="certs-panel">
+        <div v-if="showCerts" class="certs-panel">
+          <div class="certs-panel-head">
+            <span class="category-title">My Certifications</span>
+            <button type="button" class="certs-close" aria-label="Close certificates" @click="showCerts = false">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <!-- List on the left, live preview of the selected certificate on the right -->
+          <div class="certs-viewer">
+            <ul class="certs-list">
+              <li v-for="(cert, index) in certificates" :key="cert.id">
+                <button
+                  type="button"
+                  class="certs-item"
+                  :class="{ active: index === activeCert }"
+                  @click="activeCert = index"
+                >
+                  <span class="certs-item-cat">{{ cert.category }}</span>
+                  <span class="certs-item-title">{{ cert.title }}</span>
+                </button>
+              </li>
+            </ul>
+
+            <div v-if="currentCert" class="certs-preview">
+              <div class="certs-preview-frame">
+                <img
+                  v-if="!isPdf(currentCert.file)"
+                  :src="certificatePath(currentCert.file)"
+                  :alt="currentCert.title"
+                />
+                <iframe
+                  v-else
+                  :key="currentCert.id"
+                  :src="`${certificatePath(currentCert.file)}#toolbar=0&navpanes=0&view=FitH`"
+                  :title="currentCert.title"
+                ></iframe>
+              </div>
+              <div class="certs-preview-info">
+                <div>
+                  <h4>{{ currentCert.title }}</h4>
+                  <p v-if="currentCert.description">{{ currentCert.description }}</p>
+                </div>
+                <a :href="certificatePath(currentCert.file)" target="_blank" rel="noopener" class="certs-open">
+                  Open <i class="fas fa-arrow-up-right-from-square"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+
+      <div v-show="!showCerts" class="link-category">
         <h3 class="category-title">Development Work</h3>
         <div class="category-links">
           <a href="https://github.com/codewithryry?tab=repositories" target="_blank" class="link-card">
@@ -141,12 +195,44 @@
         </div>
       </div>
 
-      <div class="link-category">
+      <div v-show="!showCerts" class="link-category">
         <h3 class="category-title">Support & Connect</h3>
         <div class="category-links">
-          <div class="link-card" @click="$emit('openQRModal')">
-            <span class="link-label">Support via QR</span>
-            <small class="link-desc">Multiple banks available</small>
+          <!-- Desktop: QR card floats down from the link (phones use the modal) -->
+          <div class="qr-anchor" @click.stop>
+            <div class="link-card" :aria-expanded="showQR" @click="toggleQR">
+              <span class="link-label">Support via QR</span>
+              <small class="link-desc">{{ qrList.length ? `${qrList.length} banks available` : 'Multiple banks available' }}</small>
+            </div>
+
+            <transition name="qr-float">
+              <div v-if="showQR && currentQR" class="qr-float" role="dialog" aria-label="Support via QR">
+                <div class="qr-float-tabs">
+                  <button
+                    v-for="(item, index) in qrList"
+                    :key="item.id"
+                    type="button"
+                    :class="{ active: index === activeQR }"
+                    @click="activeQR = index"
+                  >
+                    {{ item.bank }}
+                  </button>
+                </div>
+
+                <div class="qr-float-card">
+                  <div class="qr-float-code">
+                    <img :src="currentQR.image" :alt="`${currentQR.bank} QR code`" />
+                  </div>
+
+                  <div class="qr-float-foot">
+                    <span>{{ currentQR.description }}</span>
+                    <a :href="currentQR.image" download class="qr-float-save" title="Save QR" aria-label="Save QR">
+                      <i class="fas fa-download"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </transition>
           </div>
           <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="link-card">
             <span class="link-label">Buy Me a Coffee</span>
@@ -159,7 +245,7 @@
         </div>
       </div>
 
-      <div class="link-category">
+      <div v-show="!showCerts" class="link-category">
         <h3 class="category-title category-title-row">
           Free Tools
           <button type="button" class="more-toggle" @click="showAllTools = !showAllTools">
@@ -195,11 +281,19 @@ export default {
     certificates: {
       type: Array,
       required: true
+    },
+    qrList: {
+      type: Array,
+      default: () => []
     }
   },
   emits: ['openQRModal', 'openCertificatesListModal'],
   data() {
     return {
+      showCerts: false,
+      showQR: false,
+      activeQR: 0,
+      activeCert: 0,
       tileStorageKey: 'tileSizes:links',
       tools: [
         { path: '/tools/tiktok', icon: 'fab fa-tiktok', title: 'TikTok Downloader', desc: 'Save videos watermark-free' },
@@ -232,6 +326,70 @@ export default {
 
     visibleTools() {
       return this.showAllTools ? this.tools : this.tools.slice(0, 3)
+    },
+
+    currentCert() {
+      return this.certificates[this.activeCert] || null
+    },
+
+    currentQR() {
+      return this.qrList[this.activeQR] || null
+    }
+  },
+  watch: {
+    // "?certs=1" (from the ⋯ menu): open the certificates panel and scroll to it
+    '$route.query.certs': {
+      immediate: true,
+      handler(value) {
+        if (!value) return
+        this.showCerts = true
+        this.$nextTick(() => {
+          setTimeout(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+        })
+      }
+    },
+
+    // Closing the panel clears "?certs=1" so the menu tile works again next time
+    showCerts(open) {
+      if (!open && this.$route.query.certs) {
+        const query = { ...this.$route.query }
+        delete query.certs
+        this.$router.replace({ query }).catch(() => {})
+      }
+    }
+  },
+  mounted() {
+    document.addEventListener('click', this.closeQR)
+    document.addEventListener('keydown', this.onKeydown)
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.closeQR)
+    document.removeEventListener('keydown', this.onKeydown)
+  },
+  methods: {
+    toggleQR() {
+      if (!this.qrList.length) {
+        this.$emit('openQRModal')
+        return
+      }
+      this.showQR = !this.showQR
+    },
+
+    closeQR() {
+      this.showQR = false
+    },
+
+    onKeydown(e) {
+      if (e.key === 'Escape') this.showQR = false
+    },
+
+    isPdf(filename) {
+      return /\.pdf$/i.test(filename || '')
+    },
+
+    certificatePath(filename) {
+      if (filename && filename.startsWith('http')) return filename
+      return `/certificates/${filename}`
     }
   }
 }
@@ -400,6 +558,323 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+}
+
+/* ===== Floating QR card (desktop) ===== */
+.qr-anchor {
+  position: relative;
+}
+
+/* Two stacked cards: bank names on top (one line), QR below */
+.qr-float {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  /* Never wider than this column + the one to its right */
+  max-width: calc(200% + 1.5rem);
+}
+
+.qr-float-tabs,
+.qr-float-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-xl, var(--shadow));
+}
+
+.qr-float-tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.3rem;
+  max-width: 100%;
+  padding: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.qr-float-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* Small notch pointing up at the link */
+.qr-float-tabs::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 24px;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+  transform: rotate(45deg);
+}
+
+/* Scales with the screen so it fits on 14" laptops too */
+.qr-float-card {
+  width: clamp(240px, 24vw, 320px);
+  padding: 0.6rem;
+}
+
+.qr-float-tabs button {
+  flex-shrink: 0;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.qr-float-tabs button:hover {
+  color: var(--text);
+}
+
+.qr-float-tabs button.active {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.qr-float-code {
+  overflow: hidden;
+  height: clamp(200px, calc(100vh - 420px), 340px);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.qr-float-code img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.qr-float-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+}
+
+.qr-float-save {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.qr-float-save:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.qr-float-enter-active,
+.qr-float-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.qr-float-enter-from,
+.qr-float-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+}
+
+/* ===== Inline certificates (desktop) ===== */
+/* Same top line + spacing as the other columns */
+.certs-panel {
+  grid-column: 2 / -1;
+  min-width: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.certs-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.certs-close {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.certs-close:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.certs-viewer {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.certs-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 420px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.certs-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.certs-item:hover {
+  color: var(--text);
+}
+
+.certs-item.active {
+  border-left-color: var(--text);
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.certs-item-cat {
+  color: var(--text-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.certs-item-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.certs-preview {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.certs-preview-frame {
+  height: 320px;
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--border);
+}
+
+.certs-preview-frame img,
+.certs-preview-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.certs-preview-frame img {
+  object-fit: contain;
+}
+
+.certs-preview-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+.certs-preview-info h4 {
+  margin: 0 0 0.2rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.certs-preview-info p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.certs-open {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.certs-open i {
+  font-size: 0.68rem;
+}
+
+.certs-open:hover {
+  opacity: 0.88;
+}
+
+.certs-panel-enter-active,
+.certs-panel-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.certs-panel-enter-from,
+.certs-panel-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@media (max-width: 768px) {
+  .certs-panel {
+    display: none;
+  }
 }
 
 .link-card {
@@ -743,6 +1218,7 @@ button.mobile-link-card {
 
   /* Spotify tile look */
   .spotify-tile {
+    cursor: default;
     display: flex !important;
     flex-direction: column;
     align-items: flex-start;

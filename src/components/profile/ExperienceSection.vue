@@ -1,6 +1,6 @@
 <template>
   <section id="experience" class="experience-section">
-    <div class="section-header" :class="{ 'has-link': viewAllTo }">
+    <div v-if="showTitle" class="section-header" :class="{ 'has-link': viewAllTo }">
       <div>
         <span class="section-kicker">Professional Background</span>
         <h2 class="section-title">Experience</h2>
@@ -82,6 +82,10 @@ export default {
   name: "ExperienceSection",
 
   props: {
+    showTitle: {
+      type: Boolean,
+      default: true
+    },
     viewAllTo: {
       type: String,
       default: ""

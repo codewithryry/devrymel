@@ -27,7 +27,7 @@
           <div class="project-title-row">
             <h3 class="project-title">{{ project.title }}</h3>
 
-            <div class="project-actions">
+            <div v-if="!actionsBottom" class="project-actions">
               <a
                 :href="project.demoUrl"
                 target="_blank"
@@ -59,6 +59,28 @@
               +{{ project.technologies.length - 4 }} more
             </span>
           </div>
+
+          <div v-if="actionsBottom" class="project-actions bottom">
+            <a
+              :href="project.demoUrl"
+              target="_blank"
+              class="project-action-btn primary"
+              title="Live Demo"
+              aria-label="Open live demo"
+              @click="handleProjectClick(project.demoUrl, project.title, $event)"
+            >
+              <i class="fas fa-external-link-alt"></i><span>Demo</span>
+            </a>
+            <a
+              :href="project.githubUrl"
+              target="_blank"
+              class="project-action-btn"
+              title="View Code"
+              aria-label="View source code on GitHub"
+            >
+              <i class="fab fa-github"></i><span>Code</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -72,6 +94,10 @@ export default {
     showKicker: {
       type: Boolean,
       default: true
+    },
+    actionsBottom: {
+      type: Boolean,
+      default: false
     },
     viewAllTo: {
       type: String,
@@ -299,5 +325,28 @@ export default {
 .project-action-btn:hover {
   color: var(--text);
   border-color: var(--text-muted);
+}
+.project-actions.bottom {
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.project-actions.bottom .project-action-btn {
+  flex: 1;
+  height: 38px;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.project-action-btn.primary {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.project-action-btn.primary:hover {
+  opacity: 0.88;
+  color: var(--bg);
 }
 </style>

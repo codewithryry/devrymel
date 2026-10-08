@@ -5,8 +5,8 @@
 
 <template>
   <transition name="fade">
-    <div class="modal-overlay" @click="$emit('close')">
-      <div class="modal image-viewer-modal" @click.stop>
+    <div class="modal-overlay" :class="{ 'is-popover': anchor }" @click="$emit('close')">
+      <div class="modal image-viewer-modal" :style="popoverStyle" @click.stop>
         <button class="modal-close" @click="$emit('close')">
           <i class="fas fa-times"></i>
         </button>
@@ -35,8 +35,10 @@
 
           <div class="viewer-side">
             <div class="viewer-header">
-              <h3 class="viewer-title">{{ currentItem.title }}</h3>
-              <p class="viewer-description">{{ currentItem.description }}</p>
+              <h3 class="viewer-title">
+                {{ currentItem.title }}
+              </h3>
+              <p v-if="!anchor" class="viewer-description">{{ currentItem.description }}</p>
             </div>
 
             <div class="viewer-details">
@@ -55,6 +57,9 @@
                 </div>
               </div>
             </div>
+
+            <!-- Popover: a 320×50 ad fits the free space under the details -->
+            <AdSlot v-if="anchor" class="viewer-ad" type="mobile-banner" />
 
             <div class="viewer-navigation">
               <button @click="$emit('prev')" class="nav-btn" :disabled="currentIndex === 0">
@@ -78,8 +83,11 @@
 </template>
 
 <script>
+import AdSlot from '@/components/AdSlot.vue'
+
 export default {
   name: 'DeansListModal',
+  components: { AdSlot },
   props: {
     currentItem: {
       type: Object,
@@ -92,9 +100,39 @@ export default {
     totalItems: {
       type: Number,
       required: true
+    },
+    // { top, left, width } of the area to sit over (desktop popover); null = centered modal
+    anchor: {
+      type: Object,
+      default: null
     }
   },
-  emits: ['close', 'prev', 'next']
+  emits: ['close', 'prev', 'next'],
+  computed: {
+    popoverStyle() {
+      if (!this.anchor) return null
+      const top = Math.max(16, Math.min(this.anchor.top, window.innerHeight - 340))
+      return {
+        top: `${top}px`,
+        // Reach left to the column divider, keep the right edge in place
+        left: `${this.anchor.left - 24}px`,
+        width: `${this.anchor.width + 24}px`,
+        maxHeight: `calc(100vh - ${top + 16}px)`
+      }
+    }
+  },
+  mounted() {
+    // A popover is pinned to where it opened, so close it when the page scrolls
+    if (this.anchor) window.addEventListener('scroll', this.onScroll, { passive: true })
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
+  methods: {
+    onScroll() {
+      this.$emit('close')
+    }
+  }
 }
 </script>
 
@@ -105,11 +143,12 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  /* Soft dim, above the navbar */
+  background: rgb(15 15 15 / 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 10001;
   padding: 1rem;
 }
 
@@ -125,11 +164,12 @@ export default {
 }
 
 .image-viewer-modal {
-  max-width: 1000px;
-  width: min(95vw, 1000px);
+  /* Same width as the page content / navbar */
+  max-width: var(--container-width);
+  width: min(var(--container-width), calc(100vw - 32px));
   max-height: 85vh;
   overflow-y: auto;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: var(--shadow-xl);
   text-align: left;
   border-radius: var(--radius-lg);
@@ -171,7 +211,7 @@ export default {
 
 .viewer-image-container {
   position: relative;
-  flex: 0 0 320px;
+  flex: 0 0 300px;
   background: var(--surface-soft);
   border-radius: var(--radius);
   padding: 1rem;
@@ -326,6 +366,112 @@ export default {
 .modal-close:active {
   background: var(--accent);
   color: var(--bg);
+}
+
+/* Desktop popover: no dim, compact card over the Get in Touch area */
+.modal-overlay.is-popover {
+  background: transparent;
+  padding: 0;
+}
+
+.is-popover .image-viewer-modal {
+  position: fixed;
+  max-width: none;
+  padding: 1rem;
+  border-radius: var(--radius);
+}
+
+.is-popover .viewer-layout {
+  gap: 1rem;
+}
+
+.is-popover .viewer-image-container {
+  flex: 0 0 190px;
+  padding: 0.5rem;
+}
+
+.is-popover .image-action-btn {
+  width: 28px;
+  height: 28px;
+  font-size: 0.72rem;
+}
+
+.is-popover .viewer-header {
+  margin-bottom: 0.75rem;
+  padding-right: 2.25rem;
+}
+
+.is-popover .viewer-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.05rem;
+  margin-bottom: 0;
+}
+
+.is-popover .viewer-description {
+  font-size: 0.82rem;
+}
+
+.is-popover .viewer-details {
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.is-popover .detail-col {
+  gap: 0.6rem;
+  padding: 0.55rem;
+}
+
+.is-popover .detail-col i {
+  width: 28px;
+  height: 28px;
+  font-size: 0.8rem;
+}
+
+.is-popover .detail-label {
+  font-size: 0.7rem;
+}
+
+.is-popover .detail-value {
+  font-size: 0.85rem;
+}
+
+/* Sit right under the details (AdSlot has 32px margins by default) */
+.viewer-ad {
+  margin: 0 0 0.25rem;
+}
+
+.viewer-ad :deep(.ad-label-wrapper) {
+  margin-bottom: 4px;
+}
+
+/* Keep the ad compact: no "Ad not showing?" strip inside the popover */
+.viewer-ad :deep(.ad-fallback-strip) {
+  display: none;
+}
+
+.is-popover .viewer-navigation {
+  padding-top: 0.75rem;
+}
+
+.is-popover .nav-btn {
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+.is-popover .nav-counter {
+  padding: 0 0.6rem;
+  font-size: 0.82rem;
+}
+
+.is-popover .modal-close {
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
 }
 
 /* Animation */

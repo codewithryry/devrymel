@@ -1,7 +1,7 @@
 <template>
-  <section id="tech-notes" class="tech-notes-section">
-    <div class="section-header">
-      <div>
+  <section id="tech-notes" class="tech-notes-section" :class="{ 'is-stacked': stacked }">
+    <div class="section-header" :class="{ 'no-title': !showTitle }">
+      <div v-if="showTitle">
         <span class="section-kicker">Insights</span>
         <h2 class="section-title">Tech Notes</h2>
       </div>
@@ -83,6 +83,32 @@
     </div>
 
     <!-- Mobile Single Card View -->
+    <!-- Phones, stacked: every note as its own card (Tech Notes page) -->
+    <div v-else-if="stacked" class="mobile-notes-list">
+      <article v-for="note in notes" :key="note.id" class="mobile-note-card">
+        <div class="note-top">
+          <span class="note-category">{{ note.category }}</span>
+          <span class="note-meta">
+            <span class="note-read-time">{{ note.readTime }}</span>
+            <a
+              v-if="note.url"
+              :href="note.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="note-link"
+              title="Read guide"
+              aria-label="Read guide"
+            >
+              <i class="fas fa-external-link-alt"></i>
+            </a>
+          </span>
+        </div>
+
+        <h3 class="note-title">{{ note.title }}</h3>
+        <p class="note-description">{{ note.description }}</p>
+      </article>
+    </div>
+
     <div v-else class="mobile-notes-container">
       <transition :name="mobileTransitionName" mode="out-in">
         <article
@@ -129,6 +155,15 @@ export default {
     notes: {
       type: Array,
       default: () => []
+    },
+    showTitle: {
+      type: Boolean,
+      default: true
+    },
+    // Phones: list all notes instead of the one-card swipe view
+    stacked: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -309,6 +344,23 @@ export default {
 </script>
 
 <style scoped>
+/* Desktop: no header row at all when the title is hidden (it only held the swipe hint) */
+@media (min-width: 769px) {
+  .section-header.no-title {
+    display: none;
+  }
+}
+
+/* Stacked list has nothing to swipe: drop the header row entirely */
+.tech-notes-section.is-stacked .section-header.no-title {
+  display: none;
+}
+
+/* Phones: keep the swipe hint on the right when there's no title */
+.section-header.no-title .swipe-hint {
+  margin-left: auto;
+}
+
 .tech-notes-section {
   margin: 0;
 }
@@ -586,6 +638,18 @@ export default {
 
 .slider-btn:hover {
   border-color: var(--text);
+}
+
+/* Mobile stacked list */
+.mobile-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-notes-list .mobile-note-card {
+  min-height: 0;
+  user-select: auto;
 }
 
 /* Mobile single card */

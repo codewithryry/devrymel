@@ -17,6 +17,7 @@
             Generate clean tints, shades, and matching colors from one base color.
           </p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Generator Card -->
@@ -127,33 +128,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- How to use -->
-      <div class="howto-card">
-        <h3>How to use</h3>
-
-        <div class="howto-steps">
-          <div class="howto-step">
-            <span class="step-num">1</span>
-            <span>Pick a base color or type a HEX value like <strong>#1FAE5B</strong>.</span>
-          </div>
-
-          <div class="howto-step">
-            <span class="step-num">2</span>
-            <span>Click <strong>Generate Palette</strong> to create tints, shades, and matching colors.</span>
-          </div>
-
-          <div class="howto-step">
-            <span class="step-num">3</span>
-            <span>Tap a color card to copy the HEX code for your CSS or design system.</span>
-          </div>
-        </div>
-
-        <p class="tool-note">
-          <i class="fas fa-shield-alt"></i>
-          The palette is generated inside your browser. No color data is stored.
-        </p>
-      </div>
-
       <!-- Tips -->
       <div class="tips-grid">
         <div class="tip-card">
@@ -185,6 +159,7 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
@@ -192,11 +167,18 @@ export default {
 
   components: {
     ToolSuggestions,
+    ToolHowTo,
     AdSlot
   },
 
   data() {
     return {
+      howToSteps: [
+        "Pick a base color or type a HEX value like #1FAE5B.",
+        "Click Generate Palette to create tints, shades, and matching colors.",
+        "Tap a color card to copy the HEX code."
+      ],
+      howToNote: "The palette is generated in your browser. No color data is stored.",
       seedColor: "#ec4899",
       hexInput: "#ec4899",
       palette: [],

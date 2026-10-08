@@ -17,7 +17,6 @@
         <h3 v-if="index !== activeIndex" class="carousel-side-title">{{ project.title }}</h3>
 
         <div v-else class="carousel-content">
-          <span v-if="project.demoUrl !== '#'" class="carousel-live"><i></i>Live</span>
           <h3>{{ project.title }}</h3>
           <p>{{ project.description }}</p>
           <div class="carousel-tags">
@@ -178,28 +177,6 @@ export default {
   padding: 1.5rem;
   color: #fff;
   animation: carousel-in 0.4s ease;
-}
-
-.carousel-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 0.6rem;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #bbf7d0;
-  background: rgb(34 197 94 / 0.2);
-  border: 1px solid rgb(34 197 94 / 0.45);
-}
-
-.carousel-live i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #22c55e;
 }
 
 .carousel-content h3 {

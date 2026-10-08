@@ -10,6 +10,7 @@
           <h1 class="tt-title">QR Code Generator</h1>
           <p class="tt-subtitle">Type any text or URL to generate a QR code instantly. Free and no sign-up needed.</p>
         </div>
+        <ToolHowTo :steps="howToSteps" title="Tips" />
       </div>
 
       <!-- Input area -->
@@ -79,25 +80,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- Tips -->
-      <div class="tt-howto">
-        <h3>Tips</h3>
-        <div class="tt-steps">
-          <div class="tt-step">
-            <span class="step-num"><i class="fas fa-link"></i></span>
-            <span>Works with URLs, plain text, phone numbers, Wi-Fi credentials, or emails</span>
-          </div>
-          <div class="tt-step">
-            <span class="step-num"><i class="fas fa-expand"></i></span>
-            <span>Choose a larger size for printing, smaller for on-screen use</span>
-          </div>
-          <div class="tt-step">
-            <span class="step-num"><i class="fas fa-download"></i></span>
-            <span>Download as PNG — ready to embed in documents or designs</span>
-          </div>
-        </div>
-      </div>
-
       <!-- Suggestions -->
       <tool-suggestions current="/tools/qr-generator" />
 
@@ -107,15 +89,21 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "QRGenerator",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Type a URL, text, phone number, Wi-Fi details, or email.",
+        "Choose a larger size for printing, smaller for screens.",
+        "Download the QR as a PNG."
+      ],
       text: "",
       size: 240,
       sizes: [160, 200, 240, 280],

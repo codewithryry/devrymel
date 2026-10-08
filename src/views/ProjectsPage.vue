@@ -12,7 +12,7 @@
       </div>
 
       <FeaturedCarousel class="featured-desktop" :projects="featuredProjects" @openProjectModal="openProjectModal" />
-      <ProjectsSection class="featured-mobile" :projects="featuredProjects" :show-kicker="false" @openProjectModal="openProjectModal" />
+      <ProjectsSection class="featured-mobile" :projects="featuredProjects" :show-kicker="false" actions-bottom @openProjectModal="openProjectModal" />
 
       <div class="more-header">
         <h2 class="more-title">More Projects</h2>

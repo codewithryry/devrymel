@@ -10,6 +10,7 @@
           <h1 class="tt-title">YouTube Downloader</h1>
           <p class="tt-subtitle">Download YouTube videos or extract audio — free, no signup.</p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Input -->
@@ -130,29 +131,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- How to use -->
-      <div v-if="!videoInfo" class="tt-howto">
-        <h3>How to use</h3>
-        <div class="tt-steps">
-          <div class="tt-step">
-            <span class="step-num">1</span>
-            <span>Copy any YouTube video URL from your browser or the Share button</span>
-          </div>
-          <div class="tt-step">
-            <span class="step-num">2</span>
-            <span>Paste it above and click <strong>Fetch</strong></span>
-          </div>
-          <div class="tt-step">
-            <span class="step-num">3</span>
-            <span>Choose format and quality, then click <strong>Download</strong></span>
-          </div>
-        </div>
-        <p class="tt-note">
-          <i class="fas fa-shield-alt"></i>
-          Powered by cobalt.tools. No data is stored.
-        </p>
-      </div>
-
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-downloader" />
 
@@ -162,15 +140,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "YouTubeDownloader",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Copy any YouTube video URL from your browser or the Share button.",
+        "Paste it and click Fetch.",
+        "Choose format and quality, then click Download."
+      ],
+      howToNote: "Powered by cobalt.tools. No data is stored.",
       url: "",
       inputFocused: false,
       loading: false,

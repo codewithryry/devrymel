@@ -16,6 +16,7 @@
             Shorten long links into clean, shareable URLs in seconds.
           </p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Main Card -->
@@ -116,33 +117,6 @@
       <!-- Ad -->
       <AdSlot type="banner" />
 
-      <!-- How to use -->
-      <div class="howto-card">
-        <h3>How to use</h3>
-
-        <div class="howto-steps">
-          <div class="howto-step">
-            <span class="step-num">1</span>
-            <span>Paste or type the long URL you want to shorten.</span>
-          </div>
-
-          <div class="howto-step">
-            <span class="step-num">2</span>
-            <span>Click <strong>Shorten URL</strong> and wait for the link result.</span>
-          </div>
-
-          <div class="howto-step">
-            <span class="step-num">3</span>
-            <span>Copy the shortened link or open it in a new tab.</span>
-          </div>
-        </div>
-
-        <p class="tool-note">
-          <i class="fas fa-shield-alt"></i>
-          No login is required. The URL is processed through a public link-shortening service.
-        </p>
-      </div>
-
       <!-- Tips -->
       <div class="tips-grid">
         <div class="tip-card">
@@ -174,6 +148,7 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
@@ -181,11 +156,18 @@ export default {
 
   components: {
     ToolSuggestions,
+    ToolHowTo,
     AdSlot
   },
 
   data() {
     return {
+      howToSteps: [
+        "Paste or type the long URL you want to shorten.",
+        "Click Shorten URL and wait for the result.",
+        "Copy the short link or open it in a new tab."
+      ],
+      howToNote: "No login needed. Links are made through a public shortening service.",
       longUrl: "",
       normalizedUrl: "",
       shortUrl: "",

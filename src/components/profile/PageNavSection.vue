@@ -30,7 +30,7 @@ export default {
     return {
       pages: [
         { path: "/about", icon: "fas fa-bolt", title: "Now", description: "What I'm currently focused on" },
-        { path: "/uses", icon: "fas fa-laptop-code", title: "Uses", description: "Tools, gear, and setup" },
+        { path: "/process", icon: "fas fa-route", title: "Process", description: "How I work, step by step" },
         { path: "/services", icon: "fas fa-briefcase", title: "Services", description: "What I can help you build" },
         { path: "/case-studies", icon: "fas fa-flask", title: "Case Studies", description: "In-depth project breakdowns" },
         { path: "/deployment", icon: "fas fa-rocket", title: "Deployment", description: "How I ship and host projects" },

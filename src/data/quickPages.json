@@ -6,10 +6,10 @@
     "description": "About me"
   },
   {
-    "path": "/uses",
-    "icon": "fas fa-tools",
-    "title": "Uses",
-    "description": "Tools and setup"
+    "path": "/process",
+    "icon": "fas fa-route",
+    "title": "Process",
+    "description": "How I work"
   },
   {
     "path": "/services",

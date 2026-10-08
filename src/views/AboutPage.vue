@@ -13,7 +13,7 @@
         </p>
         <div class="about-actions">
           <router-link to="/services" class="ghost-btn">View Services</router-link>
-          <a href="/Reymel_Mislang_CV.docx" download class="ghost-btn">Download CV</a>
+          <a href="/Reymel_Mislang_CV.pdf" target="_blank" rel="noopener" class="ghost-btn">View CV</a>
         </div>
       </div>
 

@@ -10,6 +10,7 @@
           <h1 class="tt-title">Base64 Encoder / Decoder</h1>
           <p class="tt-subtitle">Encode or decode Base64 strings instantly — fully client-side, nothing leaves your browser.</p>
         </div>
+        <ToolHowTo :steps="howToSteps" :note="howToNote" />
       </div>
 
       <!-- Action Buttons -->
@@ -105,15 +106,22 @@
 
 <script>
 import ToolSuggestions from "@/components/tools/ToolSuggestions.vue";
+import ToolHowTo from "@/components/tools/ToolHowTo.vue";
 import AdSlot from "@/components/AdSlot.vue";
 
 export default {
   name: "Base64Tool",
 
-  components: { ToolSuggestions, AdSlot },
+  components: { ToolSuggestions, ToolHowTo, AdSlot },
 
   data() {
     return {
+      howToSteps: [
+        "Choose Encode or Decode.",
+        "Paste or type your text in the box.",
+        "Copy the converted result."
+      ],
+      howToNote: "Everything runs in your browser. Nothing is sent or stored.",
       input: "",
       output: "",
       error: "",

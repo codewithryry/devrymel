@@ -17,9 +17,10 @@
 
 <script>
 const EXPLORE_LINKS = [
+  { path: "/skills", title: "Tech Stack" },
   { path: "/why-me", title: "Why Me" },
   { path: "/tech-notes", title: "Tech Notes" },
-  { path: "/uses", title: "Uses" },
+  { path: "/process", title: "Process" },
   { path: "/deployment", title: "Deployment" },
   { path: "/case-studies", title: "Case Studies" },
   { path: "/roadmap", title: "Roadmap" },
@@ -93,7 +94,7 @@ export default {
   }
 }
 
-/* Phones: Explore is hidden — these links live in the bottom-nav Menu */
+/* Phones: hidden — these links live in the bottom-nav Menu */
 @media (max-width: 768px) {
   .explore-panel {
     display: none;

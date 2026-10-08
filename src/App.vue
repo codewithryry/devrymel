@@ -11,9 +11,9 @@
 
         <nav class="nav-links" :class="{ open: mobileNavOpen }">
           <router-link to="/about" @click="handleQuickPageClick" :class="{ active: $route.path === '/about' }">About</router-link>
-          <router-link to="/projects" @click="handleQuickPageClick" :class="{ active: $route.path === '/projects' }">Projects</router-link>
-          <router-link to="/skills" @click="handleQuickPageClick" :class="{ active: $route.path === '/skills' }">Skills</router-link>
           <router-link to="/experience" @click="handleQuickPageClick" :class="{ active: $route.path === '/experience' }">Experience</router-link>
+          <router-link to="/projects" @click="handleQuickPageClick" :class="{ active: $route.path === '/projects' }">Projects</router-link>
+          <router-link to="/skills" @click="handleQuickPageClick" :class="{ active: $route.path === '/skills' }">Tech Stack</router-link>
           <router-link to="/services" @click="handleQuickPageClick" :class="{ active: $route.path === '/services' }">Services</router-link>
 
           <!-- Phones: theme, More and Contact Me live inside the menu -->
@@ -70,46 +70,69 @@
                 <div class="stat-line"><span>Repositories</span><strong>{{ statsLoading ? '…' : reposCount }}</strong></div>
               </div>
 
+              <!-- Free tools: small icon tiles, 3 per row -->
               <div class="dropdown-group">
-                <span class="dropdown-label">Documents</span>
-                <a href="/Reymel_Mislang_Resume.docx" download class="dropdown-row">
-                  <span>Resume</span>
-                  <i class="fas fa-download dropdown-arrow"></i>
-                </a>
+                <span class="dropdown-label">Free Tools</span>
+                <div class="dropdown-tools">
+                  <router-link
+                    v-for="tool in mobileTools"
+                    :key="tool.path"
+                    :to="tool.path"
+                    class="dropdown-tool"
+                    @click="handleQuickPageClick"
+                  >
+                    <i :class="tool.icon"></i>
+                    <span>{{ tool.title }}</span>
+                  </router-link>
+                </div>
+              </div>
 
-                <a href="/Reymel_Mislang_CV.docx" download class="dropdown-row">
-                  <span>CV</span>
-                  <i class="fas fa-download dropdown-arrow"></i>
-                </a>
+              <div class="dropdown-group">
+                <span class="dropdown-label">Public Documents</span>
+                <!-- PDFs open in a new tab (view, not download); same icon tiles as Free Tools -->
+                <div class="dropdown-tools">
+                  <a href="/Reymel_Mislang_Resume.pdf" target="_blank" rel="noopener" class="dropdown-tool">
+                    <i class="fas fa-file-lines"></i>
+                    <span>Resume</span>
+                  </a>
+                  <a href="/Reymel_Mislang_CV.pdf" target="_blank" rel="noopener" class="dropdown-tool">
+                    <i class="fas fa-id-card"></i>
+                    <span>CV</span>
+                  </a>
+                  <!-- Opens the Certificates list in the homepage Quick Links -->
+                  <router-link :to="{ path: '/', query: { certs: '1' } }" class="dropdown-tool" @click="handleQuickPageClick">
+                    <i class="fas fa-award"></i>
+                    <span>Certificates</span>
+                  </router-link>
+                </div>
               </div>
 
               <div class="dropdown-group">
                 <span class="dropdown-label">Other</span>
 
-                <router-link to="/tools/ai-chat" class="dropdown-row" @click="handleQuickPageClick">
-                  <span class="dropdown-row-label">
-                  Assistant
-                  <span class="beta-badge">Beta</span>
-                </span>
-                  <i class="fas fa-chevron-right dropdown-arrow"></i>
-                </router-link>
+                <div class="dropdown-tools">
+                  <router-link to="/tools/ai-chat" class="dropdown-tool" @click="handleQuickPageClick">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    <span>Ask Rymel</span>
+                    <small class="dropdown-tool-badge">Beta</small>
+                  </router-link>
 
-                <router-link to="/changelog" class="dropdown-row" @click="handleQuickPageClick">
-                  <span>Changelog</span>
-                  <i class="fas fa-chevron-right dropdown-arrow"></i>
-                </router-link>
+                  <router-link to="/changelog" class="dropdown-tool" @click="handleQuickPageClick">
+                    <i class="fas fa-history"></i>
+                    <span>Changelog</span>
+                  </router-link>
 
-                <!-- Phones only: the Feedback side tab is hidden there -->
-              <button type="button" class="dropdown-row mobile-only" @click="openFeedback">
-                <span>Feedback</span>
-                <small v-if="feedbackCount">{{ feedbackCount }}</small>
-                <i class="fas fa-chevron-right dropdown-arrow"></i>
-              </button>
+                  <router-link to="/privacy" class="dropdown-tool" @click="handleQuickPageClick">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Privacy</span>
+                  </router-link>
 
-              <router-link to="/privacy" class="dropdown-row" @click="handleQuickPageClick">
-                  <span>Privacy</span>
-                  <i class="fas fa-chevron-right dropdown-arrow"></i>
-                </router-link>
+                  <!-- Phones only: the Feedback side tab is hidden there -->
+                  <button type="button" class="dropdown-tool mobile-only" @click="openFeedback">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Feedback{{ feedbackCount ? ` (${feedbackCount})` : "" }}</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -129,7 +152,7 @@
     <nav v-if="!isAdminRoute" class="bottom-nav" aria-label="Main">
       <div class="bottom-pill">
       <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
-        <span class="bottom-brand">RM</span>
+        <i class="fas fa-home"></i>
         <span class="bottom-label">Home</span>
       </router-link>
       <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
@@ -155,18 +178,15 @@
         :aria-expanded="mobileSheetOpen"
         @click="mobileSheetOpen = !mobileSheetOpen"
       >
-        <i class="fas" :class="mobileSheetOpen ? 'fa-times' : 'fa-bars'"></i>
+        <i v-if="mobileSheetOpen" class="fas fa-times"></i>
+        <!-- Menu icon: bold hamburger -->
+        <svg v-else class="menu-grid-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 6.5h16M4 12h16M4 17.5h16" />
+        </svg>
       </button>
     </nav>
 
-    <!-- Tile edit mode bar (mobile homepage): resize tiles, then Done -->
-    <transition name="sheet">
-      <div v-if="tileEditMode" class="tile-edit-bar" role="toolbar" aria-label="Edit tiles">
-        <span class="tile-edit-hint"><i class="fas fa-expand-alt"></i> Resize with the handle · tap two to swap</span>
-        <button type="button" class="tile-edit-btn" @click="resetTiles">Reset</button>
-        <button type="button" class="tile-edit-btn primary" @click="tileEditMode = false">Done</button>
-      </div>
-    </transition>
+    <!-- Tile edit mode is toggled by the pencil on the homepage header (no Done bar) -->
 
     <!-- Follow-to-save popup (visitors, first time they save a tile layout) -->
     <transition name="sheet">
@@ -199,83 +219,71 @@
       </div>
     </transition>
 
-    <!-- Bottom sheet opened by "Menu" -->
+    <!-- Menu (phones): light floating glass panel above the nav, no dim overlay -->
     <transition name="sheet">
       <div v-if="mobileSheetOpen && !isAdminRoute" class="bottom-sheet-overlay" @click.self="mobileSheetOpen = false">
         <div class="bottom-sheet" role="dialog" aria-label="Menu">
-          <span class="sheet-handle" aria-hidden="true"></span>
-
-          <span class="sheet-label">Other Pages</span>
-          <router-link
-            v-for="page in (showAllSheetPages ? mobilePages : mobilePages.slice(0, 3))"
-            :key="page.path"
-            :to="page.path"
-            class="sheet-row"
-            @click="mobileSheetOpen = false"
-          >
-            <i :class="page.icon"></i><span>{{ page.title }}</span>
+          <!-- AI assistant, featured -->
+          <router-link to="/tools/ai-chat" class="menu-ask" @click="mobileSheetOpen = false">
+            <span class="menu-ask-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+            <span class="menu-ask-text">
+              <strong>Ask Rymel</strong>
+              <small>AI assistant for my work &amp; projects</small>
+            </span>
+            <span class="beta-badge">Beta</span>
           </router-link>
-          <button type="button" class="sheet-row sheet-more" @click="showAllSheetPages = !showAllSheetPages">
-            <i class="fas" :class="showAllSheetPages ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-            <span>{{ showAllSheetPages ? 'See less' : `See more (${mobilePages.length - 3})` }}</span>
-          </button>
 
-          <span class="sheet-label">Tools</span>
-          <router-link
-            v-for="tool in (showAllSheetTools ? mobileTools : mobileTools.slice(0, 1))"
-            :key="tool.path"
-            :to="tool.path"
-            class="sheet-row"
-            @click="mobileSheetOpen = false"
-          >
-            <i :class="tool.icon"></i><span>{{ tool.title }}</span>
-          </router-link>
-          <button type="button" class="sheet-row sheet-more" @click="showAllSheetTools = !showAllSheetTools">
-            <i class="fas" :class="showAllSheetTools ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-            <span>{{ showAllSheetTools ? 'See less' : `See more (${mobileTools.length - 1})` }}</span>
-          </button>
-
-          <span class="sheet-label">Documents</span>
-          <a href="/Reymel_Mislang_Resume.docx" download class="sheet-row">
-            <i class="fas fa-file-alt"></i><span>Resume</span><i class="fas fa-download sheet-end"></i>
-          </a>
-          <a href="/Reymel_Mislang_CV.docx" download class="sheet-row">
-            <i class="fas fa-id-card"></i><span>CV</span><i class="fas fa-download sheet-end"></i>
-          </a>
-
-          <span class="sheet-label">More</span>
-          <router-link to="/tools/ai-chat" class="sheet-row" @click="mobileSheetOpen = false">
-            <i class="fas fa-robot"></i><span>Assistant</span><span class="beta-badge">Beta</span>
-          </router-link>
-          <router-link to="/changelog" class="sheet-row" @click="mobileSheetOpen = false">
-            <i class="fas fa-history"></i><span>Changelog</span>
-          </router-link>
-          <router-link to="/privacy" class="sheet-row" @click="mobileSheetOpen = false">
-            <i class="fas fa-shield-alt"></i><span>Privacy</span>
-          </router-link>
-        </div>
-      </div>
-    </transition>
-
-    <!-- ===== SPOTIFY SIDEBAR BUBBLE ===== -->
-    <transition name="spotify-float-fade">
-      <div
-        v-if="spotifyTrack.isPlaying && !isAiToolsRoute && !isAdminRoute"
-        class="spotify-sidebar"
-        :class="{ 'spotify-sidebar--open': spotifySidebarOpen, 'on-home': $route.path === '/' }"
-        @mouseenter="!isMobile && (spotifySidebarOpen = true)"
-        @mouseleave="!isMobile && (spotifySidebarOpen = false)"
-        @click="isMobile && (spotifySidebarOpen = !spotifySidebarOpen)"
-      >
-        <div class="spotify-sidebar-inner">
-          <div class="spotify-sidebar-info">
-            <span class="spotify-float-now-label">Now Playing</span>
-            <span class="spotify-sidebar-title">{{ spotifyTrack.title }}</span>
-            <span class="spotify-sidebar-artist">{{ spotifyTrack.artist }}</span>
+          <!-- Main pages -->
+          <div class="menu-pages">
+            <router-link
+              v-for="page in mobilePages"
+              :key="page.path"
+              :to="page.path"
+              class="menu-page"
+              @click="mobileSheetOpen = false"
+            >
+              <i :class="page.icon"></i>
+              <span>{{ page.title }}</span>
+            </router-link>
           </div>
-          <div class="spotify-sidebar-art">
-            <img v-if="spotifyTrack.image" :src="spotifyTrack.image" :alt="spotifyTrack.title" />
-            <i v-else class="fab fa-spotify"></i>
+
+          <!-- Same links as "More about my work", same icon tiles, 3 per row -->
+          <div class="menu-pages menu-links">
+            <router-link
+              v-for="link in menuLinks"
+              :key="link.path"
+              :to="link.path"
+              class="menu-page"
+              @click="mobileSheetOpen = false"
+            >
+              <i :class="link.icon"></i>
+              <span>{{ link.title }}</span>
+            </router-link>
+
+            <!-- Last tile: shows / hides the free tools -->
+            <button
+              type="button"
+              class="menu-page"
+              :aria-expanded="showMenuTools"
+              @click="showMenuTools = !showMenuTools"
+            >
+              <i class="fas" :class="showMenuTools ? 'fa-chevron-up' : 'fa-ellipsis'"></i>
+              <span>{{ showMenuTools ? 'Less' : 'More' }}</span>
+            </button>
+          </div>
+
+          <!-- Free tools: same icon + text tiles -->
+          <div v-if="showMenuTools" class="menu-pages menu-links">
+            <router-link
+              v-for="tool in mobileTools"
+              :key="tool.path"
+              :to="tool.path"
+              class="menu-page"
+              @click="mobileSheetOpen = false"
+            >
+              <i :class="tool.icon"></i>
+              <span>{{ tool.title }}</span>
+            </router-link>
           </div>
         </div>
       </div>
@@ -356,34 +364,37 @@ export default {
       tileEditMode: false,
       followGateOpen: false,
       isSiteAdmin: false,
-      showAllSheetTools: false,
-      showAllSheetPages: false,
-
-      // Mobile Menu "Other Pages", most important first (first 3 shown)
+      // Mobile Menu: only the main pages (the rest are in each page's Explore links)
       mobilePages: [
-        { path: "/skills", title: "Skills", icon: "fas fa-bolt" },
+        { path: "/skills", title: "Tech Stack", icon: "fas fa-cubes" },
         { path: "/experience", title: "Experience", icon: "fas fa-briefcase" },
-        { path: "/services", title: "Services", icon: "fas fa-layer-group" },
-        { path: "/case-studies", title: "Case Studies", icon: "fas fa-search" },
-        { path: "/why-me", title: "Why Work With Me", icon: "fas fa-thumbs-up" },
-        { path: "/tech-notes", title: "Tech Notes", icon: "fas fa-book-open" },
-        { path: "/deployment", title: "Deployment", icon: "fas fa-rocket" },
-        { path: "/uses", title: "Uses", icon: "fas fa-laptop" },
-        { path: "/roadmap", title: "Roadmap", icon: "fas fa-map" }
+        { path: "/why-me", title: "Why Me", icon: "fas fa-thumbs-up" }
       ],
 
-      // Finished tools listed in the mobile Menu sheet
+      // Mobile Menu bottom links (like "More about my work"; Skills is a tile, Contact is in the nav)
+      menuLinks: [
+        { path: "/tech-notes", title: "Tech Notes", icon: "fas fa-book-open" },
+        { path: "/process", title: "Process", icon: "fas fa-route" },
+        { path: "/deployment", title: "Deployment", icon: "fas fa-rocket" },
+        { path: "/case-studies", title: "Case Studies", icon: "fas fa-search" },
+        { path: "/roadmap", title: "Roadmap", icon: "fas fa-map" },
+        { path: "/changelog", title: "Changelog", icon: "fas fa-history" },
+        { path: "/sponsor", title: "Sponsor", icon: "fas fa-heart" },
+        { path: "/privacy", title: "Privacy", icon: "fas fa-shield-alt" }
+      ],
+
+      // Free tools, shown in the menu after tapping "More"
+      showMenuTools: false,
       mobileTools: [
-        { path: "/tools/tiktok", title: "TikTok Downloader", icon: "fab fa-tiktok" },
-        { path: "/tools/youtube-downloader", title: "YT Downloader", icon: "fab fa-youtube" },
+        { path: "/tools/tiktok", title: "TikTok", icon: "fab fa-tiktok" },
+        { path: "/tools/youtube-downloader", title: "YT Download", icon: "fab fa-youtube" },
         { path: "/tools/youtube-thumbnail", title: "YT Thumbnail", icon: "fas fa-image" },
-        { path: "/tools/qr-generator", title: "QR Generator", icon: "fas fa-qrcode" },
-        { path: "/tools/password", title: "Password Generator", icon: "fas fa-key" },
-        { path: "/tools/color-palette", title: "Color Palette", icon: "fas fa-palette" },
+        { path: "/tools/qr-generator", title: "QR Code", icon: "fas fa-qrcode" },
+        { path: "/tools/password", title: "Password", icon: "fas fa-key" },
+        { path: "/tools/color-palette", title: "Colors", icon: "fas fa-palette" },
         { path: "/tools/ip-lookup", title: "IP Lookup", icon: "fas fa-map-marker-alt" },
-        { path: "/tools/speedtest", title: "Speed Test", icon: "fas fa-tachometer-alt" },
-        { path: "/tools/url-shortener", title: "URL Shortener", icon: "fas fa-link" },
-        { path: "/tools/base64", title: "Base64 Tool", icon: "fas fa-code" }
+        { path: "/tools/url-shortener", title: "Short URL", icon: "fas fa-link" },
+        { path: "/tools/base64", title: "Base64", icon: "fas fa-code" }
       ],
 
       showMorePanel: false,
@@ -396,8 +407,6 @@ export default {
       toastTimer: null,
 
       spotifyInterval: null,
-      spotifySidebarOpen: false,
-      spotifyAutoTimer: null,
       spotifyTrack: {
         isPlaying: false,
         title: "Not playing",
@@ -470,6 +479,11 @@ export default {
       this.mobileSheetOpen = false;
       this.closeAllPanels();
       this.mobileNavOpen = false;
+    },
+
+    // Menu always reopens with the tools collapsed
+    mobileSheetOpen(open) {
+      if (!open) this.showMenuTools = false;
     }
   },
 
@@ -507,13 +521,6 @@ export default {
 
     getSpotifyNowPlaying().then((result) => {
       this.spotifyTrack = result;
-      // Peek out for 5s on first load, then tuck back in
-      if (result.isPlaying) {
-        this.spotifySidebarOpen = true;
-        this.spotifyAutoTimer = setTimeout(() => {
-          this.spotifySidebarOpen = false;
-        }, 5000);
-      }
     });
 
     this.spotifyInterval = setInterval(async () => {
@@ -549,7 +556,6 @@ export default {
     if (this.revealObserver) this.revealObserver.disconnect();
     if (this.authUnsubscribe) this.authUnsubscribe();
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
-    if (this.spotifyAutoTimer) clearTimeout(this.spotifyAutoTimer);
   },
 
   methods: {
@@ -942,24 +948,31 @@ html[data-theme="forest"] body {
     display: none !important;
   }
 
-  /* nav sits 36px up + 62px tall: keep ~24px clear space above it.
+  /* nav sits 36px up + 62px tall: keep ~8px clear space above it.
      The space lives inside the page so it keeps the page's own background (no strip at the end). */
   #app > div > :last-child:not(.admin-page)::after {
     content: "";
     display: block;
-    height: calc(122px + env(safe-area-inset-bottom, 0px));
+    height: calc(106px + env(safe-area-inset-bottom, 0px));
   }
 
+  /* The spacer above already clears the nav, so pages drop their own bottom padding */
+  #app .info-page {
+    padding-bottom: 0;
+  }
+
+  /* Compact, centered group (same on every page) */
   .bottom-nav {
     position: fixed;
-    left: 12px;
-    right: 12px;
+    left: 50%;
     bottom: calc(36px + env(safe-area-inset-bottom, 0px));
     z-index: 300;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    max-width: calc(100vw - 24px);
     height: 62px;
+    transform: translateX(-50%);
     padding: 0;
     border: none;
     background: none;
@@ -968,12 +981,12 @@ html[data-theme="forest"] body {
 
   /* Tabs pill */
   .bottom-pill {
-    flex: 1;
+    flex: 0 1 auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     align-items: center;
     height: 100%;
-    padding: 0 6px;
+    padding: 0 5px;
     border-radius: 999px;
   }
 
@@ -1036,96 +1049,125 @@ html[data-theme="forest"] body {
     background: var(--accent);
   }
 
+  .menu-grid-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Transparent catcher: tap outside closes the menu (no dim) */
   .bottom-sheet-overlay {
     position: fixed;
     inset: 0;
     z-index: 290;
-    display: flex;
-    align-items: flex-end;
-    background: rgba(0, 0, 0, 0.35);
+    display: block;
+    background: transparent;
   }
 
+  /* Floating glass panel right above the nav, full width of the screen (12px edges) */
   .bottom-sheet {
-    width: 100%;
-    max-height: 80vh;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - 140px);
     overflow-y: auto;
-    padding: 10px 16px calc(96px + env(safe-area-inset-bottom, 0px));
-    border-radius: 22px 22px 0 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    /* Mostly solid glass: the page behind is only a soft blur, never readable */
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(30px) saturate(180%);
     box-shadow: var(--shadow-xl);
   }
 
-  .sheet-handle {
-    display: block;
-    width: 38px;
-    height: 4px;
-    margin: 0 auto 10px;
-    border-radius: 99px;
-    background: var(--border);
-  }
-
-  .sheet-label {
-    display: block;
-    margin: 12px 4px 4px;
-    color: var(--text-muted);
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .sheet-row {
+  /* Ask Rymel (featured) */
+  .menu-ask {
     display: flex;
     align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 11px 10px;
-    border: none;
-    border-radius: var(--radius-lg);
-    background: transparent;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface-soft);
     color: var(--text);
-    font-family: inherit;
-    font-size: 0.92rem;
-    text-align: left;
     text-decoration: none;
+  }
+
+  .menu-ask-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.95rem;
+  }
+
+  .menu-ask-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .menu-ask-text strong {
+    font-size: 0.92rem;
+  }
+
+  .menu-ask-text small {
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Main pages: 3 icon tiles */
+  .menu-pages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .menu-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px;
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  button.menu-page {
+    border: none;
+    background: none;
+    font-family: inherit;
     cursor: pointer;
   }
 
-  .sheet-row:active,
-  .sheet-row:hover {
-    background: var(--surface-hover);
+  .menu-page i {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
   }
 
-  .sheet-row > i:first-child {
-    width: 18px;
-    color: var(--text-muted);
-    text-align: center;
+  .menu-page:active,
+  .menu-page.router-link-active {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
   }
 
-  .sheet-more {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-  }
-
-  .sheet-end {
-    margin-left: auto;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-  }
-
-  .sheet-contact {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 14px;
-    padding: 13px;
-    border-radius: var(--radius-lg);
-    background-color: var(--accent);
-    color: var(--bg);
-    font-weight: 600;
-    text-decoration: none;
+  /* Bottom links: same tiles as the main pages, split by a line */
+  .menu-links {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
   }
 
   .sheet-enter-active,
@@ -1145,7 +1187,8 @@ html[data-theme="forest"] body {
 
   .sheet-enter-from .bottom-sheet,
   .sheet-leave-to .bottom-sheet {
-    transform: translateY(40px);
+    transform: translateY(12px) scale(0.97);
+    transform-origin: bottom center;
   }
 }
 
@@ -1661,6 +1704,62 @@ html[data-theme="froth"] #app .bottom-tab {
 /* Profile photo: soft indigo ring */
 html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profile-image) {
   box-shadow: 0 0 0 4px #ececec, var(--shadow);
+}
+
+/* Phones (Froth) homepage: solid dark charcoal page instead of white,
+   so the colorful tiles pop. Solid colors only, other pages unchanged. */
+@media (max-width: 768px) {
+  html[data-theme="froth"]:has(.m-profile),
+  html[data-theme="froth"]:has(.m-profile) body {
+    --bg: #111215;
+    --surface: #1b1c20;
+    --surface-soft: #232429;
+    --surface-hover: #2a2b31;
+    --text: #f4f4f5;
+    --text-secondary: #b3b5bb;
+    --text-muted: #868991;
+    --border: #2c2d33;
+    --accent: #f4f4f5;
+    --accent-hover: #ffffff;
+    background: #111215;
+  }
+
+  /* Header panel: solid surface (no gradient) */
+  html[data-theme="froth"] #app .m-profile {
+    --m-panel: var(--surface);
+  }
+
+  /* CTA card stays light on the dark page: dark text + dark "Hire Me" */
+  html[data-theme="froth"]:has(.m-profile) #app .header-footer .footer-name {
+    color: #111111;
+  }
+
+  html[data-theme="froth"]:has(.m-profile) #app .header-footer .footer-subtitle {
+    color: #4b4b4b;
+  }
+
+  html[data-theme="froth"]:has(.m-profile) #app .header-footer .footer-contact-btn {
+    background-color: #111111;
+    border-color: #111111;
+    color: #ffffff;
+  }
+
+  /* Bottom nav: dark glass to match the page */
+  html[data-theme="froth"]:has(.m-profile) :is(.bottom-pill, .bottom-circle) {
+    border-color: rgb(255 255 255 / 0.14);
+    background: rgb(27 28 32 / 0.72);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1),
+      0 10px 28px rgb(0 0 0 / 0.4);
+  }
+
+  html[data-theme="froth"]:has(.m-profile) :is(.bottom-tab.active, .bottom-circle.active) {
+    color: #ffffff;
+    background: rgb(255 255 255 / 0.14);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+  }
 }
 
 /* Phones (Froth): profile header matches the colorful tiles */
@@ -2264,20 +2363,21 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
   }
 
-  /* Icons only; the active tab expands into icon + label */
+  /* Icons only; the active tab expands into icon + label.
+     Tabs keep a fixed tap size so the group stays tight. */
   .bottom-pill {
     display: flex;
     gap: 2px;
   }
 
   .bottom-tab {
-    flex: 1 1 0;
+    flex: 0 0 auto;
     flex-direction: row;
     gap: 7px;
-    min-width: 0;
+    min-width: 50px;
     padding: 0 12px;
     font-size: 0.74rem;
-    transition: flex-grow 0.25s ease, color 0.2s ease, background 0.2s ease;
+    transition: padding 0.25s ease, color 0.2s ease, background 0.2s ease;
   }
 
   .bottom-tab i {
@@ -2290,12 +2390,18 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   }
 
   .bottom-tab.active {
-    flex-grow: 2;
+    padding: 0 16px;
   }
 
   .bottom-tab.active .bottom-label {
     display: inline;
   }
+}
+
+/* Tool pages: keep the header (and its "How to use" popover) above the cards below */
+.tool-hero {
+  position: relative;
+  z-index: 5;
 }
 
 /* ===== SMOOTH UX ===== */
@@ -2705,6 +2811,72 @@ html[data-theme="dark"] .nav-links a::after {
   display: none;
 }
 
+.dropdown-tools {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 2px 4px 0;
+}
+
+.dropdown-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 9px 4px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Tiny "Beta" tag in the corner of a tile */
+.dropdown-tool {
+  position: relative;
+}
+
+button.dropdown-tool {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.dropdown-tool-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.dropdown-tool span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-tool i {
+  font-size: 0.95rem;
+}
+
+.dropdown-tool:hover,
+.dropdown-tool.router-link-active {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
 .dropdown-group {
   display: flex;
   flex-direction: column;
@@ -2720,12 +2892,14 @@ html[data-theme="dark"] .nav-links a::after {
   padding-bottom: 0;
 }
 
-.dropdown-row.mobile-only {
+.dropdown-row.mobile-only,
+.dropdown-tool.mobile-only {
   display: none;
 }
 
 @media (max-width: 860px) {
-  .dropdown-row.mobile-only {
+  .dropdown-row.mobile-only,
+  .dropdown-tool.mobile-only {
     display: flex;
   }
 }
@@ -3130,143 +3304,6 @@ html[data-theme="dark"] .nav-links a::after {
   #app .tool-page.ai-tool-page {
     padding-left: 10px;
     padding-right: 10px;
-  }
-}
-
-/* ===== SPOTIFY SIDEBAR BUBBLE =====
-   Level with the navbar, tucked into the left edge showing only the album art;
-   slides out on hover (tap on mobile). */
-.spotify-sidebar {
-  position: fixed;
-  top: 14px;
-  left: 0;
-  height: 56px;
-  transform: translateX(calc(-100% + 52px));
-  z-index: 150;
-  width: 200px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: none;
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.spotify-sidebar--open {
-  transform: translateX(0);
-}
-
-.spotify-sidebar-inner {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.spotify-sidebar-art {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-  margin: 6px;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  border-radius: var(--radius);
-  background: #1db954;
-  color: #fff;
-  font-size: 1.2rem;
-}
-
-.spotify-sidebar-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.spotify-sidebar-info {
-  flex: 1;
-  min-width: 0;
-  padding: 8px 6px 8px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  overflow: hidden;
-}
-
-.spotify-float-now-label {
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #1db954;
-}
-
-.spotify-sidebar-title {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.3;
-}
-
-.spotify-sidebar-artist {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.spotify-float-fade-enter-active,
-.spotify-float-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.spotify-float-fade-enter-from,
-.spotify-float-fade-leave-to {
-  opacity: 0;
-}
-
-/* On phones: tucked into the bottom-left corner so it never covers page content */
-@media (max-width: 860px) {
-  .spotify-sidebar {
-    top: auto;
-    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
-    height: auto;
-    width: 200px;
-    transform: translateX(calc(-100% + 46px));
-  }
-
-  .spotify-sidebar--open {
-    transform: translateX(0);
-  }
-
-  .spotify-sidebar-art {
-    width: 34px;
-    height: 34px;
-    flex: 0 0 34px;
-  }
-
-  .spotify-sidebar-title {
-    font-size: 0.78rem;
-  }
-
-  .spotify-sidebar-artist {
-    font-size: 0.65rem;
-  }
-}
-
-/* Phones: no floating Now Playing anywhere — it only lives as the
-   Spotify tile on the homepage (Quick Links) */
-@media (max-width: 768px) {
-  .spotify-sidebar {
-    display: none;
   }
 }
 
