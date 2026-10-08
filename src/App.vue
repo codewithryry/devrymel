@@ -150,7 +150,22 @@
 
     <!-- ===== MOBILE BOTTOM NAVIGATION (phones only) ===== -->
     <nav v-if="!isAdminRoute" class="bottom-nav" aria-label="Main">
-      <div class="bottom-pill">
+      <div
+        ref="bottomPill"
+        class="bottom-pill"
+        @pointerdown="onNavPointerDown"
+        @pointermove="onNavPointerMove"
+        @pointerup="onNavPointerUp"
+        @pointercancel="onNavPointerCancel"
+        @click.capture="onNavClickCapture"
+      >
+      <!-- Active bubble: slides to whichever tab is active -->
+      <span
+        class="bottom-indicator"
+        :class="{ visible: navIndicator.show, dragging: navDragging }"
+        :style="{ width: navIndicator.w + 'px', transform: 'translateX(' + navIndicator.x + 'px)' }"
+        aria-hidden="true"
+      ></span>
       <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
         <i class="fas fa-home"></i>
         <span class="bottom-label">Home</span>
@@ -372,6 +387,8 @@ export default {
   data() {
     return {
       navScrolled: false,
+      navIndicator: { x: 0, w: 0, show: false },
+      navDragging: false,
       mobileNavOpen: false,
       mobileSheetOpen: false,
       tileEditMode: false,
@@ -492,11 +509,13 @@ export default {
       this.mobileSheetOpen = false;
       this.closeAllPanels();
       this.mobileNavOpen = false;
+      this.$nextTick(this.setupNavIndicator);
     },
 
     // Menu always reopens with the tools collapsed
     mobileSheetOpen(open) {
       if (!open) this.showMenuTools = false;
+      this.$nextTick(this.updateNavIndicator);
     }
   },
 
@@ -531,6 +550,7 @@ export default {
       if (!this.isSiteAdmin) this.tileEditMode = false;
     });
     this.$nextTick(this.observeReveal);
+    this.$nextTick(this.setupNavIndicator);
 
     getSpotifyNowPlaying().then((result) => {
       this.spotifyTrack = result;
@@ -568,6 +588,7 @@ export default {
     if (this.quickPagesUnsubscribe) this.quickPagesUnsubscribe();
     if (this.revealObserver) this.revealObserver.disconnect();
     if (this.authUnsubscribe) this.authUnsubscribe();
+    if (this.navIndicatorObserver) this.navIndicatorObserver.disconnect();
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
   },
 
@@ -753,6 +774,95 @@ export default {
 
     handleScroll() {
       this.navScrolled = window.scrollY > 12;
+    },
+
+    /* Bottom nav: the active tab grows (label appears), so watch every tab's
+       size and move the sliding bubble onto the active one. */
+    setupNavIndicator() {
+      const pill = this.$refs.bottomPill;
+      if (pill === this.navIndicatorPill) return this.updateNavIndicator();
+      if (this.navIndicatorObserver) this.navIndicatorObserver.disconnect();
+      this.navIndicatorPill = pill;
+      if (!pill || typeof ResizeObserver === "undefined") return;
+      this.navIndicatorObserver = new ResizeObserver(this.updateNavIndicator);
+      pill.querySelectorAll(".bottom-tab").forEach((tab) => this.navIndicatorObserver.observe(tab));
+    },
+
+    updateNavIndicator() {
+      const pill = this.$refs.bottomPill;
+      const tab = pill && pill.querySelector(".bottom-tab.active");
+      if (!tab) {
+        this.navIndicator.show = false;
+        return;
+      }
+      this.navIndicator = { x: tab.offsetLeft, w: tab.offsetWidth, show: true };
+    },
+
+    /* Bottom nav drag: slide a finger across the pill, the bubble follows,
+       and letting go opens the tab underneath. A plain tap still works as before. */
+    navTabAt(clientX) {
+      const tabs = [...this.$refs.bottomPill.querySelectorAll(".bottom-tab")];
+      let best = null;
+      let bestDist = Infinity;
+      tabs.forEach((tab) => {
+        const r = tab.getBoundingClientRect();
+        const dist = clientX < r.left ? r.left - clientX : clientX > r.right ? clientX - r.right : 0;
+        if (dist < bestDist) {
+          best = tab;
+          bestDist = dist;
+        }
+      });
+      return best;
+    },
+
+    onNavPointerDown(e) {
+      if (e.pointerType === "mouse") return;
+      this.navDrag = { startX: e.clientX, moved: false };
+    },
+
+    onNavPointerMove(e) {
+      const drag = this.navDrag;
+      if (!drag) return;
+      if (!drag.moved) {
+        if (Math.abs(e.clientX - drag.startX) < 8) return;
+        drag.moved = true;
+        this.navDragging = true;
+        this.$refs.bottomPill.setPointerCapture(e.pointerId);
+      }
+      const pill = this.$refs.bottomPill;
+      const left = pill.getBoundingClientRect().left;
+      const w = this.navTabAt(e.clientX).offsetWidth;
+      const x = Math.max(0, Math.min(e.clientX - left - w / 2, pill.clientWidth - w));
+      this.navIndicator = { x, w, show: true };
+    },
+
+    onNavPointerUp(e) {
+      const drag = this.navDrag;
+      this.navDrag = null;
+      if (!drag || !drag.moved) return;
+      this.navDragging = false;
+      const tab = this.navTabAt(e.clientX);
+      if (tab.classList.contains("active")) {
+        this.updateNavIndicator();
+      } else {
+        tab.click();
+      }
+      // The browser fires its own click after the drag; ignore that one
+      this.navSuppressClick = true;
+      setTimeout(() => (this.navSuppressClick = false), 300);
+    },
+
+    onNavPointerCancel() {
+      this.navDrag = null;
+      this.navDragging = false;
+      this.updateNavIndicator();
+    },
+
+    onNavClickCapture(e) {
+      if (!this.navSuppressClick) return;
+      this.navSuppressClick = false;
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     scrollToSection(id) {
@@ -947,6 +1057,13 @@ html[data-theme="forest"] body {
 /* ===== GLOBAL RESET ===== */
 * {
   box-sizing: border-box;
+  /* No blue flash when tapping links/buttons on phones */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Tap/click focus: no ring (keyboard focus still shows via :focus-visible) */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* ===== MOBILE BOTTOM NAV + SHEET ===== */
@@ -1594,7 +1711,7 @@ html[data-theme="froth"] :is(.brand-short, .bottom-tab.active .bottom-brand) {
 }
 
 /* Bottom nav: active tab in indigo */
-html[data-theme="froth"] :is(.bottom-tab.active, .bottom-circle.active) {
+html[data-theme="froth"] :is(.bottom-tab.active, .bottom-circle.active, .bottom-indicator) {
   color: var(--accent);
   background: rgb(17 17 17 / 0.1);
 }
@@ -1777,7 +1894,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
       0 10px 28px rgb(0 0 0 / 0.4);
   }
 
-  html[data-theme="froth"]:has(.m-profile) :is(.bottom-tab.active, .bottom-circle.active) {
+  html[data-theme="froth"]:has(.m-profile) :is(.bottom-tab.active, .bottom-circle.active, .bottom-indicator) {
     color: #ffffff;
     background: rgb(255 255 255 / 0.14);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
@@ -2235,9 +2352,9 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   /* Picked-up tile (tap another tile to swap with it) */
   #app .rt-grid > .rt-tile.rt-selected {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-    transform: scale(1);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent);
+    transform: scale(0.98);
   }
 
   /* Spotify tile: green "Now Playing" label, grey "Offline" when idle */
@@ -2504,7 +2621,8 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   /* Active tab / open menu: a soft glass bubble */
   .bottom-tab.active,
-  .bottom-circle.active {
+  .bottom-circle.active,
+  .bottom-indicator {
     color: var(--text);
     background: rgb(255 255 255 / 0.85);
     box-shadow: 0 1px 3px rgb(15 23 42 / 0.1);
@@ -2520,7 +2638,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
       0 10px 28px rgb(0 0 0 / 0.35);
   }
 
-  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) :is(.bottom-tab.active, .bottom-circle.active) {
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) :is(.bottom-tab.active, .bottom-circle.active, .bottom-indicator) {
     background: rgb(255 255 255 / 0.12);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
   }
@@ -2557,6 +2675,55 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   .bottom-tab.active .bottom-label {
     display: inline;
+  }
+
+  /* Sliding active bubble (sits behind the tabs) */
+  .bottom-pill {
+    position: relative;
+    touch-action: none; /* a horizontal swipe drags the bubble instead of scrolling */
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .bottom-indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 50px;
+    margin-top: -25px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+      width 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+      opacity 0.2s ease;
+  }
+
+  .bottom-indicator.visible {
+    opacity: 1;
+  }
+
+  /* While dragging, the bubble sticks to the finger */
+  .bottom-indicator.dragging {
+    transition: width 0.2s ease, opacity 0.2s ease;
+  }
+
+  /* The bubble replaces each tab's own background */
+  #app .bottom-pill .bottom-tab {
+    position: relative;
+    z-index: 1;
+  }
+
+  html #app .bottom-pill .bottom-tab.active {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) {
+  .bottom-indicator {
+    transition: opacity 0.2s ease;
   }
 }
 
