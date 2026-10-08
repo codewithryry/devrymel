@@ -136,13 +136,28 @@
           </div>
 
           <button class="sponsor-btn" @click="handleSponsor">
-            <i class="fas fa-heart"></i>
             Sponsor and Support
           </button>
 
           <div class="sponsor-footer-links">
-            <a href="#" class="footer-link">Problems sponsoring?</a>
-            <a href="#" class="footer-link">Sponsorship FAQ</a>
+            <!-- Opens an email with the subject filled in -->
+            <a
+              href="mailto:reymelrey.mislang@gmail.com?subject=Problem%20with%20sponsoring"
+              class="footer-link"
+            >
+              Problems sponsoring?
+            </a>
+            <button type="button" class="footer-link" :aria-expanded="showFaq" @click="showFaq = !showFaq">
+              Sponsorship FAQ
+            </button>
+          </div>
+
+          <!-- FAQ: opens right under the links -->
+          <div v-if="showFaq" class="sponsor-faq">
+            <details v-for="item in faq" :key="item.q" class="faq-item">
+              <summary>{{ item.q }}</summary>
+              <p>{{ item.a }}</p>
+            </details>
           </div>
         </div>
       </div>
@@ -180,6 +195,29 @@ export default {
       gotymeQr,
       gotyme: { name: "Reymel Mislang", number: "019851727975" },
       copied: false,
+      showFaq: false,
+      faq: [
+        {
+          q: "Where does my sponsorship go?",
+          a: "It covers hosting, the domain, and the time spent building and maintaining the free tools and resources on this site."
+        },
+        {
+          q: "How do I pay with GoTyme?",
+          a: "Scan the GoTyme QR code or send through InstaPay to the account number shown. Tap the number to copy it."
+        },
+        {
+          q: "Can I sponsor monthly?",
+          a: "Monthly sponsorship is available through PayPal only. GoTyme supports one-time transfers."
+        },
+        {
+          q: "Is there a minimum amount?",
+          a: "No — any amount helps, even ₱10. Use \"Other Amount\" to enter your own."
+        },
+        {
+          q: "I already paid but something went wrong.",
+          a: "Tap \"Problems sponsoring?\" to email me with your name, amount, and payment method, and I'll sort it out."
+        }
+      ],
       selectedFreq: "one-time",
       selectedAmount: 250,
       customAmount: "",
@@ -600,12 +638,44 @@ export default {
   opacity: 0.85;
 }
 
+/* FAQ */
+.sponsor-faq {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-item summary {
+  padding: 0.75rem 0;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.faq-item p {
+  margin: 0 0 0.8rem;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
 .sponsor-footer-links {
   display: flex;
   gap: 20px;
   justify-content: center;
 }
 .footer-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
   font-size: 0.8rem;
   color: var(--text-secondary);
   text-decoration: underline;

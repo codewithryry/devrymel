@@ -2,9 +2,48 @@
   <div>
     <!-- MOBILE LAYOUT -->
     <div class="mobile-profile-content m-profile">
+      <!-- "Contact info" popup: same look as the Dean's List / Certifications popups -->
+      <transition name="ci-fade">
+        <div v-if="showContactInfo" class="mobile-modal-overlay ci-overlay" @click="showContactInfo = false">
+          <div class="mobile-modal profile-modal ci-modal" role="dialog" aria-label="Contact info" @click.stop>
+            <div class="mobile-modal-header">
+              <h3 class="mobile-modal-title">Contact info</h3>
+              <button type="button" class="mobile-modal-close" aria-label="Close" @click="showContactInfo = false">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+
+            <p class="mobile-modal-desc">Ways to reach me and find me online.</p>
+
+            <div class="ci-list">
+              <component
+                :is="item.href ? 'a' : 'div'"
+                v-for="item in contactInfo"
+                :key="item.label"
+                class="ci-item"
+                :href="item.href || null"
+                :target="item.external ? '_blank' : null"
+                :rel="item.external ? 'noopener' : null"
+              >
+                <span class="ci-icon"><i :class="item.icon"></i></span>
+                <span class="ci-info">
+                  <strong>{{ item.label }}</strong>
+                  <small>{{ item.value }}<template v-if="item.note"> · {{ item.note }}</template></small>
+                </span>
+                <i v-if="item.href" class="fas fa-chevron-right ci-arrow"></i>
+              </component>
+            </div>
+
+            <AdSlot class="profile-modal-footer" type="banner" />
+          </div>
+        </div>
+      </transition>
+
       <!-- Banner corner: pencil turns tile edit mode on / off -->
-      <div v-if="canEditTiles" class="m-stats-wrap">
+      <!-- Banner corner: pencil (edit tiles) + "⋯" (live stats tooltip) -->
+      <div class="m-stats-wrap" @click.stop>
         <button
+          v-if="canEditTiles"
           type="button"
           class="m-stats-btn"
           :class="{ active: tileEditing }"
@@ -14,27 +53,44 @@
         >
           <i class="fas fa-pen"></i>
         </button>
+
+        <button
+          type="button"
+          class="m-stats-btn"
+          :class="{ active: showStats }"
+          :aria-expanded="showStats"
+          aria-label="Show live stats"
+          @click="showStats = !showStats"
+        >
+          <i class="fas fa-ellipsis"></i>
+        </button>
+
+        <transition name="m-stats-pop">
+          <div v-if="showStats" class="m-stats-tip" role="tooltip">
+            <span class="m-stats-title">Live stats</span>
+            <div class="m-stats-row"><span><i class="fas fa-eye"></i>Views</span><strong>{{ $root.statsLoading ? "…" : $root.visitorCount.toLocaleString() }}</strong></div>
+            <div class="m-stats-row"><span><i class="fas fa-folder"></i>Projects</span><strong>{{ $root.statsLoading ? "…" : $root.projectsCount }}</strong></div>
+            <div class="m-stats-row"><span><i class="fab fa-github"></i>Repositories</span><strong>{{ $root.statsLoading ? "…" : $root.reposCount }}</strong></div>
+            <div class="m-stats-row"><span><i class="fas fa-clock"></i>Coding this week</span><strong>{{ $root.statsLoading ? "…" : shortCodingTime }}</strong></div>
+          </div>
+        </transition>
       </div>
 
       <!-- Cover banner (phones): grid of boxes, colors follow the theme -->
       <div class="m-banner" aria-hidden="true"></div>
 
-      <!-- Centered header: photo, name, role, location -->
+      <!-- Profile header (LinkedIn style): round photo over the banner, left-aligned text -->
       <div class="m-hero">
         <div class="m-photo">
           <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
-          <!-- Availability chip on the bottom edge of the photo -->
-          <span class="m-open" title="Available for projects">
-            <i class="fas fa-circle"></i>Open to work
-          </span>
         </div>
 
         <h2 class="m-name">Reymel Mislang</h2>
         <p class="m-role">{{ text.desktopSubtitle }}</p>
 
         <p class="m-meta">
-          <span><i class="fas fa-map-marker-alt"></i> {{ text.locationValue }}</span>
-          <span><i class="fas fa-birthday-cake"></i> {{ text.dobValue }}</span>
+          <span>Naujan, Oriental Mindoro, Philippines</span>
+          <button type="button" class="m-contact-link" @click="showContactInfo = true">Contact info</button>
         </p>
 
         <div class="m-badges">
@@ -51,6 +107,13 @@
             <span class="badge-label">{{ text.links }}</span>
           </button>
         </div>
+
+        <!-- "Open to work" box -->
+        <router-link to="/services" class="m-open-card">
+          <span class="m-open-title">Open to work</span>
+          <span class="m-open-roles">Freelance, part-time & full-time · Remote or on-site</span>
+          <span class="m-open-more">Show details</span>
+        </router-link>
 
         <!-- Bio (inside the same card) — hidden for now; remove v-if to show again -->
         <div v-if="false" class="m-bio">
@@ -286,7 +349,7 @@ const PROFILE_TRANSLATIONS = {
     certificates: "Certificates",
     projectLinks: "Project Links",
 
-    desktopSubtitle: "Frontend Developer & IT Support",
+    desktopSubtitle: "Web Developer & IT Support",
     coreTechnologies: "Core Technologies",
     deanListerAward: "DEAN LISTER AWARD",
     viewAllAwards: "View all",
@@ -331,7 +394,7 @@ const PROFILE_TRANSLATIONS = {
     certificates: "Certificates",
     projectLinks: "Project Links",
 
-    desktopSubtitle: "Frontend-Focused Web Developer",
+    desktopSubtitle: "Web Developer & IT Support",
     coreTechnologies: "Core Technologies",
     deanListerAward: "DEAN LISTER AWARD",
     viewAllAwards: "Tingnan lahat",
@@ -376,7 +439,7 @@ const PROFILE_TRANSLATIONS = {
     certificates: "證書",
     projectLinks: "專案連結",
 
-    desktopSubtitle: "前端導向網頁開發者",
+    desktopSubtitle: "網頁開發者與 IT 支援",
     coreTechnologies: "核心技術",
     deanListerAward: "院長名單獎項",
     viewAllAwards: "查看全部",
@@ -458,7 +521,14 @@ export default {
       tileLayoutDocId: "home",
       tileOrder: [],
       selectedTileId: null,
-      currentTheme: document.documentElement.getAttribute("data-theme") || "light"
+      currentTheme: document.documentElement.getAttribute("data-theme") || "light",
+      showContactInfo: false,
+      showStats: false,
+      contactInfo: [
+        { icon: "fab fa-linkedin", label: "LinkedIn", value: "linkedin.com/in/reymelreymislang", href: "https://www.linkedin.com/in/reymelreymislang", external: true },
+        { icon: "fas fa-link", label: "Website", value: "devrymel.vercel.app", note: "Portfolio", href: "https://devrymel.vercel.app", external: true },
+        { icon: "fas fa-envelope", label: "Email", value: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com" }
+      ]
     };
   },
 
@@ -469,6 +539,13 @@ export default {
   },
 
   computed: {
+    // WakaTime (last 7 days): "32 hrs 15 mins" -> "32h 15m" so it fits the tooltip
+    shortCodingTime() {
+      const text = this.$root.codingHoursText || "";
+      if (!/\d/.test(text)) return "—";
+      return text.replace(/\s*hrs?/g, "h").replace(/\s*mins?/g, "m");
+    },
+
     // Claude Code is always listed (hardcoded, even when the stack comes from admin)
     techChips() {
       const hasClaude = this.techStack.some((tech) => tech.name === "Claude Code");
@@ -546,6 +623,7 @@ export default {
   },
 
   mounted() {
+    document.addEventListener("click", this.closeStats);
     this._themeObserver = new MutationObserver(() => {
       this.currentTheme = document.documentElement.getAttribute("data-theme") || "light";
     });
@@ -556,10 +634,15 @@ export default {
   },
 
   beforeUnmount() {
+    document.removeEventListener("click", this.closeStats);
     if (this._themeObserver) this._themeObserver.disconnect();
   },
 
   methods: {
+    closeStats() {
+      this.showStats = false;
+    },
+
     // Attributes for a tile's <a> (links) or <button> (actions / edit mode)
     tileLinkAttrs(tile) {
       if (!tile.href || this.tileEditing) return { type: "button" };
@@ -624,6 +707,135 @@ export default {
 </script>
 
 <style scoped>
+/* ===== "Contact info" popup (phones) — matches the Dean's List popup ===== */
+.ci-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.ci-modal {
+  width: 100%;
+  padding: 1.25rem;
+  background: var(--surface);
+}
+
+.ci-modal .mobile-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ci-modal .mobile-modal-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.ci-modal .mobile-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.ci-modal .mobile-modal-desc {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Rows look like the Dean's List rows */
+.ci-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.ci-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.ci-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.9rem;
+}
+
+.ci-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ci-info strong {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.ci-info small {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ci-arrow {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.ci-fade-enter-active,
+.ci-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.ci-fade-enter-active .ci-modal,
+.ci-fade-leave-active .ci-modal {
+  transition: transform 0.25s ease;
+}
+
+.ci-fade-enter-from,
+.ci-fade-leave-to {
+  opacity: 0;
+}
+
+.ci-fade-enter-from .ci-modal,
+.ci-fade-leave-to .ci-modal {
+  transform: translateY(40px);
+}
+
 /* Spotify tile only shows what's playing, it doesn't link out */
 .m-tile.tile-spotify {
   cursor: default;
@@ -1894,38 +2106,91 @@ export default {
     color: var(--text);
   }
 
+  /* Live stats tooltip under the "⋯" */
+  .m-stats-tip {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 210px;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow-xl, var(--shadow));
+  }
+
+  .m-stats-tip::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 12px;
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    transform: rotate(45deg);
+  }
+
+  .m-stats-title {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .m-stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.3rem 0;
+    font-size: 0.76rem;
+  }
+
+  .m-stats-row + .m-stats-row {
+    border-top: 1px solid var(--border);
+  }
+
+  .m-stats-row span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-secondary);
+  }
+
+  .m-stats-row i {
+    width: 14px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  .m-stats-row strong {
+    color: var(--text);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .m-stats-pop-enter-active,
+  .m-stats-pop-leave-active {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .m-stats-pop-enter-from,
+  .m-stats-pop-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
   /* Pencil while editing: accent color so you know edit mode is on */
   .m-stats-btn.active .fa-pen {
     color: #22c55e;
   }
 
-
-  /* "Open to work" chip centered on the photo's bottom edge */
-  .m-open {
-    position: absolute;
-    left: 50%;
-    bottom: -11px;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.68rem;
-    font-weight: 700;
-    line-height: 1.2;
-    white-space: nowrap;
-    box-shadow: var(--shadow);
-    transform: translateX(-50%);
-  }
-
-  .m-open i {
-    color: #22c55e;
-    font-size: 0.45rem;
-  }
 
   /* A few filled boxes sitting on the grid */
   .m-banner::after {

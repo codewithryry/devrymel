@@ -99,7 +99,7 @@ export default {
           title: "Tools & AI",
           status: "done",
           icon: "fas fa-wand-magic-sparkles",
-          text: "Ask Rymel AI chat, 14 free tools, and the Deployment Gallery."
+          text: "Ask Reymel AI chat, 14 free tools, and the Deployment Gallery."
         },
         {
           title: "Docs & updates",

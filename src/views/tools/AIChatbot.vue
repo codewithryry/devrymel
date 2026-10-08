@@ -1753,15 +1753,16 @@ export default {
 /* Phones, during a chat: small centered mode title above the island */
 @media (max-width: 640px) {
   /* One row: mode name left, compact island right */
+  /* Two rows: mode name (+ Beta, "i" on the right), then the mode switch full width */
   .chat-top.has-messages {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 48px 10px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 12px 10px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
   }
 
-  /* Phones: "i" on the right of the header row (Ask Rymel header / chat bar) */
+  /* Phones: "i" on the right of the header row (Ask Reymel header / chat bar) */
   .chat-howto {
     top: 15px;
     right: 12px;
@@ -1769,8 +1770,8 @@ export default {
 
   .chat-top.has-messages .chat-title-block {
     display: block;
-    flex: 0 1 auto;
     min-width: 0;
+    padding-right: 40px;
     text-align: left;
   }
 
@@ -1781,8 +1782,13 @@ export default {
   }
 
   #app .ai-tool-page .chat-top.has-messages .mode-switch {
-    flex: 0 0 auto;
+    display: flex;
+    width: 100%;
     margin: 0;
+  }
+
+  #app .ai-tool-page .chat-top.has-messages .mode-btn {
+    flex: 1;
   }
 
   #app .ai-tool-page .chat-top.has-messages .mode-btn {
@@ -1792,7 +1798,8 @@ export default {
 
   .chat-top.has-messages .chat-title-block h1 {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 1.15rem;
+    line-height: 28px;
   }
 
   .chat-top.has-messages .chat-title-block p {

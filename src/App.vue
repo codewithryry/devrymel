@@ -66,7 +66,7 @@
                 <span class="dropdown-label">Live Stats</span>
                 <div class="stat-line"><span>Views</span><strong>{{ statsLoading ? '…' : visitorCount.toLocaleString() }}</strong></div>
                 <div class="stat-line"><span>Projects</span><strong>{{ statsLoading ? '…' : projectsCount }}</strong></div>
-                <div class="stat-line"><span>Hours coding</span><strong>{{ statsLoading ? '…' : codingHoursText }}</strong></div>
+                <div class="stat-line" title="Time spent coding in the last 7 days (WakaTime)"><span>Coding this week</span><strong>{{ statsLoading ? '…' : codingHoursText }}</strong></div>
                 <div class="stat-line"><span>Repositories</span><strong>{{ statsLoading ? '…' : reposCount }}</strong></div>
               </div>
 
@@ -113,7 +113,7 @@
                 <div class="dropdown-tools">
                   <router-link to="/tools/ai-chat" class="dropdown-tool" @click="handleQuickPageClick">
                     <i class="fas fa-wand-magic-sparkles"></i>
-                    <span>Ask Rymel</span>
+                    <span>Ask Reymel</span>
                     <small class="dropdown-tool-badge">Beta</small>
                   </router-link>
 
@@ -167,23 +167,26 @@
         <i class="fas fa-envelope"></i>
         <span class="bottom-label">Contact</span>
       </router-link>
-      </div>
 
-      <!-- Menu: its own round glass button (like the iOS 26 search button) -->
+      <!-- Menu: part of the same pill as the tabs -->
       <button
         type="button"
-        class="bottom-circle"
+        class="bottom-tab bottom-menu-tab"
         :class="{ active: mobileSheetOpen }"
         :aria-label="mobileSheetOpen ? 'Close menu' : 'Open menu'"
         :aria-expanded="mobileSheetOpen"
         @click="mobileSheetOpen = !mobileSheetOpen"
       >
+        <!-- Menu icon: 2×2 grid; just an X while the menu is open -->
         <i v-if="mobileSheetOpen" class="fas fa-times"></i>
-        <!-- Menu icon: bold hamburger -->
-        <svg v-else class="menu-grid-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true">
-          <path d="M4 6.5h16M4 12h16M4 17.5h16" />
+        <svg v-else class="menu-grid-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2" />
+          <rect x="13" y="3.5" width="7.5" height="7.5" rx="2" />
+          <rect x="3.5" y="13" width="7.5" height="7.5" rx="2" />
+          <rect x="13" y="13" width="7.5" height="7.5" rx="2" />
         </svg>
       </button>
+      </div>
     </nav>
 
     <!-- Tile edit mode is toggled by the pencil on the homepage header (no Done bar) -->
@@ -225,12 +228,15 @@
         <div class="bottom-sheet" role="dialog" aria-label="Menu">
           <!-- AI assistant, featured -->
           <router-link to="/tools/ai-chat" class="menu-ask" @click="mobileSheetOpen = false">
-            <span class="menu-ask-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+            <!-- Same icon + tiny Beta tag as the desktop "⋯" menu -->
+            <span class="menu-ask-icon">
+              <i class="fas fa-wand-magic-sparkles"></i>
+              <small class="dropdown-tool-badge">Beta</small>
+            </span>
             <span class="menu-ask-text">
-              <strong>Ask Rymel</strong>
+              <strong>Ask Reymel</strong>
               <small>AI assistant for my work &amp; projects</small>
             </span>
-            <span class="beta-badge">Beta</span>
           </router-link>
 
           <!-- Main pages -->
@@ -260,15 +266,15 @@
               <span>{{ link.title }}</span>
             </router-link>
 
-            <!-- Last tile: shows / hides the free tools -->
+            <!-- Last tile: shows / hides the free tools ("More" is the nav button) -->
             <button
               type="button"
               class="menu-page"
               :aria-expanded="showMenuTools"
               @click="showMenuTools = !showMenuTools"
             >
-              <i class="fas" :class="showMenuTools ? 'fa-chevron-up' : 'fa-ellipsis'"></i>
-              <span>{{ showMenuTools ? 'Less' : 'More' }}</span>
+              <i class="fas" :class="showMenuTools ? 'fa-chevron-up' : 'fa-screwdriver-wrench'"></i>
+              <span>{{ showMenuTools ? 'Hide tools' : 'Free Tools' }}</span>
             </button>
           </div>
 
@@ -1081,7 +1087,7 @@ html[data-theme="forest"] body {
     box-shadow: var(--shadow-xl);
   }
 
-  /* Ask Rymel (featured) */
+  /* Ask Reymel (featured) */
   .menu-ask {
     display: flex;
     align-items: center;
@@ -1094,16 +1100,21 @@ html[data-theme="forest"] body {
     text-decoration: none;
   }
 
+  /* Plain icon like the desktop tile, Beta tag in its top-right corner */
   .menu-ask-icon {
+    position: relative;
     display: grid;
     flex-shrink: 0;
     place-items: center;
     width: 38px;
     height: 38px;
-    border-radius: 12px;
-    background: var(--accent);
-    color: var(--bg);
-    font-size: 0.95rem;
+    color: var(--text);
+    font-size: 1.1rem;
+  }
+
+  .menu-ask-icon .dropdown-tool-badge {
+    top: -2px;
+    right: -10px;
   }
 
   .menu-ask-text {
@@ -1835,6 +1846,141 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
 
   html[data-theme="froth"] #app .m-hero .m-badges .inline-badge::before {
     display: none;
+  }
+}
+
+/* ===== Phones: LinkedIn-style profile header (all themes) =====
+   Round photo overlapping the banner on the left, left-aligned name / headline,
+   location · Contact info, buttons, then an "Open to work" box. */
+@media (max-width: 768px) {
+  html #app .m-profile .m-banner {
+    height: 150px;
+  }
+
+  html #app .m-profile .m-hero {
+    align-items: flex-start;
+    padding: 0 16px 16px;
+    text-align: left;
+  }
+
+  /* Rounded square, same corner feel as the tiles (not a full circle) */
+  html #app .m-profile .m-hero .m-photo {
+    width: 118px;
+    height: 118px;
+    max-width: none;
+    margin: -62px 0 0;
+    padding: 4px;
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: none;
+  }
+
+  html #app .m-profile .m-hero .m-photo .profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: none;
+    object-fit: cover;
+  }
+
+  html #app .m-profile .m-hero .m-name {
+    display: block;
+    margin: 0.75rem 0 0.15rem;
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+
+  html #app .m-profile .m-hero .m-role {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: left;
+  }
+
+  /* Location · Contact info (plain text, no pills) */
+  html #app .m-profile .m-hero .m-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0 0.4rem;
+    margin: 0.35rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+  }
+
+  html #app .m-profile .m-hero .m-meta span {
+    padding: 0;
+    background: none;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 400;
+  }
+
+  html #app .m-profile .m-hero .m-contact-link {
+    padding: 0;
+    border: none;
+    background: none;
+    color: #0a66c2;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  html #app .m-profile .m-hero .m-contact-link::before {
+    content: "·";
+    margin-right: 0.4rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* Buttons row, left-aligned */
+  html #app .m-profile .m-hero .m-badges {
+    justify-content: flex-start;
+    width: 100%;
+    max-width: none;
+    margin: 0.85rem 0 0;
+  }
+
+  /* "Open to work" box */
+  html #app .m-profile .m-open-card {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    margin-top: 0.85rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-soft);
+    color: var(--text);
+    text-align: left;
+    text-decoration: none;
+  }
+
+  html #app .m-profile .m-open-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  html #app .m-profile .m-open-roles {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+
+  html #app .m-profile .m-open-more {
+    margin-top: 2px;
+    color: #0a66c2;
+    font-size: 0.8rem;
+    font-weight: 700;
   }
 }
 
