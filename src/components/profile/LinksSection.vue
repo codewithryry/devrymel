@@ -40,12 +40,13 @@
           <small class="mobile-desc">{{ spotifyPlaying ? $root.spotifyTrack.artist : 'Not playing right now' }}</small>
         </div>
 
-        <a href="https://buymeacoffee.com/reymelreym7" target="_blank" class="mobile-link-card" :class="tileClass('coffee', 'tall')">
-          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('coffee', 'tall')"><i class="fas fa-expand-alt"></i></button>
-          <div class="mobile-icon"><i class="fas fa-coffee"></i></div>
-          <span class="mobile-label">Coffee</span>
-          <small class="mobile-desc">Support my work</small>
-        </a>
+        <!-- Employer CTA (replaces Coffee + Portfolio): Hire Me goes to contact -->
+        <router-link to="/contact" class="mobile-link-card" :class="tileClass('hire', 'tall')">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('hire', 'tall')"><i class="fas fa-expand-alt"></i></button>
+          <div class="mobile-icon"><i class="fas fa-handshake"></i></div>
+          <span class="mobile-label">Hire Me</span>
+          <small class="mobile-desc">Open to work</small>
+        </router-link>
 
         <!-- Opens the feedback panel (App.openFeedback) -->
         <button type="button" class="mobile-link-card" :class="tileClass('feedback', 'sm')" @click="$root.openFeedback()">
@@ -73,11 +74,11 @@
           <small class="mobile-desc">Technical writing</small>
         </a>
 
-        <a href="https://reymelmislang.vercel.app/" target="_blank" class="mobile-link-card" :class="tileClass('portfolio', 'sm')">
-          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('portfolio', 'sm')"><i class="fas fa-expand-alt"></i></button>
-          <div class="mobile-icon"><i class="fas fa-briefcase"></i></div>
-          <span class="mobile-label">Portfolio</span>
-          <small class="mobile-desc">View my work</small>
+        <a href="https://github.com/codewithryry" target="_blank" class="mobile-link-card" :class="tileClass('github', 'sm')">
+          <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('github', 'sm')"><i class="fas fa-expand-alt"></i></button>
+          <div class="mobile-icon"><i class="fab fa-github"></i></div>
+          <span class="mobile-label">GitHub</span>
+          <small class="mobile-desc">@codewithryry</small>
         </a>
 
         <div class="mobile-link-card" :class="tileClass('support', 'wide')" @click="$emit('openQRModal')">

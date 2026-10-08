@@ -139,7 +139,7 @@
           @contextmenu="tileEditing && $event.preventDefault()"
         >
           <component
-            :is="tile.href && !tileEditing ? 'a' : tile.id === 'spotify' && !tileEditing ? 'div' : 'button'"
+            :is="tile.slides ? 'div' : tile.href && !tileEditing ? 'a' : tile.id === 'spotify' && !tileEditing ? 'div' : 'button'"
             v-for="tile in orderedTiles"
             :key="tile.id"
             v-bind="tileLinkAttrs(tile)"
@@ -148,19 +148,28 @@
               tileClass(tile.id, tile.size),
               tile.chip,
               'tile-' + tile.id,
-              { 'rt-selected': selectedTileId === tile.id, 'spotify-tile': tile.id === 'spotify', idle: tile.idle }
+              { 'rt-selected': selectedTileId === tile.id, 'spotify-tile': tile.id === 'spotify', 'm-carousel-tile': tile.slides && tileSize(tile.id, tile.size) !== 'icon', idle: tile.idle }
             ]"
             @click="onTileClick($event, tile)"
           >
-            <span v-if="tile.image" class="m-tile-icon m-tile-art">
-              <img :src="tile.image" :alt="tile.label" />
-            </span>
-            <i v-else :class="[tile.icon, 'm-tile-icon']"></i>
+            <!-- Swipeable tiles (projects, employer info); icon size shows just the icon -->
+            <TileCarousel
+              v-if="tile.slides && tileSize(tile.id, tile.size) !== 'icon'"
+              :slides="tile.slides"
+              :size="tileSize(tile.id, tile.size)"
+              :locked="tileEditing"
+            />
+            <template v-else>
+              <span v-if="tile.image" class="m-tile-icon m-tile-art">
+                <img :src="tile.image" :alt="tile.label" />
+              </span>
+              <i v-else :class="[tile.icon, 'm-tile-icon']"></i>
 
-            <small v-if="tile.kicker" class="spotify-tile-label">{{ tile.kicker }}</small>
-            <span class="m-tile-label">{{ tile.label }}</span>
-            <small>{{ tile.desc }}</small>
-            <i :class="[tile.corner, 'm-tile-corner']"></i>
+              <small v-if="tile.kicker" class="spotify-tile-label">{{ tile.kicker }}</small>
+              <span class="m-tile-label">{{ tile.label }}</span>
+              <small>{{ tile.desc }}</small>
+              <i :class="[tile.corner, 'm-tile-corner']"></i>
+            </template>
 
             <span
               v-if="tileEditing"
@@ -337,7 +346,24 @@
 
 <script>
 import AdSlot from "@/components/AdSlot.vue";
+import TileCarousel from "@/components/profile/TileCarousel.vue";
 import resizableTiles from "@/mixins/resizableTiles";
+import projectsData from "@/data/projects.json";
+import experiencesData from "@/data/experiences.json";
+import servicesData from "@/data/services.json";
+import certificatesData from "@/data/certificates.json";
+import highlightsData from "@/data/highlights.json";
+
+// Project screenshots live in src/assets (missing file -> no picture, skeleton only)
+function projectImage(image) {
+  if (!image) return "";
+  if (/^https?:/.test(image)) return image;
+  try {
+    return require(`@/assets/${image}`);
+  } catch (e) {
+    return "";
+  }
+}
 
 const PROFILE_TRANSLATIONS = {
   en: {
@@ -482,7 +508,8 @@ export default {
   mixins: [resizableTiles],
 
   components: {
-    AdSlot
+    AdSlot,
+    TileCarousel
   },
 
   props: {
@@ -518,7 +545,8 @@ export default {
 
   data() {
     return {
-      tileLayoutDocId: "home",
+      // v2: new tile set; older saved layouts (with GitHub/LinkedIn) are ignored
+      tileLayoutDocId: "home-v2",
       tileOrder: [],
       selectedTileId: null,
       currentTheme: document.documentElement.getAttribute("data-theme") || "light",
@@ -566,14 +594,18 @@ export default {
       const open = "fas fa-external-link-alt";
 
       return [
-        { id: "email", size: "wide", chip: "chip-1", icon: "fas fa-envelope", label: this.text.email, desc: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com", corner: open },
+        // Default order + sizes (also what Reset returns to). Packs the 4-column grid with no gaps:
+        // Email | CV + TikTok/IG · Projects (full) · Glance | Certs · What I build · Why | Spotify
+        // · Facebook | Feedback · Dev.to | Theme/Support
+        { id: "email", size: "tall", chip: "chip-1", icon: "fas fa-envelope", label: this.text.email, desc: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com", corner: open },
         { id: "cv", size: "sm", chip: "chip-4", icon: "fas fa-id-card", label: "CV", desc: "View PDF", href: "/Reymel_Mislang_CV.pdf", external: true, corner: "fas fa-arrow-up-right-from-square" },
-        { id: "github", size: "sm", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "@codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
-        { id: "linkedin", size: "sm", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Reymel Mislang", href: "https://www.linkedin.com/in/reymelreymislang/", external: true, corner: open },
         { id: "tiktok", size: "icon", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@devrymel", href: "https://www.tiktok.com/@devrymel", external: true, corner: open },
         { id: "instagram", size: "icon", chip: "chip-4", icon: "fab fa-instagram", label: "Instagram", desc: "Follow", href: "https://www.instagram.com/iamrymel/", external: true, corner: open },
-        { id: "facebook", size: "sm", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
-        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
+        { id: "work", size: "lg", chip: "chip-3", icon: "fas fa-folder-open", label: "Projects", slides: this.workSlides },
+        { id: "glance", size: "tall", chip: "chip-2", icon: "fas fa-user-tie", label: "At a glance", slides: this.glanceSlides },
+        { id: "certs", size: "tall", chip: "chip-4", icon: "fas fa-award", label: "Certifications", slides: this.certSlides },
+        { id: "services", size: "wide", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
+        { id: "why", size: "tall", chip: "chip-5", icon: "fas fa-star", label: "Why hire me", slides: this.whySlides },
         {
           id: "spotify", size: "tall", chip: "chip-3", idle: !playing,
           icon: "fab fa-spotify", image: playing ? track.image : "",
@@ -582,11 +614,11 @@ export default {
           desc: playing ? track.artist : "Not playing right now",
           corner: "fab fa-spotify"
         },
-        { id: "coffee", size: "tall", chip: "chip-4", icon: "fas fa-coffee", label: "Coffee", desc: "Support my work", href: "https://buymeacoffee.com/reymelreym7", external: true, corner: open },
-        { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
+        { id: "facebook", size: "sm", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
+        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
         { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
-        { id: "portfolio", size: "sm", chip: "chip-3", icon: "fas fa-briefcase", label: "Portfolio", desc: "View my work", href: "https://reymelmislang.vercel.app/", external: true, corner: open },
-        { id: "support", size: "sm", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
+        { id: "theme", size: "icon", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
+        { id: "support", size: "icon", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
       ];
     },
 
@@ -596,6 +628,96 @@ export default {
       const saved = this.tileOrder.filter((id) => byId[id]);
       const rest = this.homeTiles.map((t) => t.id).filter((id) => !saved.includes(id));
       return [...saved, ...rest].map((id) => byId[id]);
+    },
+
+    // "Projects" tile: top 3 projects (text only, opens the live demo), then "View all"
+    workSlides() {
+      const projects = projectsData || [];
+      const slides = projects.slice(0, 3).map((p) => ({
+        icon: "fas fa-folder-open",
+        kicker: p.status || "Featured project",
+        title: p.title,
+        text: p.description,
+        chips: (p.technologies || []).slice(0, 3),
+        thumb: { type: "site", src: projectImage(p.image) },
+        ...(p.demoUrl ? { href: p.demoUrl } : { to: "/projects" })
+      }));
+      slides.push({
+        icon: "fas fa-layer-group",
+        kicker: "Portfolio",
+        title: `View all ${projects.length} projects`,
+        text: "Web apps, PWAs, automation and client builds.",
+        to: "/projects"
+      });
+      return slides;
+    },
+
+    // "At a glance" tile: the 3 things employers check first
+    glanceSlides() {
+      const roles = experiencesData || [];
+      const dev = roles.find((r) => /develop/i.test(r.role)) || roles[0] || {};
+      const stack = this.techChips.map((t) => t.name);
+      const deans = (this.achievements && this.achievements.deansList) || [];
+      return [
+        {
+          icon: "fas fa-briefcase",
+          kicker: "Experience",
+          title: dev.role,
+          text: `${dev.company} · ${dev.date}${roles.length > 1 ? ` · +${roles.length - 1} more roles` : ""}`,
+          to: "/experience"
+        },
+        {
+          icon: "fas fa-code",
+          kicker: "Core stack",
+          title: stack.slice(0, 3).join(" · "),
+          text: stack.slice(3).join(", ") || "Full-stack web development",
+          chips: stack.slice(3, 6),
+          to: "/skills"
+        },
+        {
+          icon: "fas fa-graduation-cap",
+          kicker: "Education",
+          title: "BS Information Technology",
+          text: `Mindoro State University${deans.length ? ` · Dean's Lister ×${deans.length}` : ""}`,
+          to: "/about"
+        }
+      ];
+    },
+
+    // "What I build" tile: services, each opens /services
+    serviceSlides() {
+      return (servicesData || []).map((sv) => ({
+        icon: sv.icon || "fas fa-screwdriver-wrench",
+        kicker: "What I build",
+        title: sv.title,
+        text: sv.description,
+        chips: (sv.features || []).slice(0, 2),
+        to: "/services"
+      }));
+    },
+
+    // "Certifications" tile: each slide opens the certificate file
+    certSlides() {
+      return (certificatesData || []).map((c) => ({
+        icon: "fas fa-award",
+        kicker: c.category || "Certificate",
+        title: c.title,
+        text: c.description,
+        // Image certificates show a tiny copy; PDFs show a paper skeleton
+        thumb: { type: "doc", src: /\.(jpe?g|png|webp)$/i.test(c.file) ? `/certificates/${c.file}` : "" },
+        href: /^https?:/.test(c.file) ? c.file : `/certificates/${c.file}`
+      }));
+    },
+
+    // "Why hire me" tile: highlights, each opens /about
+    whySlides() {
+      return (highlightsData || []).map((h) => ({
+        icon: "fas fa-star",
+        kicker: "Why hire me",
+        title: h.title,
+        text: h.description,
+        to: "/about"
+      }));
     },
 
     text() {
@@ -645,6 +767,7 @@ export default {
 
     // Attributes for a tile's <a> (links) or <button> (actions / edit mode)
     tileLinkAttrs(tile) {
+      if (tile.slides) return {};
       if (!tile.href || this.tileEditing) return { type: "button" };
       const attrs = { href: tile.href };
       if (tile.download) attrs.download = "";

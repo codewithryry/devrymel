@@ -21,6 +21,8 @@
         Whether you're building a product, launching a startup, or improving a system,
         I'd love to collaborate and help bring your vision to life.
       </p>
+      <!-- Phones: one short line instead of the paragraph -->
+      <p class="footer-subtitle-short">Open to freelance, part-time & full-time roles.</p>
       <div class="footer-cta">
         <a
           href="mailto:reymelrey.mislang@gmail.com?subject=Project%20Collaboration%20Inquiry"
@@ -131,6 +133,10 @@
   margin-bottom: 0;
 }
 
+.footer-subtitle-short {
+  display: none;
+}
+
 .footer-meta {
   display: flex;
   justify-content: center;
@@ -237,8 +243,50 @@
 @media (max-width: 768px) {
   :root .header-footer {
     margin: 0;
-    padding: 2.25rem 1.25rem;
+    padding: 1.1rem 1.1rem;
     border-radius: 20px;
+    text-align: left;
+  }
+
+  /* Compact CTA: heading + one line on the left, button on the right */
+  .header-footer-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.9rem;
+  }
+
+  .footer-name {
+    grid-column: 1;
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .footer-subtitle {
+    display: none;
+  }
+
+  .footer-subtitle-short {
+    display: block;
+    grid-column: 1;
+    margin: 0.2rem 0 0;
+    color: color-mix(in srgb, var(--bg) 72%, transparent);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .footer-cta {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .footer-contact-btn {
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    white-space: nowrap;
   }
 }
 

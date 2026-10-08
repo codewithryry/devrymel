@@ -2162,6 +2162,32 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   html[data-theme="froth"] #app .m-tile.tile-devto     { --tile-bg: linear-gradient(145deg, #3a3a3a, #0a0a0a); }
   html[data-theme="froth"] #app .m-tile.tile-portfolio { --tile-bg: linear-gradient(145deg, #0ea5e9, #0369a1); }
   html[data-theme="froth"] #app .m-tile.tile-support   { --tile-bg: linear-gradient(145deg, #10b981, #047857); }
+  html[data-theme="froth"] #app .m-tile.tile-work      { --tile-bg: linear-gradient(145deg, #4f46e5, #1e1b4b); }
+  html[data-theme="froth"] #app .m-tile.tile-glance    { --tile-bg: linear-gradient(145deg, #0f766e, #134e4a); }
+  html[data-theme="froth"] #app .m-tile.tile-services  { --tile-bg: linear-gradient(145deg, #2563eb, #1e3a8a); }
+  html[data-theme="froth"] #app .m-tile.tile-certs     { --tile-bg: linear-gradient(145deg, #b45309, #78350f); }
+  html[data-theme="froth"] #app .m-tile.tile-why       { --tile-bg: linear-gradient(145deg, #be185d, #701a75); }
+
+  /* Swipeable tiles: white text on the gradient */
+  html[data-theme="froth"] #app .m-tile .tc :is(.tc-title, .tc-kicker, .tc-chips span) {
+    color: #ffffff !important;
+  }
+
+  html[data-theme="froth"] #app .m-tile .tc :is(.tc-text, .tc-go) {
+    color: rgb(255 255 255 / 0.78) !important;
+  }
+
+  html[data-theme="froth"] #app .m-tile .tc .tc-chips span {
+    border-color: rgb(255 255 255 / 0.35);
+  }
+
+  html[data-theme="froth"] #app .m-tile .tc .tc-dots i {
+    background: rgb(255 255 255 / 0.4);
+  }
+
+  html[data-theme="froth"] #app .m-tile .tc .tc-dots i.on {
+    background: #ffffff;
+  }
 
   /* Content: white icon, bold label, softer description, white corner arrow */
   html[data-theme="froth"] #app .m-tile[class*="tile-"] :is(i, i.m-tile-icon, .m-tile-label, .spotify-tile-label, .m-tile-corner) {
@@ -2316,7 +2342,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     font-size: 1.45rem;
   }
 
-  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > :not(.m-tile-icon):not(.m-tile-top):not(.mobile-icon):not(.spotify-tile-art):not(.rt-handle):not(.m-tile-corner) {
+  #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > :not(.m-tile-icon):not(.m-tile-top):not(.mobile-icon):not(.spotify-tile-art):not(.rt-handle):not(.m-tile-corner):not(.tc) {
     grid-column: 2;
     margin: 0;
     min-width: 0;
@@ -2369,6 +2395,12 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* Swipeable tiles (Projects / At a glance): the carousel fills the whole tile */
+  #app .rt-grid > .rt-tile.m-carousel-tile {
+    display: block;
+    padding: 0;
   }
 
   /* Picked-up tile (tap another tile to swap with it) */
