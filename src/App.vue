@@ -61,6 +61,7 @@
               </svg>
             </button>
 
+            <transition name="pop">
             <div v-if="showMorePanel" class="nav-dropdown more-dropdown" @click.stop>
               <div class="dropdown-group">
                 <span class="dropdown-label">Live Stats</span>
@@ -135,6 +136,7 @@
                 </div>
               </div>
             </div>
+            </transition>
           </div>
 
           <router-link class="nav-contact-btn" to="/contact" @click="handleQuickPageClick" :class="{ active: $route.path === '/contact' }">Contact Me</router-link>
@@ -302,6 +304,7 @@
           </div>
 
           <!-- Free tools: same icon + text tiles -->
+          <transition name="pop">
           <div v-if="showMenuTools" class="menu-pages menu-links">
             <router-link
               v-for="tool in mobileTools"
@@ -314,6 +317,7 @@
               <span>{{ tool.title }}</span>
             </router-link>
           </div>
+          </transition>
         </div>
       </div>
     </transition>
@@ -906,7 +910,14 @@ export default {
       const order = this.themes.map(t => t.id);
       const idx = order.indexOf(this.currentTheme);
       const next = order[(idx + 1) % order.length];
-      this.setTheme(next);
+
+      // Soft cross-fade between themes where supported (instant elsewhere)
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (document.startViewTransition && !reduce) {
+        document.startViewTransition(() => this.setTheme(next));
+      } else {
+        this.setTheme(next);
+      }
       this.showToast(this.currentThemeName);
     },
 
@@ -1311,14 +1322,19 @@ html[data-theme="forest"] body {
     border-top: 1px solid var(--border);
   }
 
-  .sheet-enter-active,
-  .sheet-leave-active {
-    transition: opacity 0.2s ease;
+  /* Menu panel grows up out of the nav; closes a touch faster than it opens */
+  .bottom-sheet {
+    transform-origin: bottom center;
   }
 
-  .sheet-enter-active .bottom-sheet,
+  .sheet-enter-active,
+  .sheet-enter-active .bottom-sheet {
+    transition: opacity var(--dur-in) var(--ease-out), transform var(--dur-in) var(--ease-out);
+  }
+
+  .sheet-leave-active,
   .sheet-leave-active .bottom-sheet {
-    transition: transform 0.25s ease;
+    transition: opacity var(--dur-out) var(--ease-in), transform var(--dur-out) var(--ease-in);
   }
 
   .sheet-enter-from,
@@ -1328,8 +1344,7 @@ html[data-theme="forest"] body {
 
   .sheet-enter-from .bottom-sheet,
   .sheet-leave-to .bottom-sheet {
-    transform: translateY(12px) scale(0.97);
-    transform-origin: bottom center;
+    transform: translateY(10px) scale(0.97);
   }
 }
 
@@ -2789,10 +2804,21 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Page change: quick fade + tiny lift */
-/* Old page leaves instantly; the new one fades/slides in right away */
+/* ===== MOTION =====
+   One feel for the whole site: quick ease-out on the way in,
+   a little quicker on the way out, a short press on tap. */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 0.7, 0.2);
+  --dur-in: 0.22s;
+  --dur-out: 0.15s;
+  --dur-press: 0.12s;
+}
+
+/* Page change: quick fade + tiny lift.
+   Old page leaves instantly; the new one fades/slides in right away */
 .page-enter-active {
-  transition: opacity 0.22s ease-out, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.24s var(--ease-out), transform 0.28s var(--ease-out);
 }
 
 .page-leave-active {
@@ -2801,19 +2827,152 @@ html {
 
 .page-enter-from {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
 }
 
 /* Reveal on scroll (classes added by App.observeReveal) */
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(12px);
+  transition: opacity 0.4s var(--ease-out), transform 0.45s var(--ease-out);
 }
 
 .reveal.revealed {
   opacity: 1;
   transform: none;
+}
+
+/* Small popovers: desktop "⋯" menu and the phone menu's Free Tools row */
+.nav-dropdown {
+  transform-origin: top right;
+}
+
+.pop-enter-active {
+  transition: opacity var(--dur-in) var(--ease-out), transform var(--dur-in) var(--ease-out);
+}
+
+.pop-leave-active {
+  transition: opacity var(--dur-out) var(--ease-in), transform var(--dur-out) var(--ease-in);
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+}
+
+/* Every popup (Certificates, Dean's List, Project Links, QR, Social, Project details,
+   Contact info, Feedback, Follow-to-save) opens and closes the same way:
+   the dim fades, the panel rises in — and goes back out, instead of just vanishing.
+   Works with whatever <transition> name each component uses. */
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *)[class*="-enter-active"] {
+  transition: opacity var(--dur-in) var(--ease-out);
+}
+
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *)[class*="-leave-active"] {
+  transition: opacity var(--dur-out) var(--ease-in);
+}
+
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *):is([class*="-enter-from"], [class*="-leave-to"]) {
+  opacity: 0;
+  transform: none;
+}
+
+/* Panels: transitions replace the old one-way slide-up keyframes */
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *) > :is(.modal, .modal-container, .mobile-modal, .feedback-box, .follow-gate) {
+  animation: none;
+}
+
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *)[class*="-enter-active"] > :is(.modal, .modal-container, .mobile-modal, .feedback-box, .follow-gate) {
+  transition: transform var(--dur-in) var(--ease-out), opacity var(--dur-in) var(--ease-out);
+}
+
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *)[class*="-leave-active"] > :is(.modal, .modal-container, .mobile-modal, .feedback-box, .follow-gate) {
+  transition: transform var(--dur-out) var(--ease-in), opacity var(--dur-out) var(--ease-in);
+}
+
+#app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *):is([class*="-enter-from"], [class*="-leave-to"]) > :is(.modal, .modal-container, .mobile-modal, .feedback-box, .follow-gate) {
+  transform: translateY(10px) scale(0.98);
+}
+
+/* Phones: popups are bottom sheets, so they rise a little further from below */
+@media (max-width: 768px) {
+  #app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *):is([class*="-enter-from"], [class*="-leave-to"]) > :is(.modal, .modal-container, .mobile-modal, .feedback-box, .follow-gate) {
+    transform: translateY(32px);
+  }
+}
+
+/* Press feedback: buttons and tiles give a little on tap/click */
+#app :is(
+  .nav-icon-btn,
+  .nav-contact-btn,
+  .cta-btn,
+  .bottom-tab,
+  .menu-page,
+  .menu-ask,
+  .dropdown-tool,
+  .tile-edit-btn,
+  .follow-btn,
+  .follow-skip,
+  .modal-close,
+  .mobile-modal-close,
+  .explore-link,
+  .primary-btn,
+  .ghost-btn
+):not(.admin-page *) {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform, padding;
+  transition-duration: 0.18s;
+  transition-timing-function: var(--ease-out);
+}
+
+/* Bottom nav: the active tab's label fades in as the tab widens */
+@media (max-width: 860px) {
+  .bottom-tab.active .bottom-label {
+    animation: label-in 0.22s var(--ease-out);
+  }
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+    transform: translateX(-3px);
+  }
+}
+
+#app :is(
+  .nav-icon-btn,
+  .nav-contact-btn,
+  .cta-btn,
+  .bottom-tab,
+  .menu-page,
+  .menu-ask,
+  .dropdown-tool,
+  .tile-edit-btn,
+  .follow-btn,
+  .follow-skip,
+  .modal-close,
+  .mobile-modal-close,
+  .explore-link,
+  .primary-btn,
+  .ghost-btn
+):not(.admin-page *):not(:disabled):active {
+  transform: scale(0.96);
+  transition-duration: var(--dur-press);
+}
+
+/* Desktop hover: tiles in the "⋯" menu get a soft highlight */
+@media (hover: hover) {
+  .dropdown-tool:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+}
+
+/* Theme switch: short cross-fade (View Transitions, see cycleTheme) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.24s;
+  animation-timing-function: ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2823,8 +2982,29 @@ html {
 
   .page-enter-active,
   .page-leave-active,
-  .reveal {
+  .reveal,
+  .pop-enter-active,
+  .pop-leave-active,
+  .sheet-enter-active,
+  .sheet-leave-active,
+  .sheet-enter-active .bottom-sheet,
+  .sheet-leave-active .bottom-sheet,
+  .toast-enter-active,
+  .toast-leave-active {
     transition: none;
+  }
+
+  /* Popups just fade (no movement) */
+  #app :is(.modal-overlay, .mobile-modal-overlay, .feedback-overlay, .follow-gate-overlay):not(.admin-page *):is([class*="-enter-from"], [class*="-leave-to"]) > * {
+    transform: none !important;
+  }
+
+  #app :is(.nav-icon-btn, .nav-contact-btn, .cta-btn, .bottom-tab, .menu-page, .menu-ask, .dropdown-tool, .tile-edit-btn, .follow-btn, .follow-skip, .modal-close, .mobile-modal-close, .explore-link, .primary-btn, .ghost-btn):active {
+    transform: none;
+  }
+
+  .bottom-tab.active .bottom-label {
+    animation: none;
   }
 }
 
@@ -3706,15 +3886,18 @@ button.dropdown-tool {
   text-align: center;
 }
 
-.toast-enter-active,
+.toast-enter-active {
+  transition: opacity var(--dur-in) var(--ease-out), transform var(--dur-in) var(--ease-out);
+}
+
 .toast-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity var(--dur-out) var(--ease-in), transform var(--dur-out) var(--ease-in);
 }
 
 .toast-enter-from,
 .toast-leave-to {
   opacity: 0;
-  transform: translate(-50%, 10px);
+  transform: translate(-50%, 8px) scale(0.98);
 }
 
 /* Phones: show the toast just above the bottom nav (nav is 36px up + 62px tall) */
