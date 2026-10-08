@@ -2,7 +2,18 @@
 
 export async function getSpotifyNowPlaying() {
   try {
-    const url = process.env.VUE_APP_SPOTIFY_API_URL || "http://127.0.0.1:5000/api/spotify-now-playing";
+    // Same fallback as WakaTime: if VUE_APP_SPOTIFY_API_URL isn't set at build time,
+    // use the local Express server on localhost, otherwise this site's own
+    // /api/spotify-now-playing (the Vercel function in /api).
+    const isLocal =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    const url =
+      process.env.VUE_APP_SPOTIFY_API_URL ||
+      (isLocal
+        ? "http://127.0.0.1:5000/api/spotify-now-playing"
+        : "/api/spotify-now-playing");
     const response = await fetch(url);
 
     if (!response.ok) {
