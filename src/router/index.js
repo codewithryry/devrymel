@@ -303,7 +303,7 @@ router.isReady().then(() => {
 });
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || "Devrymel | Reymel Mislang";
+  document.title = to.meta.title || "Reymel Mislang";
   next();
 });
 

@@ -28,6 +28,7 @@
         </ul>
       </section>
 
+      <AdSlot type="wide-box" show-smartlink />
       <ExploreLinks />
     </section>
   </main>
@@ -35,6 +36,7 @@
 
 <script>
 import HeroArt from "@/components/HeroArt.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
@@ -43,7 +45,8 @@ export default {
 
   components: {
     ExploreLinks,
-    HeroArt
+    HeroArt,
+    AdSlot
   },
 
   data() {

@@ -67,7 +67,7 @@
       </div>
 
       <!-- Ad -->
-      <AdSlot type="banner" />
+      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/coming-soon" />

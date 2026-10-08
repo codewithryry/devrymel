@@ -125,7 +125,7 @@
                     <i class="fas fa-external-link-alt contact-arrow"></i>
                   </a>
                   <!-- Portfolio -->
-                  <a href="https://reymelreymislang.vercel.app" target="_blank" class="contact-item">
+                  <a href="https://reymelmislang.vercel.app" target="_blank" class="contact-item">
                     <div class="contact-icon">
                       <i class="fas fa-globe"></i>
                     </div>
@@ -192,7 +192,7 @@
               <i class="fas fa-user"></i> Portfolio & Certificates
             </h3>
             <div class="category-links">
-              <a href="https://reymelreymislang.vercel.app/" target="_blank" class="link-card portfolio">
+              <a href="https://reymelmislang.vercel.app/" target="_blank" class="link-card portfolio">
                 <div class="link-icon">
                   <i class="fas fa-briefcase"></i>
                 </div>

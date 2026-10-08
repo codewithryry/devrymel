@@ -49,8 +49,8 @@
           @load="handleAdFrameLoad"
         ></iframe>
 
-        <div class="ad-fallback-strip">
-          <span>Ad not showing?</span>
+        <div v-if="showSmartlink || !iframeSrcDoc" class="ad-fallback-strip">
+          <span v-if="!showSmartlink">Ad not showing?</span>
 
           <a
             class="ad-smartlink"
@@ -97,6 +97,10 @@ export default {
           "vertical-box",
           "skyscraper"
         ].includes(value)
+    },
+    showSmartlink: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -106,7 +110,7 @@ export default {
       showInfo: false,
       adFrameLoaded: false,
       smartlinkUrl:
-        "https://elementalconsessionconsession.com/s4jbimyi6x?key=6dc926395dacffb78750e2b2edb79e17"
+        "https://elementalconsessionconsession.com/c00v9siea?key=8f3c091dea8221e7396578b10056f7db"
     };
   },
 

@@ -585,7 +585,7 @@ export default {
         { id: "coffee", size: "tall", chip: "chip-4", icon: "fas fa-coffee", label: "Coffee", desc: "Support my work", href: "https://buymeacoffee.com/reymelreym7", external: true, corner: open },
         { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
         { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
-        { id: "portfolio", size: "sm", chip: "chip-3", icon: "fas fa-briefcase", label: "Portfolio", desc: "View my work", href: "https://reymelreymislang.vercel.app/", external: true, corner: open },
+        { id: "portfolio", size: "sm", chip: "chip-3", icon: "fas fa-briefcase", label: "Portfolio", desc: "View my work", href: "https://reymelmislang.vercel.app/", external: true, corner: open },
         { id: "support", size: "sm", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
       ];
     },

@@ -12,6 +12,7 @@
 
       <TechNotesSection :notes="techNotes" :show-title="false" stacked />
 
+      <AdSlot type="mobile-banner" show-smartlink />
       <ExploreLinks />
     </section>
   </main>
@@ -19,6 +20,7 @@
 
 <script>
 import TechNotesSection from "@/components/profile/TechNotesSection.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import { subscribeToCollection } from "@/services/contentService";
 import techNotes from "@/data/techNotes.json";
@@ -29,7 +31,8 @@ export default {
 
   components: {
     TechNotesSection,
-    ExploreLinks
+    ExploreLinks,
+    AdSlot
   },
 
   data() {

@@ -13,12 +13,14 @@
 
       <ExperienceSection :experiences="experiences" :show-title="false" />
       <CareerTimeline :timeline="timeline" />
+      <AdSlot type="wide-box" show-smartlink />
     </section>
   </main>
 </template>
 
 <script>
 import HeroArt from "@/components/HeroArt.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import ExperienceSection from "@/components/profile/ExperienceSection.vue";
 import CareerTimeline from "@/components/profile/CareerTimeline.vue";
 import { subscribeToCollection } from "@/services/contentService";
@@ -32,6 +34,7 @@ export default {
 
   components: {
     HeroArt,
+    AdSlot,
     ExperienceSection,
     CareerTimeline
   },

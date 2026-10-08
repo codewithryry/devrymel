@@ -43,7 +43,7 @@
       </div>
 
       <!-- Sponsored Ad -->
-      <AdSlot type="banner" />
+      <AdSlot type="banner" show-smartlink />
 
       <!-- MY STORY -->
       <section class="info-panel">

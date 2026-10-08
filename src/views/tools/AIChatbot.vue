@@ -171,7 +171,7 @@
       </section>
 
       <!-- Sponsored Ad -->
-      <AdSlot type="banner" />
+      <AdSlot type="banner" show-smartlink />
     </div>
   </div>
 </template>

@@ -73,7 +73,7 @@
           <small class="mobile-desc">Technical writing</small>
         </a>
 
-        <a href="https://reymelreymislang.vercel.app/" target="_blank" class="mobile-link-card" :class="tileClass('portfolio', 'sm')">
+        <a href="https://reymelmislang.vercel.app/" target="_blank" class="mobile-link-card" :class="tileClass('portfolio', 'sm')">
           <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('portfolio', 'sm')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fas fa-briefcase"></i></div>
           <span class="mobile-label">Portfolio</span>
@@ -109,9 +109,9 @@
       <div class="link-category">
         <h3 class="category-title">Portfolio & Certificates</h3>
         <div class="category-links">
-          <a href="https://reymelreymislang.vercel.app/" target="_blank" class="link-card">
-            <span class="link-label">Previous Portfolio</span>
-            <small class="link-desc">My earlier version</small>
+          <a href="https://reymelmislang.vercel.app/" target="_blank" class="link-card">
+            <span class="link-label">Portfolio</span>
+            <small class="link-desc">View my latest work</small>
           </a>
           <a href="/Reymel_Mislang_Resume.pdf" target="_blank" rel="noopener" class="link-card">
             <span class="link-label">Resume</span>

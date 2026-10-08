@@ -115,7 +115,7 @@
       </transition>
 
       <!-- Ad -->
-      <AdSlot type="banner" />
+      <AdSlot type="banner" show-smartlink />
 
       <!-- Tips -->
       <div class="tips-grid">

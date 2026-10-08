@@ -95,7 +95,7 @@
       </p>
 
       <!-- Ad -->
-      <AdSlot type="banner" />
+      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/base64" />

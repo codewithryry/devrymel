@@ -180,7 +180,7 @@
       </transition>
 
       <!-- Ad -->
-      <AdSlot type="banner" />
+      <AdSlot type="banner" show-smartlink />
 
       <!-- Other tools -->
       <tool-suggestions current="/tools/tiktok" />

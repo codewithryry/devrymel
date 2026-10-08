@@ -34,19 +34,23 @@
           </div>
         </div>
       </section>
+
+      <AdSlot type="mobile-banner" show-smartlink />
     </section>
   </main>
 </template>
 
 <script>
 import HeroArt from "@/components/HeroArt.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import "@/assets/info-pages.css";
 
 export default {
   name: "SkillsPage",
 
   components: {
-    HeroArt
+    HeroArt,
+    AdSlot
   },
 
   data() {

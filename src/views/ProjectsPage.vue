@@ -105,12 +105,15 @@
           <i class="fab fa-github"></i><span>Visit my GitHub</span>
         </a>
       </section>
+
+      <AdSlot type="wide-box" show-smartlink />
     </section>
   </main>
 </template>
 
 <script>
 import HeroArt from "@/components/HeroArt.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import ProjectsSection from "@/components/projects/ProjectsSection.vue";
 import FeaturedCarousel from "@/components/projects/FeaturedCarousel.vue";
 import ProjectModal from "@/components/modals/ProjectModal.vue";
