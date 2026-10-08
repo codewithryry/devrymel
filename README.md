@@ -1,54 +1,41 @@
-# Reymel Mislang — Developer Portfolio
+# Reymel Mislang — Portfolio
 
-A modern **portfolio-style web application** built with **Vue.js** to showcase my projects, skills, and online presence.  
-This site is designed as a **project showcase and personal profile**, featuring live demos, GitHub repositories, and professional links in one place.
+My personal portfolio and toolkit: projects, experience, services, and free web tools in one site.
 
----
+**Live:** [devrymel.vercel.app](https://devrymel.vercel.app)
 
-## ✨ Overview
+## What's inside
 
-This portfolio highlights:
+- **Portfolio pages:** About, Experience, Projects, Tech Stack, Services, Process, Case Studies, Roadmap, Changelog, Contact
+- **Free tools:** TikTok / YouTube downloaders, YT thumbnails, QR code, password, colors, IP lookup, URL shortener, Base64
+- **Ask Reymel:** AI chat assistant (Chat, Code Helper, Creative)
+- **Live stats:** visitor count, GitHub repos, WakaTime coding time, Spotify now playing
+- **Themes:** Light, Midnight, Emerald, Froth Modern
+- **Admin CMS:** private Firestore dashboard to manage site content
+- Fully responsive with a mobile app-style layout
 
-- Featured real-world systems I’ve built and deployed  
-- Live demos and GitHub repositories  
-- Quick access to my resume, articles, and developer stats  
-- Social media presence with clear availability indicators  
+## Built with
 
-The goal is to present my work in a **clean, professional, and developer-focused layout**, rather than a simple Linktree-style page.
+Vue 3 · Firebase (Firestore, Auth) · Vercel serverless functions · Cohere AI · Font Awesome
 
----
+## Run locally
 
-## 🚀 Features
+```bash
+npm install
+npm run serve   # dev server
+npm run build   # production build
+```
 
-- **Personal Profile Section**  
-  Name, role, bio, and contact information  
+Create a `.env` with your keys: `VUE_APP_FIREBASE_*`, `VUE_APP_COHERE_API_KEY`, and for the `/api` functions `WAKATIME_API_KEY`, `SPOTIFY_*`, `COBALT_*`.
 
-- **Featured Projects**  
-  Project cards with:
-  - Preview images  
-  - Live demo links  
-  - GitHub repositories  
-  - Technologies used  
-  - Key features  
+## Structure
 
-- **Quick Links**  
-  Portfolio, resume, GitHub, Dev.to, and WakaTime  
+```
+src/views       pages and tools
+src/components  shared UI
+src/data        default content (overridden by Firestore)
+api/            serverless functions (WakaTime, Spotify, downloads)
+public/         static files, resume / CV PDFs, certificates
+```
 
-- **Social Media Section**  
-  Clear distinction between available and upcoming profiles  
-
-- **Context-aware Modals**  
-  Separate feedback for unavailable demos and social links  
-
-- **Responsive Design**  
-  Optimized for desktop, tablet, and mobile  
-
----
-
-## 🛠️ Built With
-
-- Vue.js  
-- JavaScript (ES6+)  
-- HTML5 & CSS3  
-- Font Awesome  
-- Vue CLI / Vite  
+© 2026 Reymel Mislang

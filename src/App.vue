@@ -189,7 +189,14 @@
       </div>
     </nav>
 
-    <!-- Tile edit mode is toggled by the pencil on the homepage header (no Done bar) -->
+    <!-- Tile edit mode bar (mobile homepage): resize / swap tiles, then Reset or Done -->
+    <transition name="sheet">
+      <div v-if="tileEditMode" class="tile-edit-bar" role="toolbar" aria-label="Edit tiles">
+        <span class="tile-edit-hint"><i class="fas fa-expand-alt"></i> Resize with the handle · tap two to swap</span>
+        <button type="button" class="tile-edit-btn" @click="resetTiles">Reset</button>
+        <button type="button" class="tile-edit-btn primary" @click="tileEditMode = false">Done</button>
+      </div>
+    </transition>
 
     <!-- Follow-to-save popup (visitors, first time they save a tile layout) -->
     <transition name="sheet">
