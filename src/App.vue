@@ -153,6 +153,7 @@
       <div
         ref="bottomPill"
         class="bottom-pill"
+        :class="{ dragging: navDragTarget !== null }"
         @pointerdown="onNavPointerDown"
         @pointermove="onNavPointerMove"
         @pointerup="onNavPointerUp"
@@ -162,23 +163,23 @@
       <!-- Active bubble: slides to whichever tab is active -->
       <span
         class="bottom-indicator"
-        :class="{ visible: navIndicator.show, dragging: navDragging }"
+        :class="{ visible: navIndicator.show, lens: navDragTarget !== null }"
         :style="{ width: navIndicator.w + 'px', transform: 'translateX(' + navIndicator.x + 'px)' }"
         aria-hidden="true"
       ></span>
-      <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
+      <router-link to="/" class="bottom-tab" :class="{ active: $route.path === '/' && !mobileSheetOpen, 'drag-target': navDragTarget === 0 }" @click="mobileSheetOpen = false">
         <i class="fas fa-home"></i>
         <span class="bottom-label">Home</span>
       </router-link>
-      <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
+      <router-link to="/about" class="bottom-tab" :class="{ active: $route.path === '/about' && !mobileSheetOpen, 'drag-target': navDragTarget === 1 }" @click="mobileSheetOpen = false">
         <i class="fas fa-user"></i>
         <span class="bottom-label">About</span>
       </router-link>
-      <router-link to="/projects" class="bottom-tab" :class="{ active: $route.path === '/projects' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
+      <router-link to="/projects" class="bottom-tab" :class="{ active: $route.path === '/projects' && !mobileSheetOpen, 'drag-target': navDragTarget === 2 }" @click="mobileSheetOpen = false">
         <i class="fas fa-folder-open"></i>
         <span class="bottom-label">Projects</span>
       </router-link>
-      <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' && !mobileSheetOpen }" @click="mobileSheetOpen = false">
+      <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' && !mobileSheetOpen, 'drag-target': navDragTarget === 3 }" @click="mobileSheetOpen = false">
         <i class="fas fa-envelope"></i>
         <span class="bottom-label">Contact</span>
       </router-link>
@@ -187,7 +188,7 @@
       <button
         type="button"
         class="bottom-tab bottom-menu-tab"
-        :class="{ active: mobileSheetOpen }"
+        :class="{ active: mobileSheetOpen, 'drag-target': navDragTarget === 4 }"
         :aria-label="mobileSheetOpen ? 'Close menu' : 'Open menu'"
         :aria-expanded="mobileSheetOpen"
         @click="mobileSheetOpen = !mobileSheetOpen"
@@ -335,7 +336,7 @@
       @count-change="feedbackCount = $event"
     />
 
-    <!-- Quick fade between pages -->
+    <!-- Quick fade-in on page change (no fade-out wait) -->
     <router-view v-slot="{ Component }">
       <transition name="page" mode="out-in" @after-enter="observeReveal">
         <component :is="Component" lang="en" :translations="t" />
@@ -388,7 +389,7 @@ export default {
     return {
       navScrolled: false,
       navIndicator: { x: 0, w: 0, show: false },
-      navDragging: false,
+      navDragTarget: null, // index of the tab under the finger while dragging
       mobileNavOpen: false,
       mobileSheetOpen: false,
       tileEditMode: false,
@@ -790,16 +791,21 @@ export default {
 
     updateNavIndicator() {
       const pill = this.$refs.bottomPill;
-      const tab = pill && pill.querySelector(".bottom-tab.active");
+      const tab = pill && pill.querySelector(this.navDragTarget !== null ? ".bottom-tab.drag-target" : ".bottom-tab.active");
       if (!tab) {
         this.navIndicator.show = false;
         return;
       }
-      this.navIndicator = { x: tab.offsetLeft, w: tab.offsetWidth, show: true };
+      const w = tab.offsetWidth;
+      // Dragging: the lens follows the finger; otherwise it sits on the active tab
+      const x = this.navDragTarget !== null && this.navDrag
+        ? Math.max(0, Math.min(this.navDrag.x - pill.getBoundingClientRect().left - w / 2, pill.clientWidth - w))
+        : tab.offsetLeft;
+      this.navIndicator = { x, w, show: true };
     },
 
-    /* Bottom nav drag: slide a finger across the pill, the bubble follows,
-       and letting go opens the tab underneath. A plain tap still works as before. */
+    /* Bottom nav drag: slide a finger across the pill, the bubble (and label)
+       moves to the tab underneath, and letting go opens it. A plain tap still works as before. */
     navTabAt(clientX) {
       const tabs = [...this.$refs.bottomPill.querySelectorAll(".bottom-tab")];
       let best = null;
@@ -826,27 +832,27 @@ export default {
       if (!drag.moved) {
         if (Math.abs(e.clientX - drag.startX) < 8) return;
         drag.moved = true;
-        this.navDragging = true;
         this.$refs.bottomPill.setPointerCapture(e.pointerId);
       }
-      const pill = this.$refs.bottomPill;
-      const left = pill.getBoundingClientRect().left;
-      const w = this.navTabAt(e.clientX).offsetWidth;
-      const x = Math.max(0, Math.min(e.clientX - left - w / 2, pill.clientWidth - w));
-      this.navIndicator = { x, w, show: true };
+      drag.x = e.clientX;
+      const tabs = [...this.$refs.bottomPill.querySelectorAll(".bottom-tab")];
+      const index = tabs.indexOf(this.navTabAt(e.clientX));
+      if (index !== this.navDragTarget) {
+        this.navDragTarget = index;
+        this.$nextTick(this.updateNavIndicator);
+      } else {
+        this.updateNavIndicator();
+      }
     },
 
     onNavPointerUp(e) {
       const drag = this.navDrag;
       this.navDrag = null;
       if (!drag || !drag.moved) return;
-      this.navDragging = false;
       const tab = this.navTabAt(e.clientX);
-      if (tab.classList.contains("active")) {
-        this.updateNavIndicator();
-      } else {
-        tab.click();
-      }
+      if (!tab.classList.contains("active")) tab.click();
+      this.navDragTarget = null;
+      this.$nextTick(this.updateNavIndicator);
       // The browser fires its own click after the drag; ignore that one
       this.navSuppressClick = true;
       setTimeout(() => (this.navSuppressClick = false), 300);
@@ -854,8 +860,8 @@ export default {
 
     onNavPointerCancel() {
       this.navDrag = null;
-      this.navDragging = false;
-      this.updateNavIndicator();
+      this.navDragTarget = null;
+      this.$nextTick(this.updateNavIndicator);
     },
 
     onNavClickCapture(e) {
@@ -2704,9 +2710,54 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     opacity: 1;
   }
 
-  /* While dragging, the bubble sticks to the finger */
-  .bottom-indicator.dragging {
+  /* While dragging, the tab under the finger shows its label instead of the current one */
+  .bottom-pill.dragging .bottom-tab.active:not(.drag-target) {
+    padding: 0 12px;
+  }
+
+  .bottom-pill.dragging .bottom-tab.active:not(.drag-target) .bottom-label {
+    display: none;
+  }
+
+  /* Tab under the lens: bolder, not bigger */
+  html #app .bottom-pill.dragging .bottom-tab.drag-target {
+    padding: 0 16px;
+    color: var(--text);
+    font-weight: 800;
+  }
+
+  .bottom-pill.dragging .bottom-tab.drag-target i,
+  .bottom-pill.dragging .bottom-tab.drag-target .menu-grid-icon {
+    -webkit-text-stroke: 0.5px currentColor;
+    filter: drop-shadow(0 0 0.4px currentColor);
+  }
+
+  /* Liquid-glass lens while dragging: clear glass with a bright rim, glued to the finger */
+  html #app .bottom-indicator.lens {
+    background: rgb(255 255 255 / 0.28);
+    -webkit-backdrop-filter: blur(3px) saturate(200%) brightness(1.08);
+    backdrop-filter: blur(3px) saturate(200%) brightness(1.08);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.75),
+      inset 0 2px 6px rgb(255 255 255 / 0.55),
+      inset 0 -2px 6px rgb(15 23 42 / 0.08),
+      0 4px 14px rgb(15 23 42 / 0.14);
     transition: width 0.2s ease, opacity 0.2s ease;
+  }
+
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app .bottom-indicator.lens,
+  html[data-theme="froth"]:has(.m-profile) #app .bottom-indicator.lens {
+    background: rgb(255 255 255 / 0.1);
+    -webkit-backdrop-filter: blur(3px) saturate(180%) brightness(1.25);
+    backdrop-filter: blur(3px) saturate(180%) brightness(1.25);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.3),
+      inset 0 2px 6px rgb(255 255 255 / 0.18),
+      0 4px 14px rgb(0 0 0 / 0.35);
+  }
+
+  .bottom-pill.dragging .bottom-tab.drag-target .bottom-label {
+    display: inline;
   }
 
   /* The bubble replaces each tab's own background */
@@ -2739,18 +2790,18 @@ html {
 }
 
 /* Page change: quick fade + tiny lift */
-.page-enter-active,
+/* Old page leaves instantly; the new one fades/slides in right away */
+.page-enter-active {
+  transition: opacity 0.22s ease-out, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .page-leave-active {
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition: none;
 }
 
 .page-enter-from {
   opacity: 0;
-  transform: translateY(6px);
-}
-
-.page-leave-to {
-  opacity: 0;
+  transform: translateY(8px);
 }
 
 /* Reveal on scroll (classes added by App.observeReveal) */

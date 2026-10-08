@@ -284,14 +284,22 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) return { el: to.hash, behavior: "smooth" };
 
-    // Wait for the page fade-out (0.18s) so the jump isn't visible,
-    // and jump instantly instead of smooth-scrolling across pages.
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(savedPosition ? { ...savedPosition, behavior: "instant" } : { top: 0, behavior: "instant" });
-      }, 180);
-    });
+    // The old page leaves instantly, so jump right away (no smooth scroll across pages)
+    return savedPosition ? { ...savedPosition, behavior: "instant" } : { top: 0, behavior: "instant" };
   }
+});
+
+// Preload every page in the background once the site is idle,
+// so tapping a page opens it instantly instead of downloading it first.
+router.isReady().then(() => {
+  const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1500));
+  idle(() => {
+    routes.forEach((route) => {
+      if (typeof route.component === "function" && !route.path.startsWith("/admin")) {
+        route.component().catch(() => {});
+      }
+    });
+  });
 });
 
 router.beforeEach((to, from, next) => {
