@@ -271,10 +271,11 @@
                 <i v-else class="fab fa-spotify"></i>
               </div>
               <div class="spotify-card-info">
+                <span v-if="spotifyPlaying" class="spotify-card-label">Now Playing</span>
                 <span class="spotify-card-title">
                   <span class="spotify-card-name">{{ spotifyPlaying ? $root.spotifyTrack.title : "Not playing" }}</span>
-                  <span v-if="spotifyPlaying" class="spotify-card-bars" aria-hidden="true"><i></i><i></i><i></i></span>
                 </span>
+                <i v-if="spotifyPlaying" class="fab fa-spotify spotify-card-logo" aria-hidden="true"></i>
                 <span class="spotify-card-artist">{{ spotifyPlaying ? $root.spotifyTrack.artist : "Offline right now" }}</span>
                 <span v-if="spotifyPlaying && $root.spotifyTrack.album" class="spotify-card-album">{{ $root.spotifyTrack.album }}</span>
               </div>
@@ -1526,6 +1527,78 @@ export default {
     font-size: 0.68rem;
     color: var(--text-muted);
   }
+
+  /* Fit the narrow sidebar: full title wraps, Spotify logo top-right */
+  /* Same look as the mobile Spotify tile: cover on top, text stacked below */
+  .spotify-card {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.8rem;
+  }
+
+  .spotify-card-art {
+    width: 56px;
+    height: 56px;
+  }
+
+  .spotify-card .spotify-card-album {
+    display: none;
+  }
+
+  .spotify-card-label {
+    color: #1db954;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .spotify-card-info {
+    gap: 0.15rem;
+  }
+
+  /* Sidebar + contact cards: one plain, rounded style (border only, no fill) */
+  .desktop-profile-content :is(.achievement-chip, .contact-item, .spotify-card) {
+    border-radius: 16px;
+  }
+
+  .desktop-profile-content .spotify-card {
+    background: transparent;
+  }
+
+  .desktop-profile-content :is(.chip-icon, .contact-icon, .spotify-card-art) {
+    border-radius: 10px;
+  }
+
+  /* Small grey Spotify logo in the corner */
+  .spotify-card-logo {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .spotify-card-title {
+    display: block;
+    white-space: normal;
+  }
+
+  /* Full title and artist, wrapping on whole words (no cut) */
+  .spotify-card-name {
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.25;
+    overflow: visible;
+    overflow-wrap: normal;
+  }
+
+  .spotify-card-artist {
+    white-space: normal;
+  }
+
 
   /* Small equalizer while a song plays */
   .spotify-card-bars {

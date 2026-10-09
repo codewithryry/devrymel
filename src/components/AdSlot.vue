@@ -33,6 +33,7 @@
     >
       <div
         v-if="iframeSrcDoc"
+        ref="frameWrap"
         class="ad-frame-container"
         :style="adFrameContainerStyle"
       >
@@ -49,32 +50,11 @@
           @load="handleAdFrameLoad"
         ></iframe>
 
-        <div v-if="showSmartlink || !iframeSrcDoc" class="ad-fallback-strip">
-          <span v-if="!showSmartlink">Ad not showing?</span>
-
-          <a
-            class="ad-smartlink"
-            :href="smartlinkUrl"
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-          >
-            Visit Sponsor
-          </a>
-        </div>
       </div>
 
       <div v-else class="ad-placeholder-wrapper">
         <span class="ad-placeholder">Advertisement space</span>
         <span class="ad-dimensions">{{ adWidth }} × {{ adHeight }}</span>
-
-        <a
-          class="ad-smartlink"
-          :href="smartlinkUrl"
-          target="_blank"
-          rel="noopener noreferrer sponsored"
-        >
-          Visit Sponsor
-        </a>
       </div>
     </div>
   </section>
@@ -107,6 +87,7 @@ export default {
   data() {
     return {
       windowWidth: 0,
+      boxWidth: 0,
       showInfo: false,
       adFrameLoaded: false,
       smartlinkUrl:
@@ -175,16 +156,29 @@ export default {
       };
     },
 
+    // Ad scales to fill the box width (up or down), keeping its shape
+    adScale() {
+      if (!this.boxWidth || !this.adWidth) return 1;
+      return Math.min(this.boxWidth / this.adWidth, 2);
+    },
+
     adFrameContainerStyle() {
       return {
-        minHeight: `${this.adHeight}px`
+        position: "relative",
+        height: `${Math.round(this.adHeight * this.adScale)}px`
       };
     },
 
     adFrameStyle() {
       return {
+        position: "absolute",
+        top: 0,
+        left: "50%",
         width: `${this.adWidth}px`,
-        height: `${this.adHeight}px`
+        height: `${this.adHeight}px`,
+        maxWidth: "none",
+        transform: `translateX(-50%) scale(${this.adScale})`,
+        transformOrigin: "top center"
       };
     },
 
@@ -245,16 +239,31 @@ export default {
 
     window.addEventListener("resize", this.handleResize);
     document.addEventListener("click", this.closeInfo);
+
+    // Track the box width so the ad can fill it
+    if ("ResizeObserver" in window) {
+      this.resizeObserver = new ResizeObserver(() => this.measureBox());
+      this.$nextTick(() => {
+        if (this.$refs.frameWrap) this.resizeObserver.observe(this.$refs.frameWrap);
+        this.measureBox();
+      });
+    }
   },
 
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize);
     document.removeEventListener("click", this.closeInfo);
+    if (this.resizeObserver) this.resizeObserver.disconnect();
   },
 
   methods: {
     handleResize() {
       this.windowWidth = window.innerWidth;
+    },
+
+    measureBox() {
+      const el = this.$refs.frameWrap;
+      if (el) this.boxWidth = el.clientWidth;
     },
 
     handleAdFrameLoad() {
@@ -617,5 +626,19 @@ export default {
     padding: 6px 10px;
     font-size: 0.6rem;
   }
+}
+</style>
+<style scoped>
+/* Loaded ad: plain rounded box (border only, no fill) on every theme and screen size */
+.ad-slot .ad-box.ad-box-loaded {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.ad-slot .ad-frame {
+  border-radius: 10px;
 }
 </style>
