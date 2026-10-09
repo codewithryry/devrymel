@@ -6,11 +6,11 @@
       class="feedback-button"
       :class="{ 'is-open': open }"
       :aria-expanded="open"
-      aria-label="Open feedback wall"
-      title="Feedback"
+      aria-label="Open message wall"
+      title="Message"
       @click="open = true"
     >
-      <span class="feedback-tab-text">Feedback</span>
+      <span class="feedback-tab-text">Message</span>
       <span v-if="feedbacks.length" class="feedback-count">
         {{ feedbacks.length > 99 ? "99+" : feedbacks.length }}
       </span>
@@ -42,6 +42,7 @@
         v-if="open"
         ref="overlay"
         class="feedback-overlay"
+        :style="keyboardStyle"
         tabindex="-1"
         @click.self="closeFeedback"
         @keydown.esc="closeFeedback"
@@ -53,12 +54,23 @@
           aria-labelledby="feedback-title"
         >
           <header class="fb-header">
-            <span id="feedback-title" class="fb-title">Feedback</span>
+            <span id="feedback-title" class="fb-title">Message</span>
+
+            <!-- Pages of 5 messages: ‹ 1/3 › (same as the Support popup) -->
+            <div v-if="pageCount > 1" class="fb-pager">
+              <button type="button" aria-label="Newer messages" :disabled="page === 0" @click="page--">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <span>{{ page + 1 }}/{{ pageCount }}</span>
+              <button type="button" aria-label="Older messages" :disabled="page >= pageCount - 1" @click="page++">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
 
             <button
               type="button"
               class="fb-close"
-              aria-label="Close feedback wall"
+              aria-label="Close message wall"
               @click="closeFeedback"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px">
@@ -68,13 +80,9 @@
           </header>
 
           <main class="fb-messages" ref="messageList" aria-live="polite">
-            <p v-if="!loading && feedbacks.length" class="fb-count-label">
-              {{ feedbackLabel }}
-            </p>
-
             <div v-if="loading" class="fb-state">
               <span class="fb-spinner"></span>
-              <p>Loading feedback...</p>
+              <p>Loading messages...</p>
             </div>
 
             <div v-else-if="feedbacks.length === 0" class="fb-state fb-empty">
@@ -83,7 +91,7 @@
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
               </span>
-              <h4>No feedback yet</h4>
+              <h4>No messages yet</h4>
               <p>Be the first to leave a quick thought.</p>
             </div>
 
@@ -104,7 +112,7 @@
           </main>
 
           <form class="fb-input-area" @submit.prevent="submitFeedback">
-            <label class="sr-only" for="feedback-message">Write your feedback</label>
+            <label class="sr-only" for="feedback-message">Write a message</label>
 
             <div class="fb-input-stack">
               <div class="fb-input-shell">
@@ -112,7 +120,7 @@
                   id="feedback-message"
                   ref="feedbackInput"
                   v-model="message"
-                  placeholder="Write your feedback..."
+                  placeholder="Write a message..."
                   rows="1"
                   maxlength="280"
                   :disabled="sending || isCoolingDown"
@@ -130,8 +138,8 @@
               type="submit"
               class="fb-send"
               :disabled="sending || isCoolingDown || !message.trim()"
-              aria-label="Send feedback"
-              :title="isCoolingDown ? `Send again in ${cooldownRemaining}s` : 'Send feedback'"
+              aria-label="Send message"
+              :title="isCoolingDown ? `Send again in ${cooldownRemaining}s` : 'Send message'"
             >
               <svg
                 v-if="!sending"
@@ -185,11 +193,14 @@ export default {
   data() {
     return {
       open: false,
+      keyboardOpen: false,
+      viewport: { top: 0, height: 0 },
       message: "",
       feedbacks: [],
       loading: false,
       sending: false,
-      visibleLimit: 8,
+      pageSize: 5,
+      page: 0,
       cooldownRemaining: 0,
       cooldownTimer: null,
       hasLoadedFeedbacks: false,
@@ -202,26 +213,30 @@ export default {
   },
 
   computed: {
+    // Phones: while the keyboard is open, fit the sheet above it (like the AI chat)
+    keyboardStyle() {
+      if (!this.keyboardOpen) return null
+      return { top: `${this.viewport.top}px`, height: `${this.viewport.height}px`, bottom: "auto" }
+    },
+
     visibleFeedbacks() {
-      return this.feedbacks.slice(0, this.visibleLimit)
+      const start = this.page * this.pageSize
+      return this.feedbacks.slice(start, start + this.pageSize)
+    },
+
+    pageCount() {
+      return Math.ceil(this.feedbacks.length / this.pageSize)
     },
 
     isCoolingDown() {
       return this.cooldownRemaining > 0
     },
-
-    feedbackLabel() {
-      if (this.loading) return "Loading visitor messages"
-      if (this.feedbacks.length === 0) return "Share a quick thought"
-      if (this.feedbacks.length === 1) return "1 visitor message"
-
-      return `${this.feedbacks.length} visitor messages`
-    }
   },
 
   watch: {
     open(val) {
       document.body.style.overflow = val ? "hidden" : ""
+      if (val) this.page = 0
 
       if (!val) return
 
@@ -245,10 +260,21 @@ export default {
     } else {
       this.prefetchHandle = setTimeout(prefetch, 1500)
     }
+
+    // Track the on-screen keyboard (visual viewport shrinks when it opens)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", this.onViewportChange)
+      window.visualViewport.addEventListener("scroll", this.onViewportChange)
+    }
   },
 
   beforeUnmount() {
     document.body.style.overflow = ""
+
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener("resize", this.onViewportChange)
+      window.visualViewport.removeEventListener("scroll", this.onViewportChange)
+    }
 
     if (this.prefetchHandle) {
       if ("cancelIdleCallback" in window) window.cancelIdleCallback(this.prefetchHandle)
@@ -261,6 +287,12 @@ export default {
   },
 
   methods: {
+    onViewportChange() {
+      const vv = window.visualViewport
+      this.keyboardOpen = window.innerWidth <= 520 && vv.height < window.innerHeight * 0.8
+      this.viewport = { top: vv.offsetTop, height: vv.height }
+    },
+
     openFeedback() {
       this.open = true
     },
@@ -289,6 +321,7 @@ export default {
           ...item.data()
         }))
 
+        this.page = 0
         this.hasLoadedFeedbacks = true
         this.$emit("count-change", this.feedbacks.length)
       } catch (error) {
@@ -329,7 +362,7 @@ export default {
         if (error?.code === "permission-denied") {
           alert("Hindi allowed ang write sa Firestore rules. Check Firebase rules.")
         } else if (error?.code === "invalid-argument") {
-          alert("May invalid data sa feedback. Check created/message fields.")
+          alert("May invalid data sa message. Check created/message fields.")
         } else {
           alert("Failed to send. Please try again.")
         }
@@ -534,6 +567,45 @@ export default {
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 700;
+  line-height: 1.2;
+}
+
+.fb-pager {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  margin-right: 8px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.fb-pager button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--text);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.fb-pager button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.fb-pager span {
+  min-width: 30px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 .fb-close {
@@ -562,15 +634,6 @@ export default {
   flex-direction: column;
   gap: 8px;
   padding: 14px 16px;
-}
-
-.fb-count-label {
-  margin: 0 0 2px;
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .fb-bubble {
@@ -672,9 +735,10 @@ export default {
 
 .fb-input-shell textarea {
   flex: 1;
+  box-sizing: border-box;
   min-height: 42px;
   max-height: 120px;
-  padding: 11px 12px;
+  padding: 10px 12px;
   border: none;
   outline: none;
   resize: none;
@@ -682,7 +746,7 @@ export default {
   color: var(--text);
   font-family: inherit;
   font-size: 0.88rem;
-  line-height: 1.4;
+  line-height: 20px;
 }
 
 .fb-input-shell textarea::placeholder {
@@ -696,8 +760,8 @@ export default {
 }
 
 .fb-send {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   display: grid;
   place-items: center;
@@ -752,6 +816,16 @@ export default {
 
   .fb-input-area {
     padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Keyboard open: the sheet fills the space above the keyboard */
+  .feedback-overlay[style*="height"] .feedback-box {
+    height: 100%;
+    border-radius: var(--radius-xl);
+  }
+
+  .feedback-overlay[style*="height"] .fb-input-area {
+    padding-bottom: 12px;
   }
 
   /* 16px stops iOS zooming into the textarea */

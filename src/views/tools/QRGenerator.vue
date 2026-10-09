@@ -49,6 +49,9 @@
         </div>
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <!-- QR Display -->
       <div class="tt-qr-area">
         <transition name="fade-slide" mode="out-in">
@@ -76,9 +79,6 @@
           </div>
         </transition>
       </div>
-
-      <!-- Ad -->
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/qr-generator" />

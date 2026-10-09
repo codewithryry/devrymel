@@ -11,6 +11,8 @@
         </p>
       </div>
 
+      <AdSlot type="mobile-banner" show-smartlink />
+
       <!-- Scrolling tech icons under the hero -->
       <section class="stack-marquee">
         <div v-for="group in stackGroups" :key="group.title" class="marquee-group">
@@ -34,8 +36,6 @@
           </div>
         </div>
       </section>
-
-      <AdSlot type="mobile-banner" show-smartlink />
     </section>
   </main>
 </template>

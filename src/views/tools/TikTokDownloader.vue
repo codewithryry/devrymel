@@ -48,6 +48,9 @@
         </button>
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <!-- Error -->
       <transition name="fade-slide">
         <div v-if="error" class="tt-error">
@@ -178,9 +181,6 @@
 
         </div>
       </transition>
-
-      <!-- Ad -->
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Other tools -->
       <tool-suggestions current="/tools/tiktok" />

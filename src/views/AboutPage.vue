@@ -131,23 +131,8 @@
       </section>
 
       <ExploreLinks />
-
-      <!-- CTA -->
-      <section class="cta-card">
-        <div>
-          <span class="eyebrow">Contact</span>
-          <h2>Have something in mind? Let's build it.</h2>
-          <p>
-            Tell me about your project — a website, a PWA, or a workflow you want
-            automated. I reply fast and keep things straightforward.
-          </p>
-        </div>
-
-        <router-link to="/contact" class="cta-btn">
-          Contact Me
-        </router-link>
-      </section>
     </section>
+
   </main>
 </template>
 
@@ -161,7 +146,7 @@ export default {
 
   components: {
     AdSlot,
-    ExploreLinks
+    ExploreLinks,
   },
 
   data() {

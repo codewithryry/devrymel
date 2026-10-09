@@ -14,6 +14,8 @@
       <FeaturedCarousel class="featured-desktop" :projects="featuredProjects" @openProjectModal="openProjectModal" />
       <ProjectsSection class="featured-mobile" :projects="featuredProjects" :show-kicker="false" actions-bottom @openProjectModal="openProjectModal" />
 
+      <AdSlot type="wide-box" show-smartlink />
+
       <div class="more-header">
         <h2 class="more-title">More Projects</h2>
         <!-- List/card toggle: phones only -->
@@ -105,8 +107,6 @@
           <i class="fab fa-github"></i><span>Visit my GitHub</span>
         </a>
       </section>
-
-      <AdSlot type="wide-box" show-smartlink />
     </section>
   </main>
 </template>

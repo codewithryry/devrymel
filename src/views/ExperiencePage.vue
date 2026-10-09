@@ -12,8 +12,9 @@
       </div>
 
       <ExperienceSection :experiences="experiences" :show-title="false" />
-      <CareerTimeline :timeline="timeline" />
+
       <AdSlot type="wide-box" show-smartlink />
+      <CareerTimeline :timeline="timeline" />
     </section>
   </main>
 </template>

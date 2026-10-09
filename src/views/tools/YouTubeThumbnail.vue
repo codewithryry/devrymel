@@ -57,6 +57,9 @@
         </button>
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <!-- Error -->
       <transition name="fade-slide">
         <div v-if="error" class="tt-error">
@@ -162,9 +165,6 @@
           </button>
         </div>
       </transition>
-
-      <!-- Ad -->
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/youtube-thumbnail" />

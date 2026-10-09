@@ -105,14 +105,14 @@
         <i class="fas fa-sync-alt"></i> Generate Password
       </button>
 
+      <!-- Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <!-- Note -->
       <p class="tt-note">
         <i class="fas fa-lock"></i>
         Generated entirely in your browser. Zero data leaves your device.
       </p>
-
-      <!-- Ad -->
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/password" />

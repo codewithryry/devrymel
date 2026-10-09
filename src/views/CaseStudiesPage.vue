@@ -11,6 +11,8 @@
         </p>
       </div>
 
+      <AdSlot type="wide-box" show-smartlink />
+
       <section
         v-for="study in caseStudies"
         :key="study.title"
@@ -27,8 +29,6 @@
           <li><strong>Result:</strong> {{ study.result }}</li>
         </ul>
       </section>
-
-      <AdSlot type="wide-box" show-smartlink />
       <ExploreLinks />
     </section>
   </main>

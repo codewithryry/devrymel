@@ -131,7 +131,7 @@
                   <!-- Phones only: the Feedback side tab is hidden there -->
                   <button type="button" class="dropdown-tool mobile-only" @click="openFeedback">
                     <i class="fas fa-comment-dots"></i>
-                    <span>Feedback{{ feedbackCount ? ` (${feedbackCount})` : "" }}</span>
+                    <span>Message{{ feedbackCount ? ` (${feedbackCount})` : "" }}</span>
                   </button>
                 </div>
               </div>
@@ -224,13 +224,13 @@
           <p>Follow me on TikTok or Instagram to save your tile layout on this device.</p>
 
           <a
-            href="https://www.tiktok.com/@devrymel"
+            href="https://www.tiktok.com/@iamrymel"
             target="_blank"
             rel="noopener noreferrer"
             class="follow-btn"
             @click="closeFollowGate(true)"
           >
-            <i class="fab fa-tiktok"></i> Follow @devrymel on TikTok
+            <i class="fab fa-tiktok"></i> Follow @iamrymel on TikTok
           </a>
           <a
             href="https://www.instagram.com/iamrymel/"
@@ -1652,6 +1652,11 @@ html[data-theme="forest"] body {
     opacity: 0.8;
   }
 
+  /* Spotify logo glyph reads smaller than the arrow icons; size it up to match */
+  #app .tile-spotify .m-tile-corner {
+    font-size: 0.85rem;
+  }
+
   /* Coffee (2nd tile when Spotify is shown): icon top-left, not centered */
   #app .mobile-links-scroll.with-spotify .mobile-link-card:nth-child(2) .mobile-icon {
     align-self: flex-start;
@@ -2339,6 +2344,66 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     bottom: 2px;
     width: 24px;
     height: 24px;
+  }
+
+  /* Icon tiles: same soft tint as vertical tiles, brand-colored icons */
+  #app .rt-grid > .rt-tile.rt-icon {
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+  }
+
+  #app .rt-grid > .rt-tile.tile-facebook > .m-tile-icon { color: #1877f2; }
+  /* Instagram: the real app icon (white glyph on the gradient square) */
+  #app .rt-grid > .rt-tile.tile-instagram > .m-tile-icon {
+    display: grid;
+    place-items: center;
+    width: 1.6em;
+    height: 1.6em;
+    font-size: 1.25rem;
+    color: #fff;
+    border-radius: 28%;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  }
+  #app .rt-grid > .rt-tile.tile-linkedin > .m-tile-icon { color: #0a66c2; }
+  #app .rt-grid > .rt-tile.tile-spotify > i.m-tile-icon { color: #1db954; }
+
+  /* Vertical tile: icon + name stacked in the center, with a soft tint */
+  #app .rt-grid > .rt-tile.rt-vert {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+  }
+
+  #app .rt-grid > .rt-tile.rt-vert > .m-tile-icon {
+    font-size: 1.9rem;
+  }
+
+  #app .rt-grid > .rt-tile.rt-vert > :is(.m-tile-label, small):not(.rt-handle) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #app .rt-grid > .rt-tile.rt-vert > .m-tile-label {
+    margin-top: 0.2rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  #app .rt-grid > .rt-tile.rt-vert > small {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+  }
+
+  /* Support Me / Feedback: name only, no second line */
+  #app .rt-grid > .rt-tile.rt-vert:is(.tile-support, .tile-feedback) > small:not(.rt-handle) {
+    display: none;
   }
 
   /* --- 1-row tiles (sm, wide): icon left, label + description stacked right --- */

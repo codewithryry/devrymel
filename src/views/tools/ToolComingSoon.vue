@@ -39,6 +39,9 @@
         </div>
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <!-- What to expect -->
       <div class="expect-card">
         <h3>What to expect</h3>
@@ -65,9 +68,6 @@
           You reached this page because this mini tool is marked as coming soon.
         </p>
       </div>
-
-      <!-- Ad -->
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/coming-soon" />

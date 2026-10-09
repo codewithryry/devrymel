@@ -46,23 +46,9 @@
         </p>
       </section>
 
-      <section class="cta-card">
-        <div>
-          <span class="eyebrow">Contact</span>
-          <h2>Privacy concern?</h2>
-          <p>
-            For questions about this portfolio’s data collection or feedback
-            records, contact the site owner directly.
-          </p>
-        </div>
-
-        <a href="mailto:reymelrey.mislang@gmail.com" class="cta-btn">
-          Contact Me
-        </a>
-      </section>
-
       <ExploreLinks />
     </section>
+
   </main>
 </template>
 

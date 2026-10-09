@@ -10,9 +10,9 @@
         </p>
       </div>
 
-      <TechNotesSection :notes="techNotes" :show-title="false" stacked />
-
       <AdSlot type="mobile-banner" show-smartlink />
+
+      <TechNotesSection :notes="techNotes" :show-title="false" stacked />
       <ExploreLinks />
     </section>
   </main>

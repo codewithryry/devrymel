@@ -105,7 +105,7 @@ export default {
   align-items: center;
   gap: 0.35rem;
   color: var(--text-muted);
-  font-size: 0.58rem;
+  font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -113,7 +113,7 @@ export default {
 }
 
 .tc-kicker i {
-  font-size: 0.7rem;
+  font-size: 0.85rem;
 }
 
 .tc-title {
@@ -291,6 +291,16 @@ export default {
 
 .tc-tall .tc-slide:has(.tc-thumb) .tc-title {
   margin-top: auto;
+}
+
+/* Tall tiles with a preview (certs): big preview + title only, so it isn't crowded */
+.tc-tall .tc-slide:has(.tc-thumb) .tc-text {
+  display: none;
+}
+
+.tc-tall .tc-thumb {
+  flex-shrink: 0;
+  margin-top: 0.5rem;
 }
 
 /* Large (full width): text on the left, preview on the right */

@@ -13,6 +13,8 @@
         </p>
       </div>
 
+      <AdSlot type="wide-box" show-smartlink />
+
       <div class="info-grid">
         <article class="info-card">
 
@@ -53,25 +55,9 @@
           </div>
         </article>
       </div>
-
-      <section class="cta-card">
-        <div>
-          <span class="eyebrow">Work Inquiry</span>
-          <h2>Send a clear project brief</h2>
-          <p>
-            Include your project type, needed pages, preferred style, deadline,
-            and any existing links or files.
-          </p>
-        </div>
-
-        <a href="mailto:reymelrey.mislang@gmail.com?subject=Book%20a%20Call" class="cta-btn">
-          Book a Call
-        </a>
-      </section>
-
-      <AdSlot type="wide-box" show-smartlink />
       <ExploreLinks />
     </section>
+
   </main>
 </template>
 

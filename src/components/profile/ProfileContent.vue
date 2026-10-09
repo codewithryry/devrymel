@@ -106,15 +106,12 @@
 
         <div class="m-badges">
           <button type="button" class="inline-badge" @click="openMobileDeansList" :title="text.deanListerAward">
-            <i class="fas fa-trophy"></i>
             <span class="badge-label">{{ text.awards }}</span>
           </button>
           <button type="button" class="inline-badge" @click="$emit('open-certificates')" :title="text.certificates">
-            <i class="fas fa-award"></i>
             <span class="badge-label">{{ text.certs }}</span>
           </button>
           <button type="button" class="inline-badge" @click="$emit('openLinks')" :title="text.projectLinks">
-            <i class="fas fa-link"></i>
             <span class="badge-label">{{ text.links }}</span>
           </button>
         </div>
@@ -610,16 +607,18 @@ export default {
 
       return [
         // Default order + sizes (also what Reset returns to). Packs the 4-column grid with no gaps:
-        // What I build | Glance (tall) · Projects (full) · TikTok/Facebook/IG/LinkedIn | Certs (tall)
-        // · Spotify (tall) | Dev.to/Feedback · Theme | Support/GitHub · Why (full, last)
-        { id: "services", size: "tall", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
+        // What I build (full) · Glance (tall) | TikTok (vertical) | Facebook/IG · Projects (full)
+        // · LinkedIn | Dev.to · GitHub | Certs (tall) · Spotify (tall) | Support/Feedback (vertical) · Theme · Why (full)
+        { id: "services", size: "wide", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
         { id: "glance", size: "tall", chip: "chip-2", icon: "fas fa-user-tie", label: "At a glance", slides: this.glanceSlides },
-        { id: "work", size: "lg", chip: "chip-3", icon: "fas fa-folder-open", label: "Projects", slides: this.workSlides },
-        { id: "tiktok", size: "icon", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@devrymel", href: "https://www.tiktok.com/@devrymel", external: true, corner: open },
+        { id: "tiktok", size: "vert", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@iamrymel", href: "https://www.tiktok.com/@iamrymel", external: true, corner: open },
         { id: "facebook", size: "icon", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
-        { id: "certs", size: "tall", chip: "chip-4", icon: "fas fa-award", label: "Certifications", slides: this.certSlides },
         { id: "instagram", size: "icon", chip: "chip-4", icon: "fab fa-instagram", label: "Instagram", desc: "Follow", href: "https://www.instagram.com/iamrymel/", external: true, corner: open },
-        { id: "linkedin", size: "icon", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Connect", href: "https://www.linkedin.com/in/reymelreymislang", external: true, corner: open },
+        { id: "work", size: "lg", chip: "chip-3", icon: "fas fa-folder-open", label: "Projects", slides: this.workSlides },
+        { id: "linkedin", size: "sm", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Connect", href: "https://www.linkedin.com/in/reymelreymislang", external: true, corner: open },
+        { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
+        { id: "github", size: "sm", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
+        { id: "certs", size: "tall", chip: "chip-4", icon: "fas fa-award", label: "Certifications", slides: this.certSlides },
         {
           id: "spotify", size: "tall", chip: "chip-3", idle: !playing,
           icon: "fab fa-spotify", image: playing ? track.image : "",
@@ -628,11 +627,9 @@ export default {
           desc: playing ? track.artist : "Not playing right now",
           corner: "fab fa-spotify"
         },
-        { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
-        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
+        { id: "support", size: "vert", chip: "chip-1", icon: "fas fa-qrcode", label: "Support", desc: "Multiple banks available", action: "qr", corner: open },
+        { id: "feedback", size: "vert", chip: "chip-1", icon: "fas fa-comment-dots", label: "Message", desc: "Leave a message", action: "feedback", corner: open },
         { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
-        { id: "support", size: "icon", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open },
-        { id: "github", size: "icon", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
         { id: "why", size: "lg", chip: "chip-5", icon: "fas fa-star", label: "Why hire me", slides: this.whySlides },
       ];
     },

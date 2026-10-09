@@ -22,6 +22,8 @@
         </li>
       </ol>
 
+      <AdSlot type="banner" show-smartlink />
+
       <section class="info-panel">
         <span class="eyebrow">What you get</span>
         <h2>Included in every project</h2>
@@ -42,8 +44,6 @@
           </li>
         </ul>
       </section>
-
-      <AdSlot type="banner" show-smartlink />
       <ExploreLinks />
     </section>
   </main>

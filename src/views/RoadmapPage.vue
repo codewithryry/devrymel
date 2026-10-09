@@ -11,6 +11,8 @@
         </p>
       </div>
 
+      <AdSlot type="banner" show-smartlink />
+
       <!-- Legend -->
       <div class="road-legend">
         <span class="is-done"><i></i> Done</span>
@@ -54,8 +56,6 @@
           </div>
         </li>
       </ol>
-
-      <AdSlot type="banner" show-smartlink />
       <ExploreLinks />
     </section>
   </main>

@@ -15,7 +15,17 @@
         <div class="viewer-mobile-head">
           <div>
             <span class="viewer-kicker">Dean's Lister</span>
-            <h3>{{ currentItem.title }}</h3>
+            <h3>{{ currentItem.title.split('|')[0].trim() }}</h3>
+          </div>
+          <!-- Switch awards here (same as the Support Me popup) -->
+          <div v-if="totalItems > 1" class="viewer-switch">
+            <button type="button" aria-label="Previous award" :disabled="currentIndex === 0" @click="$emit('prev')">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span>{{ currentIndex + 1 }}/{{ totalItems }}</span>
+            <button type="button" aria-label="Next award" :disabled="currentIndex === totalItems - 1" @click="$emit('next')">
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
           <button type="button" class="viewer-mobile-close" aria-label="Close" @click="$emit('close')">
             <i class="fas fa-times"></i>
@@ -518,6 +528,49 @@ export default {
     padding: 1rem;
     border-bottom: 1px solid var(--border);
     background: var(--surface);
+  }
+
+  .viewer-mobile-head > div:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Award switcher in the header: ‹ 1/4 › */
+  .viewer-switch {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+
+  .viewer-switch button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: var(--text);
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .viewer-switch button:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .viewer-switch span {
+    min-width: 30px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
   }
 
   .viewer-kicker {

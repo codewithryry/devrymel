@@ -11,6 +11,8 @@
         </p>
       </div>
 
+      <AdSlot type="banner" show-smartlink />
+
       <!-- Concept: one product under construction. Each service is a part of
            the site/app being built, laid out like a wireframe in a browser. -->
       <div class="build" aria-label="Services">
@@ -82,25 +84,9 @@
           </article>
         </div>
       </div>
-
-      <section class="cta-card">
-        <div>
-          <span class="eyebrow">Available</span>
-          <h2>Have a project in mind?</h2>
-          <p>
-            Tell me what you need — a new build, an improvement, or ongoing
-            help — and I'll suggest the simplest way to get it done.
-          </p>
-        </div>
-
-        <a href="mailto:reymelrey.mislang@gmail.com?subject=Project%20Inquiry" class="cta-btn">
-          Email Me
-        </a>
-      </section>
-
-      <AdSlot type="banner" show-smartlink />
       <ExploreLinks />
     </section>
+
   </main>
 </template>
 

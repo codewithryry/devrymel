@@ -88,14 +88,14 @@
 
       </div>
 
+      <!-- Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <!-- Note -->
       <p class="tt-note">
         <i class="fas fa-shield-alt"></i>
         Processing is done entirely in your browser. No data is sent to any server.
       </p>
-
-      <!-- Ad -->
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Suggestions -->
       <tool-suggestions current="/tools/base64" />

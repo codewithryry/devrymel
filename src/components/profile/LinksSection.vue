@@ -52,7 +52,7 @@
         <button type="button" class="mobile-link-card" :class="tileClass('feedback', 'sm')" @click="$root.openFeedback()">
           <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('feedback', 'sm')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon"><i class="fas fa-comment-dots"></i></div>
-          <span class="mobile-label">Feedback</span>
+          <span class="mobile-label">Message</span>
           <small class="mobile-desc">Leave a message</small>
         </button>
 
