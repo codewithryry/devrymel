@@ -1,6 +1,6 @@
 // Resizable / reorderable tiles (mobile homepage), like iOS / One UI quick settings:
 // press and hold the grid (or tap Edit) to enter edit mode, tap a tile's handle
-// to cycle its size (round icon → small → wide → tall → large).
+// to cycle its size (round icon → vertical → small → wide → tall → large).
 //
 // Changes are kept in memory while editing and saved when editing ends (Done).
 // Visitors must follow on TikTok or Instagram once before their layout saves
@@ -19,7 +19,7 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import { subscribeToDoc } from "@/services/contentService";
 
-const SIZE_ORDER = ["icon", "sm", "wide", "tall", "lg"];
+const SIZE_ORDER = ["icon", "vert", "sm", "wide", "tall", "lg"];
 const FOLLOW_KEY = "tileFollowUnlocked";
 const HOLD_MS = 500;
 

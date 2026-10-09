@@ -34,6 +34,17 @@
               </component>
             </div>
 
+            <div class="ci-docs">
+              <a href="/Reymel_Mislang_CV.pdf" target="_blank" rel="noopener" class="ci-item ci-doc">
+                <span class="ci-icon"><i class="fas fa-id-card"></i></span>
+                <span class="ci-info"><strong>CV</strong><small>View PDF</small></span>
+              </a>
+              <a href="/Reymel_Mislang_Resume.pdf" target="_blank" rel="noopener" class="ci-item ci-doc">
+                <span class="ci-icon"><i class="fas fa-file-lines"></i></span>
+                <span class="ci-info"><strong>Resume</strong><small>View PDF</small></span>
+              </a>
+            </div>
+
             <AdSlot class="profile-modal-footer" type="banner" />
           </div>
         </div>
@@ -148,8 +159,10 @@
               tileClass(tile.id, tile.size),
               tile.chip,
               'tile-' + tile.id,
-              { 'rt-selected': selectedTileId === tile.id, 'spotify-tile': tile.id === 'spotify', 'm-carousel-tile': tile.slides && tileSize(tile.id, tile.size) !== 'icon', idle: tile.idle }
+              { 'rt-selected': selectedTileId === tile.id || dragOverId === tile.id, 'spotify-tile': tile.id === 'spotify', 'm-carousel-tile': tile.slides && tileSize(tile.id, tile.size) !== 'icon', idle: tile.idle }
             ]"
+            :data-tile-id="tile.id"
+            @pointerdown="startTileDrag($event, tile)"
             @click="onTileClick($event, tile)"
           >
             <!-- Swipeable tiles (projects, employer info); icon size shows just the icon -->
@@ -353,6 +366,7 @@ import experiencesData from "@/data/experiences.json";
 import servicesData from "@/data/services.json";
 import certificatesData from "@/data/certificates.json";
 import highlightsData from "@/data/highlights.json";
+import { PINNED_CERTIFICATE } from "@/data/pinnedCertificate";
 
 // Project screenshots live in src/assets (missing file -> no picture, skeleton only)
 function projectImage(image) {
@@ -549,6 +563,7 @@ export default {
       tileLayoutDocId: "home-v2",
       tileOrder: [],
       selectedTileId: null,
+      dragOverId: null,
       currentTheme: document.documentElement.getAttribute("data-theme") || "light",
       showContactInfo: false,
       showStats: false,
@@ -595,17 +610,16 @@ export default {
 
       return [
         // Default order + sizes (also what Reset returns to). Packs the 4-column grid with no gaps:
-        // Email | CV + TikTok/IG · Projects (full) · Glance | Certs · What I build · Why | Spotify
-        // · Facebook | Feedback · Dev.to | Theme/Support
-        { id: "email", size: "tall", chip: "chip-1", icon: "fas fa-envelope", label: this.text.email, desc: "reymelrey.mislang@gmail.com", href: "mailto:reymelrey.mislang@gmail.com", corner: open },
-        { id: "cv", size: "sm", chip: "chip-4", icon: "fas fa-id-card", label: "CV", desc: "View PDF", href: "/Reymel_Mislang_CV.pdf", external: true, corner: "fas fa-arrow-up-right-from-square" },
-        { id: "tiktok", size: "icon", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@devrymel", href: "https://www.tiktok.com/@devrymel", external: true, corner: open },
-        { id: "instagram", size: "icon", chip: "chip-4", icon: "fab fa-instagram", label: "Instagram", desc: "Follow", href: "https://www.instagram.com/iamrymel/", external: true, corner: open },
-        { id: "work", size: "lg", chip: "chip-3", icon: "fas fa-folder-open", label: "Projects", slides: this.workSlides },
+        // What I build | Glance (tall) · Projects (full) · TikTok/Facebook/IG/LinkedIn | Certs (tall)
+        // · Spotify (tall) | Dev.to/Feedback · Theme | Support/GitHub · Why (full, last)
+        { id: "services", size: "tall", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
         { id: "glance", size: "tall", chip: "chip-2", icon: "fas fa-user-tie", label: "At a glance", slides: this.glanceSlides },
+        { id: "work", size: "lg", chip: "chip-3", icon: "fas fa-folder-open", label: "Projects", slides: this.workSlides },
+        { id: "tiktok", size: "icon", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@devrymel", href: "https://www.tiktok.com/@devrymel", external: true, corner: open },
+        { id: "facebook", size: "icon", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
         { id: "certs", size: "tall", chip: "chip-4", icon: "fas fa-award", label: "Certifications", slides: this.certSlides },
-        { id: "services", size: "wide", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
-        { id: "why", size: "tall", chip: "chip-5", icon: "fas fa-star", label: "Why hire me", slides: this.whySlides },
+        { id: "instagram", size: "icon", chip: "chip-4", icon: "fab fa-instagram", label: "Instagram", desc: "Follow", href: "https://www.instagram.com/iamrymel/", external: true, corner: open },
+        { id: "linkedin", size: "icon", chip: "chip-2", icon: "fab fa-linkedin", label: "LinkedIn", desc: "Connect", href: "https://www.linkedin.com/in/reymelreymislang", external: true, corner: open },
         {
           id: "spotify", size: "tall", chip: "chip-3", idle: !playing,
           icon: "fab fa-spotify", image: playing ? track.image : "",
@@ -614,11 +628,12 @@ export default {
           desc: playing ? track.artist : "Not playing right now",
           corner: "fab fa-spotify"
         },
-        { id: "facebook", size: "sm", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
-        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
         { id: "devto", size: "sm", chip: "chip-5", icon: "fab fa-dev", label: "Dev.to", desc: "Technical writing", href: "https://dev.to/codewithryry", external: true, corner: open },
-        { id: "theme", size: "icon", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
-        { id: "support", size: "icon", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open }
+        { id: "feedback", size: "sm", chip: "chip-1", icon: "fas fa-comment-dots", label: "Feedback", desc: "Leave a message", action: "feedback", corner: open },
+        { id: "theme", size: "sm", chip: "chip-2", icon: themeIcon, label: "Theme", desc: this.$root.currentThemeName, action: "theme", corner: "fas fa-exchange-alt" },
+        { id: "support", size: "icon", chip: "chip-1", icon: "fas fa-qrcode", label: "Support Me", desc: "Multiple banks available", action: "qr", corner: open },
+        { id: "github", size: "icon", chip: "chip-3", icon: "fab fa-github", label: "GitHub", desc: "codewithryry", href: "https://github.com/codewithryry", external: true, corner: open },
+        { id: "why", size: "lg", chip: "chip-5", icon: "fas fa-star", label: "Why hire me", slides: this.whySlides },
       ];
     },
 
@@ -633,7 +648,7 @@ export default {
     // "Projects" tile: top 3 projects (text only, opens the live demo), then "View all"
     workSlides() {
       const projects = projectsData || [];
-      const slides = projects.slice(0, 3).map((p) => ({
+      const slides = projects.map((p) => ({
         icon: "fas fa-folder-open",
         kicker: p.status || "Featured project",
         title: p.title,
@@ -698,13 +713,13 @@ export default {
 
     // "Certifications" tile: each slide opens the certificate file
     certSlides() {
-      return (certificatesData || []).map((c) => ({
+      return [PINNED_CERTIFICATE, ...(certificatesData || [])].map((c) => ({
         icon: "fas fa-award",
         kicker: c.category || "Certificate",
         title: c.title,
         text: c.description,
-        // Image certificates show a tiny copy; PDFs show a paper skeleton
-        thumb: { type: "doc", src: /\.(jpe?g|png|webp)$/i.test(c.file) ? `/certificates/${c.file}` : "" },
+        // Paper skeleton only, no picture
+        thumb: { type: "doc", src: "" },
         href: /^https?:/.test(c.file) ? c.file : `/certificates/${c.file}`
       }));
     },
@@ -810,6 +825,40 @@ export default {
       else if (tile.action === "qr") this.$emit("openQRModal");
     },
 
+    // Edit mode: drag a tile onto another to swap them (tap-to-swap still works)
+    startTileDrag(e, tile) {
+      if (!this.tileEditing || (e.target.closest && e.target.closest(".rt-handle"))) return;
+      const from = tile.id;
+      let moved = false;
+
+      const move = (ev) => {
+        const el = document.elementFromPoint(ev.clientX, ev.clientY);
+        const over = el && el.closest && el.closest("[data-tile-id]");
+        const id = over ? over.dataset.tileId : null;
+        if (id && id !== from) moved = true;
+        this.selectedTileId = from;
+        this.dragOverId = id && id !== from ? id : null;
+      };
+
+      const end = () => {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", end);
+        window.removeEventListener("pointercancel", end);
+        if (moved) {
+          if (this.dragOverId) this.swapTiles(from, this.dragOverId);
+          this.selectedTileId = null;
+          // Swallow the click that follows the drop
+          this.justEnteredEdit = true;
+          setTimeout(() => { this.justEnteredEdit = false; }, 0);
+        }
+        this.dragOverId = null;
+      };
+
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", end);
+      window.addEventListener("pointercancel", end);
+    },
+
     swapTiles(a, b) {
       const order = this.orderedTiles.map((t) => t.id);
       const i = order.indexOf(a);
@@ -888,6 +937,14 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
+}
+
+/* CV + Resume side by side to save space */
+.ci-docs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.45rem;
 }
 
 .ci-item {

@@ -202,7 +202,7 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: top center;
 }
 
@@ -268,6 +268,27 @@ export default {
   -webkit-line-clamp: 1;
 }
 
+/* Tall tiles: full title wraps (up to 2 lines) instead of being cut */
+.tc-tall .tc-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+/* Keep room above: compact text, no chips in tall tiles */
+.tc-tall .tc-text {
+  font-size: 0.66rem;
+  line-height: 1.3;
+  -webkit-line-clamp: 2;
+}
+
+.tc-tall .tc-chips {
+  display: none;
+}
+
 .tc-tall .tc-slide:has(.tc-thumb) .tc-title {
   margin-top: auto;
 }
@@ -285,6 +306,19 @@ export default {
   width: 42%;
   height: auto;
   margin: 0;
+}
+
+/* Screenshot: box hugs the image (full width, natural ratio), centered */
+.tc-lg .tc-thumb-site {
+  top: 50%;
+  bottom: auto;
+  max-height: calc(100% - 1.7rem);
+  transform: translateY(-50%);
+}
+
+.tc-lg .tc-thumb-site img {
+  height: auto;
+  max-height: 100%;
 }
 
 .tc-lg .tc-thumb-doc {

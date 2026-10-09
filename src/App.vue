@@ -918,7 +918,9 @@ export default {
       } else {
         this.setTheme(next);
       }
-      this.showToast(this.currentThemeName);
+      // Use the next theme's name (the view transition applies it async)
+      const found = this.themes.find(t => t.id === next);
+      this.showToast(found ? found.name : next);
     },
 
     showToast(message) {
@@ -2247,19 +2249,35 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   /* Profile tiles: label on top, grid underneath */
   #app .m-tiles {
     display: block;
+    container-type: inline-size;
   }
 
   #app .m-tiles .m-tiles-label {
     margin-bottom: 0.6rem;
   }
 
+  /* Quick Settings style: compact cells (row height tied to column width),
+     so every tile keeps the same proportions on any screen/orientation */
   #app .rt-grid {
+    --rt-gap: clamp(0.5rem, 2.2cqw, 0.75rem);
+    --rt-w: min(100cqw, 560px);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 72px;
-    grid-auto-flow: row dense;
-    gap: 0.6rem;
+    grid-auto-rows: calc((var(--rt-w) - 3 * var(--rt-gap)) / 4 * 0.72);
+    grid-auto-flow: row;
+    gap: var(--rt-gap);
     padding: 0;
+    width: var(--rt-w);
+    margin-inline: auto;
+  }
+
+  #app .rt-grid > .rt-tile.rt-tile {
+    border-radius: 22px;
+  }
+
+  #app .rt-grid > .rt-tile > * {
+    min-width: 0;
+    max-width: 100%;
   }
 
   /* Reset every older placement rule; size comes only from the rt-* class */
@@ -2278,12 +2296,13 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   }
 
   #app .rt-grid > .rt-tile.rt-icon { grid-column: span 1; }
+  #app .rt-grid > .rt-tile.rt-vert { grid-column: span 1; grid-row: span 2; }
   #app .rt-grid > .rt-tile.rt-wide { grid-column: span 4; }
   #app .rt-grid > .rt-tile.rt-tall { grid-column: span 2; grid-row: span 2; }
   #app .rt-grid > .rt-tile.rt-lg   { grid-column: span 4; grid-row: span 2; }
 
   /* Icon-only tile: a normal tile (same shape/style as the rest), icon centered */
-  #app .rt-grid > .rt-tile.rt-icon {
+  #app .rt-grid > .rt-tile:is(.rt-icon, .rt-vert) {
     display: grid;
     place-items: center;
     place-content: center; /* override the tile's old justify-content: flex-end */
@@ -2296,7 +2315,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     padding: 0;
   }
 
-  #app .rt-grid > .rt-tile.rt-icon > .m-tile-icon {
+  #app .rt-grid > .rt-tile:is(.rt-icon, .rt-vert) > .m-tile-icon {
     grid-area: 1 / 1;
     width: auto;
     height: auto;
@@ -2305,17 +2324,17 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     text-align: center;
   }
 
-  #app .rt-grid > .rt-tile.rt-icon > :not(.m-tile-icon):not(.rt-handle) {
+  #app .rt-grid > .rt-tile:is(.rt-icon, .rt-vert) > :not(.m-tile-icon):not(.rt-handle) {
     display: none;
   }
 
-  #app .rt-grid > .rt-tile.rt-icon > .m-tile-icon {
+  #app .rt-grid > .rt-tile:is(.rt-icon, .rt-vert) > .m-tile-icon {
     margin: 0;
     font-size: 1.7rem;
   }
 
 
-  #app .rt-grid > .rt-tile.rt-icon .rt-handle {
+  #app .rt-grid > .rt-tile:is(.rt-icon, .rt-vert) .rt-handle {
     right: 2px;
     bottom: 2px;
     width: 24px;
@@ -2403,7 +2422,12 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     padding: 0;
   }
 
-  /* Picked-up tile (tap another tile to swap with it) */
+  /* Edit mode: tiles can be dragged without scrolling the page */
+  #app .rt-grid > .rt-tile.rt-editing {
+    touch-action: none;
+  }
+
+  /* Picked-up tile (drag or tap another tile to swap with it) */
   #app .rt-grid > .rt-tile.rt-selected {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent);
