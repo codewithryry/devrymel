@@ -242,7 +242,11 @@ export default {
 
     // Track the box width so the ad can fill it
     if ("ResizeObserver" in window) {
-      this.resizeObserver = new ResizeObserver(() => this.measureBox());
+      // Measure on the next frame so the resulting re-render doesn't re-trigger the observer in the same frame
+      this.resizeObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(this.measureFrame);
+        this.measureFrame = requestAnimationFrame(this.measureBox);
+      });
       this.$nextTick(() => {
         if (this.$refs.frameWrap) this.resizeObserver.observe(this.$refs.frameWrap);
         this.measureBox();
@@ -254,6 +258,7 @@ export default {
     window.removeEventListener("resize", this.handleResize);
     document.removeEventListener("click", this.closeInfo);
     if (this.resizeObserver) this.resizeObserver.disconnect();
+    cancelAnimationFrame(this.measureFrame);
   },
 
   methods: {
@@ -263,7 +268,7 @@ export default {
 
     measureBox() {
       const el = this.$refs.frameWrap;
-      if (el) this.boxWidth = el.clientWidth;
+      if (el && el.clientWidth !== this.boxWidth) this.boxWidth = el.clientWidth;
     },
 
     handleAdFrameLoad() {

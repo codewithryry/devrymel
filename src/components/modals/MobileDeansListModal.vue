@@ -23,7 +23,7 @@
                  :key="'mobile-' + index"
                  @click="$emit('openItem', index)">
               <div class="mobile-deans-icon">
-                <i class="fas fa-medal"></i>
+                <ListThumb shape="portrait" />
               </div>
               <div class="mobile-deans-info">
                 <h4>{{ item.title.split('|')[0].trim() }}</h4>
@@ -52,11 +52,13 @@
 
 <script>
 import AdSlot from '@/components/AdSlot.vue'
+import ListThumb from '@/components/modals/ListThumb.vue'
 
 export default {
   name: 'MobileDeansListModal',
   components: {
-    AdSlot
+    AdSlot,
+    ListThumb
   },
   props: {
     deansList: {

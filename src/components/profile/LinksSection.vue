@@ -61,7 +61,7 @@
         <button type="button" class="mobile-link-card theme-tile" :class="tileClass('theme', 'sm')" @click="$root.cycleTheme()">
           <button v-if="tileEditing" type="button" class="rt-handle" aria-label="Resize tile" @click.stop.prevent="cycleTileSize('theme', 'sm')"><i class="fas fa-expand-alt"></i></button>
           <div class="mobile-icon">
-            <i class="fas" :class="$root.currentTheme === 'froth' ? 'fa-tint' : $root.currentTheme === 'midnight' ? 'fa-moon' : $root.currentTheme === 'forest' ? 'fa-leaf' : 'fa-sun'"></i>
+            <i class="fas" :class="$root.currentTheme === 'midnight' ? 'fa-moon' : $root.currentTheme === 'forest' ? 'fa-leaf' : 'fa-sun'"></i>
           </div>
           <span class="mobile-label">Theme</span>
           <small class="mobile-desc">{{ $root.currentThemeName }}</small>

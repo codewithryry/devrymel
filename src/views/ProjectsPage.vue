@@ -423,7 +423,8 @@ export default {
 .tags li {
   padding: 0.18rem 0.5rem;
   border-radius: 999px;
-  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  background: var(--surface);
   color: var(--text-secondary);
   font-size: 0.7rem;
   line-height: 1.4;

@@ -17,7 +17,9 @@
         <div class="mobile-link-content">
           <p class="mobile-modal-desc">Systems I've built and deployed.</p>
 
-          <div class="mobile-link-list">
+          <ModalSkeleton v-if="loading" :count="6" />
+          <p v-else-if="!links.length" class="mobile-modal-desc">No links yet.</p>
+          <div v-else class="mobile-link-list">
             <div
               class="mobile-link-item"
               :class="{ 'mobile-link-item-soon': !hasLink(site.link) }"
@@ -26,7 +28,7 @@
               @click="openLink(site.link)"
             >
               <div class="mobile-link-icon">
-                <i class="fas fa-globe"></i>
+                <ListThumb shape="website" />
               </div>
               <div class="mobile-link-info">
                 <h4>{{ site.title }}</h4>
@@ -50,16 +52,24 @@
 
 <script>
 import AdSlot from '@/components/AdSlot.vue'
+import ListThumb from '@/components/modals/ListThumb.vue'
+import ModalSkeleton from '@/components/modals/ModalSkeleton.vue'
 
 export default {
   name: 'LinkWebsiteModal',
   components: {
-    AdSlot
+    AdSlot,
+    ListThumb,
+    ModalSkeleton
   },
   props: {
     links: {
       type: Array,
       required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['close'],
@@ -280,4 +290,5 @@ export default {
   font-size: 0.85rem;
   line-height: 1.5;
 }
+
 </style>

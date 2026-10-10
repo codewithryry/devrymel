@@ -77,6 +77,7 @@
       <Linkwebsite
         v-if="showLinksModal"
         :links="projectLinks"
+        :loading="!liveLoaded.projectLinks"
         @close="showLinksModal = false"
       />
 
@@ -116,6 +117,7 @@
     <CertificatesModal 
       v-if="showCertificatesListModal"
       :certificates="certificates"
+      :loading="!liveLoaded.certificates"
       @close="closeCertificatesListModal"
     />
 
@@ -345,6 +347,8 @@ export default {
       /* ===== PROJECTS (static, managed directly in src/data/projects.json) ===== */
       projects: fallbackProjects,
       contentUnsubscribes: [],
+      // Popup lists show skeletons until their live data (or an error) arrives
+      liveLoaded: { certificates: false, projectLinks: false },
 
       /* ===== MODAL STATES ===== */
       showDeansListModal: false,
@@ -373,6 +377,7 @@ export default {
       const unsubscribe = subscribeToCollection(
         key,
         (items) => {
+          if (key in this.liveLoaded) this.liveLoaded[key] = true
           if (items.length) {
             if (key === 'projectLinks') {
               const liveTitles = new Set(
@@ -397,6 +402,8 @@ export default {
         },
         (error) => {
           console.error(`Load live ${key} error:`, error)
+          // Fall back to the bundled list instead of loading forever
+          if (key in this.liveLoaded) this.liveLoaded[key] = true
         }
       )
       this.contentUnsubscribes.push(unsubscribe)

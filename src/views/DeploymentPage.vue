@@ -124,7 +124,7 @@ deploymentPhotos: [
   overflow: hidden;
   cursor: pointer;
   border-radius: var(--radius);
-  background: var(--surface-soft);
+  background: var(--surface);
 }
 
 .deployment-image {

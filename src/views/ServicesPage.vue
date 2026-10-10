@@ -167,7 +167,7 @@ export default {
   gap: 0.75rem;
   padding: 0.65rem 0.9rem;
   border-bottom: 1px solid var(--border);
-  background: var(--surface-soft);
+  background: var(--surface);
 }
 
 .build-dots {

@@ -133,7 +133,7 @@
   margin-bottom: 0.85rem;
   border-radius: var(--radius);
   color: var(--text);
-  background: var(--surface-soft);
+  background: var(--surface);
   border: 1px solid var(--border);
 }
 
@@ -176,7 +176,7 @@
 .info-list li {
   padding: 0.75rem 0.85rem;
   border-radius: var(--radius);
-  background: var(--surface-soft);
+  background: var(--surface);
   border: 1px solid var(--border);
 }
 
@@ -195,7 +195,7 @@
   padding: 0.4rem 0.7rem;
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  background: var(--surface-soft);
+  background: var(--surface);
   border: 1px solid var(--border);
   font-size: 0.82rem;
   font-weight: 600;
@@ -290,12 +290,30 @@
     padding: 0 26px;
   }
 
+  /* Phones: room above the eyebrow, balanced headline, easier-to-read paragraphs */
+  .info-hero {
+    padding-top: 0.75rem;
+  }
+
+  .info-hero .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
   .info-hero h1 {
-    font-size: 1.6rem;
+    font-size: clamp(1.6rem, 7vw, 1.9rem);
+    text-wrap: balance;
   }
 
   .info-hero p {
     font-size: 0.95rem;
+    text-wrap: pretty;
+  }
+
+  .info-card p,
+  .info-panel p,
+  .cta-card p {
+    line-height: 1.7;
+    text-wrap: pretty;
   }
 
   .info-card,

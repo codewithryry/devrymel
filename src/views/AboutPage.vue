@@ -257,7 +257,7 @@ export default {
   gap: 0.8rem;
   padding: 0.9rem;
   border-radius: var(--radius);
-  background: var(--surface-soft);
+  background: var(--surface);
   border: 1px solid var(--border);
 }
 
@@ -289,7 +289,7 @@ export default {
   padding: 0.7rem 1.4rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--surface-soft);
+  background: var(--surface);
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
@@ -328,6 +328,39 @@ export default {
   .story-cols,
   .steps-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Phones: a little more room above "About Me", balanced headline + buttons */
+  .about-hero {
+    margin-bottom: 0.5rem;
+    padding-top: 0.75rem;
+  }
+
+  .about-hero-text .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .about-hero-text h1 {
+    font-size: clamp(1.7rem, 7.5vw, 2rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .about-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+
+  .story-cols {
+    gap: 0.85rem;
+  }
+
+  .story-cols p {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    text-wrap: pretty;
   }
 }
 </style>

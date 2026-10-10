@@ -35,10 +35,7 @@
         <div class="nav-actions">
           <div class="nav-menu-wrap theme-wrap">
             <button class="nav-icon-btn" @click="cycleTheme" :title="'Theme: ' + currentThemeName" :aria-label="'Switch theme, current: ' + currentThemeName">
-              <svg v-if="currentTheme === 'froth'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2.7c3.6 4.1 6 7.4 6 10.3a6 6 0 0 1-12 0c0-2.9 2.4-6.2 6-10.3z" />
-              </svg>
-              <svg v-else-if="currentTheme === 'midnight'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg v-if="currentTheme === 'midnight'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
               </svg>
               <svg v-else-if="currentTheme === 'forest'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -458,8 +455,7 @@ export default {
       themes: [
         { id: "light", name: "Classic Light", preview: "#f8fafc" },
         { id: "midnight", name: "Midnight Pro", preview: "#1e3a5f" },
-        { id: "forest", name: "Emerald Focus", preview: "#065f46" },
-        { id: "froth", name: "Froth Modern", preview: "#111111" }
+        { id: "forest", name: "Emerald Focus", preview: "#065f46" }
       ],
 
       quickPages: fallbackQuickPages,
@@ -525,7 +521,8 @@ export default {
   },
 
   mounted() {
-    const savedTheme = localStorage.getItem("theme") || "light";
+    const storedTheme = localStorage.getItem("theme");
+    const savedTheme = this.themes.some(t => t.id === storedTheme) ? storedTheme : "light";
     this.setTheme(savedTheme, false);
 
     document.documentElement.setAttribute("lang", "en");
@@ -594,6 +591,7 @@ export default {
     if (this.revealObserver) this.revealObserver.disconnect();
     if (this.authUnsubscribe) this.authUnsubscribe();
     if (this.navIndicatorObserver) this.navIndicatorObserver.disconnect();
+    cancelAnimationFrame(this.navIndicatorFrame);
     if (this.spotifyInterval) clearInterval(this.spotifyInterval);
   },
 
@@ -789,7 +787,11 @@ export default {
       if (this.navIndicatorObserver) this.navIndicatorObserver.disconnect();
       this.navIndicatorPill = pill;
       if (!pill || typeof ResizeObserver === "undefined") return;
-      this.navIndicatorObserver = new ResizeObserver(this.updateNavIndicator);
+      // Update on the next frame so moving the bubble doesn't re-trigger the observer in the same frame
+      this.navIndicatorObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(this.navIndicatorFrame);
+        this.navIndicatorFrame = requestAnimationFrame(this.updateNavIndicator);
+      });
       pill.querySelectorAll(".bottom-tab").forEach((tab) => this.navIndicatorObserver.observe(tab));
     },
 
@@ -805,6 +807,8 @@ export default {
       const x = this.navDragTarget !== null && this.navDrag
         ? Math.max(0, Math.min(this.navDrag.x - pill.getBoundingClientRect().left - w / 2, pill.clientWidth - w))
         : tab.offsetLeft;
+      const cur = this.navIndicator;
+      if (cur.show && cur.x === x && cur.w === w) return;
       this.navIndicator = { x, w, show: true };
     },
 
@@ -1008,27 +1012,6 @@ export default {
 
   --font-heading: "Manrope", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: "Plus Jakarta Sans", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-/* Froth Modern: plain black & white — off-white page, white cards, black accent (icons keep their real colors).
-   Solid colors only (no gradients). */
-html[data-theme="froth"],
-html[data-theme="froth"] body {
-  --bg: #f6f6f6;
-  --surface: #ffffff;
-  --surface-soft: #f1f1f1;
-  --surface-hover: #eaeaea;
-  --text: #111111;
-  --text-secondary: #4b4b4b;
-  --text-muted: #8a8a8a;
-  --border: #e4e4e4;
-  --accent: #111111;
-  --accent-hover: #000000;
-
-  --shadow-sm: 0 1px 2px rgb(17 17 17 / 0.05);
-  --shadow: 0 2px 8px rgb(17 17 17 / 0.06);
-  --shadow-lg: 0 6px 18px rgb(17 17 17 / 0.08);
-  --shadow-xl: 0 12px 32px rgb(17 17 17 / 0.12);
 }
 
 html[data-theme="dark"],
@@ -1238,7 +1221,7 @@ html[data-theme="forest"] body {
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: 16px;
-    background: var(--surface-soft);
+    background: var(--surface);
     color: var(--text);
     text-decoration: none;
   }
@@ -1283,8 +1266,10 @@ html[data-theme="forest"] body {
   .menu-pages {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 0;
     margin-top: 8px;
+    /* Clips the outer edge lines so only the inner grid lines show */
+    overflow: hidden;
   }
 
   .menu-page {
@@ -1292,8 +1277,10 @@ html[data-theme="forest"] body {
     flex-direction: column;
     align-items: center;
     gap: 6px;
+    margin: 0 -1px -1px 0;
     padding: 12px 6px;
-    border-radius: 14px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     color: var(--text);
     font-size: 0.76rem;
     font-weight: 600;
@@ -1301,7 +1288,8 @@ html[data-theme="forest"] body {
   }
 
   button.menu-page {
-    border: none;
+    border-top: none;
+    border-left: none;
     background: none;
     font-family: inherit;
     cursor: pointer;
@@ -1396,6 +1384,28 @@ html[data-theme="forest"] body {
     background: var(--surface-soft);
     box-shadow: none;
   }
+}
+
+/* ===== POPUP CARDS: rows and detail cards inside every modal use the
+   same card style as the Awards / Links bar (theme tokens, not a gray box) ===== */
+#app :is(.skeleton-row, .ci-item, .cert-item, .mobile-link-item, .mobile-deans-item, .modal-card, .detail-col, .detail-section, .description-section, .modal-description, .mobile-link-description, .mobile-deans-description) {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.03);
+}
+
+html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app :is(.skeleton-row, .ci-item, .cert-item, .mobile-link-item, .mobile-deans-item, .modal-card, .detail-col, .detail-section, .description-section, .modal-description, .mobile-link-description, .mobile-deans-description) {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  box-shadow: none;
+}
+
+#app .modal-card:hover {
+  border-color: var(--accent);
+}
+
+#app :is(.cert-item, .mobile-link-item, .mobile-deans-item, .ci-item):hover {
+  border-color: var(--text-muted);
 }
 
 /* ===== MOBILE POPUPS: one fixed size for every modal =====
@@ -1513,7 +1523,6 @@ html[data-theme="forest"] body {
     padding: 0.75rem 0.9rem;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: var(--surface-soft);
   }
 
   #app :is(.mobile-link-list, .mobile-deans-list, .cert-list) {
@@ -1664,347 +1673,6 @@ html[data-theme="forest"] body {
   }
 }
 
-/* ===== FROTH MODERN: solid, modern accents (no gradients, no glass) ===== */
-
-/* Solid buttons: flat indigo, white text, no glass shine */
-html[data-theme="froth"] #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .fb-send, .send-btn.ready, .mobile-contact-btn, .primary-btn, .google-btn) {
-  background-image: none;
-  background-color: var(--accent);
-  border-color: var(--accent);
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgb(17 17 17 / 0.22);
-}
-
-html[data-theme="froth"] #app :is(.nav-contact-btn, .cta-btn, .footer-contact-btn, .primary-btn):hover {
-  background-color: var(--accent-hover);
-  opacity: 1;
-}
-
-/* Light buttons: solid white with a clean border, indigo on hover */
-html[data-theme="froth"] #app :is(.nav-icon-btn, .ghost-btn, .explore-link) {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-html[data-theme="froth"] #app :is(.nav-icon-btn, .ghost-btn, .explore-link):hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* Nav links: solid indigo-tint pill instead of glass */
-html[data-theme="froth"] .nav-links a::after {
-  background: rgb(17 17 17 / 0.1);
-  border: none;
-  box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-html[data-theme="froth"] .nav-links a:hover,
-html[data-theme="froth"] .nav-links a.active {
-  color: var(--accent);
-}
-
-/* Section labels and kickers pick up the accent */
-html[data-theme="froth"] :is(.eyebrow, .section-kicker, .m-tiles-label, .sheet-label, .dropdown-label) {
-  color: var(--accent);
-}
-
-/* Brand badge + footer CTA panel in indigo */
-html[data-theme="froth"] :is(.brand-short, .bottom-tab.active .bottom-brand) {
-  background: var(--accent);
-  color: #ffffff;
-}
-
-/* Phones: the CTA card is indigo, so its title/subtitle are white and
-   "Hire Me" flips to a white button with indigo text */
-@media (max-width: 768px) {
-  html[data-theme="froth"] #app .header-footer .footer-name {
-    color: #ffffff;
-  }
-
-  html[data-theme="froth"] #app .header-footer .footer-subtitle {
-    color: rgb(255 255 255 / 0.82);
-  }
-
-  html[data-theme="froth"] #app .header-footer .footer-contact-btn {
-    background-color: #ffffff;
-    border-color: #ffffff;
-    color: var(--accent);
-    box-shadow: none;
-  }
-}
-
-/* Bottom nav: active tab in indigo */
-html[data-theme="froth"] :is(.bottom-tab.active, .bottom-circle.active, .bottom-indicator) {
-  color: var(--accent);
-  background: rgb(17 17 17 / 0.1);
-}
-
-/* Tool header icons: one solid accent instead of per-tool gradients */
-html[data-theme="froth"] #app :is(.tt-icon-wrap, .st-icon-wrap) {
-  background: var(--accent) !important;
-  box-shadow: none;
-}
-
-/* Inputs: indigo focus ring */
-html[data-theme="froth"] #app :is(input, textarea, select):focus {
-  border-color: var(--accent);
-  outline: none;
-}
-
-/* Links in body copy */
-html[data-theme="froth"] #app :is(.info-panel, .info-card, .timeline-item) a:not([class]) {
-  color: var(--accent);
-}
-
-/* ===== FROTH MODERN: colorful icon chips (solid tints, no gradients) ===== */
-html[data-theme="froth"] {
-  --chip-1-bg: #f1f1f1; --chip-1: #111111;  /* neutral */
-  --chip-2-bg: #e7f4fc; --chip-2: #0284c7;  /* sky     */
-  --chip-3-bg: #e6f6ef; --chip-3: #059669;  /* emerald */
-  --chip-4-bg: #fdf3e2; --chip-4: #d97706;  /* amber   */
-  --chip-5-bg: #fdecef; --chip-5: #e11d48;  /* rose    */
-}
-
-/* Shared chip shape */
-html[data-theme="froth"] #app :is(
-  .m-tile .m-tile-icon,
-  .mobile-links-scroll .mobile-link-card .mobile-icon,
-  .spotify-tile.idle .spotify-tile-art,
-  .contact-icon,
-  .icon-box
-) {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  font-size: 1.05rem;
-  background: var(--chip-1-bg);
-  color: var(--chip-1);
-}
-
-/* Homepage tiles: each tile carries its own chip color (chip-1 … chip-5) */
-html[data-theme="froth"] #app .m-tile.chip-1 .m-tile-icon { background: var(--chip-1-bg); color: var(--chip-1); }
-html[data-theme="froth"] #app .m-tile.chip-2 .m-tile-icon { background: var(--chip-2-bg); color: var(--chip-2); }
-html[data-theme="froth"] #app .m-tile.chip-3 .m-tile-icon { background: var(--chip-3-bg); color: var(--chip-3); }
-html[data-theme="froth"] #app .m-tile.chip-4 .m-tile-icon { background: var(--chip-4-bg); color: var(--chip-4); }
-html[data-theme="froth"] #app .m-tile.chip-5 .m-tile-icon { background: var(--chip-5-bg); color: var(--chip-5); }
-
-/* Brand/tech icons keep their real colors */
-html[data-theme="froth"] #app i.fa-react { color: #149eca !important; }
-html[data-theme="froth"] #app i.fa-vuejs { color: #42b883 !important; }
-html[data-theme="froth"] #app :is(i.fa-node-js, i.fa-node) { color: #539e43 !important; }
-html[data-theme="froth"] #app :is(i.fa-js, i.fa-js-square) { color: #e0b800 !important; }
-html[data-theme="froth"] #app i.fa-python { color: #3776ab !important; }
-html[data-theme="froth"] #app i.fa-html5 { color: #e34f26 !important; }
-html[data-theme="froth"] #app :is(i.fa-css3, i.fa-css3-alt) { color: #1572b6 !important; }
-html[data-theme="froth"] #app :is(i.fa-git-alt, i.fa-git) { color: #f05032 !important; }
-html[data-theme="froth"] #app i.fa-github { color: #181717 !important; }
-html[data-theme="froth"] #app :is(i.fa-facebook, i.fa-facebook-f, i.fa-facebook-square, i.fa-facebook-messenger) { color: #1877f2 !important; }
-html[data-theme="froth"] #app i.fa-instagram { color: #e4405f !important; }
-html[data-theme="froth"] #app :is(i.fa-linkedin, i.fa-linkedin-in) { color: #0a66c2 !important; }
-html[data-theme="froth"] #app i.fa-youtube { color: #ff0000 !important; }
-html[data-theme="froth"] #app i.fa-spotify { color: #1db954 !important; }
-html[data-theme="froth"] #app i.fa-discord { color: #5865f2 !important; }
-html[data-theme="froth"] #app :is(i.fa-telegram, i.fa-telegram-plane) { color: #26a5e4 !important; }
-html[data-theme="froth"] #app i.fa-whatsapp { color: #25d366 !important; }
-html[data-theme="froth"] #app i.fa-google { color: #4285f4 !important; }
-html[data-theme="froth"] #app i.fa-figma { color: #f24e1e !important; }
-html[data-theme="froth"] #app i.fa-docker { color: #2496ed !important; }
-html[data-theme="froth"] #app i.fa-php { color: #777bb4 !important; }
-html[data-theme="froth"] #app i.fa-laravel { color: #ff2d20 !important; }
-html[data-theme="froth"] #app i.fa-angular { color: #dd0031 !important; }
-html[data-theme="froth"] #app i.fa-bootstrap { color: #7952b3 !important; }
-html[data-theme="froth"] #app i.fa-java { color: #e76f00 !important; }
-html[data-theme="froth"] #app i.fa-android { color: #3ddc84 !important; }
-html[data-theme="froth"] #app i.fa-npm { color: #cb3837 !important; }
-html[data-theme="froth"] #app i.fa-wordpress { color: #21759b !important; }
-html[data-theme="froth"] #app i.fa-paypal { color: #003087 !important; }
-html[data-theme="froth"] #app i.fa-sass { color: #cc6699 !important; }
-html[data-theme="froth"] #app i.fa-tiktok { color: #000000 !important; }
-html[data-theme="froth"] #app i.fa-x-twitter { color: #000000 !important; }
-html[data-theme="froth"] #app i.fa-twitter { color: #1d9bf0 !important; }
-html[data-theme="froth"] #app i.fa-dev { color: #0a0a0a !important; }
-
-/* Phones: big plain icons on the tiles (no chip box), tile size unchanged */
-@media (max-width: 768px) {
-  html[data-theme="froth"] #app .m-tile i.m-tile-icon {
-    width: auto !important;
-    height: auto !important;
-    background: none !important;
-    border-radius: 0;
-    line-height: 1;
-  }
-
-  html[data-theme="froth"] #app .rt-grid > .rt-tile:is(.rt-tall, .rt-lg) > i.m-tile-icon {
-    font-size: 2.2rem;
-  }
-
-  html[data-theme="froth"] #app .rt-grid > .rt-tile:is(.rt-sm, .rt-wide) > i.m-tile-icon {
-    font-size: 1.9rem;
-  }
-
-  html[data-theme="froth"] #app .rt-grid > .rt-tile.rt-icon > i.m-tile-icon {
-    font-size: 2rem;
-  }
-}
-
-/* Small icons pick up the accent */
-html[data-theme="froth"] #app :is(.m-meta i, .m-badges .inline-badge i, .sheet-row > i:first-child, .contact-arrow, .view-all-icon) {
-  color: var(--accent);
-}
-
-html[data-theme="froth"] #app .m-badges .inline-badge {
-  color: var(--text);
-}
-
-/* Bottom nav: inactive icons slate, active indigo */
-html[data-theme="froth"] #app .bottom-tab {
-  color: var(--text-muted);
-}
-
-/* Profile photo: soft indigo ring */
-html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profile-image) {
-  box-shadow: 0 0 0 4px #ececec, var(--shadow);
-}
-
-/* Phones (Froth) homepage: solid dark charcoal page instead of white,
-   so the colorful tiles pop. Solid colors only, other pages unchanged. */
-@media (max-width: 768px) {
-  html[data-theme="froth"]:has(.m-profile),
-  html[data-theme="froth"]:has(.m-profile) body {
-    --bg: #111215;
-    --surface: #1b1c20;
-    --surface-soft: #232429;
-    --surface-hover: #2a2b31;
-    --text: #f4f4f5;
-    --text-secondary: #b3b5bb;
-    --text-muted: #868991;
-    --border: #2c2d33;
-    --accent: #f4f4f5;
-    --accent-hover: #ffffff;
-    background: #111215;
-  }
-
-  /* Header panel: solid surface (no gradient) */
-  html[data-theme="froth"] #app .m-profile {
-    --m-panel: var(--surface);
-  }
-
-  /* CTA card stays light on the dark page: dark text + dark "Hire Me" */
-  html[data-theme="froth"]:has(.m-profile) #app .header-footer .footer-name {
-    color: #111111;
-  }
-
-  html[data-theme="froth"]:has(.m-profile) #app .header-footer .footer-subtitle {
-    color: #4b4b4b;
-  }
-
-  html[data-theme="froth"]:has(.m-profile) #app .header-footer .footer-contact-btn {
-    background-color: #111111;
-    border-color: #111111;
-    color: #ffffff;
-  }
-
-  /* Bottom nav: dark glass to match the page */
-  html[data-theme="froth"]:has(.m-profile) :is(.bottom-pill, .bottom-circle) {
-    border-color: rgb(255 255 255 / 0.14);
-    background: rgb(27 28 32 / 0.72);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    backdrop-filter: blur(18px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.1),
-      0 10px 28px rgb(0 0 0 / 0.4);
-  }
-
-  html[data-theme="froth"]:has(.m-profile) :is(.bottom-tab.active, .bottom-circle.active, .bottom-indicator) {
-    color: #ffffff;
-    background: rgb(255 255 255 / 0.14);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
-  }
-}
-
-/* Phones (Froth): profile header matches the colorful tiles */
-@media (max-width: 768px) {
-  /* Photo: colorful gradient ring */
-  html[data-theme="froth"] #app .m-hero .m-photo {
-    padding: 4px;
-    border-radius: 32px;
-    background: conic-gradient(from 210deg, #f59e0b, #d62976, #8b5cf6, #0a66c2, #10b981, #f59e0b);
-    box-shadow: 0 10px 28px rgb(17 17 17 / 0.14);
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-photo .profile-image {
-    border-radius: 28px;
-    box-shadow: 0 0 0 3px #ffffff;
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-name {
-    margin-top: 0.9rem;
-    font-size: 1.5rem;
-    font-weight: 800;
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-role {
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-
-  /* Location / birthday: soft pills with colored icons */
-  html[data-theme="froth"] #app .m-hero .m-meta {
-    gap: 0.4rem;
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--surface-soft);
-    color: var(--text-secondary);
-    font-size: 0.72rem;
-    font-weight: 600;
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-meta span:first-child i { color: #ef4444; }
-  html[data-theme="froth"] #app .m-hero .m-meta span:last-child i { color: #ec4899; }
-
-  /* Awards / Certs / Links: three colorful pills */
-  html[data-theme="froth"] #app .m-hero .m-badges {
-    gap: 0.5rem;
-    max-width: 320px;
-    padding: 0;
-    border: none !important;
-    background: none !important;
-    box-shadow: none !important;
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge {
-    padding: 9px 4px;
-    border-radius: 999px;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgb(17 17 17 / 0.12);
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge:nth-child(1) { background: linear-gradient(145deg, #f59e0b, #d97706); }
-  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge:nth-child(2) { background: linear-gradient(145deg, #8b5cf6, #5b21b6); }
-  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge:nth-child(3) { background: linear-gradient(145deg, #0ea5e9, #0369a1); }
-
-  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge i {
-    color: #ffffff;
-  }
-
-  html[data-theme="froth"] #app .m-hero .m-badges .inline-badge::before {
-    display: none;
-  }
-}
-
 /* ===== Phones: LinkedIn-style profile header (all themes) =====
    Round photo overlapping the banner on the left, left-aligned name / headline,
    location · Contact info, buttons, then an "Open to work" box. */
@@ -2117,8 +1785,9 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     margin-top: 0.85rem;
     padding: 0.75rem 0.9rem;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--surface-soft);
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.03);
     color: var(--text);
     text-align: left;
     text-decoration: none;
@@ -2145,79 +1814,6 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   }
 }
 
-/* Phones (Froth): each tile gets its brand color, white icon + text (like the sample) */
-@media (max-width: 768px) {
-  html[data-theme="froth"] #app .m-tile[class*="tile-"] {
-    --tile-bg: linear-gradient(145deg, #2b2b2b, #111111);
-    background: var(--tile-bg) !important;
-    border-color: transparent !important;
-    color: #ffffff !important;
-    box-shadow: 0 6px 16px rgb(17 17 17 / 0.14);
-  }
-
-  html[data-theme="froth"] #app .m-tile.tile-email     { --tile-bg: linear-gradient(145deg, #1e3a8a, #0f172a); }
-  html[data-theme="froth"] #app .m-tile.tile-cv        { --tile-bg: linear-gradient(145deg, #f59e0b, #d97706); }
-  html[data-theme="froth"] #app .m-tile.tile-github    { --tile-bg: linear-gradient(145deg, #2d333b, #0d1117); }
-  html[data-theme="froth"] #app .m-tile.tile-linkedin  { --tile-bg: linear-gradient(145deg, #0a66c2, #004182); }
-  html[data-theme="froth"] #app .m-tile.tile-tiktok    { --tile-bg: linear-gradient(145deg, #25f4ee -40%, #111111 45%, #111111 60%, #fe2c55 150%); }
-  html[data-theme="froth"] #app .m-tile.tile-instagram { --tile-bg: linear-gradient(45deg, #feda75, #fa7e1e 25%, #d62976 55%, #962fbf 80%, #4f5bd5); }
-  html[data-theme="froth"] #app .m-tile.tile-facebook  { --tile-bg: linear-gradient(145deg, #3b8bff, #1877f2 50%, #0c5bd6); }
-  html[data-theme="froth"] #app .m-tile.tile-feedback  { --tile-bg: linear-gradient(145deg, #8b5cf6, #5b21b6); }
-  html[data-theme="froth"] #app .m-tile.tile-spotify   { --tile-bg: linear-gradient(145deg, #1ed760, #128c3f); }
-  html[data-theme="froth"] #app .m-tile.tile-coffee    { --tile-bg: linear-gradient(145deg, #8b5e3c, #4a3224); }
-  html[data-theme="froth"] #app .m-tile.tile-theme     { --tile-bg: linear-gradient(145deg, #3a3a3a, #111111); }
-  html[data-theme="froth"] #app .m-tile.tile-devto     { --tile-bg: linear-gradient(145deg, #3a3a3a, #0a0a0a); }
-  html[data-theme="froth"] #app .m-tile.tile-portfolio { --tile-bg: linear-gradient(145deg, #0ea5e9, #0369a1); }
-  html[data-theme="froth"] #app .m-tile.tile-support   { --tile-bg: linear-gradient(145deg, #10b981, #047857); }
-  html[data-theme="froth"] #app .m-tile.tile-work      { --tile-bg: linear-gradient(145deg, #4f46e5, #1e1b4b); }
-  html[data-theme="froth"] #app .m-tile.tile-glance    { --tile-bg: linear-gradient(145deg, #0f766e, #134e4a); }
-  html[data-theme="froth"] #app .m-tile.tile-services  { --tile-bg: linear-gradient(145deg, #2563eb, #1e3a8a); }
-  html[data-theme="froth"] #app .m-tile.tile-certs     { --tile-bg: linear-gradient(145deg, #b45309, #78350f); }
-  html[data-theme="froth"] #app .m-tile.tile-why       { --tile-bg: linear-gradient(145deg, #be185d, #701a75); }
-
-  /* Swipeable tiles: white text on the gradient */
-  html[data-theme="froth"] #app .m-tile .tc :is(.tc-title, .tc-kicker, .tc-chips span) {
-    color: #ffffff !important;
-  }
-
-  html[data-theme="froth"] #app .m-tile .tc :is(.tc-text, .tc-go) {
-    color: rgb(255 255 255 / 0.78) !important;
-  }
-
-  html[data-theme="froth"] #app .m-tile .tc .tc-chips span {
-    border-color: rgb(255 255 255 / 0.35);
-  }
-
-  html[data-theme="froth"] #app .m-tile .tc .tc-dots i {
-    background: rgb(255 255 255 / 0.4);
-  }
-
-  html[data-theme="froth"] #app .m-tile .tc .tc-dots i.on {
-    background: #ffffff;
-  }
-
-  /* Content: white icon, bold label, softer description, white corner arrow */
-  html[data-theme="froth"] #app .m-tile[class*="tile-"] :is(i, i.m-tile-icon, .m-tile-label, .spotify-tile-label, .m-tile-corner) {
-    color: #ffffff !important;
-  }
-
-  html[data-theme="froth"] #app .m-tile[class*="tile-"] .m-tile-label {
-    font-weight: 700;
-  }
-
-  html[data-theme="froth"] #app .m-tile[class*="tile-"] > small {
-    color: rgb(255 255 255 / 0.78) !important;
-  }
-
-  html[data-theme="froth"] #app .m-tile[class*="tile-"] .m-tile-corner {
-    opacity: 0.9;
-  }
-
-  html[data-theme="froth"] #app .m-tile[class*="tile-"] i.m-tile-icon {
-    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.2));
-  }
-}
-
 /* Phones: Awards / Certs / Links bar matches the tiles below it */
 @media (max-width: 768px) {
   #app .m-badges {
@@ -2228,7 +1824,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     border-radius: 12px;
   }
 
-  /* Light themes (Classic Light, Froth): white with a thin outline, like the tiles */
+  /* Light theme (Classic Light): white with a thin outline, like the tiles */
   html:not([data-theme="midnight"]):not([data-theme="forest"]):not([data-theme="dark"]) #app .m-badges {
     border: 1px solid var(--border);
     background: var(--surface);
@@ -2239,6 +1835,13 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app .m-badges {
     border-color: transparent;
     background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+
+  /* "Open to work" box follows the same per-theme card style */
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app .m-profile .m-open-card {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+    box-shadow: none;
   }
 }
 
@@ -2881,8 +2484,7 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
     transition: width 0.2s ease, opacity 0.2s ease;
   }
 
-  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app .bottom-indicator.lens,
-  html[data-theme="froth"]:has(.m-profile) #app .bottom-indicator.lens {
+  html:is([data-theme="midnight"], [data-theme="forest"], [data-theme="dark"]) #app .bottom-indicator.lens {
     background: rgb(255 255 255 / 0.1);
     -webkit-backdrop-filter: blur(3px) saturate(180%) brightness(1.25);
     backdrop-filter: blur(3px) saturate(180%) brightness(1.25);
@@ -2905,6 +2507,19 @@ html[data-theme="froth"] #app :is(.m-photo .profile-image, .profile-frame .profi
   html #app .bottom-pill .bottom-tab.active {
     background: transparent;
     box-shadow: none;
+  }
+
+  /* Menu button: fixed square so the grid icon / X sits dead center in the bubble */
+  html #app .bottom-pill .bottom-menu-tab {
+    justify-content: center;
+    width: 50px;
+    min-width: 50px;
+    padding: 0;
+  }
+
+  html #app .bottom-pill .bottom-menu-tab :is(i, .menu-grid-icon) {
+    display: block;
+    line-height: 1;
   }
 }
 

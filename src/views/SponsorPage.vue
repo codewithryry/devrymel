@@ -412,7 +412,7 @@ export default {
   padding: 0.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--surface-soft);
+  background: var(--surface);
 }
 
 .bank-qr {

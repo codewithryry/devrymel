@@ -90,7 +90,7 @@ export default {
           title: "Design system",
           status: "done",
           icon: "fas fa-palette",
-          text: "Light, Midnight, Emerald & Froth themes with shared colors and hero illustrations."
+          text: "Light, Midnight & Emerald themes with shared colors and hero illustrations."
         },
         {
           title: "Live data",

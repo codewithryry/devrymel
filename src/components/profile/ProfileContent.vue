@@ -88,7 +88,14 @@
       </div>
 
       <!-- Cover banner (phones): grid of boxes, colors follow the theme -->
-      <div class="m-banner" aria-hidden="true"></div>
+      <div class="m-banner" aria-hidden="true">
+        <span class="m-deco-code m-deco-1">&lt;/&gt;</span>
+        <span class="m-deco-code m-deco-2">{ build: true }</span>
+        <span class="m-deco-code m-deco-3">const idea = () =&gt; ship();</span>
+        <span class="m-deco-code m-deco-4">npm run deploy</span>
+        <span class="m-deco-box m-deco-5"></span>
+        <span class="m-deco-box m-deco-6"></span>
+      </div>
 
       <!-- Profile header (LinkedIn style): round photo over the banner, left-aligned text -->
       <div class="m-hero">
@@ -330,9 +337,9 @@
                 <i class="fas fa-external-link-alt contact-arrow"></i>
               </a>
 
-              <a href="/Reymel_Mislang_CV.pdf" target="_blank" rel="noopener" class="contact-item">
+              <a href="/Reymel_Mislang_CV.pdf" target="_blank" rel="noopener" class="contact-item contact-cv">
                 <div class="contact-icon">
-                  <i class="fas fa-id-card"></i>
+                  <i class="fas fa-id-card fa-fw"></i>
                 </div>
 
                 <div class="contact-details">
@@ -603,14 +610,14 @@ export default {
       const playing = !!track.isPlaying;
       const theme = this.$root.currentTheme;
       const themeIcon =
-        theme === "froth" ? "fas fa-tint" : theme === "midnight" ? "fas fa-moon" : theme === "forest" ? "fas fa-leaf" : "fas fa-sun";
+        theme === "midnight" ? "fas fa-moon" : theme === "forest" ? "fas fa-leaf" : "fas fa-sun";
       const open = "fas fa-external-link-alt";
 
       return [
         // Default order + sizes (also what Reset returns to). Packs the 4-column grid with no gaps:
-        // What I build (full) · Glance (tall) | TikTok (vertical) | Facebook/IG · Projects (full)
+        // What I build (large) · Glance (tall) | TikTok (vertical) | Facebook/IG · Projects (full)
         // · LinkedIn | Dev.to · GitHub | Certs (tall) · Spotify (tall) | Support/Feedback (vertical) · Theme · Why (full)
-        { id: "services", size: "wide", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
+        { id: "services", size: "lg", chip: "chip-1", icon: "fas fa-screwdriver-wrench", label: "What I build", slides: this.serviceSlides },
         { id: "glance", size: "tall", chip: "chip-2", icon: "fas fa-user-tie", label: "At a glance", slides: this.glanceSlides },
         { id: "tiktok", size: "vert", chip: "chip-5", icon: "fab fa-tiktok", label: "TikTok", desc: "@iamrymel", href: "https://www.tiktok.com/@iamrymel", external: true, corner: open },
         { id: "facebook", size: "icon", chip: "chip-5", icon: "fab fa-facebook", label: "Facebook", desc: "Follow", href: "https://www.facebook.com/100063507442180", external: true, corner: open },
@@ -750,7 +757,6 @@ export default {
       const map = {
         light:    "profilelight.jpg",
         midnight: "prfo.lo.png",
-        froth:    "profilelight.jpg",
         forest:   "profile3.jpg"
       };
       return map[this.currentTheme] || map.light;
@@ -951,8 +957,7 @@ export default {
   gap: 0.85rem;
   padding: 0.8rem 0.9rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-soft);
+  border-radius: 14px;
   color: var(--text);
   text-decoration: none;
 }
@@ -1718,6 +1723,26 @@ export default {
     font-size: 0.8rem;
   }
 
+  /* CV card: same rhythm as Email, centered icon, text stays on one line at any zoom */
+  .contact-cv .contact-icon i {
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .contact-cv .contact-details {
+    min-width: 0;
+  }
+
+  .contact-cv :is(.contact-label, .contact-value) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .contact-cv .contact-arrow {
+    flex-shrink: 0;
+  }
+
   .desktop-contact-ad {
     margin-top: 1.5rem;
   }
@@ -2454,22 +2479,36 @@ export default {
   }
 
 
-  /* A few filled boxes sitting on the grid */
-  .m-banner::after {
-    content: "";
+
+  /* Desktop CTA decorations, scaled down: code badges + outlined boxes, kept clear of the photo and buttons */
+  .m-deco-code {
     position: absolute;
-    top: 29px;
-    left: 29px;
-    width: 30px;
-    height: 30px;
-    background: color-mix(in srgb, var(--text) 7%, transparent);
-    box-shadow:
-      60px 30px 0 color-mix(in srgb, var(--text) 5%, transparent),
-      180px 0 0 color-mix(in srgb, var(--text) 9%, transparent),
-      240px 60px 0 color-mix(in srgb, var(--text) 6%, transparent),
-      300px 30px 0 color-mix(in srgb, var(--text) 8%, transparent),
-      30px 90px 0 color-mix(in srgb, var(--text) 4%, transparent);
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: "SF Mono", "Fira Code", Consolas, monospace;
+    font-size: 0.62rem;
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
   }
+
+  .m-deco-box {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--text-muted);
+    border-radius: var(--radius-sm);
+    opacity: 0.35;
+  }
+
+  .m-deco-1 { top: 16px; left: 16px; }
+  .m-deco-2 { top: 20px; left: 34%; }
+  .m-deco-3 { top: 58px; right: 16px; }
+  .m-deco-4 { bottom: 14px; right: 16px; }
+  .m-deco-5 { top: 60px; left: 22%; transform: rotate(12deg); }
+  .m-deco-6 { bottom: 18px; left: 46%; transform: rotate(-8deg); }
 
   .m-banner-code {
     position: absolute;

@@ -10,7 +10,7 @@ My personal portfolio and toolkit: projects, experience, services, and free web 
 - **Free tools:** TikTok / YouTube downloaders, YT thumbnails, QR code, password, colors, IP lookup, URL shortener, Base64
 - **Ask Reymel:** AI chat assistant (Chat, Code Helper, Creative)
 - **Live stats:** visitor count, GitHub repos, WakaTime coding time, Spotify now playing
-- **Themes:** Light, Midnight, Emerald, Froth Modern
+- **Themes:** Light, Midnight, Emerald
 - **Admin CMS:** private Firestore dashboard to manage site content
 - Fully responsive with a mobile app-style layout
 

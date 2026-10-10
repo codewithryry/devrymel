@@ -10,7 +10,9 @@
         </div>
         <p class="viewer-description">Credentials from my learning journey.</p>
 
-        <div class="cert-list">
+        <ModalSkeleton v-if="loading" :count="6" meta />
+        <p v-else-if="!certificates.length" class="viewer-description">No certificates yet.</p>
+        <div v-else class="cert-list">
           <div
             class="cert-item"
             v-for="cert in certificates"
@@ -18,7 +20,7 @@
             @click="openCertificate(cert.file)"
           >
             <div class="cert-icon">
-              <i class="fas fa-file-pdf"></i>
+              <ListThumb shape="landscape" />
             </div>
             <div class="cert-info">
               <h4>{{ cert.title }}</h4>
@@ -37,11 +39,15 @@
 
 <script>
 import AdSlot from '@/components/AdSlot.vue'
+import ListThumb from '@/components/modals/ListThumb.vue'
+import ModalSkeleton from '@/components/modals/ModalSkeleton.vue'
 
 export default {
   name: 'CertificatesModal',
   components: {
-    AdSlot
+    AdSlot,
+    ListThumb,
+    ModalSkeleton
   },
   data() {
     return {
@@ -53,6 +59,10 @@ export default {
     certificates: {
       type: Array,
       required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['close'],
@@ -354,4 +364,5 @@ export default {
     height: 32px;
   }
 }
+
 </style>
