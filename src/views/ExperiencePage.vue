@@ -2,13 +2,13 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="experience" />
         <span class="eyebrow">Experience</span>
-        <h1>Where I've worked and studied</h1>
+        <h1><span class="title-full">Where I've worked and studied</span><span class="title-short">My experience</span></h1>
         <p>
           Internships, freelance work, and the education behind the systems I
           build.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" />
       </div>
 
       <ExperienceSection :experiences="experiences" :show-title="false" />
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ExperienceSection from "@/components/profile/ExperienceSection.vue";
 import CareerTimeline from "@/components/profile/CareerTimeline.vue";
@@ -34,7 +33,6 @@ export default {
   name: "ExperiencePage",
 
   components: {
-    HeroArt,
     AdSlot,
     ExperienceSection,
     CareerTimeline
@@ -73,22 +71,3 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Hero: text on the left, briefcase art vertically centered on the right */
-@media (min-width: 861px) {
-  .info-hero {
-    min-height: 150px;
-    padding-right: 220px;
-  }
-
-  .info-hero .hero-art {
-    top: 50%;
-    width: 190px;
-    transform: translateY(-50%);
-  }
-
-  .info-hero p {
-    max-width: 520px;
-  }
-}
-</style>

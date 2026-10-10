@@ -1,0 +1,112 @@
+[
+  {
+    "date": "October 2026",
+    "items": [
+      {
+        "type": "New",
+        "text": "Swipe slides and Show more sections on mobile pages"
+      },
+      {
+        "type": "New",
+        "text": "Loading skeletons in Links and Certificates popups"
+      },
+      {
+        "type": "New",
+        "text": "Short page titles on mobile"
+      },
+      {
+        "type": "Improved",
+        "text": "Popup cards and chips now match the active theme"
+      },
+      {
+        "type": "Improved",
+        "text": "Mobile menu laid out as a grid"
+      },
+      {
+        "type": "Removed",
+        "text": "Froth Modern theme"
+      },
+      {
+        "type": "Fixed",
+        "text": "ResizeObserver error when zoomed out"
+      },
+      {
+        "type": "New",
+        "text": "Liquid glass desktop navbar and rounded buttons"
+      },
+      {
+        "type": "New",
+        "text": "Featured Projects carousel"
+      },
+      {
+        "type": "New",
+        "text": "Other Projects section with list/card toggle"
+      },
+      {
+        "type": "New",
+        "text": "Dedicated Projects, Skills, and Experience pages"
+      },
+      {
+        "type": "Improved",
+        "text": "About page moved to /about"
+      },
+      {
+        "type": "Improved",
+        "text": "Simpler navigation dropdown and AI chat UI"
+      },
+      {
+        "type": "Improved",
+        "text": "All 14 tools in homepage Quick Links"
+      },
+      {
+        "type": "Fixed",
+        "text": "Midnight and Emerald theme colors"
+      },
+      {
+        "type": "Fixed",
+        "text": "New pages now start at the top"
+      }
+    ]
+  },
+  {
+    "date": "May 2026",
+    "items": [
+      {
+        "type": "New",
+        "text": "Firestore admin dashboard and visitor tracking"
+      },
+      {
+        "type": "New",
+        "text": "Deployment Gallery page"
+      },
+      {
+        "type": "New",
+        "text": "Info pages: Services, Case Studies, Privacy, Roadmap, and more"
+      },
+      {
+        "type": "New",
+        "text": "Mini tools panel with 8 tools"
+      },
+      {
+        "type": "New",
+        "text": "Feedback preview popup"
+      },
+      {
+        "type": "Improved",
+        "text": "Tool pages layout and mobile inputs"
+      },
+      {
+        "type": "Improved",
+        "text": "Floating action button and feedback modal"
+      },
+      {
+        "type": "Improved",
+        "text": "Profile photo changes with the theme"
+      },
+      {
+        "type": "Fixed",
+        "text": "Visitor logs in production"
+      }
+    ]
+  }
+]

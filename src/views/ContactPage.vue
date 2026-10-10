@@ -4,16 +4,14 @@
 
       <div class="info-hero">
 
-        <HeroArt name="contact" />
         <span class="eyebrow">Contact</span>
-        <h1>Let’s build something useful</h1>
+        <h1><span class="title-full">Let’s build something useful</span><span class="title-short">Let’s work together</span></h1>
         <p>
           Reach out for portfolio websites, frontend work, Firebase integration,
           responsive UI fixes, or small automation projects.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" show-smartlink />
       </div>
-
-      <AdSlot type="wide-box" show-smartlink />
 
       <div class="info-grid">
         <article class="info-card">
@@ -62,7 +60,6 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
@@ -72,7 +69,6 @@ export default {
 
   components: {
     ExploreLinks,
-    HeroArt,
     AdSlot
   }
 };

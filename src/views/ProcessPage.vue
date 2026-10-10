@@ -2,17 +2,17 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="uses" />
         <span class="eyebrow">Process</span>
-        <h1>How I work on a project</h1>
+        <h1><span class="title-full">How I work on a project</span><span class="title-short">How I work</span></h1>
         <p>
           From the first message to launch day — a simple, clear process so you
           always know what's happening and what comes next.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" />
       </div>
 
       <!-- Steps -->
-      <ol class="process-steps">
+      <ol v-mobile-slides class="process-steps">
         <li v-for="(step, index) in steps" :key="step.title" class="info-card process-step">
           <span class="process-num">{{ String(index + 1).padStart(2, "0") }}</span>
           <div>
@@ -37,12 +37,14 @@
         <span class="eyebrow">Before we start</span>
         <h2>What helps me move faster</h2>
 
+        <MobileMore>
         <ul class="process-list">
           <li v-for="item in prep" :key="item">
             <i class="fas fa-check"></i>
             <span>{{ item }}</span>
           </li>
         </ul>
+        </MobileMore>
       </section>
       <ExploreLinks />
     </section>
@@ -50,9 +52,9 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
+import MobileMore from "@/components/MobileMore.vue";
 import "@/assets/info-pages.css";
 
 export default {
@@ -60,7 +62,7 @@ export default {
 
   components: {
     ExploreLinks,
-    HeroArt,
+    MobileMore,
     AdSlot
   },
 

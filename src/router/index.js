@@ -130,6 +130,14 @@ const routes = [
     }
   },
   {
+    path: "/insights",
+    name: "insights",
+    component: () => import("@/views/InsightsPage.vue"),
+    meta: {
+      title: "Insights"
+    }
+  },
+  {
     path: "/contact",
     name: "contact",
     component: () => import("@/views/ContactPage.vue"),

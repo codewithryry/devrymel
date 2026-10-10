@@ -2,16 +2,14 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="skills" />
         <span class="eyebrow">Tech Stack</span>
-        <h1>Tools and technologies I work with</h1>
+        <h1><span class="title-full">Tools and technologies I work with</span><span class="title-short">My tech stack</span></h1>
         <p>
           The stack I use to build modern web apps, PWAs, and automation
           workflows.
         </p>
+        <AdSlot class="hero-ad" type="mobile-banner" show-smartlink />
       </div>
-
-      <AdSlot type="mobile-banner" show-smartlink />
 
       <!-- Scrolling tech icons under the hero -->
       <section class="stack-marquee">
@@ -41,7 +39,6 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import "@/assets/info-pages.css";
 
@@ -49,7 +46,6 @@ export default {
   name: "SkillsPage",
 
   components: {
-    HeroArt,
     AdSlot
   },
 

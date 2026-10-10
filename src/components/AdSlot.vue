@@ -293,6 +293,13 @@ export default {
   padding: 0;
 }
 
+/* Phones: less empty space around ads */
+@media (max-width: 560px) {
+  .ad-slot {
+    margin: 20px 0;
+  }
+}
+
 .ad-label-wrapper {
   position: relative;
   display: flex;

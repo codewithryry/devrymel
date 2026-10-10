@@ -5,7 +5,7 @@
       <div class="about-hero">
       <div class="about-hero-text">
         <span class="eyebrow">About Me</span>
-        <h1>I turn ideas into systems people actually use.</h1>
+        <h1><span class="title-full">I turn ideas into systems people actually use.</span><span class="title-short">Ideas into real systems.</span></h1>
         <p class="about-lead">
           I'm Reymel Mislang, a frontend developer from the Philippines. I work with
           modern web tech, AI-assisted workflows, and n8n automation — building everything
@@ -56,17 +56,19 @@
             workflows that save people time. Along the way I became a Dean's Lister at
             MINSU Calapan while shipping work for real clients.
           </p>
+          <MobileMore label="Read more">
           <p>
             Today my edge is speed plus practicality: AI tools and vibe coding for fast
             builds, Vue / React / Firebase for solid frontends, and n8n to connect apps
             and kill repetitive tasks. No bloated systems — just useful, simple solutions
             that create real value.
           </p>
+          </MobileMore>
         </div>
       </section>
 
       <!-- VALUES -->
-      <div class="info-grid">
+      <div v-mobile-slides class="info-grid">
         <article class="info-card">
           <div class="icon-box"><i class="fas fa-bolt"></i></div>
           <span class="card-label">Value 01</span>
@@ -98,12 +100,15 @@
         </article>
       </div>
 
+      <!-- Sponsored Ad -->
+      <AdSlot type="wide-box" show-smartlink />
+
       <!-- HOW I WORK -->
       <section class="info-panel">
         <span class="eyebrow">Process</span>
         <h2>How I work with you</h2>
 
-        <div class="steps-grid">
+        <div v-mobile-slides class="steps-grid">
           <div
             v-for="(step, i) in steps"
             :key="step.title"
@@ -130,6 +135,9 @@
         </div>
       </section>
 
+      <!-- Sponsored Ad -->
+      <AdSlot type="banner" show-smartlink />
+
       <ExploreLinks />
     </section>
 
@@ -139,6 +147,7 @@
 <script>
 import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
+import MobileMore from "@/components/MobileMore.vue";
 import "@/assets/info-pages.css";
 
 export default {
@@ -147,6 +156,7 @@ export default {
   components: {
     AdSlot,
     ExploreLinks,
+    MobileMore,
   },
 
   data() {

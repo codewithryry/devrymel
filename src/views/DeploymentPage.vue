@@ -2,13 +2,13 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="deployment" />
         <span class="eyebrow">Deployment Journey</span>
-        <h1>Behind the build and deployment</h1>
+        <h1><span class="title-full">Behind the build and deployment</span><span class="title-short">Build & deploy</span></h1>
         <p>
           A visual gallery of my development, testing, Firebase setup, and live
           deployment process.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" />
       </div>
 
       <section class="info-panel gallery-panel">
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
@@ -61,8 +61,8 @@ export default {
   name: "DeploymentPage",
 
   components: {
+    AdSlot,
     ExploreLinks,
-    HeroArt
   },
 
   data() {

@@ -2,13 +2,13 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="privacy" />
         <span class="eyebrow">Privacy</span>
-        <h1>Privacy and visitor data notice</h1>
+        <h1><span class="title-full">Privacy and visitor data notice</span><span class="title-short">Your data, explained</span></h1>
         <p>
           This portfolio uses basic analytics to understand site visits,
           improve user experience, and monitor technical performance.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" />
       </div>
 
       <section class="info-panel">
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
+import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
 
@@ -61,8 +61,8 @@ export default {
   name: "PrivacyPage",
 
   components: {
+    AdSlot,
     ExploreLinks,
-    HeroArt
   }
 };
 </script>

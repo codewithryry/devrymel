@@ -2,17 +2,17 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="case-studies" />
         <span class="eyebrow">Case Studies</span>
-        <h1>Selected project breakdowns</h1>
+        <h1><span class="title-full">Selected project breakdowns</span><span class="title-short">Case studies</span></h1>
         <p>
           A deeper look at selected work, including the goal, core features,
           technologies used, and the result of each build.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" show-smartlink />
       </div>
 
-      <AdSlot type="wide-box" show-smartlink />
-
+      <!-- Phones: one case study per slide -->
+      <div v-mobile-slides class="study-list">
       <section
         v-for="study in caseStudies"
         :key="study.title"
@@ -29,13 +29,13 @@
           <li><strong>Result:</strong> {{ study.result }}</li>
         </ul>
       </section>
+      </div>
       <ExploreLinks />
     </section>
   </main>
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
@@ -45,7 +45,6 @@ export default {
 
   components: {
     ExploreLinks,
-    HeroArt,
     AdSlot
   },
 

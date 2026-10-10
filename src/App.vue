@@ -15,6 +15,7 @@
           <router-link to="/projects" @click="handleQuickPageClick" :class="{ active: $route.path === '/projects' }">Projects</router-link>
           <router-link to="/skills" @click="handleQuickPageClick" :class="{ active: $route.path === '/skills' }">Tech Stack</router-link>
           <router-link to="/services" @click="handleQuickPageClick" :class="{ active: $route.path === '/services' }">Services</router-link>
+          <router-link to="/insights" @click="handleQuickPageClick" :class="{ active: $route.path === '/insights' }">Insights</router-link>
 
           <!-- Phones: theme, More and Contact Me live inside the menu -->
           <div class="nav-mobile-extra">
@@ -26,9 +27,9 @@
               <span>More</span>
               <i class="fas fa-chevron-right"></i>
             </button>
-            <router-link to="/contact" class="mobile-contact-btn cta-btn" @click="handleQuickPageClick">
+            <button type="button" class="mobile-contact-btn cta-btn" @click="openContactInfo">
               Contact Me
-            </router-link>
+            </button>
           </div>
         </nav>
 
@@ -136,7 +137,8 @@
             </transition>
           </div>
 
-          <router-link class="nav-contact-btn" to="/contact" @click="handleQuickPageClick" :class="{ active: $route.path === '/contact' }">Contact Me</router-link>
+          <!-- Opens the Contact info popup (email, LinkedIn, GitHub, CV, Resume) -->
+          <button type="button" class="nav-contact-btn" @click="openContactInfo">Contact Me</button>
 
           <button class="nav-hamburger" :class="{ open: mobileNavOpen }" @click.stop="mobileNavOpen = !mobileNavOpen; showMorePanel = false" :aria-expanded="mobileNavOpen" aria-label="Menu">
             <span></span>
@@ -178,9 +180,9 @@
         <i class="fas fa-folder-open"></i>
         <span class="bottom-label">Projects</span>
       </router-link>
-      <router-link to="/contact" class="bottom-tab" :class="{ active: $route.path === '/contact' && !mobileSheetOpen, 'drag-target': navDragTarget === 3 }" @click="mobileSheetOpen = false">
-        <i class="fas fa-envelope"></i>
-        <span class="bottom-label">Contact</span>
+      <router-link to="/insights" class="bottom-tab" :class="{ active: $route.path === '/insights' && !mobileSheetOpen, 'drag-target': navDragTarget === 3 }" @click="mobileSheetOpen = false">
+        <i class="fas fa-chart-line"></i>
+        <span class="bottom-label">Insights</span>
       </router-link>
 
       <!-- Menu: part of the same pill as the tabs -->
@@ -329,6 +331,8 @@
       </div>
     </transition>
 
+    <ContactInfoModal v-if="showContactInfo" @close="showContactInfo = false" />
+
     <FeedbackBubble
       v-if="!isAdminRoute && !isAiToolsRoute"
       ref="feedbackBubble"
@@ -350,6 +354,7 @@
 import { trackVisit, getViews } from "./services/analyticsService";
 import { getGitHubReposCount, getWakaTimeStats } from "./services/devStatsService";
 import FeedbackBubble from "@/components/FeedbackBubble.vue";
+import ContactInfoModal from "@/components/ContactInfoModal.vue";
 import CursorTrail from "@/components/CursorTrail.vue";
 import { getSpotifyNowPlaying } from "./services/spotifyService";
 import { onAuthStateChanged } from "firebase/auth";
@@ -383,12 +388,14 @@ export default {
 
   components: {
     FeedbackBubble,
+    ContactInfoModal,
     CursorTrail
   },
 
   data() {
     return {
       navScrolled: false,
+      showContactInfo: false,
       navIndicator: { x: 0, w: 0, show: false },
       navDragTarget: null, // index of the tab under the finger while dragging
       mobileNavOpen: false,
@@ -692,6 +699,13 @@ export default {
 
     toggleSubmenu(name) {
       this.openSubmenu = this.openSubmenu === name ? null : name;
+    },
+
+    // Navbar "Contact Me": close any open menu, then show the Contact info popup
+    openContactInfo() {
+      this.closeAllPanels();
+      this.mobileNavOpen = false;
+      this.showContactInfo = true;
     },
 
     closeAllPanels() {
@@ -2927,7 +2941,7 @@ h1, h2, h3, h4, h5, h6 {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
   flex: 1;
   justify-content: center;
 }
@@ -2939,12 +2953,21 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   font-size: 0.86rem;
   font-weight: 500;
-  padding: 7px 13px;
+  padding: 7px 9px;
   border-radius: 999px;
+  white-space: nowrap;
   transition: color 0.18s ease;
 }
 
 /* Liquid-glass pill behind the link (hover + current page) */
+/* Narrow desktops: a little tighter so all links + Contact Me fit in the pill */
+@media (min-width: 861px) and (max-width: 960px) {
+  .nav-links a {
+    padding: 7px 6px;
+    font-size: 0.82rem;
+  }
+}
+
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -3013,7 +3036,9 @@ html[data-theme="dark"] .nav-links a::after {
 
 .nav-icon-btn,
 .nav-contact-btn {
+  flex-shrink: 0;
   font-family: inherit;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -3566,8 +3591,11 @@ button.dropdown-tool {
     font-size: 0.75rem;
   }
 
-  .nav-links a.mobile-contact-btn,
-  .nav-links a.mobile-contact-btn:hover {
+  .nav-links .mobile-contact-btn,
+  .nav-links .mobile-contact-btn:hover {
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;

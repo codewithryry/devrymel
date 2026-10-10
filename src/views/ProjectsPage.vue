@@ -2,13 +2,13 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="projects" />
         <span class="eyebrow">Projects</span>
-        <h1>Things I've built and shipped</h1>
+        <h1><span class="title-full">Things I've built and shipped</span><span class="title-short">What I've built</span></h1>
         <p>
           Web apps, PWAs, automation workflows, and client builds — from idea to
           working product.
         </p>
+        <AdSlot class="hero-ad" type="wide-box" />
       </div>
 
       <FeaturedCarousel class="featured-desktop" :projects="featuredProjects" @openProjectModal="openProjectModal" />
@@ -112,7 +112,6 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ProjectsSection from "@/components/projects/ProjectsSection.vue";
 import FeaturedCarousel from "@/components/projects/FeaturedCarousel.vue";
@@ -137,8 +136,8 @@ export default {
   name: "ProjectsPage",
 
   components: {
+    AdSlot,
     FeaturedCarousel,
-    HeroArt,
     ProjectsSection,
     ProjectModal
   },

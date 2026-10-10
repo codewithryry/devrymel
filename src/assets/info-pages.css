@@ -53,23 +53,9 @@
   margin-bottom: 2rem;
 }
 
-.info-hero .hero-art {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 220px;
-  height: auto;
-  color: var(--text-muted);
-}
-
-.info-hero:has(.hero-art) h1 {
-  max-width: 580px;
-}
-
-@media (max-width: 860px) {
-  .info-hero .hero-art {
-    display: none;
-  }
+/* Ad right under the hero title */
+.info-hero .hero-ad.ad-slot {
+  margin: 1rem 0 0;
 }
 
 .eyebrow {
@@ -82,14 +68,33 @@
   text-transform: uppercase;
 }
 
+/* Hero titles: full on desktop, a short one-liner on phones */
+.title-short {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .title-full {
+    display: none;
+  }
+
+  .title-short {
+    display: inline;
+  }
+}
+
 .info-hero h1 {
-  max-width: 640px;
   margin: 0;
   color: var(--text);
   font-size: clamp(1.8rem, 4vw, 2.4rem);
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
+}
+
+/* The title says enough; the hero subtext is hidden to save space */
+.info-hero > p {
+  display: none;
 }
 
 .info-hero p {
@@ -283,7 +288,7 @@
 
 @media (max-width: 560px) {
   .info-page {
-    padding: 1.75rem 0 3rem;
+    padding: 1.25rem 0 2rem;
   }
 
   .info-shell {
@@ -292,6 +297,7 @@
 
   /* Phones: room above the eyebrow, balanced headline, easier-to-read paragraphs */
   .info-hero {
+    margin-bottom: 1.25rem;
     padding-top: 0.75rem;
   }
 
@@ -304,11 +310,6 @@
     text-wrap: balance;
   }
 
-  .info-hero p {
-    font-size: 0.95rem;
-    text-wrap: pretty;
-  }
-
   .info-card p,
   .info-panel p,
   .cta-card p {
@@ -319,10 +320,113 @@
   .info-card,
   .info-panel,
   .cta-card {
-    padding: 1.1rem;
+    padding: 1rem;
+  }
+
+  /* Phones: tighter rhythm between cards and inside lists (less scrolling, same look) */
+  .info-grid {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-panel,
+  .cta-card {
+    margin-bottom: 1rem;
+  }
+
+  .icon-box {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0.6rem;
+  }
+
+  .info-list {
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .info-list li {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .pill-grid {
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+
+  .timeline-list {
+    gap: 0.7rem;
+    margin-top: 0.75rem;
   }
 
   .cta-card .cta-btn {
     width: 100%;
+  }
+}
+
+/* ===== Phones: swipe slides (v-mobile-slides) =====
+   Grids/lists become a horizontal scroll-snap row; the next card peeks in so it's
+   clearly swipeable. Vertical page scroll is untouched (pan-y still works). */
+.m-slide-dots {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .m-slides {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 0.75rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 0;
+    scrollbar-width: none;
+  }
+
+  /* Page-level sliders run to the screen edge so the next card peeks in */
+  .info-shell > .m-slides {
+    margin-right: -26px;
+    padding-right: 26px;
+  }
+
+  .m-slides::-webkit-scrollbar {
+    display: none;
+  }
+
+  .m-slides > * {
+    flex: 0 0 86%;
+    min-width: 0;
+    margin-bottom: 0;
+    scroll-snap-align: start;
+  }
+
+  .m-slide-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 0.6rem 0 1rem;
+  }
+
+  .m-slide-dots button {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: var(--border);
+    cursor: pointer;
+    transition: width 0.2s ease, background 0.2s ease;
+  }
+
+  .m-slide-dots button.on {
+    width: 16px;
+    background: var(--text);
+  }
+}
+
+@media (max-width: 560px) and (prefers-reduced-motion: reduce) {
+  .m-slide-dots button {
+    transition: none;
   }
 }

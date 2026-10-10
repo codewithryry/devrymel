@@ -2,16 +2,14 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="services" />
         <span class="eyebrow">Services</span>
-        <h1>What I can help you build</h1>
+        <h1><span class="title-full">What I can help you build</span><span class="title-short">What I build</span></h1>
         <p>
           From a simple website to a complete web app — I plan, build, and
           launch projects that are fast, responsive, and easy to use.
         </p>
+        <AdSlot class="hero-ad" type="banner" show-smartlink />
       </div>
-
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Concept: one product under construction. Each service is a part of
            the site/app being built, laid out like a wireframe in a browser. -->
@@ -91,7 +89,6 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
 import "@/assets/info-pages.css";
@@ -101,7 +98,6 @@ export default {
 
   components: {
     ExploreLinks,
-    HeroArt,
     AdSlot
   },
 

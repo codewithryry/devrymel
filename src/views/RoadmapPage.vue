@@ -2,16 +2,14 @@
   <main class="info-page">
     <section class="info-shell">
       <div class="info-hero">
-        <HeroArt name="roadmap" />
         <span class="eyebrow">Roadmap</span>
-        <h1>Portfolio improvement roadmap</h1>
+        <h1><span class="title-full">Portfolio improvement roadmap</span><span class="title-short">What's next</span></h1>
         <p>
           A simple roadmap of completed, ongoing, and planned improvements for
           the Devrymel portfolio.
         </p>
+        <AdSlot class="hero-ad" type="banner" show-smartlink />
       </div>
-
-      <AdSlot type="banner" show-smartlink />
 
       <!-- Legend -->
       <div class="road-legend">
@@ -62,9 +60,9 @@
 </template>
 
 <script>
-import HeroArt from "@/components/HeroArt.vue";
 import AdSlot from "@/components/AdSlot.vue";
 import ExploreLinks from "@/components/ExploreLinks.vue";
+import milestones from "@/data/roadmap.json";
 import "@/assets/info-pages.css";
 
 export default {
@@ -72,69 +70,13 @@ export default {
 
   components: {
     ExploreLinks,
-    HeroArt,
     AdSlot
   },
 
   data() {
     return {
       // Stops along the road, in order (status: done / progress / planned)
-      milestones: [
-        {
-          title: "Foundation",
-          status: "done",
-          icon: "fas fa-cube",
-          text: "Responsive layout, About page, and dedicated Projects, Tech Stack & Experience pages."
-        },
-        {
-          title: "Design system",
-          status: "done",
-          icon: "fas fa-palette",
-          text: "Light, Midnight & Emerald themes with shared colors and hero illustrations."
-        },
-        {
-          title: "Live data",
-          status: "done",
-          icon: "fas fa-chart-line",
-          text: "GitHub & WakaTime stats, visitor analytics, and a private Firestore admin CMS."
-        },
-        {
-          title: "Tools & AI",
-          status: "done",
-          icon: "fas fa-wand-magic-sparkles",
-          text: "Ask Reymel AI chat, 14 free tools, and the Deployment Gallery."
-        },
-        {
-          title: "Docs & updates",
-          status: "done",
-          icon: "fas fa-file-lines",
-          text: "Monthly changelog plus downloadable resume and CV."
-        },
-        {
-          title: "Content & polish",
-          status: "progress",
-          icon: "fas fa-person-digging",
-          text: "More case studies, mobile polish, and better analytics charts."
-        },
-        {
-          title: "More tools",
-          status: "planned",
-          icon: "fas fa-screwdriver-wrench",
-          text: "JSON Formatter, Text Counter, Case Converter, and Meta Tag Generator."
-        },
-        {
-          title: "Notes & filters",
-          status: "planned",
-          icon: "fas fa-filter",
-          text: "Tech notes / blog pages and project filters by tech stack."
-        },
-        {
-          title: "Admin upgrades",
-          status: "planned",
-          icon: "fas fa-sliders",
-          text: "Feedback status management and admin data export."
-        }
-      ]
+      milestones
     };
   },
 
