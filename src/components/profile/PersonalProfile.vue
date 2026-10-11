@@ -188,7 +188,7 @@ import timeline from '@/data/timeline.json'
 import techNotes from '@/data/techNotes.json'
 
 import { PINNED_EXPERIENCE } from '@/data/pinnedExperience'
-import { PINNED_CERTIFICATE } from '@/data/pinnedCertificate'
+import { PINNED_CERTIFICATES } from '@/data/pinnedCertificate'
 
 const experiences = [PINNED_EXPERIENCE, ...experiencesFromJson]
 const FALLBACK_PROJECT_LINK_ADDITIONS = projectLinks.filter((item) => Number(item.id) >= 12)
@@ -244,7 +244,7 @@ export default {
       techStack,
       devStats,
       services,
-      certificates: [PINNED_CERTIFICATE, ...certificates],
+      certificates: [...PINNED_CERTIFICATES, ...certificates],
       socialLinks,
       projectLinks,
       experiences,
@@ -390,10 +390,11 @@ export default {
                 ...items
               ]
             } else if (key === 'certificates') {
-              // Hardcoded DOLE cert stays first, on top of the admin uploads
+              // Pinned certs (CodeAlpha, DOLE) stay first, on top of the admin uploads
+              const pinnedTitles = new Set(PINNED_CERTIFICATES.map((c) => c.title))
               this.certificates = [
-                PINNED_CERTIFICATE,
-                ...items.filter((item) => item.title !== PINNED_CERTIFICATE.title)
+                ...PINNED_CERTIFICATES,
+                ...items.filter((item) => !pinnedTitles.has(item.title))
               ]
             } else {
               this[key] = items

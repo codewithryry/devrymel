@@ -327,7 +327,7 @@ import experiencesData from "@/data/experiences.json";
 import servicesData from "@/data/services.json";
 import certificatesData from "@/data/certificates.json";
 import highlightsData from "@/data/highlights.json";
-import { PINNED_CERTIFICATE } from "@/data/pinnedCertificate";
+import { PINNED_CERTIFICATES } from "@/data/pinnedCertificate";
 
 // Project screenshots live in src/assets (missing file -> no picture, skeleton only)
 function projectImage(image) {
@@ -670,7 +670,7 @@ export default {
 
     // "Certifications" tile: each slide opens the certificate file
     certSlides() {
-      return [PINNED_CERTIFICATE, ...(certificatesData || [])].map((c) => ({
+      return [...PINNED_CERTIFICATES, ...(certificatesData || [])].map((c) => ({
         icon: "fas fa-award",
         kicker: c.category || "Certificate",
         title: c.title,

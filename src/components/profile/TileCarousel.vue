@@ -116,6 +116,16 @@ export default {
   font-size: 0.85rem;
 }
 
+/* Minimum breathing room under the label so a full tile's title never touches it */
+.tc-kicker {
+  margin-bottom: 0.5rem;
+}
+
+.tc-sm .tc-kicker,
+.tc-wide .tc-kicker {
+  margin-bottom: 0.2rem;
+}
+
 .tc-title {
   margin-top: auto;
   overflow: hidden;

@@ -127,7 +127,7 @@ import milestones from "@/data/roadmap.json";
 import projects from "@/data/projects.json";
 import certificatesData from "@/data/certificates.json";
 import devStats from "@/data/devStats.json";
-import { PINNED_CERTIFICATE } from "@/data/pinnedCertificate";
+import { PINNED_CERTIFICATES } from "@/data/pinnedCertificate";
 import "@/assets/info-pages.css";
 
 export default {
@@ -145,7 +145,7 @@ export default {
       latestRelease: changelog[0],
       milestones,
       projects,
-      certificates: [PINNED_CERTIFICATE, ...certificatesData],
+      certificates: [...PINNED_CERTIFICATES, ...certificatesData],
       stats: devStats.slice(0, 3)
     };
   },
