@@ -1,5 +1,7 @@
 <template>
   <div>
+    <RunnerGameModal v-if="showGame" @close="showGame = false" />
+
     <!-- MOBILE LAYOUT -->
     <div class="mobile-profile-content m-profile">
       <!-- "Contact info" popup: same look as the Dean's List / Certifications popups -->
@@ -55,7 +57,7 @@
       <!-- Profile header (LinkedIn style): round photo over the banner, left-aligned text -->
       <div class="m-hero">
         <div class="m-photo">
-          <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
+          <img :src="profileImage" alt="Reymel Mislang" class="profile-image" @mousedown="$event.detail > 1 && $event.preventDefault()" @click="onPhotoTap" />
         </div>
 
         <h2 class="m-name">Reymel Mislang</h2>
@@ -160,7 +162,7 @@
         <!-- Left Column: Visual Identity -->
         <div class="brand-visual">
           <div class="profile-frame">
-            <img :src="profileImage" alt="Reymel Mislang" class="profile-image" />
+            <img :src="profileImage" alt="Reymel Mislang" class="profile-image" @mousedown="$event.detail > 1 && $event.preventDefault()" @click="onPhotoTap" />
           </div>
 
           <!-- Details -->
@@ -320,6 +322,7 @@
 <script>
 import AdSlot from "@/components/AdSlot.vue";
 import ContactInfoModal from "@/components/ContactInfoModal.vue";
+import RunnerGameModal from "@/components/modals/RunnerGameModal.vue";
 import TileCarousel from "@/components/profile/TileCarousel.vue";
 import resizableTiles from "@/mixins/resizableTiles";
 import projectsData from "@/data/projects.json";
@@ -485,6 +488,7 @@ export default {
   components: {
     AdSlot,
     ContactInfoModal,
+    RunnerGameModal,
     TileCarousel
   },
 
@@ -528,6 +532,7 @@ export default {
       dragOverId: null,
       currentTheme: document.documentElement.getAttribute("data-theme") || "light",
       showContactInfo: false,
+      showGame: false,
       showStats: false
     };
   },
@@ -729,11 +734,24 @@ export default {
   beforeUnmount() {
     document.removeEventListener("click", this.closeStats);
     if (this._themeObserver) this._themeObserver.disconnect();
+    clearTimeout(this._photoTapTimer);
   },
 
   methods: {
     closeStats() {
       this.showStats = false;
+    },
+
+    // Three quick taps on the profile photo; the count resets if the taps are too slow
+    onPhotoTap() {
+      this._photoTaps = (this._photoTaps || 0) + 1;
+      clearTimeout(this._photoTapTimer);
+      if (this._photoTaps >= 3) {
+        this._photoTaps = 0;
+        this.showGame = true;
+        return;
+      }
+      this._photoTapTimer = setTimeout(() => { this._photoTaps = 0; }, 600);
     },
 
     // Attributes for a tile's <a> (links) or <button> (actions / edit mode)
